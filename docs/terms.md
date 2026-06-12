@@ -8,7 +8,7 @@ These terms are intentionally small and foundational. They exist to prevent ambi
 
 ### Open Hadith
 
-The project defined by this repository: an open, integrity-verified infrastructure for preserving Hadith text under a principled data architecture.
+The project defined by this repository: an open, integrity-focused infrastructure for preserving Hadith text under a principled data architecture.
 
 ### Hadith
 
@@ -38,7 +38,7 @@ The position of an occurrence within its source witness, expressed using whateve
 
 ### Raw Text
 
-The text of an occurrence exactly as it appears in its source witness, preserved without correction or normalization.
+The preserved text of an occurrence: its source characters in canonical form, as the data policy defines, with nothing corrected, added, or removed.
 
 ## Records
 
