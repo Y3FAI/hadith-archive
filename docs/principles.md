@@ -4,7 +4,7 @@ This document states the principles of Open Hadith. Each one explains what the p
 
 ## Openness
 
-Everything Open Hadith preserves is public and independently inspectable, which is what lets every other principle be verified rather than merely trusted. It lives in a public GitHub repository anyone can clone or download without an account, stored as plain-text Markdown and JSON that need no special software, with its full history kept in Git and released under an open license.
+Everything Open Hadith preserves is public and independently inspectable, which is what lets every other principle be verified rather than merely trusted. It lives in a public GitHub repository anyone can clone or download without an account, stored as plain-text files that need no special software, with its full history kept in Git and released under an open license.
 
 ## Provenance
 
@@ -12,7 +12,7 @@ Every record is bound to a specific source it can be traced back to, so nothing 
 
 ## Fidelity
 
-Preserved text faithfully represents its source witness, including its errors, unusual spellings, and irregularities; we keep what the source says, not what we think it should say. Raw text is stored verbatim in UTF-8 with no normalization, following a documented text policy, and corrections are kept in a separate field rather than overwriting it, so the witnessed text and any correction stay distinguishable.
+Preserved text faithfully represents its source witness, including its errors, unusual spellings, and irregularities; we keep what the source says, not what we think it should say. Text is stored in canonical form (UTF-8, NFC) as the data policy defines, with nothing corrected or removed, and corrections are kept separate rather than overwriting it, so the witnessed text and any correction stay distinguishable.
 
 ## Integrity
 
@@ -44,7 +44,7 @@ Records survive deletion, corruption, and the failure of any single system; the 
 
 ## Longevity
 
-Records remain readable and understandable far beyond the tools, people, and platforms that created them. Data is stored in plain-text open formats — Markdown and JSON in UTF-8 — with its vocabulary documented in [terms.md](terms.md), and stable identifiers and a documented schema will be preserved alongside the data so it can be read without any specific application.
+Records remain readable and understandable far beyond the tools, people, and platforms that created them. Data is stored in open, plain-text, UTF-8 formats such as Markdown and JSON, with its vocabulary documented in [terms.md](terms.md), and stable identifiers and a documented schema will be preserved alongside the data so it can be read without any specific application.
 
 ## When principles meet
 
