@@ -203,6 +203,8 @@ A hadith is served at `/h/<id>`, independent of any collection. A narration that
 
 Books and sections are addressable in their own right, at `/b/<source>/` and `/b/<source>/<section>`. These pages aggregate; they present no text that is not already preserved.
 
+A section is presented as one witness printed it, in that witness's order, so that the page reflects a book a reader can hold rather than a composite of several. Where a source has more than one witness, the one with the highest priority score presents it, and equal scores are settled on the witness identifier so that a build is never left to chance. The same score therefore governs both which occurrence a hadith displays and which witness presents a section; raising it to correct one will also change the other.
+
 Identifiers behind published addresses are permanent. They are not reused, and they are not recomputed. Where a hadith must be split, the original identifier is retained with its narrowed meaning and a new one is minted; where two must be joined, the older identifier survives and the newer redirects to it. Both operations are avoided by deciding carefully before minting rather than by correcting afterwards.
 
 The form of the identifier itself is not yet fixed. No address may be published until it is, because an address that has been indexed cannot afterwards change.
