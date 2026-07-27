@@ -9,5 +9,10 @@ sources/**
 !sources/**/*.json
 !sources/**/*.md
 
+# Working notes and contributor briefing. The repository publishes what the
+# project concluded, not the deliberation that produced it.
+decisions/
+CLAUDE.md
+
 # Operating system artifacts.
 .DS_Store
