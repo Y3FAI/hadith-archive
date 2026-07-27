@@ -14,6 +14,8 @@ The project defined by this repository: an open, integrity-focused infrastructur
 
 A transmitted report of what the Prophet Muhammad (peace be upon him) said, did, or approved.
 
+Hadith collections also carry reports attributed to companions and successors rather than to the Prophet. Open Hadith preserves what the collections print, and does not classify which kind a report is. A text states its own attribution, and determining it is scholarship the project does not perform.
+
 ## Sources
 
 ### Source
