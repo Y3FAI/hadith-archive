@@ -8,7 +8,7 @@ Everything Open Hadith preserves is public and independently inspectable, which 
 
 ## Provenance
 
-Every record is bound to a specific source it can be traced back to, so nothing stands on unknown origin. Each record names the source witness it comes from and its location within that witness; the witnesses themselves will be defined in their own files in the repository, and validation will reject any record whose witness reference is missing or unresolved.
+Every record is bound to a specific source it can be traced back to, so nothing stands on unknown origin. Each record names the source witness it comes from and its location within that witness; the witnesses themselves will be defined in their own files in the repository, and validation will reject any record whose witness reference is missing or unresolved. Because every witness is a print edition identified by publisher, edition, year, and ISBN, provenance is not merely recorded but actionable: anyone may obtain the same book and check the page for themselves.
 
 ## Fidelity
 

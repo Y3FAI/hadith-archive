@@ -22,7 +22,11 @@ A work whose text Open Hadith preserves, such as the Hadith collection *Sahih al
 
 ### Source Witness
 
-A specific, citable instance of a source that text is actually preserved from: a named print edition, manuscript, scan, or digital file. A source name alone is not a source witness.
+A specific, citable instance of a source that text is actually preserved from: a single published print edition of a work, issued by a named publisher of established standing. Which publishers qualify is a governance decision, not a property of the text.
+
+A witness is identified by whatever lets another person obtain the same copy: the title as printed, the publisher, the edition or printing, the year of publication, and the ISBN. A source name alone is not a source witness, and neither is an edition described too loosely to be ordered.
+
+Open Hadith preserves text only from print editions in circulation. Manuscripts, scans, and unpublished digital files are not witnesses.
 
 ## Occurrences
 
@@ -34,7 +38,9 @@ The same text appearing in another witness, or at another location in the same w
 
 ### Location
 
-The position of an occurrence within its source witness, expressed using whatever reference points the witness provides, such as book, chapter, page, or Hadith number.
+The position of an occurrence within its source witness, expressed using the reference points that printed edition provides: its volume and page, together with the book, chapter, or Hadith number the edition assigns.
+
+Because every witness is a printed edition, a location must resolve to a specific page. The page is what makes an occurrence checkable by hand.
 
 ### Raw Text
 
@@ -65,6 +71,14 @@ A fingerprint verifies content; it does not identify the occurrence.
 ### Verification
 
 The process of checking that a record is valid: that its raw text still matches its fingerprint, and that its required information is present and well-formed.
+
+Verification is internal. It proves a record is consistent with itself and with the project's rules; it cannot prove the text matches the page it claims to come from.
+
+### Independent Verification
+
+The check Open Hadith cannot perform on itself: a person obtains the printed edition a record names, turns to the location it gives, and compares the page against the preserved text.
+
+This is why a witness must be identified precisely enough to order and a location precise enough to find. The project does not ask to be trusted about what a book says; it says which book, and where.
 
 ## Properties
 

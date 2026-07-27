@@ -1,0 +1,13 @@
+# Open Hadith — the repository cites its sources, it does not carry them.
+# See docs/terms.md (Source Witness) and docs/layers.md (Sources).
+
+# Everything under sources/ is excluded by default, so no scan, PDF, or other
+# copy of a published edition can be committed by accident. Witness definitions
+# are re-included below: they describe an edition, they do not reproduce it.
+sources/**
+!sources/**/
+!sources/**/*.json
+!sources/**/*.md
+
+# Operating system artifacts.
+.DS_Store

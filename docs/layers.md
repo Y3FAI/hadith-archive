@@ -15,7 +15,7 @@ Data flows top to bottom. Verification and governance apply across every layer.
 
 ## Sources
 
-The works and witnesses outside the project that text comes from: editions, manuscripts, scans, digital files. Open Hadith does not own or control its sources; it records which witness each record came from.
+The published print editions outside the project that text comes from. Open Hadith does not own, control, or redistribute its sources; it records which witness each record came from, described precisely enough that anyone can obtain the same edition and turn to the same page.
 
 ## Ingestion
 
@@ -39,7 +39,7 @@ Interfaces that serve people: browsing, search, APIs, the web app. Applications 
 
 ## Verification
 
-A cross-cutting control that checks every layer against its rules — that a witness is registered, that text matches its fingerprint, that identifiers are unique, that relationships point to real records, that derived outputs are reproducible. Verification owns checks, not data: it does not define truth, only tests whether the project's claims are internally valid — consistent with the rules and the fingerprints, not whether the text matches the world. It never silently fixes anything; it passes, warns, or fails. It fails on what a machine can prove (invalid encoding, fingerprint mismatch, duplicate identifier, broken reference) and warns on what only a person can judge (near-duplicate text, weak provenance) — and a warning must be surfaced for review and either resolved or explicitly accepted.
+A cross-cutting control that checks every layer against its rules — that a witness is registered, that text matches its fingerprint, that identifiers are unique, that relationships point to real records, that derived outputs are reproducible. Verification owns checks, not data: it does not define truth, only tests whether the project's claims are internally valid — consistent with the rules and the fingerprints, not whether the text matches the world. Whether a record matches its printed page is independent verification, and it happens outside the project, performed by a person holding the edition. It never silently fixes anything; it passes, warns, or fails. It fails on what a machine can prove (invalid encoding, fingerprint mismatch, duplicate identifier, broken reference) and warns on what only a person can judge (near-duplicate text, weak provenance) — and a warning must be surfaced for review and either resolved or explicitly accepted.
 
 ## Governance
 
