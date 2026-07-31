@@ -24,9 +24,11 @@ A work whose text Open Hadith preserves, such as the Hadith collection *Sahih al
 
 ### Source Witness
 
-A specific, citable instance of a source that text is actually preserved from: a single published print edition of a work, issued by a named publisher of established standing. Which publishers qualify is a governance decision, not a property of the text.
+A specific, citable printing of a source that text is actually preserved from: a published print edition of a work, issued by a named publisher of established standing. Which publishers qualify is a governance decision, not a property of the text.
 
-A witness is identified by whatever lets another person obtain the same copy: the title as printed, the publisher, the edition or printing, the year of publication, and the ISBN. A source name alone is not a source witness, and neither is an edition described too loosely to be ordered.
+Physical copies that belong to the same printing are one source witness, because another person need not obtain the particular object used during ingestion; an interchangeable copy of that printing presents the same text and locations. A distinguishable edition or printing is another witness.
+
+A witness is identified by whatever lets another person obtain an interchangeable copy: the title as printed, the publisher, the edition or printing, the year of publication, and the ISBN. A source name alone is not a source witness, and neither is an edition described too loosely to be ordered.
 
 Open Hadith preserves text only from print editions in circulation. Manuscripts, scans, and unpublished digital files are not witnesses.
 
@@ -40,13 +42,13 @@ The same text appearing in another witness, or at another location in the same w
 
 ### Location
 
-The position of an occurrence within its source witness, expressed using the reference points that printed edition provides: its volume and page, together with the book, chapter, or Hadith number the edition assigns.
+The physical position of an occurrence within its source witness. Every location records the pages on which the occurrence begins and ends. It also records the volume when the witness has volumes and the Hadith number when the printing assigns one.
 
-Because every witness is a printed edition, a location must resolve to a specific page. The page is what makes an occurrence checkable by hand.
+Book and chapter structure belongs to the source and is represented by sections, not repeated as part of the witness location. Because every witness is a printed edition, a location always resolves to a specific page. The page is what makes an occurrence checkable by hand.
 
 ### Raw Text
 
-The preserved text of an occurrence: its source characters in canonical form, as the data policy defines, with nothing corrected, added, or removed.
+The preserved report body of an occurrence: its source characters in canonical form, as the data policy defines, with nothing corrected, added, or removed. It includes the isnad, matn, punctuation, diacritics, bracketed text, and variants the printing presents as part of the report. Running headers, page numbers, decorative numbering, section headings, and editorial footnotes are outside the report body and are not raw text.
 
 ## Records
 
@@ -56,9 +58,9 @@ The stored representation of a single occurrence: its raw text together with the
 
 ### Identifier
 
-The stable name that distinguishes one occurrence from every other.
+The stable internal name assigned to an occurrence that distinguishes it from every other occurrence.
 
-An identifier stays fixed even if the raw text is later corrected. Identity comes from provenance, not from the text itself.
+An identifier is separate from the human-readable source location. It stays fixed if the raw text or its location metadata is later corrected, and it is never reused.
 
 ### Provenance
 

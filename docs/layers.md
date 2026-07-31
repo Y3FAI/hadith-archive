@@ -27,7 +27,7 @@ The preserved, source-bound records — the project's only authoritative data. E
 
 ## Relationships
 
-Links between core records: the same narration appearing in different witnesses, parallels, cross-references. Relationships are assertions about records, not records themselves; they reference core records by identifier and never alter, merge, or replace them.
+Assertions between core records that are not identity or hadith membership, such as parallels and cross-references. The same narration appearing in different witnesses is grouped by a hadith in the core, not by this layer. Relationship data is introduced only when the project carries assertions beyond sameness; it references core records by identifier and never alters, merges, or replaces them.
 
 ## Derived
 

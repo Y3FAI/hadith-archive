@@ -12,7 +12,7 @@ Every record is bound to a specific source it can be traced back to, so nothing 
 
 ## Fidelity
 
-Preserved text faithfully represents its source witness, including its errors, unusual spellings, and irregularities; we keep what the source says, not what we think it should say. Text is stored in canonical form (UTF-8, NFC) as the data policy defines, with nothing corrected or removed, and corrections are kept separate rather than overwriting it, so the witnessed text and any correction stay distinguishable.
+Preserved text faithfully represents its source witness, including its errors, unusual spellings, and irregularities; we keep what the source says, not what we think it should say. Text is stored in canonical form (UTF-8, NFC) as the data policy defines, with nothing corrected or removed. When stored text does not match its cited witness, it is corrected through review to restore that match. An apparent error printed by the witness remains untouched.
 
 ## Integrity
 
@@ -20,7 +20,7 @@ A record's content stays as it was preserved, and any change to it can be detect
 
 ## Uniqueness
 
-Each occurrence has one distinct identity that no other record shares; the same or similar text appearing in different places is several occurrences, not one. Each record's identifier is derived from its source location rather than its text, so it stays stable when text is corrected, validation will reject any two records sharing an identifier, and similar texts are linked rather than merged.
+Each occurrence has one distinct identity that no other record shares; the same or similar text appearing in different places is several occurrences, not one. Each record receives a stable internal identifier separate from its text and source location, validation rejects any two records sharing an identifier, and similar texts are grouped by a hadith rather than merged as occurrences.
 
 ## Traceability
 
