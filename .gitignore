@@ -13,6 +13,7 @@ sources/**
 # project concluded, not the deliberation that produced it.
 decisions/
 CLAUDE.md
+AGENTS.md
 
 # Operating system artifacts.
 .DS_Store

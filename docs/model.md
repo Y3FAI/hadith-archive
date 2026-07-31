@@ -16,9 +16,9 @@ The definition is deliberately general. A hadith-grading work is also a source, 
 
 ### Source Witness
 
-A single published print edition of a source, identified by the details that let another person obtain the same copy: title as printed, publisher, edition or printing, year, and ISBN.
+A specific published printing of a source, identified by the details that let another person obtain an interchangeable copy: title as printed, publisher, edition or printing, year, and ISBN. Two physical copies of the same printing are one source witness; a distinguishable edition or printing is another.
 
-A witness declares its own reference scheme — which location parts that edition provides, such as volume, page, or hadith number. Editions disagree about how to point at a text, and without a declared scheme an absent volume cannot be distinguished from a forgotten one.
+A witness declares its own reference scheme. A page span is universal; the scheme records whether that printing also uses volumes or printed hadith numbers. Editions disagree about how to point at a text, and without a declared scheme an absent volume cannot be distinguished from a forgotten one.
 
 A witness also carries a priority score, expressing the quality of that edition. It is distinct from the score on the source: the authority of a work and the care of a printing are different judgements, and both bear on which text is published.
 
@@ -34,7 +34,9 @@ A section belongs to the source, not to any witness. The structure is the author
 
 A single appearance of a text at a specific location within a source witness. It is the unit of preservation.
 
-An occurrence holds its raw text — canonical UTF-8, opaque, isnad and matn together exactly as printed — its location within the witness, the fingerprint of its text, and an identifier derived from its provenance. It may also record the section of the work it falls within.
+An occurrence holds its raw text — canonical UTF-8, opaque, isnad and matn together exactly as printed — its location within the witness, the fingerprint of its text, and a stable internal identifier assigned to it. The identifier is separate from the citation that lets a person find the occurrence. It may also record the section of the work it falls within.
+
+Raw text is the report body. It includes punctuation, diacritics, bracketed text, and variants presented as part of the report, but excludes running headers, page numbers, decorative numbering, section headings, and editorial footnotes.
 
 A location spans pages where the printed text does. A narration crossing a page break records where it begins and where it ends; a narration confined to one page records the same page for both.
 
@@ -112,11 +114,11 @@ A hadith groups at least one occurrence and displays exactly one. The displayed 
 erDiagram
   SOURCE ||--o{ SOURCE_WITNESS : "source_id"
   SOURCE ||--o{ SECTION : "source_id"
-  SECTION ||--o{ SECTION : "parent_section_id"
+  SECTION o|--o{ SECTION : "parent_section_id"
   SOURCE_WITNESS ||--o{ OCCURRENCE : "witness_id"
-  SECTION ||--o{ OCCURRENCE : "section_id"
-  HADITH ||--o{ OCCURRENCE : "hadith_id"
-  HADITH ||--|| OCCURRENCE : "display_occurrence_id"
+  SECTION o|--o{ OCCURRENCE : "section_id"
+  HADITH o|--o{ OCCURRENCE : "hadith_id"
+  HADITH o|--|| OCCURRENCE : "display_occurrence_id"
 
   SOURCE {
     string source_id PK
@@ -147,7 +149,7 @@ erDiagram
   }
 
   OCCURRENCE {
-    string identifier PK "derived from witness and location"
+    string occurrence_id PK "stable internal identifier"
     string witness_id FK
     string section_id FK "null if the work has no sections"
     string hadith_id FK "null until grouped"
@@ -177,13 +179,15 @@ These are the rules verification enforces. Each fails on what a machine can prov
 
 **Provenance is mandatory.** `witness_id` on an occurrence and `source_id` on a witness are never absent, and must resolve to a registered record.
 
-**Identity derives from provenance.** The pair of witness and location is unique across occurrences. Two texts at the same location in the same edition are the same occurrence. The identifier encodes that pair deterministically, so it can be recomputed from a citation and stays fixed when text is corrected.
+**Identity is stable.** Every occurrence has one unique internal identifier. The identifier is assigned once, never reused, and remains fixed when raw text or location metadata is corrected.
 
-**Location matches the declared scheme.** An occurrence supplies exactly the location parts its witness declares — no more, no fewer.
+**Location matches the witness.** Every occurrence supplies its starting and ending page. It supplies a volume when the witness has volumes and a printed hadith number when the printing assigns one.
 
-**Location is granular enough to be a key.** Where an edition prints two texts on one page, page alone cannot distinguish them; the scheme must provide something that does.
+**Location and identity are separate.** Location exists to let a person find the occurrence in the witness; it is not the occurrence's identifier. An ordinal distinguishes and orders multiple occurrences printed on the same page.
 
 **Fingerprints match.** An occurrence's fingerprint is the SHA-256 of the canonical bytes of its raw text, recomputed on every change.
+
+**Corrections restore fidelity.** Raw text changes only when it does not match the cited source witness. Errors and irregularities printed by the witness are preserved.
 
 **A section stays within its source.** A section's parent belongs to the same source as the section itself.
 
