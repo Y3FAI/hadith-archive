@@ -150,7 +150,7 @@ erDiagram
     string identifier PK "derived from witness and location"
     string witness_id FK
     string section_id FK "null if the work has no sections"
-    string hadith_id FK "null until grouped"
+    int    hadith_id FK "null until grouped"
     string volume "per reference_scheme"
     string page_start "per reference_scheme"
     string page_end "equals page_start when not spanning"
@@ -161,7 +161,7 @@ erDiagram
   }
 
   HADITH {
-    string hadith_id PK
+    int    hadith_id PK "positive global sequence"
     string display_occurrence_id FK
     string title "span of the displayed raw_text"
     string heading "span of the displayed raw_text"
@@ -199,15 +199,17 @@ These are the rules verification enforces. Each fails on what a machine can prov
 
 ## Addressing
 
-A hadith is served at `/h/<id>`, independent of any collection. A narration that appears in Bukhari, Muslim, and Forty Nawawi belongs to none of them exclusively, and an address implying otherwise would assert a claim the project does not make.
+A hadith receives a positive global sequential integer, beginning at `1`, and is served at the canonical address `/h/<id>/`. The integer has no leading zeroes: hadith `13` is served at `/h/13/`. A narration that appears in Bukhari, Muslim, and Forty Nawawi belongs to none of them exclusively, and an address implying otherwise would assert a claim the project does not make.
+
+The next identifier is one greater than the highest identifier ever minted. Identifiers are never reused, and gaps carry no meaning. The sequence expresses minting order only; it does not reproduce the numbering of any source.
 
 Books and sections are addressable in their own right, at `/b/<source>/` and `/b/<source>/<section>`. These pages aggregate; they present no text that is not already preserved.
 
 A section is presented as one witness printed it, in that witness's order, so that the page reflects a book a reader can hold rather than a composite of several. Where a source has more than one witness, the one with the highest priority score presents it, and equal scores are settled on the witness identifier so that a build is never left to chance. The same score therefore governs both which occurrence a hadith displays and which witness presents a section; raising it to correct one will also change the other.
 
-Identifiers behind published addresses are permanent. They are not reused, and they are not recomputed. Where a hadith must be split, the original identifier is retained with its narrowed meaning and a new one is minted; where two must be joined, the older identifier survives and the newer redirects to it. Both operations are avoided by deciding carefully before minting rather than by correcting afterwards.
+Identifiers behind published addresses are permanent. They are not reused, renumbered, or recomputed. Where a hadith must be split, the original identifier is retained with the narration closest to its established meaning and every additional result receives a new identifier. Where two must be joined, the older identifier survives and the newer becomes a permanent redirect. Where a hadith must be withdrawn, its address remains as a tombstone explaining that the identifier was withdrawn. These operations are avoided by deciding carefully before minting rather than by correcting afterwards.
 
-The form of the identifier itself is not yet fixed. No address may be published until it is, because an address that has been indexed cannot afterwards change.
+The trailing slash is part of the canonical address. A host may redirect the slashless form, such as `/h/13`, to `/h/13/` as a convenience, but the two forms are not separate identifiers.
 
 ## What the model excludes
 
