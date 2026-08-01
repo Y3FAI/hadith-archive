@@ -1,6 +1,7 @@
 import type { VerificationExecutionResult } from "./protocol.ts";
 import { loadRepositorySnapshot } from "./repository.ts";
 import { REPOSITORY_FILE_RULES } from "./rules/file.ts";
+import { GRAPH_RULES } from "./rules/graph.ts";
 import { SEMANTIC_RULES } from "./rules/semantic.ts";
 import { STRUCTURAL_RULES } from "./rules/structural.ts";
 import { runVerification } from "./runner.ts";
@@ -16,6 +17,7 @@ export async function verifyRepository(
       ...REPOSITORY_FILE_RULES,
       ...STRUCTURAL_RULES,
       ...SEMANTIC_RULES,
+      ...GRAPH_RULES,
     ]);
   } catch {
     return Object.freeze({
