@@ -9,6 +9,7 @@
   "scripts": {
     "test": "bun test test",
     "typecheck": "tsc --noEmit --project tsconfig.json",
+    "verify": "bun run src/main.ts",
     "verify:schemas": "bun run src/verify-schemas.ts"
   },
   "type": "module"

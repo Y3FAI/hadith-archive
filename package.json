@@ -7,11 +7,12 @@
   "packageManager": "bun@1.3.14",
   "private": true,
   "scripts": {
-    "check": "bun run typecheck && bun run test && bun run check:generated && bun run verify:schemas",
+    "check": "bun run typecheck && bun run test && bun run check:generated && bun run verify:schemas && bun run verify",
     "check:generated": "bun run packages/core-loader/scripts/check-record-types.ts",
     "generate:types": "bun run packages/core-loader/scripts/generate-record-types.ts",
     "test": "bun test packages",
     "typecheck": "tsc --noEmit",
+    "verify": "bun run packages/verifier/src/main.ts",
     "verify:schemas": "bun run packages/verifier/src/verify-schemas.ts"
   },
   "workspaces": [
