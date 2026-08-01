@@ -841,7 +841,7 @@ Humans and AI agents may use both views: catalogs for discovery and individual c
 
 The six version-one JSON Schemas, private Bun workspace root, and initial verifier package are implemented. The schema registry validates every schema against Draft 2020-12, checks each `$id` against its repository path, resolves exact local references without network access, compiles all five entity schemas, and tests valid and invalid records.
 
-The canonical JSON and core-loader packages, complete verifier protocol, semantic and cross-record rules, historical checks, and full fixture catalog remain to be implemented before authoritative core data is accepted.
+The canonical JSON package implements duplicate-aware parsing, lossless large integers, deterministic formatting, canonical byte comparison, and the approved UTF-8, BOM, line-ending, final-LF, NFC, and top-level-object boundaries. The core-loader package, complete verifier protocol and rule integration, semantic and cross-record rules, historical checks, and full verifier fixture catalog remain to be implemented before authoritative core data is accepted.
 
 The first real source witness and occurrence are drafted only after these decisions produce complete version-one schemas. The draft then tests the schemas; it does not define them by accident.
 
