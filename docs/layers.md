@@ -1,6 +1,6 @@
 # Layers
 
-This document defines the layers of Open Hadith and how data moves through them. Each layer has one job and is built from the layer before it. Two cross-cutting controls — verification and governance — protect the whole flow. This makes the Separation of Concerns principle concrete; it builds on the vocabulary in [terms.md](terms.md) and the commitments in [principles.md](principles.md).
+This document defines the layers of Open Hadith and how data moves through them. Each layer has one job and is built from the layer before it. Two cross-cutting controls — verification and governance — protect the whole flow. This makes the Separation of Concerns principle concrete; it builds on the vocabulary in [terms.md](terms.md) and the commitments in [principles.md](principles.md). The software boundaries that read and enforce core data are defined separately in [tooling.md](tooling.md).
 
 ```
 Sources ───────┐
