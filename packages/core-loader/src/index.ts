@@ -25,8 +25,14 @@ export {
   type LoadedCoreRecord,
 } from "./loader.ts";
 export {
+  EXPECTED_SCHEMA_PATHS,
+  SCHEMA_BASE_URL,
   createSchemaRegistry,
+  inspectSchemaCatalog,
   type RecordValidationResult,
+  type SchemaCatalogInspection,
+  type SchemaCatalogIssue,
+  type SchemaCatalogIssueKind,
   type SchemaRegistry,
   type StructuralValidationError,
 } from "./schema-registry.ts";

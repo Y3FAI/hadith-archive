@@ -40,5 +40,20 @@ export {
   repositoryPrivateMaterialAbsent,
   textNfc,
 } from "./rules/file.ts";
+export {
+  STRUCTURAL_RULES,
+  recordPathMatches,
+  recordSchemaKnown,
+  recordSchemaValid,
+  schemaCatalogComplete,
+  schemaIdMatchesPath,
+  schemaMetaValid,
+  schemaReferencesExact,
+} from "./rules/structural.ts";
 export { runVerification } from "./runner.ts";
-export { verifyRepositoryFiles } from "./verify.ts";
+export {
+  createStructuralVerificationContext,
+  type CoreRecordCandidate,
+  type StructuralVerificationContext,
+} from "./structural-context.ts";
+export { verifyRepository, verifyRepositoryFiles } from "./verify.ts";
