@@ -41,6 +41,27 @@ export {
   textNfc,
 } from "./rules/file.ts";
 export {
+  GRAPH_RULES,
+  hadithDisplayIsMember,
+  hadithExtractedSpans,
+  hadithNonempty,
+  identifierHadithUnique,
+  identifierOccurrenceUnique,
+  identifierSectionUnique,
+  identifierSourceUnique,
+  identifierWitnessUnique,
+  occurrenceOrdinalSequence,
+  referenceDisplayOccurrenceResolves,
+  referenceHadithResolves,
+  referenceSectionResolves,
+  referenceSourceResolves,
+  referenceWitnessResolves,
+  sectionDepthFirstOrder,
+  sectionOrdinalSequence,
+  sectionParentAcyclic,
+  witnessSourcePrefix,
+} from "./rules/graph.ts";
+export {
   SEMANTIC_RULES,
   occurrenceFingerprintMatches,
   occurrenceLocationMatchesScheme,

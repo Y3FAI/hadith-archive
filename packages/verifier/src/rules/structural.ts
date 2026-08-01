@@ -25,7 +25,11 @@ function isKnownRecord(candidate: CoreRecordCandidate): boolean {
   );
 }
 
-function expectedRecordPath(record: OpenHadithRecord, actualPath: string): string {
+function expectedRecordPath(
+  record: OpenHadithRecord,
+  actualPath: string,
+  context: StructuralVerificationContext,
+): string {
   switch (record.record_type) {
     case "source":
       return `core/sources/${record.source_id}/source.json`;
@@ -34,7 +38,14 @@ function expectedRecordPath(record: OpenHadithRecord, actualPath: string): strin
     case "section":
       return `core/sources/${record.source_id}/sections/${record.section_id}.json`;
     case "occurrence": {
-      const sourceSegment = actualPath.split("/")[2] ?? "";
+      const witnesses = context.validRecords.filter((entry) =>
+        entry.record.record_type === "source_witness" &&
+        entry.record.witness_id === record.witness_id
+      );
+      const sourceSegment = witnesses.length === 1 &&
+          witnesses[0]?.record.record_type === "source_witness"
+        ? witnesses[0].record.source_id
+        : actualPath.split("/")[2] ?? "";
       return `core/sources/${sourceSegment}/witnesses/${record.witness_id}/occurrences/${record.occurrence_id}.json`;
     }
     case "hadith":
@@ -131,7 +142,11 @@ export const recordPathMatches: VerificationRule<StructuralVerificationContext> 
         return [];
       }
       const record = candidate.value as unknown as OpenHadithRecord;
-      return candidate.file.path === expectedRecordPath(record, candidate.file.path)
+      return candidate.file.path === expectedRecordPath(
+        record,
+        candidate.file.path,
+        context,
+      )
         ? []
         : [finding(
             candidate.file.path,

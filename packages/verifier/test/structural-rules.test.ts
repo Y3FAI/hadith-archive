@@ -133,4 +133,47 @@ describe("schema and record rules", () => {
       }
     }
   });
+
+  test("matches occurrence provenance paths through the unique witness", async () => {
+    const rawText = "مثال";
+    const schemas = await schemaInputs();
+    const witness = jsonInput(
+      "core/sources/example/witnesses/example-edition/witness.json",
+      {
+        edition_statement: "الطبعة الأولى",
+        isbn: "9780000000002",
+        priority_score: 0,
+        publication_year: 2007,
+        publisher: "مثال",
+        record_type: "source_witness",
+        reference_scheme: { hadith_number: true, volume: false },
+        schema_version: 1,
+        source_id: "example",
+        title_as_printed: "مثال",
+        witness_id: "example-edition",
+      },
+    );
+    const occurrence = jsonInput(
+      "core/sources/wrong/witnesses/example-edition/occurrences/1.json",
+      {
+        fingerprint: "0".repeat(64),
+        location: { hadith_number: 1, page_end: 1, page_start: 1 },
+        occurrence_id: 1,
+        ordinal: 1,
+        raw_text: rawText,
+        record_type: "occurrence",
+        schema_version: 1,
+        witness_id: "example-edition",
+      },
+    );
+    const result = await verify([...schemas, witness, occurrence]);
+
+    expect(result.kind).toBe("complete");
+    if (result.kind === "complete") {
+      expect(result.report.findings).toContainEqual(expect.objectContaining({
+        file: "core/sources/wrong/witnesses/example-edition/occurrences/1.json",
+        rule_id: "record.path_matches",
+      }));
+    }
+  });
 });
