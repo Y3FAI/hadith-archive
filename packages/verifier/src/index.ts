@@ -41,6 +41,15 @@ export {
   textNfc,
 } from "./rules/file.ts";
 export {
+  SEMANTIC_RULES,
+  occurrenceFingerprintMatches,
+  occurrenceLocationMatchesScheme,
+  occurrencePageOrder,
+  textRawWhitespace,
+  textSingleLine,
+  witnessIsbnChecksum,
+} from "./rules/semantic.ts";
+export {
   STRUCTURAL_RULES,
   recordPathMatches,
   recordSchemaKnown,
@@ -55,5 +64,6 @@ export {
   createStructuralVerificationContext,
   type CoreRecordCandidate,
   type StructuralVerificationContext,
+  type ValidCoreRecord,
 } from "./structural-context.ts";
 export { verifyRepository, verifyRepositoryFiles } from "./verify.ts";
