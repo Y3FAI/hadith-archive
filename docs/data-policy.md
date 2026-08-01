@@ -10,9 +10,15 @@ All core text is stored as UTF-8, without a byte-order mark (BOM), in Unicode No
 
 Once in this form, a text has one and only one byte sequence. That single, unambiguous byte sequence is what makes the text hashable and verifiable.
 
+## Whitespace
+
+Whitespace represents textual separation, not page geometry. A visible word separation is one ASCII space. A line wrap or page break inside continuing text becomes one ASCII space, while a genuine paragraph or separately printed report-body block is separated by one LF.
+
+Core text has no leading or trailing whitespace, repeated spaces, consecutive LF characters, tabs, carriage returns, or non-breaking spaces. The presence or absence of separation around punctuation follows the printing, but the physical width of printed spacing is not represented. An ambiguous boundary is resolved by human review rather than silently normalized.
+
 ## No removal
 
-The canonical form unifies representation only. The core never removes or alters content — not diacritics, tatweel, or punctuation. Removing content is lossy and belongs to the application or derived layers, never the core.
+The canonical form unifies representation only. The core never removes or alters content — not diacritics, tatweel, or punctuation. Whitespace conversion excludes page layout rather than textual content. Removing content is lossy and belongs to the application or derived layers, never the core.
 
 ## Storage and transfer
 

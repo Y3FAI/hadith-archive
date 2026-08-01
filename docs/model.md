@@ -10,23 +10,25 @@ Open Hadith preserves text from print editions and publishes it as public HTML. 
 
 A work, taken apart from any particular copy: *Forty Nawawi*, *Sahih al-Bukhari*, *Sahih Muslim*.
 
-A source carries a priority score expressing the authority of the work itself. The score influences which text a hadith displays; the algorithm that consumes it is a governance decision and is not fixed here.
+A source carries a required integer priority score from `0` through `100` expressing the relative authority of the work itself. Zero is the ordinary baseline, and only ordering has meaning. The score influences which text a hadith displays; the algorithm that consumes it is a governance decision and is not fixed here.
 
 The definition is deliberately general. A hadith-grading work is also a source, its printed edition a source witness, and its verdicts occurrences within it. No separate machinery is required when such works are added.
 
 ### Source Witness
 
-A specific published printing of a source, identified by the details that let another person obtain an interchangeable copy: title as printed, publisher, edition or printing, year, and ISBN. Two physical copies of the same printing are one source witness; a distinguishable edition or printing is another.
+A specific published printing of a source, identified by the details that let another person obtain an interchangeable copy: title as printed, publisher, complete edition or printing statement, Gregorian publication year, and ISBN-13. Two physical copies of the same printing are one source witness; a distinguishable edition or printing is another. A printing outside those version-one bibliographic forms requires explicit schema review rather than an empty or improvised value.
 
 A witness declares its own reference scheme. A page span is universal; the scheme records whether that printing also uses volumes or printed hadith numbers. Editions disagree about how to point at a text, and without a declared scheme an absent volume cannot be distinguished from a forgotten one.
 
-A witness also carries a priority score, expressing the quality of that edition. It is distinct from the score on the source: the authority of a work and the care of a printing are different judgements, and both bear on which text is published.
+A witness also carries a required integer priority score from `0` through `100`, expressing the relative quality of that edition. Zero is the ordinary baseline, and only ordering has meaning. It is distinct from the score on the source: the authority of a work and the care of a printing are different judgements, and both bear on which text is published.
 
 ### Section
 
 A division of a source, as its author divided it: *kitab*, *bab*, *juz'*, part, or whatever divisions the work itself uses.
 
 Sections nest to any depth and record what kind of division they are. They are not a fixed two-level hierarchy, because works are not organised alike, and a source may have none at all.
+
+Each section has a source-wide positive ordinal in depth-first printed order. The ordinals are unique and contiguous from `1`, so flat records reproduce the complete authored sequence without deriving order from identifiers or directory traversal. Version one recognizes the controlled kinds `kitab`, `bab`, `fasl`, `juz`, and `qism`.
 
 A section belongs to the source, not to any witness. The structure is the author's; a publisher's decision to bind a work in four volumes rather than six is an edition's property and is recorded in that witness's reference scheme instead.
 
@@ -42,6 +44,8 @@ A location spans pages where the printed text does. A narration crossing a page 
 
 An occurrence also records its ordinal: its position in the printed sequence of its witness. Editions that number their texts supply an order already, but many do not, and page alone cannot order two texts printed on the same page. The sequence is a fact about the book, recoverable only while the book is open, and it is what allows a section to be presented in the order its author arranged it.
 
+Occurrence ordinals are unique and contiguous from `1` within a source witness, so authoritative ingestion follows printed report order. Omitted hadith membership means not yet grouped. Omitted section membership affirmatively means that no section applies, not that an applicable section remains unrecorded.
+
 An occurrence belonging to no hadith is a valid and expected state. Ingestion produces occurrences and nothing else; grouping them is separate, later work.
 
 ### Hadith
@@ -55,6 +59,8 @@ That judgement is made deliberately. Scripts and assisted review propose candida
 The published text is selected, never composed. Where occurrences differ, the one that best represents their weighted agreement is published verbatim, in full, as one witness printed it. Open Hadith does not assemble a text that no edition contains.
 
 A hadith also carries the text its page needs to be found: a title, a heading, and a description. These are chosen when the hadith is minted, by the same combination of scripts, assisted review, and human decision. They are drawn from the displayed occurrence and never written, which keeps a published page free of any sentence the project composed. Every occurrence a hadith gathers is presented on that page beneath the selected text, with its edition and location, so that a reader sees each appearance in full rather than a single version standing for all of them.
+
+The title, heading, and description are nonempty single-line contiguous spans. They may overlap or be identical, but they cannot join passages, cross a stored line boundary, normalize characters, paraphrase, or add punctuation. Membership remains on occurrence records rather than being duplicated as an array on the hadith.
 
 ## Conceptual structure
 
@@ -132,10 +138,10 @@ erDiagram
     string source_id FK
     string title_as_printed
     string publisher
-    string edition
-    int    year
+    string edition_statement
+    int    publication_year
     string isbn
-    array  reference_scheme
+    object reference_scheme
     int    priority_score
   }
 
@@ -149,14 +155,14 @@ erDiagram
   }
 
   OCCURRENCE {
-    string occurrence_id PK "stable internal identifier"
+    int    occurrence_id PK "stable internal identifier"
     string witness_id FK
-    string section_id FK "null if the work has no sections"
-    int    hadith_id FK "null until grouped"
-    string volume "per reference_scheme"
-    string page_start "per reference_scheme"
-    string page_end "equals page_start when not spanning"
-    string hadith_number "per reference_scheme"
+    string section_id FK "omitted when no section applies"
+    int    hadith_id FK "omitted until grouped"
+    int    volume "per reference_scheme"
+    int    page_start
+    int    page_end "equals page_start when not spanning"
+    int    hadith_number "per reference_scheme"
     int    ordinal "position in the printed sequence"
     text   raw_text "canonical UTF-8, NFC"
     string fingerprint "sha256 of raw_text"
@@ -191,13 +197,15 @@ These are the rules verification enforces. Each fails on what a machine can prov
 
 **A section stays within its source.** A section's parent belongs to the same source as the section itself.
 
+**Section structure is total.** Section ordinals are unique and contiguous within a source, parents precede descendants, and the parent graph has no self-reference or cycle.
+
 **The displayed occurrence is a grouped occurrence.** A hadith's `display_occurrence_id` must name an occurrence whose `hadith_id` is that hadith. A hadith cannot publish text it does not gather.
 
 **A hadith is never empty.** Every hadith groups at least one occurrence. An occurrence, by contrast, may belong to none.
 
 **Published text is drawn, not written.** A hadith's title, heading, and description each appear verbatim within the raw text of the occurrence it displays. No page presents a sentence that no edition printed, and the rule is checkable rather than merely stated.
 
-**Sequence is unique within a witness.** No two occurrences of the same witness share an ordinal, so the printed order is always total.
+**Sequence is complete within a witness.** Occurrence ordinals are unique and contiguous from `1`, so the printed order is always total and authoritative ingestion proceeds in that order.
 
 **A location does not end before it begins.** An occurrence's ending page is never earlier than its starting page.
 

@@ -39,11 +39,11 @@ Interfaces that serve people: browsing, search, APIs, the web app. Applications 
 
 ## Verification
 
-A cross-cutting control that checks every layer against its rules — that a witness is registered, that text matches its fingerprint, that identifiers are unique, that relationships point to real records, that derived outputs are reproducible. Verification owns checks, not data: it does not define truth, only tests whether the project's claims are internally valid — consistent with the rules and the fingerprints, not whether the text matches the world. Whether a record matches its printed page is independent verification, and it happens outside the project, performed by a person holding the edition. It never silently fixes anything; it passes, warns, or fails. It fails on what a machine can prove (invalid encoding, fingerprint mismatch, duplicate identifier, broken reference) and warns on what only a person can judge (near-duplicate text, weak provenance) — and a warning must be surfaced for review and either resolved or explicitly accepted.
+A cross-cutting control that checks every layer against its rules — that a witness is registered, that text matches its fingerprint, that identifiers are unique, that relationships point to real records, that derived outputs are reproducible. Verification owns checks, not data: it does not define truth, only tests whether the project's claims are internally valid — consistent with the rules and the fingerprints, not whether the text matches the world. Whether a record matches its printed page is independent verification, and it happens outside the project, performed by a person holding the edition. It never silently fixes anything. Each authoritative machine rule passes or fails; human judgement and review notes remain governance work rather than warnings that allow questionable core data to pass verification.
 
 ## Governance
 
-A cross-cutting control that decides the rules themselves: what each layer may contain, how rules change, who reviews, and how warnings, disputes, and exceptions are resolved. Where verification asks whether the rules are obeyed, governance decides what they are.
+A cross-cutting control that decides the rules themselves: what each layer may contain, how rules change, who reviews, and how review notes, disputes, and exceptions are resolved. Where verification asks whether the rules are obeyed, governance decides what they are.
 
 ## The rule
 
