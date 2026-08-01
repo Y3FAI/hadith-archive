@@ -32,6 +32,7 @@ export interface VerificationRule<Context> {
 
 export type VerificationSystemErrorCode =
   | "catalog_invalid"
+  | "history_unavailable"
   | "repository_unavailable"
   | "rule_exception"
   | "rule_output_invalid";

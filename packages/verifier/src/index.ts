@@ -5,6 +5,16 @@ export {
   type VerificationCliWriter,
 } from "./cli.ts";
 export {
+  createHistoryVerificationContext,
+  historicalRecordFromValue,
+  loadGitHistoryState,
+  loadRepositorySnapshotAtCommit,
+  resolveGitBase,
+  type GitHistoryState,
+  type HistoricalRecord,
+  type HistoryVerificationContext,
+} from "./history.ts";
+export {
   VERIFICATION_VERSION,
   type VerificationExecutionResult,
   type VerificationExitStatus,
@@ -62,6 +72,13 @@ export {
   witnessSourcePrefix,
 } from "./rules/graph.ts";
 export {
+  HISTORY_RULES,
+  historyIdentifierNotReused,
+  historyRecordPreserved,
+  historySchemaImmutable,
+  historySequenceNext,
+} from "./rules/history.ts";
+export {
   SEMANTIC_RULES,
   occurrenceFingerprintMatches,
   occurrenceLocationMatchesScheme,
@@ -87,4 +104,4 @@ export {
   type StructuralVerificationContext,
   type ValidCoreRecord,
 } from "./structural-context.ts";
-export { verifyRepository, verifyRepositoryFiles } from "./verify.ts";
+export { verifyRepository } from "./verify.ts";
