@@ -1,7 +1,9 @@
 {
   "dependencies": {
+    "@open-hadith/canonical-json": "workspace:*",
     "@open-hadith/core-loader": "workspace:*"
   },
+  "exports": "./src/index.ts",
   "name": "@open-hadith/verifier",
   "private": true,
   "scripts": {

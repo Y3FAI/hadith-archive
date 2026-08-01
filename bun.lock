@@ -25,6 +25,7 @@
     "packages/verifier": {
       "name": "@open-hadith/verifier",
       "dependencies": {
+        "@open-hadith/canonical-json": "workspace:*",
         "@open-hadith/core-loader": "workspace:*",
       },
     },
