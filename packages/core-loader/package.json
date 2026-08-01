@@ -1,0 +1,19 @@
+{
+  "dependencies": {
+    "@open-hadith/canonical-json": "workspace:*",
+    "ajv": "8.20.0"
+  },
+  "devDependencies": {
+    "json-schema-to-typescript": "15.0.4"
+  },
+  "exports": "./src/index.ts",
+  "name": "@open-hadith/core-loader",
+  "private": true,
+  "scripts": {
+    "check:generated": "bun run scripts/check-record-types.ts",
+    "generate:types": "bun run scripts/generate-record-types.ts",
+    "test": "bun test test",
+    "typecheck": "tsc --noEmit --project tsconfig.json"
+  },
+  "type": "module"
+}

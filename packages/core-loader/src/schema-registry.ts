@@ -1,46 +1,80 @@
 import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
 
+import { parseCanonicalJsonBytes } from "@open-hadith/canonical-json";
 import Ajv2020, {
   type AnySchemaObject,
   type ErrorObject,
   type ValidateFunction,
 } from "ajv/dist/2020";
 
+import { RECORD_SCHEMA_CATALOG, type RecordType } from "./catalog.ts";
+
 const SCHEMA_BASE_URL =
   "https://raw.githubusercontent.com/Y3FAI/open-hadith/main/schemas/";
 
 const SCHEMA_FILES = [
   "common/v1.schema.json",
-  "hadith/v1.schema.json",
-  "occurrence/v1.schema.json",
-  "section/v1.schema.json",
-  "source/v1.schema.json",
-  "source_witness/v1.schema.json",
+  ...RECORD_SCHEMA_CATALOG.map((entry) => entry.relativePath),
 ] as const;
-
-const RECORD_SCHEMA_FILES = [
-  ["hadith", 1, "hadith/v1.schema.json"],
-  ["occurrence", 1, "occurrence/v1.schema.json"],
-  ["section", 1, "section/v1.schema.json"],
-  ["source", 1, "source/v1.schema.json"],
-  ["source_witness", 1, "source_witness/v1.schema.json"],
-] as const;
-
-type RecordType = (typeof RECORD_SCHEMA_FILES)[number][0];
 
 type IdentifiedSchema = AnySchemaObject & { $id: string };
 
+export interface StructuralValidationError {
+  instancePath: string;
+  keyword: string;
+  message: string;
+  params: Readonly<Record<string, unknown>>;
+  schemaPath: string;
+}
+
 export interface RecordValidationResult {
-  errors: ErrorObject[];
+  errors: readonly StructuralValidationError[];
+  known: boolean;
   valid: boolean;
 }
 
 export interface SchemaRegistry {
-  ajv: Ajv2020;
   schemaCount: number;
-  schemas: ReadonlyMap<string, IdentifiedSchema>;
   validateRecord(record: unknown): RecordValidationResult;
+}
+
+function compareText(left: string, right: string): number {
+  return left < right ? -1 : left > right ? 1 : 0;
+}
+
+function compareErrors(
+  left: StructuralValidationError,
+  right: StructuralValidationError,
+): number {
+  return (
+    compareText(left.instancePath, right.instancePath) ||
+    compareText(left.keyword, right.keyword) ||
+    compareText(left.schemaPath, right.schemaPath) ||
+    compareText(left.message, right.message)
+  );
+}
+
+function copyErrors(
+  errors: ErrorObject[] | null | undefined,
+): readonly StructuralValidationError[] {
+  if (errors === null || errors === undefined) {
+    return Object.freeze([]);
+  }
+
+  return Object.freeze(
+    errors
+      .map((error) =>
+        Object.freeze({
+          instancePath: error.instancePath,
+          keyword: error.keyword,
+          message: error.message ?? "Schema validation failed",
+          params: Object.freeze({ ...error.params }),
+          schemaPath: error.schemaPath,
+        })
+      )
+      .sort(compareErrors),
+  );
 }
 
 function isObject(value: unknown): value is Record<string, unknown> {
@@ -48,7 +82,7 @@ function isObject(value: unknown): value is Record<string, unknown> {
 }
 
 function isRecordType(value: unknown): value is RecordType {
-  return RECORD_SCHEMA_FILES.some(([recordType]) => recordType === value);
+  return RECORD_SCHEMA_CATALOG.some((entry) => entry.recordType === value);
 }
 
 function recordSchemaKey(recordType: RecordType, schemaVersion: number): string {
@@ -70,7 +104,7 @@ function requireIdentifiedSchema(
     );
   }
 
-  return value as unknown as IdentifiedSchema;
+  return value as IdentifiedSchema;
 }
 
 function requireValidator(
@@ -100,8 +134,10 @@ export async function createSchemaRegistry(
 
   for (const relativePath of SCHEMA_FILES) {
     const absolutePath = resolve(repositoryRoot, "schemas", relativePath);
-    const source = await readFile(absolutePath, "utf8");
-    const schema = requireIdentifiedSchema(JSON.parse(source), relativePath);
+    const schema = requireIdentifiedSchema(
+      parseCanonicalJsonBytes(await readFile(absolutePath)),
+      relativePath,
+    );
 
     if (!ajv.validateSchema(schema)) {
       throw new Error(
@@ -114,56 +150,56 @@ export async function createSchemaRegistry(
   }
 
   const recordValidators = new Map<string, ValidateFunction>();
-  for (const [recordType, schemaVersion, relativePath] of RECORD_SCHEMA_FILES) {
-    const schema = schemas.get(relativePath);
+  for (const entry of RECORD_SCHEMA_CATALOG) {
+    const schema = schemas.get(entry.relativePath);
     if (schema === undefined) {
-      throw new Error(`Required schema ${relativePath} was not loaded`);
+      throw new Error(`Required schema ${entry.relativePath} was not loaded`);
     }
 
     recordValidators.set(
-      recordSchemaKey(recordType, schemaVersion),
+      recordSchemaKey(entry.recordType, entry.schemaVersion),
       requireValidator(ajv, schema),
     );
   }
 
-  return {
-    ajv,
+  return Object.freeze({
     schemaCount: schemas.size,
-    schemas,
     validateRecord(record: unknown): RecordValidationResult {
       if (!isObject(record)) {
-        return {
-          errors: [],
+        return Object.freeze({
+          errors: Object.freeze([]),
+          known: false,
           valid: false,
-        };
+        });
       }
 
       const recordType = record["record_type"];
       const schemaVersion = record["schema_version"];
       if (!isRecordType(recordType) || typeof schemaVersion !== "number") {
-        return {
-          errors: [],
+        return Object.freeze({
+          errors: Object.freeze([]),
+          known: false,
           valid: false,
-        };
+        });
       }
 
       const validator = recordValidators.get(
         recordSchemaKey(recordType, schemaVersion),
       );
       if (validator === undefined) {
-        return {
-          errors: [],
+        return Object.freeze({
+          errors: Object.freeze([]),
+          known: false,
           valid: false,
-        };
+        });
       }
 
       const valid = validator(record);
-      return {
-        errors: validator.errors === null || validator.errors === undefined
-          ? []
-          : [...validator.errors],
+      return Object.freeze({
+        errors: copyErrors(validator.errors),
+        known: true,
         valid,
-      };
+      });
     },
-  };
+  });
 }
