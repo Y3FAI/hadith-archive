@@ -1,6 +1,6 @@
 # Schema Architecture
 
-This document defines how Open Hadith stores, types, validates, versions, and exposes its data. The entity model remains in [model.md](model.md); this document makes that model concrete as files and machine-readable schemas.
+This document defines how Open Hadith stores, types, validates, versions, and exposes its data. The entity model remains in [model.md](model.md); this document makes that model concrete as files and machine-readable schemas. The high-level software flow from canonical bytes through typed loading and repository verification is defined in [tooling.md](tooling.md).
 
 The schema architecture serves four actors: ingestion pipelines that produce records, applications that consume data, humans who inspect and review it, and AI agents that navigate and verify it. Their needs differ, so the authoritative core and its derived representations have different jobs.
 
