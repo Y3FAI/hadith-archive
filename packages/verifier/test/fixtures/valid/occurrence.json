@@ -1,0 +1,14 @@
+{
+  "fingerprint": "8d7bfc3a90a1c0c2531a0bb7c409b4bfeddd0a07c4ce20ebcc79bf20cb401839",
+  "location": {
+    "hadith_number": 1,
+    "page_end": 10,
+    "page_start": 10
+  },
+  "occurrence_id": 1,
+  "ordinal": 1,
+  "raw_text": "مثال نص الحديث",
+  "record_type": "occurrence",
+  "schema_version": 1,
+  "witness_id": "example-work-example-publisher-2007-4"
+}

@@ -1,0 +1,45 @@
+{
+  "$id": "https://raw.githubusercontent.com/Y3FAI/open-hadith/main/schemas/section/v1.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "A version-one authoritative SECTION record.",
+  "properties": {
+    "kind": {
+      "$ref": "../common/v1.schema.json#/$defs/section_kind"
+    },
+    "ordinal": {
+      "$ref": "../common/v1.schema.json#/$defs/ordinal"
+    },
+    "parent_section_id": {
+      "$ref": "../common/v1.schema.json#/$defs/section_id"
+    },
+    "record_type": {
+      "$ref": "../common/v1.schema.json#/$defs/record_type",
+      "const": "section"
+    },
+    "schema_version": {
+      "$ref": "../common/v1.schema.json#/$defs/schema_version",
+      "const": 1
+    },
+    "section_id": {
+      "$ref": "../common/v1.schema.json#/$defs/section_id"
+    },
+    "source_id": {
+      "$ref": "../common/v1.schema.json#/$defs/source_id"
+    },
+    "title": {
+      "$ref": "../common/v1.schema.json#/$defs/single_line_text"
+    }
+  },
+  "required": [
+    "kind",
+    "ordinal",
+    "record_type",
+    "schema_version",
+    "section_id",
+    "source_id",
+    "title"
+  ],
+  "title": "Open Hadith SECTION record version one",
+  "type": "object"
+}

@@ -1,0 +1,52 @@
+{
+  "$id": "https://raw.githubusercontent.com/Y3FAI/open-hadith/main/schemas/occurrence/v1.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "A version-one authoritative OCCURRENCE record.",
+  "properties": {
+    "fingerprint": {
+      "$ref": "../common/v1.schema.json#/$defs/fingerprint"
+    },
+    "hadith_id": {
+      "$ref": "../common/v1.schema.json#/$defs/hadith_id"
+    },
+    "location": {
+      "$ref": "../common/v1.schema.json#/$defs/location"
+    },
+    "occurrence_id": {
+      "$ref": "../common/v1.schema.json#/$defs/occurrence_id"
+    },
+    "ordinal": {
+      "$ref": "../common/v1.schema.json#/$defs/ordinal"
+    },
+    "raw_text": {
+      "$ref": "../common/v1.schema.json#/$defs/raw_text"
+    },
+    "record_type": {
+      "$ref": "../common/v1.schema.json#/$defs/record_type",
+      "const": "occurrence"
+    },
+    "schema_version": {
+      "$ref": "../common/v1.schema.json#/$defs/schema_version",
+      "const": 1
+    },
+    "section_id": {
+      "$ref": "../common/v1.schema.json#/$defs/section_id"
+    },
+    "witness_id": {
+      "$ref": "../common/v1.schema.json#/$defs/witness_id"
+    }
+  },
+  "required": [
+    "fingerprint",
+    "location",
+    "occurrence_id",
+    "ordinal",
+    "raw_text",
+    "record_type",
+    "schema_version",
+    "witness_id"
+  ],
+  "title": "Open Hadith OCCURRENCE record version one",
+  "type": "object"
+}

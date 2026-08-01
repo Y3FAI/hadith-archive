@@ -1,0 +1,159 @@
+{
+  "$defs": {
+    "extracted_span_text": {
+      "$ref": "#/$defs/single_line_text",
+      "description": "A single-line value that semantic verification requires to be one exact contiguous substring of the selected raw text."
+    },
+    "fingerprint": {
+      "description": "A lowercase hexadecimal SHA-256 digest.",
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "hadith_id": {
+      "$ref": "#/$defs/positive_integer",
+      "description": "A permanent globally unique HADITH identifier."
+    },
+    "isbn13": {
+      "description": "An ISBN-13 normalized to thirteen ASCII digits; semantic verification checks its checksum.",
+      "pattern": "^97[89][0-9]{10}$",
+      "type": "string"
+    },
+    "location": {
+      "additionalProperties": false,
+      "description": "The physical location of an OCCURRENCE within its SOURCE_WITNESS.",
+      "properties": {
+        "hadith_number": {
+          "$ref": "#/$defs/printed_hadith_number"
+        },
+        "page_end": {
+          "$ref": "#/$defs/page_number"
+        },
+        "page_start": {
+          "$ref": "#/$defs/page_number"
+        },
+        "volume": {
+          "$ref": "#/$defs/volume_number"
+        }
+      },
+      "required": [
+        "page_end",
+        "page_start"
+      ],
+      "type": "object"
+    },
+    "occurrence_id": {
+      "$ref": "#/$defs/positive_integer",
+      "description": "A permanent globally unique OCCURRENCE identifier."
+    },
+    "ordinal": {
+      "$ref": "#/$defs/positive_integer",
+      "description": "A position in a complete entity-specific printed sequence."
+    },
+    "page_number": {
+      "$ref": "#/$defs/positive_integer",
+      "description": "A positive printed page number."
+    },
+    "positive_integer": {
+      "description": "An integer greater than or equal to one.",
+      "minimum": 1,
+      "type": "integer"
+    },
+    "printed_hadith_number": {
+      "$ref": "#/$defs/positive_integer",
+      "description": "A positive hadith number assigned by a printed SOURCE_WITNESS."
+    },
+    "priority_score": {
+      "description": "A relative ordering value whose differences and ratios carry no meaning.",
+      "maximum": 100,
+      "minimum": 0,
+      "type": "integer"
+    },
+    "publication_year": {
+      "description": "A four-digit Gregorian publication year stated by a SOURCE_WITNESS.",
+      "maximum": 9999,
+      "minimum": 1000,
+      "type": "integer"
+    },
+    "raw_text": {
+      "description": "The nonempty preserved report body governed by the canonical text and whitespace policy.",
+      "minLength": 1,
+      "type": "string"
+    },
+    "record_type": {
+      "description": "The entity type represented by a core record.",
+      "enum": [
+        "hadith",
+        "occurrence",
+        "section",
+        "source",
+        "source_witness"
+      ],
+      "type": "string"
+    },
+    "reference_scheme": {
+      "additionalProperties": false,
+      "description": "The optional printed reference parts used by a SOURCE_WITNESS; pages are universal.",
+      "properties": {
+        "hadith_number": {
+          "type": "boolean"
+        },
+        "volume": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "hadith_number",
+        "volume"
+      ],
+      "type": "object"
+    },
+    "schema_version": {
+      "$ref": "#/$defs/positive_integer",
+      "description": "The explicit schema version selected by a core record."
+    },
+    "section_id": {
+      "description": "A permanent descriptive ASCII slug unique within one SOURCE.",
+      "maxLength": 96,
+      "minLength": 1,
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "type": "string"
+    },
+    "section_kind": {
+      "description": "A controlled classification for a source-authored division.",
+      "enum": [
+        "bab",
+        "fasl",
+        "juz",
+        "kitab",
+        "qism"
+      ],
+      "type": "string"
+    },
+    "single_line_text": {
+      "description": "Nonempty NFC metadata text governed by the single-line whitespace policy.",
+      "minLength": 1,
+      "type": "string"
+    },
+    "source_id": {
+      "description": "A permanent globally unique descriptive ASCII slug for a SOURCE.",
+      "maxLength": 64,
+      "minLength": 1,
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "type": "string"
+    },
+    "volume_number": {
+      "$ref": "#/$defs/positive_integer",
+      "description": "A positive printed volume number."
+    },
+    "witness_id": {
+      "description": "A permanent globally unique descriptive ASCII slug for a SOURCE_WITNESS.",
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$",
+      "type": "string"
+    }
+  },
+  "$id": "https://raw.githubusercontent.com/Y3FAI/open-hadith/main/schemas/common/v1.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Open Hadith version-one common semantic types"
+}

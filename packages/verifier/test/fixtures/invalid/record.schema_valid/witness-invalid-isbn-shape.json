@@ -1,0 +1,16 @@
+{
+  "edition_statement": "الطبعة الرابعة",
+  "isbn": "978-0-00-000000-2",
+  "priority_score": 0,
+  "publication_year": 2007,
+  "publisher": "مثال دار النشر",
+  "record_type": "source_witness",
+  "reference_scheme": {
+    "hadith_number": true,
+    "volume": false
+  },
+  "schema_version": 1,
+  "source_id": "example-work",
+  "title_as_printed": "مثال عنوان الكتاب",
+  "witness_id": "example-work-example-publisher-2007-4"
+}
