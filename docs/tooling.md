@@ -114,7 +114,7 @@ When a proposal crosses rows, each affected contract changes explicitly. A seman
 
 ## Implementation status
 
-`canonical-json` and `core-loader` implement their complete initial boundaries. The verifier implements its protocol, tracked-file repository snapshot, private-material and canonical file-representation rules, structured schema-catalog inspection, record-schema selection and validation, and record-path checks. Semantic rules, cross-record rules, and historical rules remain under implementation. Until those rule families are complete, no authoritative core record is admitted.
+`canonical-json` and `core-loader` implement their complete initial boundaries. The verifier implements its protocol, repository and representation rules, structural schema and record rules, single-line and raw-text whitespace, ISBN checksum, occurrence fingerprints, page ordering, and witness-dependent location presence. Cross-record graph and historical rules remain under implementation. Until those rule families are complete, no authoritative core record is admitted.
 
 ## The rule
 

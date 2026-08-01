@@ -1,6 +1,7 @@
 import type { VerificationExecutionResult } from "./protocol.ts";
 import { loadRepositorySnapshot } from "./repository.ts";
 import { REPOSITORY_FILE_RULES } from "./rules/file.ts";
+import { SEMANTIC_RULES } from "./rules/semantic.ts";
 import { STRUCTURAL_RULES } from "./rules/structural.ts";
 import { runVerification } from "./runner.ts";
 import { createStructuralVerificationContext } from "./structural-context.ts";
@@ -11,7 +12,11 @@ export async function verifyRepository(
   try {
     const snapshot = await loadRepositorySnapshot(repositoryRoot);
     const context = createStructuralVerificationContext(snapshot);
-    return runVerification(context, [...REPOSITORY_FILE_RULES, ...STRUCTURAL_RULES]);
+    return runVerification(context, [
+      ...REPOSITORY_FILE_RULES,
+      ...STRUCTURAL_RULES,
+      ...SEMANTIC_RULES,
+    ]);
   } catch {
     return Object.freeze({
       error: Object.freeze({

@@ -2,6 +2,8 @@ import { parseCanonicalJsonBytes } from "@open-hadith/canonical-json";
 import {
   EXPECTED_SCHEMA_PATHS,
   inspectSchemaCatalog,
+  loadCoreRecordBytes,
+  type LoadedCoreRecord,
   type SchemaCatalogInspection,
 } from "@open-hadith/core-loader";
 
@@ -12,10 +14,16 @@ export interface CoreRecordCandidate {
   readonly value: Readonly<Record<string, unknown>>;
 }
 
+export interface ValidCoreRecord {
+  readonly file: TrackedFile;
+  readonly record: LoadedCoreRecord;
+}
+
 export interface StructuralVerificationContext extends RepositorySnapshot {
   readonly records: readonly CoreRecordCandidate[];
   readonly schemaInspection: SchemaCatalogInspection;
   readonly schemaPaths: ReadonlySet<string>;
+  readonly validRecords: readonly ValidCoreRecord[];
 }
 
 function isObject(value: unknown): value is Record<string, unknown> {
@@ -53,10 +61,22 @@ export function createStructuralVerificationContext(
     }
   }
 
+  const validRecords: ValidCoreRecord[] = [];
+  const registry = inspectSchemaCatalog(documents);
+  if (registry.registry !== undefined) {
+    for (const candidate of records) {
+      const loaded = loadCoreRecordBytes(candidate.file.readBytes(), registry.registry);
+      if (loaded.ok) {
+        validRecords.push(Object.freeze({ file: candidate.file, record: loaded.record }));
+      }
+    }
+  }
+
   return Object.freeze({
     files: snapshot.files,
     records: Object.freeze(records),
-    schemaInspection: inspectSchemaCatalog(documents),
+    schemaInspection: registry,
     schemaPaths,
+    validRecords: Object.freeze(validRecords),
   });
 }
