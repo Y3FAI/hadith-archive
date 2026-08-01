@@ -8,7 +8,7 @@
   "private": true,
   "scripts": {
     "check": "bun run typecheck && bun run test && bun run verify:schemas",
-    "test": "bun test packages/verifier/test",
+    "test": "bun test packages",
     "typecheck": "tsc --noEmit",
     "verify:schemas": "bun run packages/verifier/src/verify-schemas.ts"
   },
