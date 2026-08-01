@@ -114,7 +114,7 @@ When a proposal crosses rows, each affected contract changes explicitly. A seman
 
 ## Implementation status
 
-`canonical-json` and `core-loader` implement their complete initial boundaries. The current verifier compiles and exercises the structural schema catalog through `core-loader`, but the deterministic protocol, repository traversal, semantic rules, cross-record rules, and historical rules remain under implementation. Until those rule families are complete, no authoritative core record is admitted.
+`canonical-json` and `core-loader` implement their complete initial boundaries. The verifier implements its immutable finding and report protocol, deterministic prerequisite runner and serialization, stable incomplete outcomes, and exit-status presentation. It also compiles and exercises the structural schema catalog through `core-loader`. Repository traversal, named rule integration, semantic rules, cross-record rules, and historical rules remain under implementation. Until those rule families are complete, no authoritative core record is admitted.
 
 ## The rule
 
