@@ -1,0 +1,42 @@
+{
+  "$id": "https://raw.githubusercontent.com/Y3FAI/open-hadith/main/schemas/hadith/v1.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "A version-one authoritative HADITH record.",
+  "properties": {
+    "description": {
+      "$ref": "../common/v1.schema.json#/$defs/extracted_span_text"
+    },
+    "display_occurrence_id": {
+      "$ref": "../common/v1.schema.json#/$defs/occurrence_id"
+    },
+    "hadith_id": {
+      "$ref": "../common/v1.schema.json#/$defs/hadith_id"
+    },
+    "heading": {
+      "$ref": "../common/v1.schema.json#/$defs/extracted_span_text"
+    },
+    "record_type": {
+      "$ref": "../common/v1.schema.json#/$defs/record_type",
+      "const": "hadith"
+    },
+    "schema_version": {
+      "$ref": "../common/v1.schema.json#/$defs/schema_version",
+      "const": 1
+    },
+    "title": {
+      "$ref": "../common/v1.schema.json#/$defs/extracted_span_text"
+    }
+  },
+  "required": [
+    "description",
+    "display_occurrence_id",
+    "hadith_id",
+    "heading",
+    "record_type",
+    "schema_version",
+    "title"
+  ],
+  "title": "Open Hadith HADITH record version one",
+  "type": "object"
+}

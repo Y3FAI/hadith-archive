@@ -1,0 +1,9 @@
+{
+  "kind": "kitab",
+  "ordinal": 1,
+  "record_type": "section",
+  "schema_version": 1,
+  "section_id": "kitab-example",
+  "source_id": "example-work",
+  "title": "كتاب المثال"
+}

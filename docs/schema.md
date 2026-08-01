@@ -6,7 +6,7 @@ The schema architecture serves four actors: ingestion pipelines that produce rec
 
 ## Status
 
-The storage architecture, type system, canonical JSON representation, schema-version policy, and identifier forms for all five entities are settled. The common semantic types and exact version-one fields remain to be defined.
+The storage architecture, type system, canonical JSON representation, schema-version policy, identifier forms, common semantic types, and exact version-one fields for all five entities are settled. The six version-one JSON Schemas implement that structural contract.
 
 No core record is accepted until all five version-one entity schemas exist and the verifier enforces their structural and semantic rules.
 
@@ -839,7 +839,9 @@ Humans and AI agents may use both views: catalogs for discovery and individual c
 
 ## Implementation status
 
-The version-one data, verification, and repository-topology contracts are settled. The actual JSON Schemas, Bun packages, verifier, and tests are the next implementation step.
+The six version-one JSON Schemas, private Bun workspace root, and initial verifier package are implemented. The schema registry validates every schema against Draft 2020-12, checks each `$id` against its repository path, resolves exact local references without network access, compiles all five entity schemas, and tests valid and invalid records.
+
+The canonical JSON and core-loader packages, complete verifier protocol, semantic and cross-record rules, historical checks, and full fixture catalog remain to be implemented before authoritative core data is accepted.
 
 The first real source witness and occurrence are drafted only after these decisions produce complete version-one schemas. The draft then tests the schemas; it does not define them by accident.
 

@@ -1,0 +1,38 @@
+{
+  "$id": "https://raw.githubusercontent.com/Y3FAI/open-hadith/main/schemas/source/v1.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "A version-one authoritative SOURCE record.",
+  "properties": {
+    "author": {
+      "$ref": "../common/v1.schema.json#/$defs/single_line_text"
+    },
+    "priority_score": {
+      "$ref": "../common/v1.schema.json#/$defs/priority_score"
+    },
+    "record_type": {
+      "$ref": "../common/v1.schema.json#/$defs/record_type",
+      "const": "source"
+    },
+    "schema_version": {
+      "$ref": "../common/v1.schema.json#/$defs/schema_version",
+      "const": 1
+    },
+    "source_id": {
+      "$ref": "../common/v1.schema.json#/$defs/source_id"
+    },
+    "title": {
+      "$ref": "../common/v1.schema.json#/$defs/single_line_text"
+    }
+  },
+  "required": [
+    "author",
+    "priority_score",
+    "record_type",
+    "schema_version",
+    "source_id",
+    "title"
+  ],
+  "title": "Open Hadith SOURCE record version one",
+  "type": "object"
+}

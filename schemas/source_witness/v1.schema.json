@@ -1,0 +1,58 @@
+{
+  "$id": "https://raw.githubusercontent.com/Y3FAI/open-hadith/main/schemas/source_witness/v1.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "A version-one authoritative SOURCE_WITNESS record.",
+  "properties": {
+    "edition_statement": {
+      "$ref": "../common/v1.schema.json#/$defs/single_line_text"
+    },
+    "isbn": {
+      "$ref": "../common/v1.schema.json#/$defs/isbn13"
+    },
+    "priority_score": {
+      "$ref": "../common/v1.schema.json#/$defs/priority_score"
+    },
+    "publication_year": {
+      "$ref": "../common/v1.schema.json#/$defs/publication_year"
+    },
+    "publisher": {
+      "$ref": "../common/v1.schema.json#/$defs/single_line_text"
+    },
+    "record_type": {
+      "$ref": "../common/v1.schema.json#/$defs/record_type",
+      "const": "source_witness"
+    },
+    "reference_scheme": {
+      "$ref": "../common/v1.schema.json#/$defs/reference_scheme"
+    },
+    "schema_version": {
+      "$ref": "../common/v1.schema.json#/$defs/schema_version",
+      "const": 1
+    },
+    "source_id": {
+      "$ref": "../common/v1.schema.json#/$defs/source_id"
+    },
+    "title_as_printed": {
+      "$ref": "../common/v1.schema.json#/$defs/single_line_text"
+    },
+    "witness_id": {
+      "$ref": "../common/v1.schema.json#/$defs/witness_id"
+    }
+  },
+  "required": [
+    "edition_statement",
+    "isbn",
+    "priority_score",
+    "publication_year",
+    "publisher",
+    "record_type",
+    "reference_scheme",
+    "schema_version",
+    "source_id",
+    "title_as_printed",
+    "witness_id"
+  ],
+  "title": "Open Hadith SOURCE_WITNESS record version one",
+  "type": "object"
+}

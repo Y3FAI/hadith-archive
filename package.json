@@ -1,0 +1,19 @@
+{
+  "devDependencies": {
+    "@types/bun": "1.3.14",
+    "typescript": "7.0.2"
+  },
+  "name": "open-hadith",
+  "packageManager": "bun@1.3.14",
+  "private": true,
+  "scripts": {
+    "check": "bun run typecheck && bun run test && bun run verify:schemas",
+    "test": "bun test packages/verifier/test",
+    "typecheck": "tsc --noEmit",
+    "verify:schemas": "bun run packages/verifier/src/verify-schemas.ts"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ]
+}

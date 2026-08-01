@@ -8,6 +8,8 @@
 
 # Reproducible, disposable output.
 /artifacts/
+node_modules/
+coverage/
 
 # Working notes and contributor briefing. The repository publishes what the
 # project concluded, not the deliberation that produced it.
