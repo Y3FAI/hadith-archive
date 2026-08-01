@@ -213,13 +213,13 @@ Once a schema is referenced by core data on `main`, its identifier, bytes, and m
 | `$defs` key | Structural representation and meaning |
 |---|---|
 | `record_type` | String enum: `source`, `source_witness`, `section`, `occurrence`, `hadith` |
-| `schema_version` | Integer with minimum `1`; each version-one entity schema further requires the constant `1` |
+| `schema_version` | Semantic alias of `positive_integer`; each version-one entity schema further requires the constant `1` |
 | `source_id` | Approved segmented ASCII slug with maximum length 64 |
 | `witness_id` | Approved segmented ASCII slug with maximum length 128 |
 | `section_id` | Approved segmented ASCII slug with maximum length 96 |
 | `occurrence_id` | Positive integer |
 | `hadith_id` | Positive integer |
-| `positive_integer` | Integer with minimum `1` |
+| `positive_integer` | Integer from `1` through `9007199254740991`, inclusive |
 | `ordinal` | Semantic alias of `positive_integer` |
 | `page_number` | Semantic alias of `positive_integer` |
 | `volume_number` | Semantic alias of `positive_integer` |
@@ -238,6 +238,8 @@ Once a schema is referenced by core data on `main`, its identifier, bytes, and m
 JSON Schema enforces structural constraints. Named semantic checks enforce NFC, Unicode whitespace, ISBN checksum, fingerprint recomputation, extracted-span membership, page order, and the witness-dependent presence of location fields.
 
 Semantically distinct values retain separate definitions even when their JSON representation is identical. A page number, ordinal, volume number, and printed hadith number are all positive integers but are not interchangeable concepts for documentation, validation errors, or generated bindings.
+
+Every core positive integer is bounded by `9007199254740991`, JavaScript's maximum safe integer. Every integer through that bound is represented exactly and distinctly by the ordinary number type. The bound keeps schema validation, generated TypeScript bindings, applications, and cross-language JSON consumers on one lossless numeric representation. The generic canonical JSON parser remains capable of preserving larger integer literals, but authoritative core schemas reject them.
 
 Entity schemas reference these definitions through an exact common version, for example:
 

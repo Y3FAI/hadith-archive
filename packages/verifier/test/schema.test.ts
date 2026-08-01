@@ -41,11 +41,43 @@ describe("version-one schema catalog", () => {
     }
   });
 
-  test("rejects missing, unknown, malformed, and null fields", async () => {
+  test("accepts the maximum safe positive integer", async () => {
+    const fixtures = await readJsonFiles(
+      resolve(fixtureRoot, "valid", "record.schema_valid"),
+    );
+    expect(fixtures).toHaveLength(1);
+
+    const result = registry.validateRecord(fixtures[0]);
+    expect(result.errors).toEqual([]);
+    expect(result.valid).toBe(true);
+  });
+
+  test("rejects the first integer above the safe boundary", async () => {
+    const source = await readFile(
+      resolve(
+        fixtureRoot,
+        "invalid",
+        "record.schema_valid",
+        "hadith-unsafe-id.json",
+      ),
+      "utf8",
+    );
+    const result = registry.validateRecord(JSON.parse(source) as unknown);
+
+    expect(result.valid).toBe(false);
+    expect(result.errors).toContainEqual(
+      expect.objectContaining({
+        instancePath: "/hadith_id",
+        keyword: "maximum",
+      }),
+    );
+  });
+
+  test("rejects every structurally invalid fixture", async () => {
     const fixtures = await readJsonFiles(
       resolve(fixtureRoot, "invalid", "record.schema_valid"),
     );
-    expect(fixtures).toHaveLength(7);
+    expect(fixtures).toHaveLength(8);
 
     for (const fixture of fixtures) {
       const result = registry.validateRecord(fixture);

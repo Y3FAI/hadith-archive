@@ -54,7 +54,8 @@
       "description": "A positive printed page number."
     },
     "positive_integer": {
-      "description": "An integer greater than or equal to one.",
+      "description": "An integer from one through JavaScript's maximum safe integer, inclusive.",
+      "maximum": 9007199254740991,
       "minimum": 1,
       "type": "integer"
     },
