@@ -114,7 +114,7 @@ When a proposal crosses rows, each affected contract changes explicitly. A seman
 
 ## Implementation status
 
-`canonical-json` and `core-loader` implement their complete initial boundaries. The verifier implements its protocol and every current nonhistorical rule: repository and representation, structural schemas and records, common semantics, identifier and ordinal integrity, reference resolution, section hierarchy, and HADITH membership and display spans. Git-history rules remain under implementation. Until those historical rules are complete, no authoritative core record is admitted.
+`canonical-json`, `core-loader`, and the complete version-one verifier boundary are implemented. Verification requires an explicit Git base resolved to a commit and evaluates the full published catalog: repository and representation, structural schemas and records, common semantics, identifier and ordinal integrity, reference resolution, section hierarchy, HADITH membership and display spans, used-schema immutability, record preservation, identifier non-reuse, and next-sequence minting. The repository is ready for the first human-reviewed core record; verification still cannot replace comparison with the physical source witness.
 
 ## The rule
 
