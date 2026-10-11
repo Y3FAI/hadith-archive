@@ -16,6 +16,17 @@ Whitespace represents textual separation, not page geometry. A visible word sepa
 
 Core text has no leading or trailing whitespace, repeated spaces, consecutive LF characters, tabs, carriage returns, or non-breaking spaces. The presence or absence of separation around punctuation follows the printing, but the physical width of printed spacing is not represented. An ambiguous boundary is resolved by human review rather than silently normalized.
 
+## Invisible format characters
+
+Core text also never contains these invisible characters, which direct display or layout rather than record printed content:
+
+- every Unicode `Bidi_Control` character: U+061C ARABIC LETTER MARK, U+200E LEFT-TO-RIGHT MARK, U+200F RIGHT-TO-LEFT MARK, U+202A–U+202E (directional embeddings, pop, and overrides), and U+2066–U+2069 (directional isolates and their pop);
+- U+200B ZERO WIDTH SPACE, U+2060 WORD JOINER, and U+FEFF ZERO WIDTH NO-BREAK SPACE anywhere within a string.
+
+A bidirectional control can make a page display characters in a different order than they are stored, and the three zero-width characters are layout directives that hide or suppress the word separation the ASCII space already records. Such a character is rejected, never removed or replaced automatically; a human decides the corrected text.
+
+This list is exact, not a category. U+200C ZERO WIDTH NON-JOINER and U+200D ZERO WIDTH JOINER affect letter shaping and remain governed by the existing rules. Other format, private-use, or unassigned characters are not banned by this rule; extending the list is a governance decision.
+
 ## No removal
 
 The canonical form unifies representation only. The core never removes or alters content — not diacritics, tatweel, or punctuation. Whitespace conversion excludes page layout rather than textual content. Removing content is lossy and belongs to the application or derived layers, never the core.

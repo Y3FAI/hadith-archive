@@ -471,6 +471,7 @@ Version one accepts numeric printed references only. If a real witness uses nonn
 - A printed line wrap or page break within continuing text becomes one ASCII space.
 - A genuine paragraph or separately printed report-body block is separated by one LF (`U+000A`).
 - Leading whitespace, trailing whitespace, repeated spaces, consecutive LF characters, tabs, carriage returns, and non-breaking spaces are forbidden.
+- The invisible format characters listed in [data-policy.md](data-policy.md#invisible-format-characters) — every `Bidi_Control` character, U+200B, U+2060, and U+FEFF — are forbidden in raw text and in every single-line value. U+200C ZWNJ and U+200D ZWJ are not part of that list.
 - The presence or absence of separation around punctuation follows the printing, but physical spacing width is not represented.
 
 Running headers, page numbers, decorative numbering, section headings, editorial footnotes, and other matter outside the report body never enter `raw_text`.
@@ -761,8 +762,8 @@ The version-one catalog contains the following authoritative rules.
 
 | Rule identifier | Failure condition |
 |---|---|
-| `text.single_line` | A single-line or extracted-span value violates the approved Unicode whitespace rules. |
-| `text.raw_whitespace` | Raw text contains forbidden leading, trailing, repeated, control, or layout whitespace. |
+| `text.single_line` | A single-line or extracted-span value violates the approved Unicode whitespace rules or contains a forbidden invisible format character. |
+| `text.raw_whitespace` | Raw text contains forbidden leading, trailing, repeated, control, or layout whitespace, or a forbidden invisible format character. |
 | `witness.isbn_checksum` | An ISBN-13 checksum is invalid. |
 | `occurrence.fingerprint_matches` | The stored fingerprint differs from SHA-256 of the canonical raw-text bytes. |
 

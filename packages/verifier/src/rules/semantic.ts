@@ -48,7 +48,17 @@ function singleLineFields(
   }
 }
 
-function hasForbiddenWhitespace(value: string, allowLf: boolean): boolean {
+// The twelve Unicode Bidi_Control characters, then U+200B ZERO WIDTH SPACE,
+// U+2060 WORD JOINER, and U+FEFF ZERO WIDTH NO-BREAK SPACE. This exact list is
+// not a category ban; U+200C ZWNJ and U+200D ZWJ are deliberately absent.
+const FORBIDDEN_FORMAT_CODE_POINTS = new Set([
+  0x061c, 0x200e, 0x200f,
+  0x202a, 0x202b, 0x202c, 0x202d, 0x202e,
+  0x2066, 0x2067, 0x2068, 0x2069,
+  0x200b, 0x2060, 0xfeff,
+]);
+
+function hasForbiddenCharacter(value: string, allowLf: boolean): boolean {
   for (const character of value) {
     if (/\p{White_Space}/u.test(character)) {
       if (character !== " " && !(allowLf && character === "\n")) {
@@ -58,6 +68,9 @@ function hasForbiddenWhitespace(value: string, allowLf: boolean): boolean {
     if (/\p{Cc}/u.test(character) && !(allowLf && character === "\n")) {
       return true;
     }
+    if (FORBIDDEN_FORMAT_CODE_POINTS.has(character.codePointAt(0) as number)) {
+      return true;
+    }
   }
   return false;
 }
@@ -65,7 +78,7 @@ function hasForbiddenWhitespace(value: string, allowLf: boolean): boolean {
 function validSingleLine(value: string): boolean {
   return value.length > 0 &&
     !value.startsWith(" ") && !value.endsWith(" ") &&
-    !value.includes("  ") && !hasForbiddenWhitespace(value, false);
+    !value.includes("  ") && !hasForbiddenCharacter(value, false);
 }
 
 function validRawWhitespace(value: string): boolean {
@@ -74,7 +87,7 @@ function validRawWhitespace(value: string): boolean {
     !value.endsWith(" ") && !value.endsWith("\n") &&
     !value.includes("  ") && !value.includes("\n\n") &&
     !value.includes(" \n") && !value.includes("\n ") &&
-    !hasForbiddenWhitespace(value, true);
+    !hasForbiddenCharacter(value, true);
 }
 
 function validIsbn13(value: string): boolean {

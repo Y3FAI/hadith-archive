@@ -160,6 +160,25 @@ describe("staged repository verification", () => {
     });
   });
 
+  test("rejects staged bidi controls without repairing the staged text", async () => {
+    const { base, git, root, write } = await fixture();
+    const override = String.fromCodePoint(0x202e);
+    const polluted = sourceBytes.replace('"title": "مثال"', `"title": "مث${override}ال"`);
+    expect(polluted).not.toBe(sourceBytes);
+    await write(sourcePath, polluted);
+    await git("add", "core");
+    const result = await verifyRepository(root, base);
+    expect(result).toMatchObject({ kind: "complete", report: { valid: false } });
+    if (result.kind === "complete") {
+      expect(result.report.findings).toEqual([expect.objectContaining({
+        file: sourcePath, instance_path: "/title", rule_id: "text.single_line",
+      })]);
+    }
+    expect((await loadRepositorySnapshot(root)).files.find((file) =>
+      file.path === sourcePath
+    )?.readBytes()).toEqual(new TextEncoder().encode(polluted));
+  });
+
   test("rejects an external symlink even when its target is valid or absent", async () => {
     const { base, directory, git, root } = await fixture();
     const target = resolve(directory, "outside.json");

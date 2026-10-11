@@ -79,6 +79,107 @@ function occurrence(
   );
 }
 
+function textRecords(text: string, rawText = text): RepositoryFileInput[] {
+  return [
+    jsonInput("core/sources/example-work/source.json", {
+      author: text,
+      priority_score: 0,
+      record_type: "source",
+      schema_version: 1,
+      source_id: "example-work",
+      title: text,
+    }),
+    witness({ edition_statement: text, publisher: text, title_as_printed: text }),
+    jsonInput("core/sources/example-work/sections/kitab-example.json", {
+      kind: "kitab",
+      ordinal: 1,
+      record_type: "section",
+      schema_version: 1,
+      section_id: "kitab-example",
+      source_id: "example-work",
+      title: text,
+    }),
+    jsonInput("core/hadith/1.json", {
+      description: text,
+      display_occurrence_id: 1,
+      hadith_id: 1,
+      heading: text,
+      record_type: "hadith",
+      schema_version: 1,
+      title: text,
+    }),
+    occurrence(rawText),
+  ];
+}
+
+// Every single-line field reached by text.single_line, plus raw_text.
+const TEXT_FIELD_KEYS = [
+  "core/hadith/1.json text.single_line:/description",
+  "core/hadith/1.json text.single_line:/heading",
+  "core/hadith/1.json text.single_line:/title",
+  "core/sources/example-work/sections/kitab-example.json text.single_line:/title",
+  "core/sources/example-work/source.json text.single_line:/author",
+  "core/sources/example-work/source.json text.single_line:/title",
+  "core/sources/example-work/witnesses/example-work-edition/occurrences/1.json text.raw_whitespace:/raw_text",
+  "core/sources/example-work/witnesses/example-work-edition/witness.json text.single_line:/edition_statement",
+  "core/sources/example-work/witnesses/example-work-edition/witness.json text.single_line:/publisher",
+  "core/sources/example-work/witnesses/example-work-edition/witness.json text.single_line:/title_as_printed",
+];
+
+const BIDI_CONTROLS = [
+  0x061c, 0x200e, 0x200f,
+  0x202a, 0x202b, 0x202c, 0x202d, 0x202e,
+  0x2066, 0x2067, 0x2068, 0x2069,
+];
+const LAYOUT_CHARACTERS = [0x200b, 0x2060, 0xfeff];
+
+describe("invisible format characters", () => {
+  test("the rejected bidi list is exactly Unicode Bidi_Control", () => {
+    const property: number[] = [];
+    for (let codePoint = 0; codePoint <= 0x10ffff; codePoint += 1) {
+      if (codePoint >= 0xd800 && codePoint <= 0xdfff) continue;
+      if (/\p{Bidi_Control}/u.test(String.fromCodePoint(codePoint))) {
+        property.push(codePoint);
+      }
+    }
+    expect(property).toEqual(BIDI_CONTROLS);
+  });
+
+  for (const codePoint of [...BIDI_CONTROLS, ...LAYOUT_CHARACTERS]) {
+    const character = String.fromCodePoint(codePoint);
+    const name = `U+${codePoint.toString(16).toUpperCase().padStart(4, "0")}`;
+    const placements = {
+      embedded: `مثال${character}نص`,
+      "between spaces": `مثال ${character} نص`,
+      leading: `${character}مثال نص`,
+      trailing: `مثال نص${character}`,
+    };
+    for (const [placement, text] of Object.entries(placements)) {
+      test(`rejects ${name} ${placement} in every text field`, async () => {
+        // The occurrence fingerprint is computed over the polluted text, so
+        // only the text rules may report it, and nothing is repaired.
+        const result = await verify(textRecords(text));
+        expect(result.kind).toBe("complete");
+        if (result.kind !== "complete") return;
+        const keys = result.report.findings
+          .map((item) => `${item.file} ${item.rule_id}:${item.instance_path}`)
+          .sort();
+        expect(keys).toEqual(TEXT_FIELD_KEYS);
+      });
+    }
+  }
+
+  test("preserves diacritics, tatweel, joiners, supplementary characters, and LF", async () => {
+    const [zwnj, zwj] = [0x200c, 0x200d].map((codePoint) => String.fromCodePoint(codePoint));
+    const text = `قَالَ رَسُولُ اللهِ قـال می${zwnj}خواهم لا${zwj}م ${String.fromCodePoint(0x1ee00)}`;
+    expect(text.normalize("NFC")).toBe(text);
+    expect(await verify(textRecords(text, `${text}\n${text}`))).toEqual({
+      kind: "complete",
+      report: { findings: [], valid: true, verification_version: 1 },
+    });
+  });
+});
+
 describe("common semantic rules", () => {
   test("accepts valid whitespace, checksum, fingerprint, pages, and location", async () => {
     expect(await verify([witness(), occurrence("مثال نص\nفقرة ثانية")])).toEqual({
