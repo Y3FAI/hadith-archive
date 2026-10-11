@@ -86,6 +86,8 @@ The candidate repository state is the Git index. Stage changes before running th
 
 Intent-to-add placeholders (`git add -N`) are excluded because they are not part of the tree Git would commit; a genuinely staged empty file is still checked. Candidate enumeration and blob reads disable local Git replacement objects so the verifier reads the original indexed bytes.
 
+History loading walks changes under `core/` and `schemas/` along the resolved base's first-parent history. Merge commits contribute their changes relative to the first parent. One persistent Git batch reader loads blobs, and an invocation-local object cache avoids parsing unchanged records again. Historical deletions, identity changes, and changes to used schemas remain violations even if later commits restore the original files. Schema dependencies are evaluated after all changes in each commit have been applied. This bounds Git process usage independently of the number of records or ingestion commits; it does not change base selection or the historical rules.
+
 A failed prerequisite invalidates the repository and prevents only checks that cannot be evaluated honestly. It never becomes a false pass for dependent rules. Missing schemas, unavailable required history, internal errors, and incomplete execution cannot produce a valid report.
 
 The verifier reports findings; it does not fix them. Its machine report contains only the settled verification version, validity, and sorted findings. Terminal presentation is derived from that report. Exit status `0` means complete success, `1` means complete verification found rule failures, and `2` means verification could not complete.
