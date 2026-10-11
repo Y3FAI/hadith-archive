@@ -179,6 +179,60 @@ describe("staged repository verification", () => {
     )?.readBytes()).toEqual(new TextEncoder().encode(polluted));
   });
 
+  test("rejects staged non-record core files without changing indexed bytes", async () => {
+    const { base, git, root, write } = await fixture();
+    const witness = "core/sources/example/witnesses/example-edition";
+    const strays = new Map<string, string | Uint8Array>([
+      ["core/hadith/2.JSON", sourceBytes],
+      ["core/hadith/3.json.bak", "not json {{{"],
+      [`${witness}/page-010.jpg`, Uint8Array.from([0xff, 0xd8, 0xff, 0xe0, 0x00])],
+      [`${witness}/scan-010.tif`, Uint8Array.from([0x49, 0x49, 0x2a, 0x00])],
+    ]);
+    await write(sourcePath, sourceBytes);
+    for (const [path, bytes] of strays) await write(path, bytes);
+    await git("add", "core");
+    const indexed = async () => (await loadRepositorySnapshot(root)).files
+      .map((file) => [file.path, file.mode, [...file.readBytes()]]);
+    const before = await indexed();
+    const result = await verifyRepository(root, base);
+    expect(result).toMatchObject({ kind: "complete", report: { valid: false } });
+    if (result.kind === "complete") {
+      expect(result.report.findings).toEqual([...strays.keys()].sort().map((file) => ({
+        file,
+        instance_path: "",
+        message: "Core paths must match an approved record path",
+        rule_id: "repository.core_paths",
+      })));
+    }
+    expect(await indexed()).toEqual(before);
+  });
+
+  for (const root of ["Core", "CORE"]) {
+    test(`rejects a staged ${root} root alias of a valid record path`, async () => {
+      const { base, git, root: repository, write } = await fixture();
+      const aliasPath = sourcePath.replace(/^core\//, `${root}/`);
+      await write(aliasPath, sourceBytes);
+      await git("add", root);
+      expect(await git("ls-files")).toContain(aliasPath);
+      const coreFinding = (file: string) => ({
+        file,
+        instance_path: "",
+        message: "Core paths must match an approved record path",
+        rule_id: "repository.core_paths",
+      });
+      expect(await verifyRepository(repository, base)).toEqual({
+        kind: "complete",
+        report: { findings: [coreFinding(aliasPath)], valid: false, verification_version: 1 },
+      });
+      await git("rm", "--quiet", "-r", "--cached", root);
+      await git("update-index", "--add", "--cacheinfo", `160000,${base},${root}`);
+      expect(await verifyRepository(repository, base)).toEqual({
+        kind: "complete",
+        report: { findings: [coreFinding(root)], valid: false, verification_version: 1 },
+      });
+    });
+  }
+
   test("rejects an external symlink even when its target is valid or absent", async () => {
     const { base, directory, git, root } = await fixture();
     const target = resolve(directory, "outside.json");
@@ -187,6 +241,10 @@ describe("staged repository verification", () => {
     await symlink(target, resolve(root, sourcePath));
     await git("add", "core");
     await expectRegularFinding(root, base, sourcePath);
+    // The allowed-looking path itself needs no core path finding.
+    expect(await verifyRepository(root, base)).toMatchObject({
+      report: { findings: [expect.objectContaining({ rule_id: "file.regular" })] },
+    });
     await rm(target);
     await expectRegularFinding(root, base, sourcePath);
     // Replacing only the working file must not conceal the staged symlink.

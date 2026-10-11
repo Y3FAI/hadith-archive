@@ -24,6 +24,57 @@ const PRIVATE_EXTENSIONS = new Set([
   ".pdf",
 ]);
 
+// Version-one identifier spellings from schemas/common/v1.schema.json. Numeric
+// identifiers use ordinary unpadded decimal notation within the safe range.
+const SLUG_PATTERN = /^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$/;
+const SOURCE_ID_MAX_LENGTH = 64;
+const SECTION_ID_MAX_LENGTH = 96;
+const WITNESS_ID_MAX_LENGTH = 128;
+
+function isSlug(segment: string, maxLength: number): boolean {
+  return segment.length <= maxLength && SLUG_PATTERN.test(segment);
+}
+
+function isPositiveDecimal(segment: string): boolean {
+  return /^[1-9][0-9]*$/.test(segment) && Number.isSafeInteger(Number(segment));
+}
+
+function jsonStem(segment: string | undefined): string | undefined {
+  return segment !== undefined && segment.endsWith(".json")
+    ? segment.slice(0, -".json".length)
+    : undefined;
+}
+
+function isRecordPath(path: string): boolean {
+  const segments = path.split("/");
+  if (segments[0] !== "core") {
+    return false;
+  }
+  if (segments[1] === "hadith") {
+    const hadithId = jsonStem(segments[2]);
+    return segments.length === 3 && hadithId !== undefined && isPositiveDecimal(hadithId);
+  }
+  if (segments[1] !== "sources" || !isSlug(segments[2] ?? "", SOURCE_ID_MAX_LENGTH)) {
+    return false;
+  }
+  if (segments.length === 4) {
+    return segments[3] === "source.json";
+  }
+  if (segments.length === 5 && segments[3] === "sections") {
+    const sectionId = jsonStem(segments[4]);
+    return sectionId !== undefined && isSlug(sectionId, SECTION_ID_MAX_LENGTH);
+  }
+  if (segments[3] !== "witnesses" || !isSlug(segments[4] ?? "", WITNESS_ID_MAX_LENGTH)) {
+    return false;
+  }
+  if (segments.length === 6) {
+    return segments[5] === "witness.json";
+  }
+  const occurrenceId = jsonStem(segments[6]);
+  return segments.length === 7 && segments[5] === "occurrences" &&
+    occurrenceId !== undefined && isPositiveDecimal(occurrenceId);
+}
+
 function isCoreJson(file: TrackedFile): boolean {
   return isRegularFile(file) && file.path.endsWith(".json") &&
     (file.path.startsWith("core/") || file.path.startsWith("schemas/"));
@@ -90,6 +141,22 @@ export const repositoryPrivateMaterialAbsent: VerificationRule<RepositorySnapsho
     .filter((file) => hasPrivatePath(file.path))
     .map((file) => finding(file, "Private material must not be tracked")),
   id: "repository.private_material_absent",
+  prerequisites: [],
+};
+
+// Every ASCII case variant of the root aliases core/ on case-insensitive
+// filesystems, so variants are rejected rather than normalized.
+function hasCoreRoot(path: string): boolean {
+  return /^[cC][oO][rR][eE]$/.test(path.split("/", 1)[0] ?? "");
+}
+
+// Inspects path metadata only, so unreadable, binary, or non-JSON entries still
+// receive a finding. record.path_matches owns agreement with declared identity.
+export const repositoryCorePaths: VerificationRule<RepositorySnapshot> = {
+  evaluate: (snapshot) => snapshot.files
+    .filter((file) => hasCoreRoot(file.path) && !isRecordPath(file.path))
+    .map((file) => finding(file, "Core paths must match an approved record path")),
+  id: "repository.core_paths",
   prerequisites: [],
 };
 
@@ -218,6 +285,7 @@ export const textNfc: VerificationRule<RepositorySnapshot> = {
 
 export const REPOSITORY_FILE_RULES = Object.freeze([
   repositoryPrivateMaterialAbsent,
+  repositoryCorePaths,
   fileRegular,
   fileValidUtf8,
   fileNoBom,

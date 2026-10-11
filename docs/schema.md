@@ -87,6 +87,8 @@ The tree mirrors provenance for human and AI navigation. A source directory cont
 
 Paths mirror relationships but do not define them. Every record carries its own identifier and foreign references. Verification checks that a record's physical placement agrees with its declared relationships.
 
+`core/` admits only these five record paths. Any other tracked file or entry at or beneath `core`, including placeholders, notes, backups, and images, fails verification. A top-level root spelled as any other ASCII case variant of `core`, such as `Core` or `CORE`, aliases `core/` on case-insensitive filesystems; it is rejected, never normalized, even when the rest of the path is a valid record path.
+
 The private `sources/` directory is separate from `core/sources/`. The former holds excluded working copies of print editions; the latter holds public source records and never contains a PDF, scan, or page image.
 
 ## Repository topology
@@ -736,6 +738,7 @@ The version-one catalog contains the following authoritative rules.
 | Rule identifier | Failure condition |
 |---|---|
 | `repository.private_material_absent` | Git tracks `AGENTS.md`, `decisions/`, `sources/`, a source PDF, scan, or other prohibited private material. Ignored local files are permitted. |
+| `repository.core_paths` | An index entry at `core` or beneath `core/` does not match one of the five record paths in the core topology, using the approved identifier spellings and unpadded positive decimal filenames, or any index entry has a top-level root that is another ASCII case variant of `core`, such as `Core/` or `CORE`. Only path metadata is inspected, so scans, backups, uppercase extensions, case aliases, and other non-record files are rejected regardless of content. |
 | `file.regular` | An index entry at or beneath `core/` or `schemas/` is not a regular Git file (mode `100644` or `100755`). Symlinks and submodules are rejected without reading their targets. |
 | `file.valid_utf8` | A tracked schema or core JSON file is not valid UTF-8. |
 | `file.no_bom` | A tracked schema or core JSON file begins with a BOM. |
