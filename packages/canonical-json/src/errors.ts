@@ -3,6 +3,7 @@ export type CanonicalJsonErrorCode =
   | "duplicate_key"
   | "final_lf"
   | "floating_point"
+  | "ill_formed_unicode"
   | "invalid_utf8"
   | "line_ending"
   | "non_canonical"

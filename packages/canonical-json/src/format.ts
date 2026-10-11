@@ -52,6 +52,12 @@ function formatInteger(value: bigint | number): string {
 }
 
 function formatString(value: string): string {
+  if (!value.isWellFormed()) {
+    throw new CanonicalJsonError(
+      "ill_formed_unicode",
+      "Canonical JSON strings must contain Unicode scalar values only",
+    );
+  }
   return JSON.stringify(value.normalize("NFC"));
 }
 

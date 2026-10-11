@@ -112,6 +112,25 @@ describe("canonical JSON bytes", () => {
     const bytes = new TextEncoder().encode('{\n  "value": 1.5\n}\n');
     expectErrorCode(() => parseCanonicalJsonBytes(bytes), "floating_point");
   });
+
+  test("rejects an escaped unpaired surrogate that would otherwise be canonical", () => {
+    const bytes = new TextEncoder().encode('{\n  "text": "قال \\ud800"\n}\n');
+    expectErrorCode(() => parseCanonicalJsonBytes(bytes), "ill_formed_unicode");
+  });
+
+  test("accepts literal supplementary characters, Arabic, and U+FFFD", () => {
+    const source = '{\n  "text": "حديث 😀 \uFFFD"\n}\n';
+    const bytes = new TextEncoder().encode(source);
+    const value = parseCanonicalJsonBytes(bytes);
+
+    expect(value["text"]).toBe("حديث \u{1F600} \uFFFD");
+    expect(encodeCanonicalJson(value)).toEqual(bytes);
+  });
+
+  test("keeps rejecting an optionally escaped valid pair as non-canonical", () => {
+    const bytes = new TextEncoder().encode('{\n  "text": "\\ud83d\\ude00"\n}\n');
+    expectErrorCode(() => parseCanonicalJsonBytes(bytes), "non_canonical");
+  });
 });
 
 describe("duplicate-aware parser", () => {
@@ -153,6 +172,32 @@ describe("duplicate-aware parser", () => {
       () => parseJsonSource('{"a": 1, "\\u0061": 2}'),
       "duplicate_key",
     );
+  });
+
+  test("rejects unpaired surrogates in string values and keys", () => {
+    const sources = [
+      '"\\ud800"',
+      '"\\udfff"',
+      '"\\udc00\\ud800"',
+      '"\\ud83d x \\ude00"',
+      '{"outer": [{"\\ud800": 1}]}',
+      '{"outer": ["حديث", "\\udc00"]}',
+      '"\ud800"',
+      '{"\udc00": "حديث"}',
+    ];
+
+    for (const source of sources) {
+      expectErrorCode(() => parseJsonSource(source), "ill_formed_unicode");
+    }
+  });
+
+  test("decodes escaped and literal supplementary pairs and U+FFFD", () => {
+    expect(parseJsonSource('"\\ud83d\\ude00"')).toBe("\u{1F600}");
+    expect(parseJsonSource('"\\uD83D\\uDE00"')).toBe("\u{1F600}");
+    expect(parseJsonSource('{"\\ud83d\\ude00": "😀 حديث"}')).toEqual({
+      "\u{1F600}": "\u{1F600} حديث",
+    });
+    expect(parseJsonSource('"\\ufffd"')).toBe("\uFFFD");
   });
 
   test("preserves integer literals beyond JavaScript's safe range", () => {
@@ -230,6 +275,25 @@ describe("canonical formatter", () => {
     expectErrorCode(
       () => formatCanonicalJson({ value: namedArray } as never),
       "unsupported_value",
+    );
+  });
+
+  test("rejects unpaired surrogates instead of escaping or replacing them", () => {
+    const values = [
+      { text: "قال \ud800" },
+      { text: "\udc00" },
+      { outer: [{ text: "\udc00\ud800" }] },
+      { outer: { "\ud800": "حديث" } },
+    ];
+
+    for (const value of values) {
+      expectErrorCode(() => formatCanonicalJson(value), "ill_formed_unicode");
+    }
+  });
+
+  test("keeps supplementary characters and U+FFFD literal", () => {
+    expect(formatCanonicalJson({ "\u{1F600}": "حديث \u{1F600} �" })).toBe(
+      '{\n  "😀": "حديث 😀 �"\n}\n',
     );
   });
 

@@ -6,7 +6,7 @@ Open Hadith preserves the *representation* of a text — its exact characters in
 
 ## Canonical form
 
-All core text is stored as UTF-8, without a byte-order mark (BOM), in Unicode Normalization Form C (NFC). Any source is converted to this form. NFC may change the underlying code-point sequence, but only to a canonically equivalent representation of the same text. The compatibility forms (NFKC and NFKD) are never used, because they alter content.
+All core text is stored as UTF-8, without a byte-order mark (BOM), in Unicode Normalization Form C (NFC). Every character is a Unicode scalar value: an unpaired UTF-16 surrogate, whether written literally or as a JSON `\uXXXX` escape, has no UTF-8 encoding and is rejected rather than replaced. Any source is converted to this form. NFC may change the underlying code-point sequence, but only to a canonically equivalent representation of the same text. The compatibility forms (NFKC and NFKD) are never used, because they alter content.
 
 Once in this form, a text has one and only one byte sequence. That single, unambiguous byte sequence is what makes the text hashable and verifiable.
 
