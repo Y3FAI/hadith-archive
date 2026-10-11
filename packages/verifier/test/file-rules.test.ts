@@ -57,6 +57,7 @@ describe("repository and file rules", () => {
     { bytes: bytes("{ invalid }\n"), ruleId: "json.parseable" },
     { bytes: bytes('{"a":1,"a":2}\n'), ruleId: "json.unique_keys" },
     { bytes: bytes('{"b":1,"a":2}\n'), ruleId: "json.canonical" },
+    { bytes: bytes('{\n  "text": "\\ud800"\n}\n'), ruleId: "json.canonical" },
     { bytes: bytes('{\n  "text": "أ"\n}\n'), ruleId: "text.nfc" },
   ] as const;
 

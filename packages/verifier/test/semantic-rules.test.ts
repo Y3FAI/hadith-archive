@@ -9,6 +9,7 @@ import { EXPECTED_SCHEMA_PATHS } from "@open-hadith/core-loader";
 import {
   createRepositorySnapshot,
   createStructuralVerificationContext,
+  REPOSITORY_FILE_RULES,
   runVerification,
   SEMANTIC_RULES,
   type RepositoryFileInput,
@@ -133,6 +134,42 @@ describe("common semantic rules", () => {
       );
       expect(keys).toContain("occurrence.location_matches_scheme:/location/volume");
     }
+  });
+
+  test("rejects an unpaired surrogate whose fingerprint collides with U+FFFD", async () => {
+    const replacement = occurrence("قال � رسول الله");
+    const malformed = {
+      ...replacement,
+      bytes: encoder.encode(
+        new TextDecoder().decode(replacement.bytes).replace("�", "\\ud800"),
+      ),
+    };
+    // Node and Bun encode a lone surrogate as U+FFFD, so the hashes collide.
+    expect(fingerprint("قال \ud800 رسول الله")).toBe(fingerprint("قال � رسول الله"));
+
+    const rules = [...REPOSITORY_FILE_RULES, ...SEMANTIC_RULES];
+    const run = async (file: RepositoryFileInput) => runVerification(
+      createStructuralVerificationContext(
+        createRepositorySnapshot([...await schemaInputs(), witness(), file]),
+      ),
+      rules,
+    );
+
+    expect(await run(replacement)).toEqual({
+      kind: "complete",
+      report: { findings: [], valid: true, verification_version: 1 },
+    });
+    expect(await run(malformed)).toEqual({
+      kind: "complete",
+      report: {
+        findings: [expect.objectContaining({
+          file: malformed.path,
+          rule_id: "json.canonical",
+        })],
+        valid: false,
+        verification_version: 1,
+      },
+    });
   });
 
   test("does not invent a scheme finding for an unresolved witness", async () => {

@@ -126,6 +126,19 @@ describe("core loader", () => {
     });
   });
 
+  test("rejects an unpaired surrogate before schema validation", () => {
+    const source = '{\n  "author": "مثال",\n  "priority_score": 0,\n  "record_type": "source",\n  "schema_version": 1,\n  "source_id": "example",\n  "title": "مثال \\udc00"\n}\n';
+    expect(loader.loadBytes(new TextEncoder().encode(source))).toEqual({
+      failure: {
+        code: "ill_formed_unicode",
+        kind: "canonical_json",
+        message: "JSON string contains an unpaired UTF-16 surrogate",
+        offset: source.indexOf('"مثال \\udc00"'),
+      },
+      ok: false,
+    });
+  });
+
   test("reports file read failures without throwing", async () => {
     const result = await loader.loadFile(
       fixturePath("missing", "record.json"),

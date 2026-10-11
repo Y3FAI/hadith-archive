@@ -184,6 +184,7 @@ export const jsonUniqueKeys: VerificationRule<RepositorySnapshot> = {
 
 const CANONICAL_CODES = new Set([
   "floating_point",
+  "ill_formed_unicode",
   "non_canonical",
   "top_level",
   "unsupported_value",

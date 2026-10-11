@@ -170,14 +170,23 @@ class Parser {
       if (character === '"') {
         this.offset += 1;
         const token = this.source.slice(start, this.offset);
+        let value: string;
         try {
-          return JSON.parse(token) as string;
+          value = JSON.parse(token) as string;
         } catch (error: unknown) {
           throw new CanonicalJsonError("syntax", "Invalid JSON string", {
             cause: error,
             offset: start,
           });
         }
+        if (!value.isWellFormed()) {
+          throw new CanonicalJsonError(
+            "ill_formed_unicode",
+            "JSON string contains an unpaired UTF-16 surrogate",
+            { offset: start },
+          );
+        }
+        return value;
       }
 
       if (character === "\\") {

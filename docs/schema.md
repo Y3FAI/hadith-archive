@@ -292,6 +292,7 @@ Every core file has one canonical byte representation:
 
 - exactly one top-level JSON object;
 - UTF-8 without BOM;
+- Unicode scalar values only, with no unpaired UTF-16 surrogate in any string or key;
 - Unicode Normalization Form C;
 - LF line endings;
 - two spaces per indentation level;
@@ -741,7 +742,7 @@ The version-one catalog contains the following authoritative rules.
 | `file.final_lf` | A tracked schema or core JSON file does not end with exactly one LF. |
 | `json.parseable` | A tracked schema or core JSON file is not valid JSON. |
 | `json.unique_keys` | A JSON object contains a duplicate key, including equal duplicate values. |
-| `json.canonical` | Formatting, key order, escaping, indentation, integer notation, or whitespace differs from canonical output. |
+| `json.canonical` | Formatting, key order, escaping, indentation, integer notation, or whitespace differs from canonical output, or a string or key contains an unpaired UTF-16 surrogate. |
 | `text.nfc` | A string value in a core record is not NFC. |
 
 ### Schema and record rules

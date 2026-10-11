@@ -38,14 +38,14 @@ For canonical input, it:
 
 1. decodes UTF-8 without accepting malformed input or a byte-order mark;
 2. enforces LF and the exact final-newline rule;
-3. parses with duplicate-key detection and lossless integer handling;
+3. parses with duplicate-key detection, lossless integer handling, and rejection of any string or key that is not a sequence of Unicode scalar values;
 4. requires one top-level object for a canonical core JSON file;
 5. checks NFC and the canonical integer-only numeric domain;
 6. formats the parsed value deterministically and compares the expected bytes with the input.
 
 Successful parsing returns the JSON value represented by those exact bytes. Failure identifies the violated representation boundary with a stable code and, where meaningful, a byte offset. The package does not consult JSON Schemas, infer record types, traverse the repository, or decide whether content is correct.
 
-Formatting is explicit and separate from verification. A formatter may produce canonical bytes for provisional data, but verification never repairs a file silently. This distinction preserves reviewability: an invalid representation remains visible until a deliberate change corrects it.
+Formatting is explicit and separate from verification. The formatter rejects an in-memory string or key containing an unpaired surrogate rather than escaping it. A formatter may produce canonical bytes for provisional data, but verification never repairs a file silently. This distinction preserves reviewability: an invalid representation remains visible until a deliberate change corrects it.
 
 ## `core-loader`
 
