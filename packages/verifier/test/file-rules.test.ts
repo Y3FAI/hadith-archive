@@ -3,11 +3,79 @@ import { describe, expect, test } from "bun:test";
 import {
   createRepositorySnapshot,
   REPOSITORY_FILE_RULES,
+  repositoryCorePaths,
   runVerification,
+  type RepositorySnapshot,
 } from "@open-hadith/verifier";
 
 const encoder = new TextEncoder();
 const bytes = (source: string): Uint8Array => encoder.encode(source);
+
+async function corePathFindings(snapshot: RepositorySnapshot): Promise<string[]> {
+  const result = await runVerification(snapshot, [repositoryCorePaths]);
+  if (result.kind !== "complete") throw new Error("Expected complete verification");
+  return result.report.findings.map((finding) => {
+    expect(finding).toMatchObject({
+      instance_path: "",
+      message: "Core paths must match an approved record path",
+      rule_id: "repository.core_paths",
+    });
+    return finding.file;
+  });
+}
+
+const witnessPath = "core/sources/nawawi-40/witnesses/nawawi-40-test-2007-4";
+const allowedCorePaths = [
+  "core/hadith/1.json",
+  "core/hadith/9007199254740991.json",
+  "core/sources/nawawi-40/sections/kitab-al-hajj.json",
+  "core/sources/nawawi-40/source.json",
+  `${witnessPath}/occurrences/1842.json`,
+  `${witnessPath}/witness.json`,
+  `core/sources/${"a".repeat(64)}/source.json`,
+  `core/sources/a/sections/${"b".repeat(96)}.json`,
+  `core/sources/a/witnesses/${"c".repeat(128)}/witness.json`,
+];
+const rejectedCorePaths = [
+  "core",
+  "core/.gitkeep",
+  "core/README.md",
+  "core/hadith.json",
+  "core/hadith/.gitkeep",
+  "core/hadith/0.json",
+  "core/hadith/01.json",
+  "core/hadith/1",
+  "core/hadith/1.json\n",
+  "core/hadith/1.json.bak",
+  "core/hadith/1.json\u001b",
+  "core/hadith/1\t.json",
+  "core/hadith/1e3.json",
+  "core/hadith/2.JSON",
+  "core/hadith/9007199254740992.json",
+  "core/hadith/nested/1.json",
+  "core/hadith/１.json",
+  "core/occurrences/1.json",
+  "core/sources/40-nawawi/source.json",
+  "core/sources/Nawawi-40/source.json",
+  "core/sources/nawawi--40/source.json",
+  "core/sources/nawawi-40",
+  "core/sources/nawawi-40-/source.json",
+  "core/sources/nawawi-40/Source.json",
+  "core/sources/nawawi-40/occurrences/1.json",
+  "core/sources/nawawi-40/sections/1.json",
+  "core/sources/nawawi-40/sections/kitab/bab.json",
+  "core/sources/nawawi-40/source.json.bak",
+  "core/sources/nawawi-40/witness.json",
+  "core/sources/nawawi_40/source.json",
+  `${witnessPath}/occurrences/01.json`,
+  `${witnessPath}/occurrences/a.json`,
+  `${witnessPath}/occurrences/1/witness.json`,
+  `${witnessPath}/page-010.jpg`,
+  `${witnessPath}/scan-010.tif`,
+  `core/sources/${"a".repeat(65)}/source.json`,
+  `core/sources/a/sections/${"b".repeat(97)}.json`,
+  `core/sources/a/witnesses/${"c".repeat(129)}/witness.json`,
+];
 
 describe("repository and file rules", () => {
   test("accepts canonical schema and core JSON while ignoring unrelated JSON", async () => {
@@ -91,6 +159,86 @@ describe("repository and file rules", () => {
         "json.unique_keys",
       ]);
     }
+  });
+
+  test("accepts the five record path shapes at their identifier limits", async () => {
+    const snapshot = createRepositorySnapshot(allowedCorePaths.map((path) => ({
+      bytes: bytes("not JSON"),
+      path,
+    })));
+    expect(await corePathFindings(snapshot)).toEqual([]);
+  });
+
+  test("rejects every other core path regardless of mode or content", async () => {
+    const snapshot = createRepositorySnapshot(rejectedCorePaths.map((path, index) => ({
+      bytes: Uint8Array.from([0xff, 0xd8, 0xff, 0xe0]),
+      mode: index % 2 === 0 ? "100644" : "100755",
+      path,
+    })));
+    expect(await corePathFindings(snapshot)).toEqual(
+      snapshot.files.map((file) => file.path),
+    );
+  });
+
+  test("rejects every ASCII case variant of the core root, even with record paths", async () => {
+    const roots = Array.from({ length: 16 }, (_, mask) =>
+      [..."core"].map((letter, index) =>
+        mask & (1 << index) ? letter.toUpperCase() : letter
+      ).join("")
+    );
+    const variants = roots.filter((root) => root !== "core");
+    expect(new Set(variants).size).toBe(15);
+    const paths = variants.flatMap((root) => [
+      root,
+      `${root}/hadith/1.json`,
+      `${root}/sources/nawawi-40/source.json`,
+      `${root}/sources/nawawi-40/witnesses/nawawi-40-test-2007-4/witness.json`,
+    ]);
+    const snapshot = createRepositorySnapshot([
+      ...paths.map((path, index) => ({
+        bytes: bytes("{}\n"),
+        mode: index % 4 === 0 ? "160000" : "100644",
+        path,
+      })),
+      { bytes: bytes("{}\n"), path: "core/hadith/1.json" },
+      { bytes: bytes("{}\n"), path: "core/sources/nawawi-40/source.json" },
+    ]);
+    expect(await corePathFindings(snapshot)).toEqual(
+      snapshot.files.map((file) => file.path).filter((path) => !path.startsWith("core/")),
+    );
+  });
+
+  test("leaves similarly prefixed paths outside core to other rules", async () => {
+    const snapshot = createRepositorySnapshot([
+      "CORE.md",
+      "Core-archive/hadith/1.json",
+      "core-archive/hadith/2.JSON",
+      "corepage.jpg",
+      "docs/Core/hadith/1.json",
+      "docs/core/scan.png",
+      "schemas/hadith/v1.schema.json",
+    ].map((path) => ({ bytes: bytes("{}\n"), path })));
+    expect(await corePathFindings(snapshot)).toEqual([]);
+  });
+
+  test("judges core paths from metadata without reading content", async () => {
+    const unreadable = (path: string, mode: string) => ({
+      mode,
+      path,
+      readBytes: (): Uint8Array => {
+        throw new Error("content must not be read");
+      },
+    });
+    const snapshot: RepositorySnapshot = {
+      files: [
+        unreadable("core", "160000"),
+        unreadable("core/hadith/1.json", "120000"),
+        unreadable("core/hadith/2.JSON", "100644"),
+        unreadable("core/sources/example/source.json", "100644"),
+      ],
+    };
+    // file.regular, not this rule, rejects the symlink at an allowed path.
+    expect(await corePathFindings(snapshot)).toEqual(["core", "core/hadith/2.JSON"]);
   });
 
   test("copies bytes into the repository snapshot", () => {

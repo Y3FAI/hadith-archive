@@ -48,6 +48,7 @@ export {
   jsonCanonical,
   jsonParseable,
   jsonUniqueKeys,
+  repositoryCorePaths,
   repositoryPrivateMaterialAbsent,
   textNfc,
 } from "./rules/file.ts";
