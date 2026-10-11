@@ -25,7 +25,7 @@ const sourceBytes = formatCanonicalJson({
   title: "مثال",
 });
 
-async function fixture() {
+async function fixture(objectFormat: "sha1" | "sha256" = "sha1") {
   const directory = await mkdtemp(resolve(tmpdir(), "open-hadith-index-"));
   temporaryDirectories.push(directory);
   const root = resolve(directory, "repository");
@@ -39,7 +39,7 @@ async function fixture() {
     await mkdir(dirname(absolute), { recursive: true });
     await writeFile(absolute, bytes);
   };
-  await git("init", "--quiet");
+  await git("init", "--quiet", `--object-format=${objectFormat}`);
   await git("config", "user.name", "Verifier Test");
   await git("config", "user.email", "verifier@example.invalid");
   await git("config", "commit.gpgsign", "false");
@@ -72,6 +72,57 @@ async function expectRegularFinding(root: string, base: string, path: string) {
 }
 
 describe("staged repository verification", () => {
+  test("reads original staged bytes despite local Git replacement refs", async () => {
+    const { base, git, root, write } = await fixture();
+    const invalid = "invalid staged JSON\n";
+    await write(sourcePath, invalid);
+    await git("add", "core");
+    const originalId = await git("rev-parse", `:${sourcePath}`);
+    await write("replacement.json", sourceBytes);
+    const replacementId = await git("hash-object", "-w", "replacement.json");
+    await git("replace", originalId, replacementId);
+    // Git would normally substitute the valid blob; verification must not.
+    expect(await git("cat-file", "blob", originalId)).toBe(sourceBytes.trim());
+    const files = (await loadRepositorySnapshot(root)).files;
+    expect(files.find((file) => file.path === sourcePath)?.readBytes()).toEqual(
+      new TextEncoder().encode(invalid),
+    );
+    const result = await verifyRepository(root, base);
+    expect(result).toMatchObject({ kind: "complete", report: { valid: false } });
+    if (result.kind === "complete") {
+      expect(result.report.findings).toContainEqual(expect.objectContaining({
+        file: sourcePath, rule_id: "json.parseable",
+      }));
+    }
+  });
+
+  for (const objectFormat of ["sha1", "sha256"] as const) {
+    test(`excludes intent-to-add drafts but rejects staged empty JSON (${objectFormat})`, async () => {
+      const { base, git, root, write } = await fixture(objectFormat);
+      await write(sourcePath, sourceBytes);
+      await git("add", "-N", "core");
+      expect(await git("diff", "--cached", "--name-only")).toBe("");
+      const snapshot = await loadRepositorySnapshot(root);
+      expect(snapshot.files.some((file) => file.path === sourcePath)).toBe(false);
+      // Unchanged committed files must still be part of the candidate.
+      expect(snapshot.files.some((file) => file.path === "schemas/common/v1.schema.json")).toBe(true);
+      expect(await verifyRepository(root, base)).toMatchObject({
+        kind: "complete", report: { valid: true },
+      });
+      await write(sourcePath, "");
+      await git("add", "core");
+      const staged = await loadRepositorySnapshot(root);
+      expect(staged.files.find((file) => file.path === sourcePath)?.readBytes()).toEqual(new Uint8Array());
+      const result = await verifyRepository(root, base);
+      expect(result).toMatchObject({ kind: "complete", report: { valid: false } });
+      if (result.kind === "complete") {
+        expect(result.report.findings).toContainEqual(expect.objectContaining({
+          file: sourcePath, rule_id: "json.parseable",
+        }));
+      }
+    });
+  }
+
   test("uses staged bytes despite unstaged edits, replacements, and missing working files", async () => {
     const { base, directory, git, root, write } = await fixture();
     await write(sourcePath, sourceBytes);
@@ -139,6 +190,7 @@ describe("staged repository verification", () => {
       const { base, git, root } = await fixture();
       if (path === "schemas") await git("rm", "-r", "--cached", "schemas");
       await git("update-index", "--add", "--cacheinfo", `160000,${base},${path}`);
+      await git("config", "diff.ignoreSubmodules", "all");
       await expectRegularFinding(root, base, path);
     });
   }

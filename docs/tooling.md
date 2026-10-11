@@ -84,6 +84,8 @@ Verification runs in prerequisite order:
 
 The candidate repository state is the Git index. Stage changes before running the verifier: it reads captured staged blob IDs rather than working-tree files, so unstaged edits, missing local files, or replaced symlink targets cannot change the bytes being verified. Core and schema entries must be regular Git files; symlinks and submodules produce `file.regular` findings and exit status `1`. Unresolved index conflicts make verification incomplete. Historical checks still read committed Git objects against the explicit base.
 
+Intent-to-add placeholders (`git add -N`) are excluded because they are not part of the tree Git would commit; a genuinely staged empty file is still checked. Candidate enumeration and blob reads disable local Git replacement objects so the verifier reads the original indexed bytes.
+
 A failed prerequisite invalidates the repository and prevents only checks that cannot be evaluated honestly. It never becomes a false pass for dependent rules. Missing schemas, unavailable required history, internal errors, and incomplete execution cannot produce a valid report.
 
 The verifier reports findings; it does not fix them. Its machine report contains only the settled verification version, validity, and sorted findings. Terminal presentation is derived from that report. Exit status `0` means complete success, `1` means complete verification found rule failures, and `2` means verification could not complete.

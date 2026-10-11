@@ -65,22 +65,49 @@ export function createRepositorySnapshot(
 export async function loadRepositorySnapshot(
   repositoryRoot: string,
 ): Promise<RepositorySnapshot> {
+  // Compare the index with the empty tree to enumerate the complete candidate,
+  // including unchanged files, but excluding `git add -N` placeholders. Compute
+  // the empty tree ID for the repository's object format without writing it.
+  const hash = Bun.spawn(["git", "-C", repositoryRoot, "hash-object", "-t", "tree", "--stdin"], {
+    stdin: new Blob([]),
+    stdout: "pipe",
+    stderr: "pipe",
+  });
+  const [hashExit, hashOutput] = await Promise.all([
+    hash.exited,
+    new Response(hash.stdout).text(),
+    new Response(hash.stderr).text(),
+  ]);
+  const emptyTree = hashOutput.trim();
+  if (hashExit !== 0 || !/^(?:[0-9a-f]{40}|[0-9a-f]{64})$/.test(emptyTree)) {
+    throw new Error("Git empty tree ID could not be determined");
+  }
   const { stdout } = await execFileAsync(
     "git",
-    ["-C", repositoryRoot, "ls-files", "--stage", "--full-name", "-z"],
+    [
+      "--no-replace-objects", "-C", repositoryRoot, "diff", "--cached", "--raw",
+      "-z", "--no-abbrev", "--no-renames", "--no-relative", "--no-ext-diff",
+      "--no-textconv", "--ignore-submodules=none", "--ita-invisible-in-index",
+      emptyTree, "--",
+    ],
     { encoding: "utf8", maxBuffer: 16 * 1024 * 1024 },
   );
-  const entries = stdout.split("\0").filter(Boolean).map((line) => {
-    const match = /^([0-7]{6}) ([0-9a-f]+) ([0-3])\t([\s\S]+)$/.exec(line);
-    if (match === null || match[3] !== "0") {
+  const fields = stdout.split("\0");
+  if (fields.pop() !== "" || fields.length % 2 !== 0) {
+    throw new Error("Git index response is malformed");
+  }
+  const entries: { mode: string; objectId: string; path: string }[] = [];
+  for (let index = 0; index < fields.length; index += 2) {
+    const match = /^:000000 ([0-7]{6}) 0+ ([0-9a-f]+) A$/.exec(fields[index]!);
+    if (match === null) {
       throw new Error("Git index is malformed or contains unresolved conflicts");
     }
     const mode = match[1]!;
     const objectId = match[2]!;
-    const path = match[4]!;
+    const path = fields[index + 1]!;
     requireRepositoryPath(path);
-    return { mode, objectId, path };
-  });
+    entries.push({ mode, objectId, path });
+  }
   // Read only regular blobs by their captured index IDs. Never dereference a
   // working-tree path, symlink target, or submodule checkout.
   const regular = entries.filter((entry) =>
@@ -89,7 +116,7 @@ export async function loadRepositorySnapshot(
   const blobs = new Map<string, Uint8Array>();
   if (regular.length > 0) {
     const objectIds = [...new Set(regular.map((entry) => entry.objectId))];
-    const child = Bun.spawn(["git", "-C", repositoryRoot, "cat-file", "--batch"], {
+    const child = Bun.spawn(["git", "--no-replace-objects", "-C", repositoryRoot, "cat-file", "--batch"], {
       stdin: new Blob([`${objectIds.join("\n")}\n`]),
       stdout: "pipe",
       stderr: "pipe",
