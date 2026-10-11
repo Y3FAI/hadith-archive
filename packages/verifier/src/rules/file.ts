@@ -7,7 +7,7 @@ import {
 } from "@open-hadith/canonical-json";
 
 import type { VerificationFindingInput, VerificationRule } from "../protocol.ts";
-import type { RepositorySnapshot, TrackedFile } from "../repository.ts";
+import { isRegularFile, type RepositorySnapshot, type TrackedFile } from "../repository.ts";
 
 const PRIVATE_PATHS = new Set([
   ".claude",
@@ -25,7 +25,7 @@ const PRIVATE_EXTENSIONS = new Set([
 ]);
 
 function isCoreJson(file: TrackedFile): boolean {
-  return file.path.endsWith(".json") &&
+  return isRegularFile(file) && file.path.endsWith(".json") &&
     (file.path.startsWith("core/") || file.path.startsWith("schemas/"));
 }
 
@@ -90,6 +90,17 @@ export const repositoryPrivateMaterialAbsent: VerificationRule<RepositorySnapsho
     .filter((file) => hasPrivatePath(file.path))
     .map((file) => finding(file, "Private material must not be tracked")),
   id: "repository.private_material_absent",
+  prerequisites: [],
+};
+
+export const fileRegular: VerificationRule<RepositorySnapshot> = {
+  evaluate: (snapshot) => snapshot.files.filter((file) =>
+    !isRegularFile(file) &&
+    ["core", "schemas"].some((root) =>
+      file.path === root || file.path.startsWith(`${root}/`)
+    )
+  ).map((file) => finding(file, "Core and schema paths must be regular Git files")),
+  id: "file.regular",
   prerequisites: [],
 };
 
@@ -206,6 +217,7 @@ export const textNfc: VerificationRule<RepositorySnapshot> = {
 
 export const REPOSITORY_FILE_RULES = Object.freeze([
   repositoryPrivateMaterialAbsent,
+  fileRegular,
   fileValidUtf8,
   fileNoBom,
   fileLfOnly,

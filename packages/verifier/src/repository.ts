@@ -1,11 +1,10 @@
 import { execFile } from "node:child_process";
-import { readFile } from "node:fs/promises";
-import { resolve } from "node:path";
 import { promisify } from "node:util";
 
 const execFileAsync = promisify(execFile);
 
 export interface TrackedFile {
+  readonly mode: string;
   readonly path: string;
   readBytes(): Uint8Array;
 }
@@ -16,7 +15,12 @@ export interface RepositorySnapshot {
 
 export interface RepositoryFileInput {
   readonly bytes: Uint8Array;
+  readonly mode?: string;
   readonly path: string;
+}
+
+export function isRegularFile(file: TrackedFile): boolean {
+  return file.mode === "100644" || file.mode === "100755";
 }
 
 function compareText(left: string, right: string): number {
@@ -49,6 +53,7 @@ export function createRepositorySnapshot(
     seen.add(input.path);
     const storedBytes = Uint8Array.from(input.bytes);
     return Object.freeze({
+      mode: input.mode ?? "100644",
       path: input.path,
       readBytes: () => Uint8Array.from(storedBytes),
     });
@@ -62,18 +67,65 @@ export async function loadRepositorySnapshot(
 ): Promise<RepositorySnapshot> {
   const { stdout } = await execFileAsync(
     "git",
-    ["-C", repositoryRoot, "ls-files", "-z"],
+    ["-C", repositoryRoot, "ls-files", "--stage", "--full-name", "-z"],
     { encoding: "utf8", maxBuffer: 16 * 1024 * 1024 },
   );
-  const paths = stdout.split("\0").filter((path) => path.length > 0);
-  const inputs = await Promise.all(
-    paths.map(async (path) => {
-      requireRepositoryPath(path);
-      return {
-        bytes: await readFile(resolve(repositoryRoot, path)),
-        path,
-      };
-    }),
+  const entries = stdout.split("\0").filter(Boolean).map((line) => {
+    const match = /^([0-7]{6}) ([0-9a-f]+) ([0-3])\t([\s\S]+)$/.exec(line);
+    if (match === null || match[3] !== "0") {
+      throw new Error("Git index is malformed or contains unresolved conflicts");
+    }
+    const mode = match[1]!;
+    const objectId = match[2]!;
+    const path = match[4]!;
+    requireRepositoryPath(path);
+    return { mode, objectId, path };
+  });
+  // Read only regular blobs by their captured index IDs. Never dereference a
+  // working-tree path, symlink target, or submodule checkout.
+  const regular = entries.filter((entry) =>
+    entry.mode === "100644" || entry.mode === "100755"
   );
+  const blobs = new Map<string, Uint8Array>();
+  if (regular.length > 0) {
+    const objectIds = [...new Set(regular.map((entry) => entry.objectId))];
+    const child = Bun.spawn(["git", "-C", repositoryRoot, "cat-file", "--batch"], {
+      stdin: new Blob([`${objectIds.join("\n")}\n`]),
+      stdout: "pipe",
+      stderr: "pipe",
+    });
+    const [exitCode, output] = await Promise.all([
+      child.exited,
+      new Response(child.stdout).arrayBuffer(),
+      new Response(child.stderr).text(),
+    ]);
+    if (exitCode !== 0) throw new Error("Staged Git blobs could not be read");
+    const buffer = Buffer.from(output);
+    let offset = 0;
+    for (const objectId of objectIds) {
+      const headerEnd = buffer.indexOf(0x0a, offset);
+      if (headerEnd < 0) throw new Error("Git blob header is missing");
+      const header = buffer.toString("ascii", offset, headerEnd).split(" ");
+      const size = Number(header[2]);
+      const start = headerEnd + 1;
+      const end = start + size;
+      if (
+        header.length !== 3 || header[0] !== objectId || header[1] !== "blob" ||
+        !Number.isSafeInteger(size) || size < 0 ||
+        end >= buffer.length || buffer[end] !== 0x0a
+      ) {
+        throw new Error("Git blob response is invalid or incomplete");
+      }
+      blobs.set(objectId, buffer.subarray(start, end));
+      offset = end + 1;
+    }
+    if (offset !== buffer.length) throw new Error("Unexpected Git blob response");
+  }
+  const inputs = entries.map(({ mode, objectId, path }) => ({
+    // Non-regular entries carry metadata only; file.regular owns their finding.
+    bytes: blobs.get(objectId) ?? new Uint8Array(),
+    mode,
+    path,
+  }));
   return createRepositorySnapshot(inputs);
 }

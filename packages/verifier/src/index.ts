@@ -43,6 +43,7 @@ export {
   fileFinalLf,
   fileLfOnly,
   fileNoBom,
+  fileRegular,
   fileValidUtf8,
   jsonCanonical,
   jsonParseable,

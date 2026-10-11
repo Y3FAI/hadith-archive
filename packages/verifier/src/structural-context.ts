@@ -7,7 +7,7 @@ import {
   type SchemaCatalogInspection,
 } from "@open-hadith/core-loader";
 
-import type { RepositorySnapshot, TrackedFile } from "./repository.ts";
+import { isRegularFile, type RepositorySnapshot, type TrackedFile } from "./repository.ts";
 
 export interface CoreRecordCandidate {
   readonly file: TrackedFile;
@@ -41,7 +41,7 @@ export function createStructuralVerificationContext(
     if (file.path.startsWith("schemas/") && file.path.endsWith(".json")) {
       const relativePath = file.path.slice("schemas/".length);
       schemaPaths.add(relativePath);
-      if (EXPECTED_SCHEMA_PATHS.includes(relativePath)) {
+      if (isRegularFile(file) && EXPECTED_SCHEMA_PATHS.includes(relativePath)) {
         try {
           documents.set(relativePath, parseCanonicalJsonBytes(file.readBytes()));
         } catch {
@@ -49,7 +49,7 @@ export function createStructuralVerificationContext(
         }
       }
     }
-    if (file.path.startsWith("core/") && file.path.endsWith(".json")) {
+    if (isRegularFile(file) && file.path.startsWith("core/") && file.path.endsWith(".json")) {
       try {
         const value = parseCanonicalJsonBytes(file.readBytes());
         if (isObject(value)) {
