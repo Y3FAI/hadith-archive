@@ -4,11 +4,17 @@ Preserving hadith as source-bound textual occurrences.
 
 ## Verification
 
-Install dependencies with `bun install --frozen-lockfile` and run `bun run check` for the toolchain checks. Repository verification checks **staged Git contents**. Stage candidate data and schema changes with `git add` or `git rm`, then run:
+Install dependencies with `bun install --frozen-lockfile`. Repository verification checks **staged Git contents** against an explicit accepted base. On a feature branch targeting `main`, fetch the target branch, capture the common ancestor, and stage candidate data and schema changes with `git add` or `git rm`:
 
 ```sh
-bun run packages/verifier/src/main.ts --base <accepted-base-commit>
+git fetch origin main &&
+base=$(git merge-base origin/main HEAD) &&
+bun run check --base "$base"
 ```
+
+`check` runs the toolchain checks and forwards `--base` to repository verification. To run only repository verification, use `bun run verify --base "$base"`. There is no implicit base: omitting it exits with status `2` rather than reporting a valid repository.
+
+Before merging, update the feature branch against the latest target branch and verify again. For verification after a merge, supply the accepted target commit from **before** the merge; using the new `main` tip as its own base would treat the new identifiers as already accepted. Do not use a feature branch's `HEAD^` as the accepted base: it includes draft commits and can hide invalid identifiers introduced earlier in the branch.
 
 Unstaged changes are excluded from the repository report. Core and schema symlinks and submodules are rejected. See [the toolchain contract](docs/tooling.md).
 
