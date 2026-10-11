@@ -695,6 +695,8 @@ Verification checks the complete repository by default and collects every failur
 
 Validation performs no network request and makes no file change. Historical checks compare with an explicit Git base resolved to a commit before checking. Formatting, migration, and repair are separate explicit commands.
 
+Repository verification reads the Git index: paths, file modes, and the exact staged blob bytes. Stage candidate additions, edits, and deletions with `git add` or `git rm` before verifying. Unstaged edits and untracked files are not part of that candidate. Symlinks and submodules at or beneath `core/` and `schemas/` fail `file.regular`; their targets are never read. Regular Git modes `100644` and `100755` are accepted. An unresolved index conflict prevents verification from completing (exit status `2`).
+
 Exit status `0` means complete verification with every rule passing. Status `1` means complete verification found one or more content or schema failures. Status `2` means verification could not complete because of a tool, configuration, or environment failure.
 
 ### File representation
@@ -732,6 +734,7 @@ The version-one catalog contains the following authoritative rules.
 | Rule identifier | Failure condition |
 |---|---|
 | `repository.private_material_absent` | Git tracks `AGENTS.md`, `decisions/`, `sources/`, a source PDF, scan, or other prohibited private material. Ignored local files are permitted. |
+| `file.regular` | An index entry at or beneath `core/` or `schemas/` is not a regular Git file (mode `100644` or `100755`). Symlinks and submodules are rejected without reading their targets. |
 | `file.valid_utf8` | A tracked schema or core JSON file is not valid UTF-8. |
 | `file.no_bom` | A tracked schema or core JSON file begins with a BOM. |
 | `file.lf_only` | A tracked schema or core JSON file contains CR or another line-ending form. |

@@ -2,6 +2,16 @@
 
 Preserving hadith as source-bound textual occurrences.
 
+## Verification
+
+Install dependencies with `bun install --frozen-lockfile` and run `bun run check` for the toolchain checks. Repository verification checks **staged Git contents**. Stage candidate data and schema changes with `git add` or `git rm`, then run:
+
+```sh
+bun run packages/verifier/src/main.ts --base <accepted-base-commit>
+```
+
+Unstaged changes are excluded from the repository report. Core and schema symlinks and submodules are rejected. See [the toolchain contract](docs/tooling.md).
+
 ## License
 
 This repository holds two kinds of work, licensed separately.
