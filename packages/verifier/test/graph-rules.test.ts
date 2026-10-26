@@ -245,3 +245,105 @@ describe("cross-record graph rules", () => {
     expect(ids).toContain("hadith.extracted_spans");
   });
 });
+
+describe("hadith extracted spans", () => {
+  const niyyat = "إِنَّمَا الأَعْمَالُ بِالنِّيَّاتِ";
+
+  async function spanPaths(
+    rawText: string,
+    spans: { description: string; heading: string; title: string },
+  ): Promise<string[]> {
+    const result = await verify([
+      source(),
+      witness(),
+      section("core/sources/example/sections/root.json", "root", 1),
+      section("core/sources/example/sections/child.json", "child", 2, "root"),
+      occurrence(undefined, { fingerprint: fingerprint(rawText), raw_text: rawText }),
+      hadith(undefined, spans),
+    ]);
+    expect(result.kind).toBe("complete");
+    return result.kind === "complete"
+      ? result.report.findings.map((finding) => `${finding.rule_id} ${finding.instance_path}`)
+      : [];
+  }
+
+  test("accepts complete grapheme clusters, including spans inside words", async () => {
+    expect(await spanPaths(niyyat, {
+      description: niyyat,
+      heading: "الأَعْمَالُ",
+      title: "نِّيَّ",
+    })).toEqual([]);
+  });
+
+  test("rejects spans that start or end inside a grapheme cluster", async () => {
+    expect(await spanPaths(niyyat, {
+      // Ends before the final kasra of بِالنِّيَّاتِ.
+      description: "إِنَّمَا الأَعْمَالُ بِالنِّيَّات",
+      // Starts with the sukun of عْ.
+      heading: "ْمَالُ",
+      // The lone damma of الأَعْمَالُ.
+      title: "ُ",
+    })).toEqual([
+      "hadith.extracted_spans /description",
+      "hadith.extracted_spans /heading",
+      "hadith.extracted_spans /title",
+    ]);
+  });
+
+  test("rejects spans that keep only some marks of a letter", async () => {
+    expect(await spanPaths(niyyat, {
+      // Keeps the kasra of نِّ but drops its shadda.
+      description: "بِالنِ",
+      // Keeps the fatha of نَّ but drops its shadda.
+      heading: "إِنَ",
+      title: "إِنَّ",
+    })).toEqual([
+      "hadith.extracted_spans /description",
+      "hadith.extracted_spans /heading",
+    ]);
+  });
+
+  test("accepts a later or overlapping occurrence after one that splits a cluster", async () => {
+    // نَ first occurs inside نَّ, splitting its shadda, then whole in نَوَى.
+    const rawText = `${niyyat}، وَإِنَّمَا لِكُلِّ امْرِئٍ مَا نَوَى`;
+    expect(await spanPaths(rawText, {
+      description: rawText,
+      heading: "نَ",
+      title: "نَوَى",
+    })).toEqual([]);
+
+    // بَب first matches at 0, splitting the second ب from its fatha, then
+    // matches again at 2, overlapping the first match, on whole clusters.
+    expect(await spanPaths("بَبَب", {
+      description: "بَبَب",
+      heading: "بَب",
+      title: "بَب",
+    })).toEqual([]);
+  });
+
+  test("keeps exact single-line matching", async () => {
+    expect(await spanPaths(`${niyyat}\nوَإِنَّمَا لِكُلِّ امْرِئٍ مَا نَوَى`, {
+      // A stored LF is a grapheme boundary but still cannot be crossed.
+      description: "بِالنِّيَّاتِ\nوَإِنَّمَا",
+      // Diacritics are not stripped before matching.
+      heading: "إنما الأعمال بالنيات",
+      title: "مَا نَوَى",
+    })).toEqual([
+      "hadith.extracted_spans /description",
+      "hadith.extracted_spans /heading",
+    ]);
+  });
+
+  test("treats ZWJ and supplementary characters as parts of clusters", async () => {
+    const rawText = "ه‍ـ 👍🏽";
+    expect(await spanPaths(rawText, {
+      // The ZWJ extends ه, and the skin-tone modifier extends 👍.
+      description: "ه",
+      heading: "👍",
+      title: "ه‍",
+    })).toEqual([
+      "hadith.extracted_spans /description",
+      "hadith.extracted_spans /heading",
+    ]);
+  });
+});

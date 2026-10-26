@@ -60,7 +60,7 @@ The published text is selected, never composed. Where occurrences differ, the on
 
 A hadith also carries the text its page needs to be found: a title, a heading, and a description. These are chosen when the hadith is minted, by the same combination of scripts, assisted review, and human decision. They are drawn from the displayed occurrence and never written, which keeps a published page free of any sentence the project composed. Every occurrence a hadith gathers is presented on that page beneath the selected text, with its edition and location, so that a reader sees each appearance in full rather than a single version standing for all of them.
 
-The title, heading, and description are nonempty single-line contiguous spans. They may overlap or be identical, but they cannot join passages, cross a stored line boundary, normalize characters, paraphrase, or add punctuation. Membership remains on occurrence records rather than being duplicated as an array on the hadith.
+The title, heading, and description are nonempty single-line contiguous spans that begin and end on extended grapheme-cluster boundaries, so none starts or stops partway through a letter and its marks. They may overlap or be identical, but they cannot join passages, cross a stored line boundary, normalize characters, paraphrase, or add punctuation. Membership remains on occurrence records rather than being duplicated as an array on the hadith.
 
 ## Conceptual structure
 
@@ -203,7 +203,7 @@ These are the rules verification enforces. Each fails on what a machine can prov
 
 **A hadith is never empty.** Every hadith groups at least one occurrence. An occurrence, by contrast, may belong to none.
 
-**Published text is drawn, not written.** A hadith's title, heading, and description each appear verbatim within the raw text of the occurrence it displays. No page presents a sentence that no edition printed, and the rule is checkable rather than merely stated.
+**Published text is drawn, not written.** A hadith's title, heading, and description each appear verbatim within the raw text of the occurrence it displays, in at least one place where the span starts and ends on extended grapheme-cluster boundaries. No page presents a sentence that no edition printed, and the rule is checkable rather than merely stated.
 
 **Sequence is complete within a witness.** Occurrence ordinals are unique and contiguous from `1`, so the printed order is always total and authoritative ingestion proceeds in that order.
 
