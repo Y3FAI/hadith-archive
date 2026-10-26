@@ -435,6 +435,31 @@ export const hadithDisplayIsMember: VerificationRule<StructuralVerificationConte
   prerequisites: [],
 };
 
+const graphemes = new Intl.Segmenter(undefined, { granularity: "grapheme" });
+
+function graphemeBoundaries(text: string): ReadonlySet<number> {
+  const boundaries = new Set<number>([text.length]);
+  for (const { index } of graphemes.segment(text)) {
+    boundaries.add(index);
+  }
+  return boundaries;
+}
+
+// Any exact occurrence may qualify, so a match that splits a cluster does not
+// hide a later one, including one that overlaps it.
+function containsGraphemeSpan(
+  text: string,
+  boundaries: ReadonlySet<number>,
+  span: string,
+): boolean {
+  for (let start = text.indexOf(span); start !== -1; start = text.indexOf(span, start + 1)) {
+    if (boundaries.has(start) && boundaries.has(start + span.length)) {
+      return true;
+    }
+  }
+  return false;
+}
+
 export const hadithExtractedSpans: VerificationRule<StructuralVerificationContext> = {
   evaluate: (context) => {
     const occurrences = occurrenceIndex(context);
@@ -445,8 +470,9 @@ export const hadithExtractedSpans: VerificationRule<StructuralVerificationContex
         return [];
       }
       const rawText = (displayed[0]?.record as OccurrenceRecord).raw_text;
+      const boundaries = graphemeBoundaries(rawText);
       return (["description", "heading", "title"] as const).flatMap((field) =>
-        !record[field].includes("\n") && rawText.includes(record[field])
+        !record[field].includes("\n") && containsGraphemeSpan(rawText, boundaries, record[field])
           ? []
           : [finding(entry, `/${field}`, `${field} is not an exact display-occurrence span`)]
       );

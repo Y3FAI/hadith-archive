@@ -652,7 +652,7 @@ A version-one hadith record has exactly seven required properties:
 
 `record_type` is the constant `hadith`, `schema_version` is the integer constant `1`, `hadith_id` is the approved `HadithId`, and `display_occurrence_id` is the approved `OccurrenceId` whose record supplies the complete published raw text.
 
-`title`, `heading`, and `description` use the common `ExtractedSpanText` type. Each is nonempty NFC single-line text with no leading or trailing whitespace, repeated spaces, or control characters. Each must occur as one exact contiguous substring of the display occurrence's `raw_text`; it cannot concatenate passages, normalize characters, rewrite punctuation, summarize, paraphrase, or add an ellipsis. A span cannot cross a stored LF. The three values may overlap or be identical, and no arbitrary maximum length rejects a legitimate phrase.
+`title`, `heading`, and `description` use the common `ExtractedSpanText` type. Each is nonempty NFC single-line text with no leading or trailing whitespace, repeated spaces, or control characters. Each must occur as one exact contiguous substring of the display occurrence's `raw_text` whose start and end both fall on extended grapheme-cluster boundaries of that raw text, so a span cannot begin or end inside a letter's cluster of marks. Any one matching occurrence suffices. A span cannot concatenate passages, normalize characters, rewrite punctuation, summarize, paraphrase, or add an ellipsis. A span cannot cross a stored LF. The three values may overlap or be identical, and no arbitrary maximum length rejects a legitimate phrase.
 
 The display occurrence must resolve and must carry the same `hadith_id`. At least one occurrence must name the hadith. Membership is discovered from occurrence records; the hadith record does not duplicate an `occurrence_ids` array. Changing the display occurrence revalidates all three spans, and scripts may propose but never approve a selection.
 
@@ -798,7 +798,7 @@ The version-one catalog contains the following authoritative rules.
 | `section.depth_first_order` | A parent does not precede its descendants or a subtree is not contiguous in source ordinal order. |
 | `hadith.nonempty` | No occurrence names a hadith. |
 | `hadith.display_is_member` | A displayed occurrence does not carry the displaying hadith's identifier. |
-| `hadith.extracted_spans` | A title, heading, or description is not an exact contiguous single-line substring of displayed raw text. |
+| `hadith.extracted_spans` | A title, heading, or description is not an exact contiguous single-line substring of displayed raw text that starts and ends on extended grapheme-cluster boundaries in at least one occurrence. |
 
 ### Historical rules
 
