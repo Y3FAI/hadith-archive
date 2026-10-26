@@ -1,8 +1,8 @@
 import { createHash } from "node:crypto";
 
 import type {
+  LoadedCoreRecord,
   OccurrenceRecord,
-  OpenHadithRecord,
   SourceWitnessRecord,
 } from "@open-hadith/core-loader";
 
@@ -21,7 +21,7 @@ function finding(
 }
 
 function singleLineFields(
-  record: OpenHadithRecord,
+  record: LoadedCoreRecord,
 ): readonly { readonly path: string; readonly value: string }[] {
   switch (record.record_type) {
     case "source":

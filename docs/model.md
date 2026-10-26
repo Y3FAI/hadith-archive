@@ -44,7 +44,7 @@ A location spans pages where the printed text does. A narration crossing a page 
 
 An occurrence also records its ordinal: its position in the printed sequence of its witness. Editions that number their texts supply an order already, but many do not, and page alone cannot order two texts printed on the same page. The sequence is a fact about the book, recoverable only while the book is open, and it is what allows a section to be presented in the order its author arranged it.
 
-Occurrence ordinals are unique and contiguous from `1` within a source witness, so authoritative ingestion follows printed report order. Omitted hadith membership means not yet grouped. Omitted section membership affirmatively means that no section applies, not that an applicable section remains unrecorded.
+Occurrence ordinals are unique and contiguous from `1` within a source witness, so authoritative ingestion follows printed report order. An occurrence carries no reference to a hadith; grouping is recorded on hadith records, and an occurrence that no hadith lists is not yet grouped. Omitted section membership affirmatively means that no section applies, not that an applicable section remains unrecorded.
 
 An occurrence belonging to no hadith is a valid and expected state. Ingestion produces occurrences and nothing else; grouping them is separate, later work.
 
@@ -54,13 +54,17 @@ The canonical unit. A hadith gathers the occurrences of one narration wherever i
 
 It is the only entity Open Hadith authors. A source, a witness, and an occurrence are all discoveries: a work exists, a book exists, ink on a page exists. A hadith is a judgement that several appearances are one narration.
 
+That judgement is still authoritative core data. The core holds the source-bound records and, beside them, the human-reviewed hadith records that group them. A hadith record is not derived and cannot be regenerated from the others; it is kept, verified, and preserved under the same rules as the records it groups.
+
 That judgement is made deliberately. Scripts and assisted review propose candidates — whether a narration is already recorded, whether a new occurrence belongs with existing ones — and a person decides. Hadith are not regenerated. An existing hadith is altered only to correct a clear mistake.
 
 The published text is selected, never composed. Where occurrences differ, the one that best represents their weighted agreement is published verbatim, in full, as one witness printed it. Open Hadith does not assemble a text that no edition contains.
 
 A hadith also carries the text its page needs to be found: a title, a heading, and a description. These are chosen when the hadith is minted, by the same combination of scripts, assisted review, and human decision. They are drawn from the displayed occurrence and never written, which keeps a published page free of any sentence the project composed. Every occurrence a hadith gathers is presented on that page beneath the selected text, with its edition and location, so that a reader sees each appearance in full rather than a single version standing for all of them.
 
-The title, heading, and description are nonempty single-line contiguous spans that begin and end on extended grapheme-cluster boundaries, so none starts or stops partway through a letter and its marks. They may overlap or be identical, but they cannot join passages, cross a stored line boundary, normalize characters, paraphrase, or add punctuation. Membership remains on occurrence records rather than being duplicated as an array on the hadith.
+The title, heading, and description are nonempty single-line contiguous spans that begin and end on extended grapheme-cluster boundaries, so none starts or stops partway through a letter and its marks. They may overlap or be identical, but they cannot join passages, cross a stored line boundary, normalize characters, paraphrase, or add punctuation.
+
+Membership is recorded once, on the hadith, as the set of its occurrence identifiers. The set is written in strictly ascending numeric order so that one membership has one representation; the order carries no editorial or display meaning, and the displayed occurrence is chosen separately. Occurrence records carry no reference back, so a reviewed change to a grouping edits hadith records and never rewrites preserved text.
 
 ## Conceptual structure
 
@@ -123,7 +127,7 @@ erDiagram
   SECTION o|--o{ SECTION : "parent_section_id"
   SOURCE_WITNESS ||--o{ OCCURRENCE : "witness_id"
   SECTION o|--o{ OCCURRENCE : "section_id"
-  HADITH o|--o{ OCCURRENCE : "hadith_id"
+  HADITH o|--|{ OCCURRENCE : "member_occurrence_ids"
   HADITH o|--|| OCCURRENCE : "display_occurrence_id"
 
   SOURCE {
@@ -158,7 +162,6 @@ erDiagram
     int    occurrence_id PK "stable internal identifier"
     string witness_id FK
     string section_id FK "omitted when no section applies"
-    int    hadith_id FK "omitted until grouped"
     int    volume "per reference_scheme"
     int    page_start
     int    page_end "equals page_start when not spanning"
@@ -170,14 +173,15 @@ erDiagram
 
   HADITH {
     int    hadith_id PK "positive global sequence"
-    string display_occurrence_id FK
+    int[]  member_occurrence_ids FK "nonempty set, ascending numeric order"
+    int    display_occurrence_id FK "one of member_occurrence_ids"
     string title "span of the displayed raw_text"
     string heading "span of the displayed raw_text"
     string description "span of the displayed raw_text"
   }
 ```
 
-`HADITH` and `OCCURRENCE` reference each other: an occurrence names the hadith it belongs to, and a hadith names the occurrence it displays. The cycle is intentional and is constrained below.
+References between `HADITH` and `OCCURRENCE` run one way. A hadith names every occurrence it groups and the one it displays; an occurrence names no hadith. Source-bound records therefore never depend on a grouping judgement, and changing that judgement touches only hadith records. The constraints below keep the one-way references consistent.
 
 ## Constraints
 
@@ -199,9 +203,13 @@ These are the rules verification enforces. Each fails on what a machine can prov
 
 **Section structure is total.** Section ordinals are unique and contiguous within a source, parents precede descendants, and the parent graph has no self-reference or cycle.
 
-**The displayed occurrence is a grouped occurrence.** A hadith's `display_occurrence_id` must name an occurrence whose `hadith_id` is that hadith. A hadith cannot publish text it does not gather.
+**The displayed occurrence is a grouped occurrence.** A hadith's `display_occurrence_id` must appear in its own `member_occurrence_ids` and resolve to exactly one occurrence. A hadith cannot publish text it does not gather.
 
-**A hadith is never empty.** Every hadith groups at least one occurrence. An occurrence, by contrast, may belong to none.
+**A hadith is never empty.** Every hadith lists at least one occurrence, and every listed identifier resolves to exactly one occurrence. A hadith of one occurrence is valid.
+
+**An occurrence belongs to at most one hadith.** No occurrence identifier appears in the member lists of two hadith, whether or not either displays it. An occurrence, by contrast, may belong to none.
+
+**Membership has one representation.** A member list contains no repeated identifier and is written in strictly ascending numeric order.
 
 **Published text is drawn, not written.** A hadith's title, heading, and description each appear verbatim within the raw text of the occurrence it displays, in at least one place where the span starts and ends on extended grapheme-cluster boundaries. No page presents a sentence that no edition printed, and the rule is checkable rather than merely stated.
 
@@ -233,4 +241,4 @@ The trailing slash is part of the canonical address. A host may redirect the sla
 
 **Grading.** Not yet carried, and it will need no new entity when it is: a grading work is a source like any other.
 
-**Relationships between records.** Grouping by hadith expresses sameness, which was the whole of their early purpose. A relationship entity returns when assertions that are not sameness arrive.
+**Relationships between records.** Grouping by hadith expresses sameness, which was the whole of their early purpose, and it lives in the core as reviewed hadith records. A relationship entity for assertions that are not sameness remains deferred until such assertions arrive.

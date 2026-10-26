@@ -55,7 +55,7 @@ describe("verification runner", () => {
 
     expect(result).toEqual({
       kind: "complete",
-      report: { findings: [], valid: true, verification_version: 1 },
+      report: { findings: [], valid: true, verification_version: 2 },
     });
   });
 

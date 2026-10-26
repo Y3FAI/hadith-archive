@@ -87,7 +87,7 @@ describe("repository and file rules", () => {
 
     expect(await runVerification(snapshot, REPOSITORY_FILE_RULES)).toEqual({
       kind: "complete",
-      report: { findings: [], valid: true, verification_version: 1 },
+      report: { findings: [], valid: true, verification_version: 2 },
     });
   });
 

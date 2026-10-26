@@ -94,7 +94,6 @@ function occurrence(
   const rawText = "عنوان حديث كامل";
   return input(path, {
     fingerprint: fingerprint(rawText),
-    hadith_id: 1,
     location: { hadith_number: 1, page_end: 10, page_start: 10 },
     occurrence_id: 1,
     ordinal: 1,
@@ -116,6 +115,7 @@ function hadith(
     display_occurrence_id: 1,
     hadith_id: 1,
     heading: "حديث",
+    member_occurrence_ids: [1],
     record_type: "hadith",
     schema_version: 1,
     title: "عنوان",
@@ -146,7 +146,7 @@ describe("cross-record graph rules", () => {
   test("accepts a complete consistent graph", async () => {
     expect(await verify(validGraph())).toEqual({
       kind: "complete",
-      report: { findings: [], valid: true, verification_version: 1 },
+      report: { findings: [], valid: true, verification_version: 2 },
     });
   });
 
@@ -191,22 +191,21 @@ describe("cross-record graph rules", () => {
     expect(ids).toContain("occurrence.ordinal_sequence");
   });
 
-  test("requires every source, witness, section, hadith, and display reference", async () => {
+  test("requires every source, witness, section, member, and display reference", async () => {
     const ids = await ruleIds([
       witness(undefined, { source_id: "missing", witness_id: "missing-edition" }),
       section("core/sources/example/sections/child.json", "child", 1, "missing"),
       occurrence(undefined, {
-        hadith_id: 99,
         section_id: "missing",
         witness_id: "missing-witness",
       }),
-      hadith(undefined, { display_occurrence_id: 99 }),
+      hadith(undefined, { display_occurrence_id: 99, member_occurrence_ids: [99] }),
     ]);
 
     expect(ids).toContain("reference.source_resolves");
     expect(ids).toContain("reference.witness_resolves");
     expect(ids).toContain("reference.section_resolves");
-    expect(ids).toContain("reference.hadith_resolves");
+    expect(ids).toContain("reference.member_occurrence_resolves");
     expect(ids).toContain("reference.display_occurrence_resolves");
   });
 
@@ -225,24 +224,141 @@ describe("cross-record graph rules", () => {
     expect(orderIds).toContain("section.depth_first_order");
   });
 
-  test("enforces nonempty membership, display membership, and extracted spans", async () => {
-    const emptyIds = await ruleIds([hadith()]);
-    expect(emptyIds).toContain("hadith.nonempty");
-
+  test("enforces display membership and extracted spans", async () => {
     const ids = await ruleIds([
-      occurrence(undefined, { hadith_id: 2 }),
+      occurrence(),
       occurrence(
         "core/sources/example/witnesses/example-edition/occurrences/2.json",
-        { hadith_id: 1, occurrence_id: 2, ordinal: 2 },
+        { occurrence_id: 2, ordinal: 2 },
       ),
       hadith(undefined, {
         description: "غير موجود",
         heading: "غير موجود",
+        member_occurrence_ids: [2],
         title: "غير موجود",
       }),
     ]);
     expect(ids).toContain("hadith.display_is_member");
     expect(ids).toContain("hadith.extracted_spans");
+  });
+});
+
+describe("hadith membership", () => {
+  function occurrenceAt(id: number, ordinal = id) {
+    return occurrence(
+      `core/sources/example/witnesses/example-edition/occurrences/${id}.json`,
+      { occurrence_id: id, ordinal },
+    );
+  }
+
+  function occurrencesThrough(count: number): RepositoryFileInput[] {
+    return Array.from({ length: count }, (_, index) => occurrenceAt(index + 1));
+  }
+
+  function group(id: number, members: readonly number[], display = members[0]) {
+    return hadith(`core/hadith/${id}.json`, {
+      display_occurrence_id: display,
+      hadith_id: id,
+      member_occurrence_ids: members,
+    });
+  }
+
+  async function findings(records: readonly RepositoryFileInput[]): Promise<string[]> {
+    const result = await verify([
+      source(),
+      witness(),
+      section("core/sources/example/sections/root.json", "root", 1),
+      section("core/sources/example/sections/child.json", "child", 2, "root"),
+      ...records,
+    ]);
+    expect(result.kind).toBe("complete");
+    return result.kind === "complete"
+      ? result.report.findings.map((item) =>
+          `${item.file} ${item.rule_id} ${item.instance_path}`
+        )
+      : [];
+  }
+
+  test("accepts ungrouped occurrences, singletons, and multi-member groups", async () => {
+    expect(await findings([
+      ...occurrencesThrough(5),
+      group(1, [1]),
+      // The display occurrence need not be the lowest member.
+      group(2, [2, 4], 4),
+      // Occurrences 3 and 5 belong to no hadith.
+    ])).toEqual([]);
+  });
+
+  test("orders members numerically rather than lexicographically", async () => {
+    expect(await findings([...occurrencesThrough(10), group(1, [2, 10])])).toEqual([]);
+    expect(await findings([...occurrencesThrough(10), group(1, [10, 2])])).toEqual([
+      "core/hadith/1.json hadith.member_order /member_occurrence_ids",
+    ]);
+    expect(await findings([...occurrencesThrough(10), group(1, [1, 3, 2], 1)])).toEqual([
+      "core/hadith/1.json hadith.member_order /member_occurrence_ids",
+    ]);
+  });
+
+  test("requires every member to resolve to exactly one occurrence", async () => {
+    expect(await findings([...occurrencesThrough(2), group(1, [1, 2, 5], 1)])).toEqual([
+      "core/hadith/1.json reference.member_occurrence_resolves /member_occurrence_ids/2",
+    ]);
+
+    const ambiguous = occurrence(
+      "core/sources/example/witnesses/example-edition/occurrences/3.json",
+      { occurrence_id: 2, ordinal: 3 },
+    );
+    expect(await findings([...occurrencesThrough(2), ambiguous, group(1, [1, 2], 1)])).toEqual([
+      "core/hadith/1.json reference.member_occurrence_resolves /member_occurrence_ids/1",
+      "core/sources/example/witnesses/example-edition/occurrences/2.json identifier.occurrence_unique /occurrence_id",
+      "core/sources/example/witnesses/example-edition/occurrences/3.json identifier.occurrence_unique /occurrence_id",
+    ]);
+  });
+
+  test("allows an occurrence to belong to at most one hadith", async () => {
+    // The shared member is the display of neither group.
+    expect(await findings([...occurrencesThrough(3), group(1, [1, 2], 1), group(2, [2, 3], 3)]))
+      .toEqual([
+        "core/hadith/1.json hadith.member_exclusive /member_occurrence_ids/1",
+        "core/hadith/2.json hadith.member_exclusive /member_occurrence_ids/0",
+      ]);
+
+    // A shared display occurrence is no different.
+    expect(await findings([...occurrencesThrough(2), group(1, [1, 2], 2), group(2, [2])]))
+      .toEqual([
+        "core/hadith/1.json hadith.member_exclusive /member_occurrence_ids/1",
+        "core/hadith/2.json hadith.member_exclusive /member_occurrence_ids/0",
+      ]);
+  });
+
+  test("reports overlapping claims on a missing occurrence conservatively", async () => {
+    expect(await findings([...occurrencesThrough(2), group(1, [1, 9], 1), group(2, [2, 9], 2)]))
+      .toEqual([
+        "core/hadith/1.json hadith.member_exclusive /member_occurrence_ids/1",
+        "core/hadith/1.json reference.member_occurrence_resolves /member_occurrence_ids/1",
+        "core/hadith/2.json hadith.member_exclusive /member_occurrence_ids/1",
+        "core/hadith/2.json reference.member_occurrence_resolves /member_occurrence_ids/1",
+      ]);
+  });
+
+  test("requires the display occurrence to be listed even when it resolves", async () => {
+    expect(await findings([...occurrencesThrough(2), group(1, [1], 2)])).toEqual([
+      "core/hadith/1.json hadith.display_is_member /display_occurrence_id",
+    ]);
+    expect(await findings([...occurrencesThrough(1), group(1, [1], 9)])).toEqual([
+      "core/hadith/1.json hadith.display_is_member /display_occurrence_id",
+      "core/hadith/1.json reference.display_occurrence_resolves /display_occurrence_id",
+    ]);
+  });
+
+  test("changes membership without rewriting occurrence bytes", async () => {
+    const occurrences = occurrencesThrough(3);
+    const before = occurrences.map((file) => [...file.bytes]);
+
+    expect(await findings([...occurrences, group(1, [1])])).toEqual([]);
+    expect(await findings([...occurrences, group(1, [1, 3])])).toEqual([]);
+    expect(await findings([...occurrences, group(1, [1, 3], 3), group(2, [2])])).toEqual([]);
+    expect(occurrences.map((file) => [...file.bytes])).toEqual(before);
   });
 });
 

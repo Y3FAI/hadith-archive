@@ -6,7 +6,7 @@ The schema architecture serves four actors: ingestion pipelines that produce rec
 
 ## Status
 
-The storage architecture, type system, canonical JSON representation, schema-version policy, identifier forms, common semantic types, and exact version-one fields for all five entities are settled. The six version-one JSON Schemas implement that structural contract.
+The storage architecture, type system, canonical JSON representation, schema-version policy, identifier forms, common semantic types, and exact version-one fields for all five entities are settled. The six version-one JSON Schemas implement that structural contract, and verification catalog version two enforces it. The record schemas remain draft version one; the catalog advanced when hadith membership moved from occurrence records onto hadith records.
 
 No core record is accepted until all five version-one entity schemas exist and the verifier enforces their structural and semantic rules.
 
@@ -35,7 +35,9 @@ Human minting ──────────────────────
                                applications
 ```
 
-Ingestion and hadith minting remain separate. Ingestion produces source-bound occurrences; it does not group them or mint public identities. Derived catalogs, indexes, query databases, language bindings, exports, and HTML are reproducible and disposable. None becomes a source of truth.
+Ingestion and hadith minting remain separate. Ingestion produces source-bound occurrences; it does not group them or mint public identities.
+
+The authoritative core therefore holds two kinds of record. `SOURCE`, `SOURCE_WITNESS`, `SECTION`, and `OCCURRENCE` are source-bound: each records something a printed edition shows. `HADITH` is an authoritative human-reviewed judgement: it records which occurrences are one narration, which of them is displayed, and the spans drawn from that display. Both kinds are core data under the same canonical, structural, and historical verification. Neither is derived. Grouping decisions point one way, from a hadith to its member occurrences, so a reviewed grouping can change without rewriting any source-bound record. Derived catalogs, indexes, query databases, language bindings, exports, and HTML are reproducible and disposable. None becomes a source of truth.
 
 Identifiers, record fields, schemas, and relationships form the durable data contract. Filesystem paths remain predictable and verifiable, but may later be reorganized or sharded without changing entity identity.
 
@@ -311,7 +313,7 @@ Every core file has one canonical byte representation:
 - ordinary decimal notation for integers, without fractions or exponents;
 - no floating-point values unless a future schema explicitly requires them.
 
-Arrays preserve their defined semantic order. Any array representing an unordered set declares a deterministic sorting rule.
+Arrays preserve their defined semantic order. Any array representing an unordered set declares a deterministic sorting rule. The one such array in version one, `member_occurrence_ids`, is serialized in strictly ascending numeric order.
 
 A pinned formatter produces the canonical representation. Verification compares every file with the formatter's expected bytes and fails on any difference. Verification never rewrites a record silently; a separate explicit formatting command may repair presentation before review.
 
@@ -603,7 +605,7 @@ The record lives at `core/sources/<source_id>/sections/<section_id>.json`, and v
 
 ### Occurrence record
 
-A version-one occurrence record has eight required properties and two optional relationships. This illustrative record is ungrouped and has no applicable section:
+A version-one occurrence record has eight required properties and one optional relationship. This illustrative record has no applicable section:
 
 ```json
 {
@@ -628,22 +630,28 @@ The example fingerprint is the SHA-256 of the example `raw_text`. The required f
 
 `ordinal` is a positive integer unique within the source witness. Witness occurrence ordinals are contiguous from `1` in printed report order, independent of pages and printed hadith numbers. Authoritative ingestion therefore proceeds in printed order. Correcting an ordinal never changes the occurrence identifier.
 
-`hadith_id` and `section_id` are optional properties. A present `hadith_id` is a positive `HadithId` assigned by human grouping. Its omission means that the occurrence is not grouped. A present `section_id` resolves within the witness's source. Its omission affirmatively means that no section applies; an occurrence cannot enter the core if an applicable source section has merely not been modeled. Neither state uses `null`, zero, an empty string, or a placeholder.
+`section_id` is the only optional property. A present `section_id` resolves within the witness's source. Its omission affirmatively means that no section applies; an occurrence cannot enter the core if an applicable source section has merely not been modeled. The absent state does not use `null`, an empty string, or a placeholder.
 
-The record lives at `core/sources/<source_id>/witnesses/<witness_id>/occurrences/<occurrence_id>.json`. Verification checks all path components, resolves the witness and optional relationships, confirms the location against the witness reference scheme, and enforces the page range. `source_id` is deliberately not repeated in the record because it resolves through `witness_id`.
+An occurrence record carries no hadith reference. Hadith membership is a reviewed grouping decision recorded only on the hadith record, so grouping, regrouping, or ungrouping never rewrites occurrence bytes. A `hadith_id` property on an occurrence fails structural validation like any other unknown property. Whether an occurrence is grouped is discovered from hadith records; an occurrence named by none is ungrouped, which is a valid state.
+
+The record lives at `core/sources/<source_id>/witnesses/<witness_id>/occurrences/<occurrence_id>.json`. Verification checks all path components, resolves the witness and optional section, confirms the location against the witness reference scheme, and enforces the page range. `source_id` is deliberately not repeated in the record because it resolves through `witness_id`.
 
 Normalized text, isnad or matn parts, narrator graphs, OCR confidence, transcription notes, timestamps, and source-file paths remain outside the occurrence record.
 
 ### Hadith record
 
-A version-one hadith record has exactly seven required properties:
+A version-one hadith record has exactly eight required properties. This illustrative record groups occurrences `2` and `10` and displays occurrence `10`:
 
 ```json
 {
   "description": "مثال نص الحديث",
-  "display_occurrence_id": 1,
+  "display_occurrence_id": 10,
   "hadith_id": 1,
   "heading": "مثال نص الحديث",
+  "member_occurrence_ids": [
+    2,
+    10
+  ],
   "record_type": "hadith",
   "schema_version": 1,
   "title": "نص الحديث"
@@ -652,11 +660,15 @@ A version-one hadith record has exactly seven required properties:
 
 `record_type` is the constant `hadith`, `schema_version` is the integer constant `1`, `hadith_id` is the approved `HadithId`, and `display_occurrence_id` is the approved `OccurrenceId` whose record supplies the complete published raw text.
 
+`member_occurrence_ids` is the reviewed membership set: a nonempty array of distinct `OccurrenceId` values. It is a set, not an editorial or display sequence, and it is serialized in strictly ascending numeric order so that one membership has exactly one byte representation: `[2, 10]` is canonical and `[10, 2]` is not, even though `"10"` sorts before `"2"` as text. No arbitrary maximum limits a group, and a group of one is valid. JSON Schema rejects an absent, empty, malformed, or repeated list; semantic verification enforces the numeric order.
+
 `title`, `heading`, and `description` use the common `ExtractedSpanText` type. Each is nonempty NFC single-line text with no leading or trailing whitespace, repeated spaces, or control characters. Each must occur as one exact contiguous substring of the display occurrence's `raw_text` whose start and end both fall on extended grapheme-cluster boundaries of that raw text, so a span cannot begin or end inside a letter's cluster of marks. Any one matching occurrence suffices. A span cannot concatenate passages, normalize characters, rewrite punctuation, summarize, paraphrase, or add an ellipsis. A span cannot cross a stored LF. The three values may overlap or be identical, and no arbitrary maximum length rejects a legitimate phrase.
 
-The display occurrence must resolve and must carry the same `hadith_id`. At least one occurrence must name the hadith. Membership is discovered from occurrence records; the hadith record does not duplicate an `occurrence_ids` array. Changing the display occurrence revalidates all three spans, and scripts may propose but never approve a selection.
+Every listed member must resolve to exactly one occurrence record. An occurrence belongs to at most one hadith: no occurrence identifier may appear in the member lists of two hadith records, whether or not it is the display occurrence of either. The display occurrence must resolve uniquely and must appear in `member_occurrence_ids`; it is chosen independently of member order. Changing the display occurrence revalidates all three spans, and scripts may propose but never approve a selection or a membership.
 
-The record lives at `core/hadith/<hadith_id>.json` and owns `/h/<hadith_id>/`. Verification checks the filename, reciprocal membership, nonempty grouping, selected occurrence, and extracted spans.
+Because membership references point only from hadith to occurrence, a reviewed grouping change edits hadith records alone. This record states no lifecycle policy beyond the existing permanent-address rules.
+
+The record lives at `core/hadith/<hadith_id>.json` and owns `/h/<hadith_id>/`. Verification checks the filename, member resolution, member order, exclusive membership, display membership and resolution, and extracted spans.
 
 The hadith record stores no second canonical text. Rendering resolves and publishes the display occurrence's complete `raw_text`. Translation, transliteration, grading, topic tags, narrator graphs, timestamps, and composed prose remain excluded.
 
@@ -666,9 +678,11 @@ Schema validation is necessary but not sufficient. Verification proceeds in expl
 
 ### Protocol
 
-Every authoritative rule has a stable lowercase identifier matching `^[a-z][a-z0-9_]*(?:\.[a-z][a-z0-9_]*)+$` and belongs to an explicit positive integer `verification_version`. Version one rules pass or fail only; warnings are not authoritative outcomes. Human-review suggestions may exist outside verification but never use authoritative rule identifiers.
+Every authoritative rule has a stable lowercase identifier matching `^[a-z][a-z0-9_]*(?:\.[a-z][a-z0-9_]*)+$` and belongs to an explicit positive integer `verification_version`. Catalog rules pass or fail only; warnings are not authoritative outcomes. Human-review suggestions may exist outside verification but never use authoritative rule identifiers.
 
 A semantic change to a rule or its scope creates a new verification-catalog version. An implementation correction that restores the documented meaning does not. Every rule has passing and failing fixtures, and every verifier bug fix adds a regression fixture.
+
+The verification-catalog version and record schema versions are independent. The current catalog is version two; it replaced version one when hadith membership moved onto hadith records. The record schemas stay at draft version one because no core record on `main` had yet used them. The verifier emits only the current catalog version and refuses to serialize a report claiming any other.
 
 Each failure contains exactly four properties:
 
@@ -689,7 +703,7 @@ The machine report is:
 {
   "findings": [],
   "valid": true,
-  "verification_version": 1
+  "verification_version": 2
 }
 ```
 
@@ -717,7 +731,7 @@ Named checks enforce properties that JSON Schema cannot prove alone, including f
 
 ### Cross-record integrity
 
-Named checks resolve foreign references, enforce global uniqueness, verify hadith membership and display selection, confirm section ancestry, and compare physical placement with declared provenance.
+Named checks resolve foreign references, enforce global uniqueness, verify hadith member resolution, member order, exclusive membership, and display selection, confirm section ancestry, and compare physical placement with declared provenance.
 
 ### Historical integrity
 
@@ -729,9 +743,9 @@ Derived artifacts are built twice from the same core and compared byte for byte.
 
 Every verification rule has a stable name, an implementation, and tests. Verification passes or fails; it never warns authoritative data through and never silently changes core data.
 
-## Version-one verification rules
+## Verification catalog version two
 
-The version-one catalog contains the following authoritative rules.
+The version-two catalog contains the following authoritative rules. Relative to version one, it removes `reference.hadith_resolves` and `hadith.nonempty`, whose occurrence-side membership no longer exists; adds `reference.member_occurrence_resolves`, `hadith.member_order`, and `hadith.member_exclusive`; and redefines `hadith.display_is_member` against the hadith's own member list. A nonempty and repeat-free member list is enforced by `record.schema_valid` rather than a separate rule.
 
 ### Repository and file rules
 
@@ -790,14 +804,15 @@ The version-one catalog contains the following authoritative rules.
 | `reference.source_resolves` | A witness or section names a nonexistent source. |
 | `reference.witness_resolves` | An occurrence names a nonexistent source witness. |
 | `reference.section_resolves` | A parent or occurrence section reference does not resolve within the applicable source. |
-| `reference.hadith_resolves` | A present occurrence hadith reference does not resolve. |
-| `reference.display_occurrence_resolves` | A hadith display-occurrence reference does not resolve. |
+| `reference.member_occurrence_resolves` | A hadith member-occurrence identifier does not resolve to exactly one occurrence. |
+| `reference.display_occurrence_resolves` | A hadith display-occurrence reference does not resolve to exactly one occurrence. |
 | `occurrence.location_matches_scheme` | Volume or hadith number presence disagrees with the witness reference scheme. |
 | `occurrence.page_order` | An ending page is less than its starting page. |
 | `section.parent_acyclic` | A section parents itself or the parent graph contains a cycle. |
 | `section.depth_first_order` | A parent does not precede its descendants or a subtree is not contiguous in source ordinal order. |
-| `hadith.nonempty` | No occurrence names a hadith. |
-| `hadith.display_is_member` | A displayed occurrence does not carry the displaying hadith's identifier. |
+| `hadith.member_order` | Member-occurrence identifiers are not in strictly ascending numeric order. |
+| `hadith.member_exclusive` | One occurrence identifier appears in the member lists of more than one hadith record; every claim is reported, including claims on an unresolved identifier. |
+| `hadith.display_is_member` | A hadith's display-occurrence identifier does not appear in its member list. |
 | `hadith.extracted_spans` | A title, heading, or description is not an exact contiguous single-line substring of displayed raw text that starts and ends on extended grapheme-cluster boundaries in at least one occurrence. |
 
 ### Historical rules
@@ -805,13 +820,13 @@ The version-one catalog contains the following authoritative rules.
 | Rule identifier | Failure condition |
 |---|---|
 | `history.schema_immutable` | A schema version already used by merged core data is changed or removed. |
-| `history.record_preserved` | A merged core record is deleted. Version one requires schema review before adding withdrawal or tombstone states. |
+| `history.record_preserved` | A merged core record is deleted. Record schema version one requires schema review before adding withdrawal or tombstone states. |
 | `history.identifier_not_reused` | A current identifier was previously used by a different historical record. |
 | `history.sequence_next` | Newly minted hadith or occurrence identifiers are not the uninterrupted range immediately after the greatest identifiers ever minted. |
 
 The verifier cannot prove that raw text matches ink on a cited page, bibliographic metadata names the correct printing, a publisher meets the governance standard, an omitted section truly does not apply, grouped occurrences are the same narration, extracted spans are the best choices, or a priority score is scholarly appropriate. Those are human judgements and receive no machine rule identifiers. Verification proves repository consistency; independent verification compares the record with the physical source witness.
 
-Derived-build reproducibility receives a rule when a real builder exists. Version one does not report an unimplemented artifact check as passed.
+Derived-build reproducibility receives a rule when a real builder exists. The catalog does not report an unimplemented artifact check as passed.
 
 ## Verifier implementation
 
@@ -862,7 +877,7 @@ Humans and AI agents may use both views: catalogs for discovery and individual c
 
 The six version-one JSON Schemas, private Bun workspace root, core loader, and initial verifier package are implemented. The core loader's schema registry validates every schema against Draft 2020-12, checks each `$id` against its repository path, resolves exact local references without network access, compiles all five entity schemas, and tests valid and invalid records. The initial verifier consumes that shared structural boundary.
 
-The canonical JSON package implements duplicate-aware parsing, lossless large integers, deterministic formatting, canonical byte comparison, and the approved UTF-8, BOM, line-ending, final-LF, NFC, and top-level-object boundaries. The core loader implements canonical, structurally validated file and byte loading; committed schema-derived TypeScript bindings with a deterministic freshness gate; structured failure results; deep runtime immutability; and structured inspection of the same schema catalog used for loading. The verifier implements its complete version-one protocol and rule catalog, including ancestry-indexed historical checks against an explicit base commit. The repository is ready to admit the first human-reviewed core record through the complete machine-verification boundary.
+The canonical JSON package implements duplicate-aware parsing, lossless large integers, deterministic formatting, canonical byte comparison, and the approved UTF-8, BOM, line-ending, final-LF, NFC, and top-level-object boundaries. The core loader implements canonical, structurally validated file and byte loading; committed schema-derived TypeScript bindings with a deterministic freshness gate; structured failure results; deep runtime immutability; and structured inspection of the same schema catalog used for loading. The verifier implements its complete protocol and version-two rule catalog, including ancestry-indexed historical checks against an explicit base commit. The repository is ready to admit the first human-reviewed core record through the complete machine-verification boundary.
 
 The first real source witness and occurrence are drafted only after these decisions produce complete version-one schemas. The draft then tests the schemas; it does not define them by accident.
 

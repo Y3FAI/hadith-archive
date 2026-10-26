@@ -104,6 +104,7 @@ function textRecords(text: string, rawText = text): RepositoryFileInput[] {
       display_occurrence_id: 1,
       hadith_id: 1,
       heading: text,
+      member_occurrence_ids: [1],
       record_type: "hadith",
       schema_version: 1,
       title: text,
@@ -175,7 +176,7 @@ describe("invisible format characters", () => {
     expect(text.normalize("NFC")).toBe(text);
     expect(await verify(textRecords(text, `${text}\n${text}`))).toEqual({
       kind: "complete",
-      report: { findings: [], valid: true, verification_version: 1 },
+      report: { findings: [], valid: true, verification_version: 2 },
     });
   });
 });
@@ -184,7 +185,7 @@ describe("common semantic rules", () => {
   test("accepts valid whitespace, checksum, fingerprint, pages, and location", async () => {
     expect(await verify([witness(), occurrence("مثال نص\nفقرة ثانية")])).toEqual({
       kind: "complete",
-      report: { findings: [], valid: true, verification_version: 1 },
+      report: { findings: [], valid: true, verification_version: 2 },
     });
   });
 
@@ -258,7 +259,7 @@ describe("common semantic rules", () => {
 
     expect(await run(replacement)).toEqual({
       kind: "complete",
-      report: { findings: [], valid: true, verification_version: 1 },
+      report: { findings: [], valid: true, verification_version: 2 },
     });
     expect(await run(malformed)).toEqual({
       kind: "complete",
@@ -268,7 +269,7 @@ describe("common semantic rules", () => {
           rule_id: "json.canonical",
         })],
         valid: false,
-        verification_version: 1,
+        verification_version: 2,
       },
     });
   });
@@ -277,7 +278,7 @@ describe("common semantic rules", () => {
     const result = await verify([occurrence("مثال نص")]);
     expect(result).toEqual({
       kind: "complete",
-      report: { findings: [], valid: true, verification_version: 1 },
+      report: { findings: [], valid: true, verification_version: 2 },
     });
   });
 });

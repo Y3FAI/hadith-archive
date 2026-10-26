@@ -3,6 +3,9 @@
   "display_occurrence_id": 1,
   "hadith_id": 9007199254740991,
   "heading": "مثال نص الحديث",
+  "member_occurrence_ids": [
+    1
+  ],
   "record_type": "hadith",
   "schema_version": 1,
   "title": "نص الحديث"

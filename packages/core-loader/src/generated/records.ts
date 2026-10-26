@@ -24,6 +24,12 @@ export interface HadithRecord {
    */
   heading: string;
   /**
+   * The nonempty set of OCCURRENCE identifiers this HADITH groups, serialized in strictly ascending numeric order; the order carries no editorial or display meaning.
+   *
+   * @minItems 1
+   */
+  member_occurrence_ids: [number, ...number[]];
+  /**
    * The entity type represented by a core record.
    */
   record_type: "hadith";
@@ -45,10 +51,6 @@ export interface OccurrenceRecord {
    * A lowercase hexadecimal SHA-256 digest.
    */
   fingerprint: string;
-  /**
-   * A permanent globally unique HADITH identifier.
-   */
-  hadith_id?: number;
   location: Location;
   /**
    * A permanent globally unique OCCURRENCE identifier.

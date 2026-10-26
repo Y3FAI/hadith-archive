@@ -7,9 +7,6 @@
     "fingerprint": {
       "$ref": "../common/v1.schema.json#/$defs/fingerprint"
     },
-    "hadith_id": {
-      "$ref": "../common/v1.schema.json#/$defs/hadith_id"
-    },
     "location": {
       "$ref": "../common/v1.schema.json#/$defs/location"
     },

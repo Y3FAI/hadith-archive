@@ -93,6 +93,7 @@ function hadith(id: number) {
     display_occurrence_id: id,
     hadith_id: id,
     heading: "مثال",
+    member_occurrence_ids: [id],
     record_type: "hadith",
     schema_version: 1,
     title: "مثال",
@@ -103,7 +104,7 @@ describe("Git-history rules", () => {
   test("accepts first numeric identifiers beginning at one", async () => {
     expect(await verify([occurrence(1), hadith(1)], emptyHistory())).toEqual({
       kind: "complete",
-      report: { findings: [], valid: true, verification_version: 1 },
+      report: { findings: [], valid: true, verification_version: 2 },
     });
   });
 
