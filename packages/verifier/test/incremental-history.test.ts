@@ -211,7 +211,8 @@ describe("incremental historical verification", () => {
         .map((line) => JSON.parse(line) as { event: string; argv?: string[] })
         .filter((entry) => entry.event === "start").map((entry) => entry.argv ?? []);
       expect(measured.records).toBe(batch * 20);
-      expect(commands).toHaveLength(4); // rev-parse, merge-base, log, cat-file
+      // rev-parse --is-shallow-repository, rev-parse, merge-base, log, cat-file
+      expect(commands).toHaveLength(5);
       expect(commands.filter((args) => args.includes("cat-file"))).toHaveLength(1);
       expect(commands.some((args) => args.includes("show") || args.includes("ls-tree"))).toBe(false);
       observations.push({ commits: batch, ...measured, processes: commands.length });
