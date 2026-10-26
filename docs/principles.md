@@ -32,7 +32,7 @@ Every accepted change is attributable to a verified identity, so an action can b
 
 ## Separation of Concerns
 
-The core preserves source-bound truth and nothing else; search, display, normalization, and linking belong to separate layers built on top of it and may never redefine it. Core records will hold only source-bound fields, and anything derived — normalized text, indexes, search forms — is generated from the core into separate files, so it can be rebuilt or discarded without touching the source.
+The core preserves source-bound truth and the human-reviewed hadith groupings made over it, and nothing else; search, display, normalization, and linking belong to separate layers built on top of it and may never redefine it. Source-bound records hold only source-bound fields, reviewed groupings live in their own hadith records rather than on the records they group, and anything derived — normalized text, indexes, search forms — is generated from the core into separate files, so it can be rebuilt or discarded without touching the source.
 
 ## Availability
 

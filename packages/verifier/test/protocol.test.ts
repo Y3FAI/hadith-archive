@@ -5,6 +5,7 @@ import {
   createVerificationReport,
   isRuleId,
   serializeVerificationReport,
+  VERIFICATION_VERSION,
 } from "@open-hadith/verifier";
 
 describe("verification protocol", () => {
@@ -119,7 +120,7 @@ describe("verification protocol", () => {
     }
   ],
   "valid": false,
-  "verification_version": 1
+  "verification_version": 2
 }
 `);
   });
@@ -129,8 +130,19 @@ describe("verification protocol", () => {
       serializeVerificationReport({
         findings: [],
         valid: false,
-        verification_version: 1,
+        verification_version: 2,
       })
     ).toThrow("validity is inconsistent");
+  });
+
+  test("refuses a report from the superseded version-one catalog", () => {
+    expect(VERIFICATION_VERSION).toBe(2);
+    expect(() =>
+      serializeVerificationReport({
+        findings: [],
+        valid: true,
+        verification_version: 1 as typeof VERIFICATION_VERSION,
+      })
+    ).toThrow("version is unsupported");
   });
 });

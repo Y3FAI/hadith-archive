@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, test } from "bun:test";
 import { execFile } from "node:child_process";
+import { createHash } from "node:crypto";
 import { cp, mkdir, mkdtemp, rm, symlink, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { dirname, resolve } from "node:path";
@@ -222,13 +223,13 @@ describe("staged repository verification", () => {
       });
       expect(await verifyRepository(repository, base)).toEqual({
         kind: "complete",
-        report: { findings: [coreFinding(aliasPath)], valid: false, verification_version: 1 },
+        report: { findings: [coreFinding(aliasPath)], valid: false, verification_version: 2 },
       });
       await git("rm", "--quiet", "-r", "--cached", root);
       await git("update-index", "--add", "--cacheinfo", `160000,${base},${root}`);
       expect(await verifyRepository(repository, base)).toEqual({
         kind: "complete",
-        report: { findings: [coreFinding(root)], valid: false, verification_version: 1 },
+        report: { findings: [coreFinding(root)], valid: false, verification_version: 2 },
       });
     });
   }
@@ -313,6 +314,105 @@ describe("staged repository verification", () => {
         file: sourcePath, rule_id: "history.record_preserved",
       }));
     }
+  });
+
+  test("regroups occurrences through hadith records alone and rejects invalid membership", async () => {
+    const { base, git, root, write } = await fixture();
+    const witnessDirectory = "core/sources/example/witnesses/example-edition";
+    const occurrencePath = (id: number) => `${witnessDirectory}/occurrences/${id}.json`;
+    const rawText = "عنوان حديث كامل";
+    const occurrence = (id: number, extra: Record<string, unknown> = {}) => formatCanonicalJson({
+      fingerprint: createHash("sha256").update(rawText, "utf8").digest("hex"),
+      location: { hadith_number: id, page_end: 10, page_start: 10 },
+      occurrence_id: id,
+      ordinal: id,
+      raw_text: rawText,
+      record_type: "occurrence",
+      schema_version: 1,
+      witness_id: "example-edition",
+      ...extra,
+    });
+    const hadith = (id: number, members: number[], display = members[0]) => formatCanonicalJson({
+      description: "كامل",
+      display_occurrence_id: display as number,
+      hadith_id: id,
+      heading: "حديث",
+      member_occurrence_ids: members,
+      record_type: "hadith",
+      schema_version: 1,
+      title: "عنوان",
+    });
+    const findings = async (accepted: string) => {
+      const result = await verifyRepository(root, accepted);
+      if (result.kind !== "complete") throw new Error("Expected complete verification");
+      return result.report.findings.map((item) => `${item.file} ${item.rule_id} ${item.instance_path}`);
+    };
+
+    await write(sourcePath, sourceBytes);
+    await write(`${witnessDirectory}/witness.json`, formatCanonicalJson({
+      edition_statement: "الطبعة الأولى",
+      isbn: "9780000000002",
+      priority_score: 0,
+      publication_year: 2007,
+      publisher: "مثال",
+      record_type: "source_witness",
+      reference_scheme: { hadith_number: true, volume: false },
+      schema_version: 1,
+      source_id: "example",
+      title_as_printed: "مثال",
+      witness_id: "example-edition",
+    }));
+    for (const id of [1, 2, 3]) await write(occurrencePath(id), occurrence(id));
+    await write("core/hadith/1.json", hadith(1, [1]));
+    await git("add", "core");
+    expect(await findings(base)).toEqual([]);
+    await git("commit", "--quiet", "-m", "grouped core");
+    const accepted = await git("rev-parse", "HEAD");
+    const occurrenceBlobs = async () => Promise.all(
+      [1, 2, 3].map((id) => git("rev-parse", `:${occurrencePath(id)}`)),
+    );
+    const committedBlobs = await occurrenceBlobs();
+
+    // Regrouping touches only hadith records; numeric order is not lexicographic.
+    await write("core/hadith/1.json", hadith(1, [1, 3], 3));
+    await write("core/hadith/2.json", hadith(2, [2]));
+    await git("add", "core");
+    expect(await findings(accepted)).toEqual([]);
+    expect((await git("diff", "--cached", "--name-only")).split("\n")).toEqual([
+      "core/hadith/1.json",
+      "core/hadith/2.json",
+    ]);
+    expect(await occurrenceBlobs()).toEqual(committedBlobs);
+
+    await write("core/hadith/2.json", hadith(2, [2, 3]));
+    await git("add", "core");
+    expect(await findings(accepted)).toEqual([
+      "core/hadith/1.json hadith.member_exclusive /member_occurrence_ids/1",
+      "core/hadith/2.json hadith.member_exclusive /member_occurrence_ids/1",
+    ]);
+
+    await write("core/hadith/2.json", hadith(2, [3, 2]));
+    await write("core/hadith/1.json", hadith(1, [1]));
+    await git("add", "core");
+    expect(await findings(accepted)).toEqual([
+      "core/hadith/2.json hadith.member_order /member_occurrence_ids",
+    ]);
+
+    await write("core/hadith/2.json", hadith(2, [2, 4]));
+    await git("add", "core");
+    expect(await findings(accepted)).toEqual([
+      "core/hadith/2.json reference.member_occurrence_resolves /member_occurrence_ids/1",
+    ]);
+
+    await write("core/hadith/2.json", hadith(2, [2]));
+    await write(occurrencePath(3), occurrence(3, { hadith_id: 1 }));
+    await git("add", "core");
+    // The legacy back-reference is structurally invalid, so the accepted
+    // occurrence can no longer prove it is preserved.
+    expect(await findings(accepted)).toEqual([
+      `${occurrencePath(3)} history.record_preserved `,
+      `${occurrencePath(3)} record.schema_valid `,
+    ]);
   });
 
   test("fails closed on unresolved index entries", async () => {

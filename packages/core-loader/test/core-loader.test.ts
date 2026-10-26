@@ -6,7 +6,6 @@ import { fileURLToPath } from "node:url";
 import {
   createCoreLoader,
   type LoadedCoreRecord,
-  type OpenHadithRecord,
 } from "@open-hadith/core-loader";
 
 const currentDirectory = dirname(fileURLToPath(import.meta.url));
@@ -18,7 +17,7 @@ function fixturePath(...parts: string[]): string {
   return resolve(fixtureRoot, ...parts);
 }
 
-function assertExhaustiveRecord(record: OpenHadithRecord): string {
+function assertExhaustiveRecord(record: LoadedCoreRecord): string {
   switch (record.record_type) {
     case "hadith":
       return record.title;

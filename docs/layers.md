@@ -23,11 +23,11 @@ Ingestion turns a source into canonical core records. It reads the source text, 
 
 ## Core
 
-The preserved, source-bound records — the project's only authoritative data. Each record holds canonical text bound to its provenance, identity, and fingerprint. Everything else is built from the core, and nothing rewrites it.
+The project's only authoritative data. The core holds the preserved, source-bound records, each bound to its provenance and identity and each preserved text to its fingerprint, together with the human-reviewed hadith records that group them. A hadith record is a reviewed judgement rather than a discovery, but it is authoritative, not derived: its membership references point from the hadith to the occurrences it groups, never back, so a grouping decision never rewrites a source-bound record. Everything else is built from the core, and nothing rewrites it.
 
 ## Relationships
 
-Assertions between core records that are not identity or hadith membership, such as parallels and cross-references. The same narration appearing in different witnesses is grouped by a hadith in the core, not by this layer. Relationship data is introduced only when the project carries assertions beyond sameness; it references core records by identifier and never alters, merges, or replaces them.
+Assertions between core records that are not identity or hadith membership, such as parallels and cross-references. The same narration appearing in different witnesses is grouped by a hadith record in the core, not by this layer. This layer remains deferred: relationship data is introduced only when the project carries assertions beyond sameness; it references core records by identifier and never alters, merges, or replaces them.
 
 ## Derived
 

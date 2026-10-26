@@ -40,6 +40,12 @@ function indexBy(
   return index;
 }
 
+function occurrenceIndex(context: StructuralVerificationContext) {
+  return indexBy(entriesOf(context, "occurrence"), (entry) =>
+    String((entry.record as OccurrenceRecord).occurrence_id)
+  );
+}
+
 function duplicateFindings(
   entries: readonly ValidCoreRecord[],
   key: (entry: ValidCoreRecord) => string,
@@ -237,19 +243,22 @@ export const referenceSectionResolves: VerificationRule<StructuralVerificationCo
   prerequisites: [],
 };
 
-export const referenceHadithResolves: VerificationRule<StructuralVerificationContext> = {
+export const referenceMemberOccurrenceResolves: VerificationRule<StructuralVerificationContext> = {
   evaluate: (context) => {
-    const hadith = indexBy(entriesOf(context, "hadith"), (entry) =>
-      String((entry.record as HadithRecord).hadith_id)
+    const occurrences = occurrenceIndex(context);
+    return entriesOf(context, "hadith").flatMap((entry) =>
+      (entry.record as HadithRecord).member_occurrence_ids.flatMap((id, index) =>
+        occurrences.get(String(id))?.length === 1
+          ? []
+          : [finding(
+              entry,
+              `/member_occurrence_ids/${index}`,
+              "Member occurrence does not resolve uniquely",
+            )]
+      )
     );
-    return entriesOf(context, "occurrence").flatMap((entry) => {
-      const record = entry.record as OccurrenceRecord;
-      return record.hadith_id === undefined || hadith.get(String(record.hadith_id))?.length === 1
-        ? []
-        : [finding(entry, "/hadith_id", "Referenced hadith does not resolve uniquely")];
-    });
   },
-  id: "reference.hadith_resolves",
+  id: "reference.member_occurrence_resolves",
   prerequisites: [],
 };
 
@@ -395,42 +404,55 @@ export const sectionDepthFirstOrder: VerificationRule<StructuralVerificationCont
   prerequisites: [],
 };
 
-export const hadithNonempty: VerificationRule<StructuralVerificationContext> = {
-  evaluate: (context) => {
-    const members = indexBy(entriesOf(context, "occurrence"), (entry) => {
-      const id = (entry.record as OccurrenceRecord).hadith_id;
-      return id === undefined ? "" : String(id);
-    });
-    return entriesOf(context, "hadith").flatMap((entry) =>
-      (members.get(String((entry.record as HadithRecord).hadith_id)) ?? []).length > 0
-        ? []
-        : [finding(entry, "/hadith_id", "Hadith has no occurrence members")]
-    );
-  },
-  id: "hadith.nonempty",
+export const hadithMemberOrder: VerificationRule<StructuralVerificationContext> = {
+  evaluate: (context) => entriesOf(context, "hadith").flatMap((entry) => {
+    const members = (entry.record as HadithRecord).member_occurrence_ids;
+    return members.every((id, index) => index === 0 || (members[index - 1] as number) < id)
+      ? []
+      : [finding(
+          entry,
+          "/member_occurrence_ids",
+          "Member occurrence identifiers are not in strictly ascending numeric order",
+        )];
+  }),
+  id: "hadith.member_order",
   prerequisites: [],
 };
 
-function occurrenceIndex(context: StructuralVerificationContext) {
-  return indexBy(entriesOf(context, "occurrence"), (entry) =>
-    String((entry.record as OccurrenceRecord).occurrence_id)
-  );
-}
+// Keyed by the listed identifier alone, so two claims on one occurrence are
+// reported even when that identifier is missing or ambiguous.
+export const hadithMemberExclusive: VerificationRule<StructuralVerificationContext> = {
+  evaluate: (context) => {
+    const claims = new Map<number, number>();
+    const hadith = entriesOf(context, "hadith");
+    for (const entry of hadith) {
+      for (const id of (entry.record as HadithRecord).member_occurrence_ids) {
+        claims.set(id, (claims.get(id) ?? 0) + 1);
+      }
+    }
+    return hadith.flatMap((entry) =>
+      (entry.record as HadithRecord).member_occurrence_ids.flatMap((id, index) =>
+        (claims.get(id) ?? 0) > 1
+          ? [finding(
+              entry,
+              `/member_occurrence_ids/${index}`,
+              "Occurrence belongs to more than one hadith",
+            )]
+          : []
+      )
+    );
+  },
+  id: "hadith.member_exclusive",
+  prerequisites: [],
+};
 
 export const hadithDisplayIsMember: VerificationRule<StructuralVerificationContext> = {
-  evaluate: (context) => {
-    const occurrences = occurrenceIndex(context);
-    return entriesOf(context, "hadith").flatMap((entry) => {
-      const record = entry.record as HadithRecord;
-      const displayed = occurrences.get(String(record.display_occurrence_id)) ?? [];
-      if (displayed.length !== 1) {
-        return [];
-      }
-      return (displayed[0]?.record as OccurrenceRecord).hadith_id === record.hadith_id
-        ? []
-        : [finding(entry, "/display_occurrence_id", "Display occurrence is not a hadith member")];
-    });
-  },
+  evaluate: (context) => entriesOf(context, "hadith").flatMap((entry) => {
+    const record = entry.record as HadithRecord;
+    return record.member_occurrence_ids.includes(record.display_occurrence_id)
+      ? []
+      : [finding(entry, "/display_occurrence_id", "Display occurrence is not a hadith member")];
+  }),
   id: "hadith.display_is_member",
   prerequisites: [],
 };
@@ -494,11 +516,12 @@ export const GRAPH_RULES = Object.freeze([
   referenceSourceResolves,
   referenceWitnessResolves,
   referenceSectionResolves,
-  referenceHadithResolves,
+  referenceMemberOccurrenceResolves,
   referenceDisplayOccurrenceResolves,
   sectionParentAcyclic,
   sectionDepthFirstOrder,
-  hadithNonempty,
+  hadithMemberOrder,
+  hadithMemberExclusive,
   hadithDisplayIsMember,
   hadithExtractedSpans,
 ]);

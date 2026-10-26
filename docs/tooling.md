@@ -94,7 +94,7 @@ Historical checks require the complete Git history. Before resolving the base or
 
 A failed prerequisite invalidates the repository and prevents only checks that cannot be evaluated honestly. It never becomes a false pass for dependent rules. Missing schemas, unavailable required history, internal errors, and incomplete execution cannot produce a valid report.
 
-The verifier reports findings; it does not fix them. Its machine report contains only the settled verification version, validity, and sorted findings. Terminal presentation is derived from that report. Exit status `0` means complete success, `1` means complete verification found rule failures, and `2` means verification could not complete.
+The verifier reports findings; it does not fix them. Its machine report contains only the current verification-catalog version, validity, and sorted findings. The catalog is at version two, independent of the draft version-one record schemas, and a report claiming any other catalog version is refused rather than serialized. Terminal presentation is derived from that report. Exit status `0` means complete success, `1` means complete verification found rule failures, and `2` means verification could not complete.
 
 Verification proves repository consistency under the published machine rules. It cannot prove that preserved text matches the cited physical source witness or that a human-authored grouping is scholarly correct. Those claims remain independently checkable because the core records preserve the exact witness and location needed for human review.
 
@@ -124,7 +124,7 @@ When a proposal crosses rows, each affected contract changes explicitly. A seman
 
 ## Implementation status
 
-`canonical-json`, `core-loader`, and the complete version-one verifier boundary are implemented. Verification requires an explicit Git base resolved to a commit and evaluates the full published catalog: repository and representation, structural schemas and records, common semantics, identifier and ordinal integrity, reference resolution, section hierarchy, HADITH membership and display spans, used-schema immutability, record preservation, identifier non-reuse, and next-sequence minting. The repository is ready for the first human-reviewed core record; verification still cannot replace comparison with the physical source witness.
+`canonical-json`, `core-loader`, and the complete verifier boundary are implemented. Verification requires an explicit Git base resolved to a commit and evaluates the full published version-two catalog: repository and representation, structural schemas and records, common semantics, identifier and ordinal integrity, reference resolution, section hierarchy, HADITH member resolution, ordering, exclusivity, display membership, and display spans, used-schema immutability, record preservation, identifier non-reuse, and next-sequence minting. The repository is ready for the first human-reviewed core record; verification still cannot replace comparison with the physical source witness.
 
 ## The rule
 
