@@ -101,6 +101,26 @@ async function gitText(repositoryRoot: string, args: readonly string[]): Promise
   return stdout;
 }
 
+export const SHALLOW_REPOSITORY_MESSAGE =
+  "Full Git history is required, but this repository is a shallow clone; " +
+  "run `git fetch --unshallow` (or use actions/checkout with fetch-depth: 0) and retry";
+
+/** A shallow clone truncates history, so history rules cannot be trusted. */
+export class ShallowRepositoryError extends Error {
+  constructor() {
+    super(SHALLOW_REPOSITORY_MESSAGE);
+    this.name = "ShallowRepositoryError";
+  }
+}
+
+export async function assertCompleteGitHistory(repositoryRoot: string): Promise<void> {
+  // Ask Git rather than inspecting .git/shallow: linked worktrees use gitfiles.
+  const answer = (await gitText(repositoryRoot, ["rev-parse", "--is-shallow-repository"])).trim();
+  if (answer === "true") throw new ShallowRepositoryError();
+  // Fail closed when Git cannot establish that history is complete.
+  if (answer !== "false") throw new Error("Git history completeness is unknown");
+}
+
 export async function resolveGitBase(
   repositoryRoot: string,
   baseReference: string,
@@ -165,6 +185,7 @@ export async function loadGitHistoryState(
   repositoryRoot: string,
   baseReference: string,
 ): Promise<GitHistoryState> {
+  await assertCompleteGitHistory(repositoryRoot);
   const baseCommit = await resolveGitBase(repositoryRoot, baseReference);
   const records = new Map<string, HistoricalRecord>();
   const schemas = new Map<string, string>();

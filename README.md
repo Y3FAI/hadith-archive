@@ -14,6 +14,8 @@ bun run check --base "$base"
 
 `check` runs the toolchain checks and forwards `--base` to repository verification. To run only repository verification, use `bun run verify --base "$base"`. There is no implicit base: omitting it exits with status `2` rather than reporting a valid repository.
 
+Verification requires the complete Git history. A shallow clone hides earlier commits, so the verifier refuses it and exits with status `2` instead of reporting on truncated history; it never fetches history itself. Recover with `git fetch --unshallow` and rerun with the same explicit base. In GitHub Actions, check out with `actions/checkout` and `fetch-depth: 0`.
+
 Before merging, update the feature branch against the latest target branch and verify again. For verification after a merge, supply the accepted target commit from **before** the merge; using the new `main` tip as its own base would treat the new identifiers as already accepted. Do not use a feature branch's `HEAD^` as the accepted base: it includes draft commits and can hide invalid identifiers introduced earlier in the branch.
 
 Unstaged changes are excluded from the repository report. Core and schema symlinks and submodules are rejected. See [the toolchain contract](docs/tooling.md).

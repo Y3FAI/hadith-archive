@@ -2,6 +2,8 @@ import type { VerificationExecutionResult } from "./protocol.ts";
 import {
   createHistoryVerificationContext,
   loadGitHistoryState,
+  SHALLOW_REPOSITORY_MESSAGE,
+  ShallowRepositoryError,
 } from "./history.ts";
 import { loadRepositorySnapshot } from "./repository.ts";
 import { REPOSITORY_FILE_RULES } from "./rules/file.ts";
@@ -39,11 +41,13 @@ export async function verifyRepository(
       ...GRAPH_RULES,
       ...HISTORY_RULES,
     ]);
-  } catch {
+  } catch (error) {
     return Object.freeze({
       error: Object.freeze({
         code: "history_unavailable" as const,
-        message: "Required Git history could not be read",
+        message: error instanceof ShallowRepositoryError
+          ? SHALLOW_REPOSITORY_MESSAGE
+          : "Required Git history could not be read",
       }),
       kind: "incomplete" as const,
     });
