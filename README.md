@@ -1,27 +1,31 @@
-# hadith-archive
+# Hadith Archive
 
 Preserving hadith as source-bound textual occurrences.
 
+## Documents
+
+- [Soul](docs/soul.md): why Hadith Archive exists and what it must remain.
+- [Terms](docs/terms.md): the core vocabulary.
+- [Principles](docs/principles.md): the commitments the project upholds.
+- [Layers](docs/layers.md): the layers data moves through.
+- [Data model](docs/model.md): the entities and their relationships.
+- [Schema](docs/schema.md): how data is stored, typed, validated and versioned.
+- [Data policy](docs/data-policy.md): how core text is represented and verified.
+- [Toolchain](docs/tooling.md): the software that reads and verifies core data.
+
 ## Verification
 
-Install dependencies with `bun install --frozen-lockfile`. Repository verification checks **staged Git contents** against an explicit accepted base. On a feature branch targeting `main`, fetch the target branch, capture the common ancestor, and stage candidate data and schema changes with `git add` or `git rm`:
-
 ```sh
+bun install --frozen-lockfile
 git fetch origin main &&
 base=$(git merge-base origin/main HEAD) &&
 bun run check --base "$base"
 ```
 
-`check` runs the toolchain checks and forwards `--base` to repository verification. To run only repository verification, use `bun run verify --base "$base"`. There is no implicit base: omitting it exits with status `2` rather than reporting a valid repository.
+`check` runs the toolchain checks and repository verification; `bun run verify --base "$base"` runs verification alone. Stage data and schema changes first, because verification reads the Git index, not the working tree. The base is always explicit, and the complete Git history is required. Base selection, shallow clones and post-merge checks are covered in the [toolchain](docs/tooling.md).
 
-Verification requires the complete Git history. A shallow clone hides earlier commits, so the verifier refuses it and exits with status `2` instead of reporting on truncated history; it never fetches history itself. Recover with `git fetch --unshallow` and rerun with the same explicit base. In GitHub Actions, check out with `actions/checkout` and `fetch-depth: 0`.
+## Licence
 
-Before merging, update the feature branch against the latest target branch and verify again. For verification after a merge, supply the accepted target commit from **before** the merge; using the new `main` tip as its own base would treat the new identifiers as already accepted. Do not use a feature branch's `HEAD^` as the accepted base: it includes draft commits and can hide invalid identifiers introduced earlier in the branch.
+Everything Hadith Archive made, its data, documents and code, is under the [Hadith Archive Licence](LICENSE), in Arabic and English: free for any use except what does not please Allah. The hadith texts themselves are centuries old and belong to no one. Outside works, such as the Arabic font and the icons, keep their own licences; see [CREDITS.md](CREDITS.md).
 
-Unstaged changes are excluded from the repository report. Core and schema symlinks and submodules are rejected. See [the toolchain contract](docs/tooling.md).
-
-## License
-
-Everything Hadith Archive made, its data, documents and code, is under the [Hadith Archive Licence](LICENSE), in Arabic and English. The hadith texts themselves are centuries old and belong to no one. The Arabic font and the icons are outside works under their own licences; see [CREDITS.md](CREDITS.md).
-
-Hadith Archive does not redistribute the print editions it cites. Their typesetting, footnotes, and editorial apparatus remain their publishers' own; this repository records which edition a text came from and where in it to look, so that anyone may obtain the same book and check the page. See [docs/terms.md](docs/terms.md).
+Hadith Archive does not redistribute the print editions it cites. Their typesetting, footnotes and editorial apparatus remain their publishers' own; the repository records which edition a text came from and where to look, so anyone can obtain the same book and check the page. See [Terms](docs/terms.md).
