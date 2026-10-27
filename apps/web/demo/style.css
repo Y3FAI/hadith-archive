@@ -1,0 +1,692 @@
+@font-face {
+  font-family: "Uthman Taha Naskh";
+  src: url("font/UthmanTN_v2-0.woff2") format("woff2"),
+       url("font/UthmanTN_v2-0.ttf") format("truetype");
+  font-display: swap;
+}
+
+:root {
+  --text: clamp(1.25rem, 1.088rem + .69vw, 1.5625rem);
+  --card-padding: clamp(1.25rem, .5rem + 3vw, 2.5rem);
+  --space-s: clamp(.75rem, .5rem + 1vw, 1rem);
+  --space-m: clamp(1.75rem, 1.25rem + 2vw, 2.5rem);
+  --space-l: clamp(2.5rem, 1.5rem + 3.2vw, 4rem);
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  scrollbar-gutter: stable;
+}
+
+body {
+  font-family: "Uthman Taha Naskh", system-ui, sans-serif;
+  font-synthesis: none;
+  font-size: 1.125rem;
+  line-height: 2rem;
+  color: #000000;
+  background: #F5F5F7;
+  margin: 0;
+  overflow-wrap: anywhere;
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+header,
+main,
+footer {
+  padding-inline: max(clamp(1rem, .25rem + 4vw, 3rem), (100% - 52rem) / 2);
+}
+
+main {
+  flex-grow: 1;
+  padding-block: calc(var(--space-l) - 1.125rem) var(--space-l);
+}
+
+h1 {
+  margin: 0;
+  font-size: calc(var(--text) * 1.25);
+  line-height: 1.85;
+  font-weight: 400;
+}
+
+/* The hadith text, on its card. */
+article > h1 {
+  padding: var(--card-padding);
+  text-align: justify;
+  text-wrap: pretty;
+}
+
+header {
+  padding-block: calc(var(--space-m) - .5rem) .75rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  column-gap: 1.5rem;
+}
+
+header > a {
+  font-size: var(--text);
+  line-height: 2.75rem;
+}
+
+header button {
+  display: none;
+}
+
+/* Where the closed phone drawer waits, off screen. Set here too, where
+   it has no effect, so a window or phone that crosses the phone width
+   never starts a slide. */
+nav[popover] {
+  --drawer: min(15rem, 100vw - 3rem);
+  display: block;
+  position: static;
+  inset-inline-end: calc(-1 * var(--drawer) - 1.5rem);
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  overflow: visible;
+}
+
+nav ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+h2 {
+  display: flex;
+  align-items: center;
+  gap: .25em;
+  margin: calc(var(--space-l) - .3em) 0 calc(var(--space-s) - .125em);
+  font-size: var(--text);
+  line-height: 1.5;
+  font-weight: 400;
+}
+
+a svg,
+h1 svg,
+h2 svg,
+dd svg {
+  flex-shrink: 0;
+  width: 1.25em;
+  height: 1.25em;
+  fill: currentColor;
+}
+
+ol > li {
+  scroll-margin-block-start: 1.5rem;
+}
+
+section > ol {
+  display: grid;
+  gap: var(--space-m);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* A dot sits before every item; the clip hides the one before an item
+   that starts a line (the right edge, as the page is always RTL). */
+/* Citations. */
+dl {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 1.25rem;
+  clip-path: inset(-2rem -.25rem -2rem -2rem);
+  margin: 0;
+  color: #636366;
+  font-size: 1rem;
+  line-height: 1.75rem;
+}
+
+h1 + dl {
+  margin-block-start: .5rem;
+}
+
+li > dl {
+  margin-block-start: .5rem;
+}
+
+dl div {
+  position: relative;
+  display: flex;
+  gap: .375rem;
+}
+
+dl div::before {
+  content: "·";
+  position: absolute;
+  inset-inline-start: -1.25rem;
+  width: 1.25rem;
+  text-align: center;
+}
+
+/* Hidden on screen, still read by screen readers: a book title's label,
+   and the search's label (the field's placeholder says what to do). */
+dt:has(+ dd > cite),
+search h1 {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+dd {
+  display: flex;
+  align-items: center;
+  gap: .25em;
+  margin: 0;
+}
+
+/* Cards: the white surfaces that hold reading text. */
+article > h1,
+li > div,
+main > div {
+  background: #FFFFFF;
+  border-radius: 20px;
+  box-shadow: 0 0 0 .5px rgb(0 0 0 / .04), 0 1px 2px rgb(0 0 0 / .04);
+}
+
+li > div {
+  font-size: var(--text);
+  line-height: 1.85;
+}
+
+blockquote {
+  margin: 0;
+  padding: var(--card-padding);
+}
+
+/* A long narration shows its first 4 lines (4 x line height 1.85) until
+   opened, then grows smoothly. Only the first row animates, between 0fr
+   and 1fr; the 4 lines are held by a fixed row beside it, so a new window
+   size or a late font changes the height at once instead of animating. */
+li > div:has(details) {
+  display: grid;
+  grid-template-rows: minmax(0, 0fr) auto auto;
+  transition: grid-template-rows .4s cubic-bezier(.32, .72, 0, 1);
+}
+
+li > div:has(details[open]) {
+  grid-template-rows: minmax(0, 1fr) auto auto;
+}
+
+li > div:has(details)::before {
+  content: "";
+  grid-area: 2 / 1;
+  block-size: calc(var(--card-padding) + 7.4em);
+}
+
+blockquote:has(+ details) {
+  grid-area: 1 / 1 / 3;
+  position: relative;
+  min-height: 0;
+  padding-block-end: 0;
+  overflow: hidden;
+}
+
+blockquote:has(+ details)::after {
+  content: "...";
+  position: absolute;
+  inset-block-end: 0;
+  inset-inline-end: var(--card-padding);
+  padding-inline-start: 2em;
+  background: linear-gradient(to right, #FFFFFF 55%, rgb(255 255 255 / 0));
+  transition: opacity .2s .2s;
+}
+
+li > div:has(details[open]) blockquote::after {
+  opacity: 0;
+  transition: opacity .2s;
+}
+
+blockquote p {
+  margin: 0;
+  text-align: justify;
+  text-wrap: pretty;
+}
+
+details {
+  grid-row: 3;
+  margin-block-start: .5rem;
+}
+
+summary {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: .25em;
+  min-height: 2.75rem;
+  background: #FAFAFB;
+  border-radius: 0 0 20px 20px;
+  color: #636366;
+  font-size: 1rem;
+  list-style: none;
+  cursor: pointer;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+summary::-webkit-details-marker {
+  display: none;
+}
+
+details[open] summary span:first-child,
+details:not([open]) summary span:nth-child(2) {
+  display: none;
+}
+
+summary svg {
+  width: 1.5rem;
+  height: 1.5rem;
+  fill: currentColor;
+  transition: rotate .4s cubic-bezier(.32, .72, 0, 1);
+}
+
+details[open] summary svg {
+  rotate: 180deg;
+}
+
+summary:active {
+  background: #F5F5F7;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  summary:hover:not(:focus-visible) {
+    background: #F5F5F7;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  li > div:has(details),
+  summary svg {
+    transition: none;
+  }
+}
+
+cite {
+  font-style: normal;
+}
+
+cite a {
+  border-radius: 12px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  cite a:hover {
+    color: #000000;
+  }
+}
+
+/* The home page: a large search, then categories and books. */
+/* The field sits in the middle of its own space, half a step more than
+   the usual gap between parts of the page on each side: as far below the
+   header as above the first section's heading. */
+search {
+  display: block;
+  padding-block: calc(var(--space-l) / 2) calc(var(--space-l) / 2 + .5rem);
+}
+
+search div {
+  position: relative;
+}
+
+search input {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 4rem;
+  margin: 0;
+  padding-block: 0;
+  padding-inline: 1.5rem 4rem;
+  border: 0;
+  border-radius: 20px;
+  background: #FFFFFF;
+  box-shadow: 0 0 0 .5px rgb(0 0 0 / .04), 0 1px 2px rgb(0 0 0 / .04);
+  color: inherit;
+  font: inherit;
+  font-size: var(--text);
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+search input::placeholder {
+  color: #636366;
+  opacity: 1;
+}
+
+search button {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-end: .625rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  margin-block: auto;
+  padding: 0;
+  border: 0;
+  border-radius: 12px;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+search button svg {
+  width: 1.5rem;
+  height: 1.5rem;
+  fill: currentColor;
+}
+
+/* A heading that leads to its own page. Like the menu links, the 44px
+   target reaches past the line by negative margins, so the row keeps the
+   heading's height. */
+h2 > a {
+  display: flex;
+  align-items: center;
+  gap: .25em;
+  min-height: 2.75rem;
+  margin-block: calc((var(--text) * 1.5 - 2.75rem) / 2);
+  margin-inline: -.75rem;
+  padding-inline: .75rem;
+  border-radius: 12px;
+}
+
+/* A section whose heading row ends with «المزيد» on the far side. */
+section:has(> h2 + a) {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+}
+
+section:has(> h2 + a) > ul {
+  grid-column: 1 / -1;
+}
+
+/* Margins match the heading's, less the part of the 44px target that is
+   taller than the heading's line, so the row keeps the heading's height. */
+h2 + a {
+  display: flex;
+  align-items: center;
+  gap: .125em;
+  min-height: 2.75rem;
+  margin-block: calc(var(--space-l) - var(--text) * .3 + (var(--text) * 1.5 - 2.75rem) / 2) calc(var(--space-s) - var(--text) * .125 + (var(--text) * 1.5 - 2.75rem) / 2);
+  margin-inline: 1rem -.75rem;
+  padding-inline: .75rem;
+  border-radius: 12px;
+  color: #636366;
+  font-size: 1rem;
+}
+
+main > section > ul {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-s);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+[aria-labelledby="kutub"] ul {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@media (width >= 40em) {
+  [aria-labelledby="aqsam"] ul {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  [aria-labelledby="kutub"] ul {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+main > section > ul a {
+  display: flex;
+  background: #FFFFFF;
+  box-shadow: 0 0 0 .5px rgb(0 0 0 / .04), 0 1px 2px rgb(0 0 0 / .04);
+  -webkit-tap-highlight-color: transparent;
+}
+
+[aria-labelledby="aqsam"] ul a {
+  align-items: center;
+  justify-content: center;
+  min-height: 4.5rem;
+  padding-inline: .75rem;
+  border-radius: 20px;
+  font-size: var(--text);
+  line-height: 1.5;
+  text-align: center;
+}
+
+[aria-labelledby="kutub"] ul a {
+  flex-direction: column;
+  justify-content: center;
+  min-height: 4.5rem;
+  padding: .75rem 1.5rem;
+  border-radius: 20px;
+  font-size: var(--text);
+  line-height: 1.5;
+}
+
+[aria-labelledby="kutub"] ul span {
+  color: #636366;
+  font-size: 1rem;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  main > section > ul a:hover:not(:focus-visible) {
+    box-shadow: 0 0 0 .5px rgb(0 0 0 / .05), 0 2px 4px rgb(0 0 0 / .06);
+  }
+}
+
+main > section > ul a:active {
+  box-shadow: 0 0 0 .5px rgb(0 0 0 / .05), inset 0 1px 2px rgb(0 0 0 / .08);
+}
+
+/* The about page: its title, then one card of paragraphs. */
+main > h1 {
+  display: flex;
+  align-items: center;
+  gap: .25em;
+  margin-block-end: calc(var(--space-s) - .125em);
+  line-height: 1.5;
+}
+
+main > div {
+  padding: var(--card-padding);
+  font-size: var(--text);
+  line-height: 1.85;
+}
+
+/* Justified like hadith text, so every full line reaches the card's
+   edge instead of stopping short. */
+main > div > p {
+  margin-block: 0;
+  text-align: justify;
+  text-wrap: pretty;
+}
+
+main > div > p + p {
+  margin-block-start: .75em;
+}
+
+footer {
+  padding-block: .75rem;
+  background: #E8E8ED;
+  font-size: 1rem;
+  line-height: 1.75rem;
+}
+
+footer ul {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+footer a {
+  color: #636366;
+}
+
+header a,
+footer a {
+  display: inline-flex;
+  align-items: center;
+  gap: .25em;
+  min-height: 2.75rem;
+  padding-inline: .75rem;
+  margin-inline: -.75rem;
+  border-radius: 12px;
+}
+
+:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 .5px rgb(0 0 0 / .06), 0 4px 16px rgb(0 0 0 / .16);
+}
+
+a:focus-visible,
+button:focus-visible {
+  background: #FFFFFF;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  header a:hover:not(:focus-visible),
+  header button:hover:not(:focus-visible),
+  h2 > a:hover:not(:focus-visible),
+  h2 + a:hover:not(:focus-visible),
+  footer a:hover:not(:focus-visible) {
+    background: #FFFFFF;
+    box-shadow: 0 0 0 .5px rgb(0 0 0 / .04), 0 1px 2px rgb(0 0 0 / .04);
+  }
+}
+
+@media (forced-colors: active) {
+  :focus-visible {
+    outline: 2px solid Highlight;
+    outline-offset: 3px;
+  }
+
+  nav[popover]:popover-open {
+    border: 1px solid CanvasText;
+  }
+}
+
+@supports selector(:popover-open) {
+  @media (width < 40em) {
+    header button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 2.75rem;
+      height: 2.75rem;
+      margin-inline-end: -.75rem;
+      padding: 0;
+      border: 0;
+      border-radius: 12px;
+      background: none;
+      color: inherit;
+      cursor: pointer;
+    }
+
+    header button svg {
+      width: 1.5rem;
+      height: 1.5rem;
+      fill: currentColor;
+    }
+
+    nav[popover] {
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      inset-block: 0;
+      inset-inline-start: auto;
+      z-index: 2;
+      box-sizing: border-box;
+      width: var(--drawer);
+      height: auto;
+      padding: calc(var(--space-m) - .5rem) clamp(1rem, .25rem + 4vw, 3rem) .75rem;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      background: #FFFFFF;
+      box-shadow: 0 0 0 .5px rgb(0 0 0 / .06), 0 4px 16px rgb(0 0 0 / .16);
+      visibility: hidden;
+      transition: inset-inline-end .4s cubic-bezier(.32, .72, 0, 1), visibility 0s .4s;
+    }
+
+    nav[popover]:popover-open {
+      inset-inline-end: 0;
+      visibility: visible;
+      transition: inset-inline-end .4s cubic-bezier(.32, .72, 0, 1);
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      background: rgb(0 0 0 / .2);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity .4s cubic-bezier(.32, .72, 0, 1), visibility 0s .4s;
+    }
+
+    html:has(nav[popover]:popover-open) body::after {
+      opacity: 1;
+      visibility: visible;
+      transition: opacity .4s cubic-bezier(.32, .72, 0, 1);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      nav[popover],
+      nav[popover]:popover-open {
+        transition: none;
+      }
+    }
+
+    html:has(nav[popover]:popover-open) {
+      overflow: hidden;
+    }
+
+    nav[popover] button {
+      align-self: flex-end;
+      margin-block-end: 1.5rem;
+    }
+
+    nav[popover] ul {
+      flex-direction: column;
+      gap: 0;
+    }
+
+    nav[popover] ul a {
+      display: flex;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    nav[popover] ul a:hover:not(:focus-visible),
+    nav[popover] ul a:active {
+      background: #F5F5F7;
+      box-shadow: none;
+    }
+
+  }
+}
