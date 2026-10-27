@@ -3,7 +3,7 @@
     "@types/bun": "1.3.14",
     "typescript": "7.0.2"
   },
-  "name": "open-hadith",
+  "name": "hadith-archive",
   "packageManager": "bun@1.3.14",
   "private": true,
   "scripts": {

@@ -1,10 +1,10 @@
 # Principles
 
-This document states the principles of Open Hadith. Each one explains what the principle is and, in concrete terms, how we uphold it. They build on the vocabulary defined in [terms.md](terms.md).
+This document states the principles of Hadith Archive. Each one explains what the principle is and, in concrete terms, how we uphold it. They build on the vocabulary defined in [terms.md](terms.md).
 
 ## Openness
 
-Everything Open Hadith preserves is public and independently inspectable, which is what lets every other principle be verified rather than merely trusted. It lives in a public GitHub repository anyone can clone or download without an account, stored as plain-text files that need no special software, with its full history kept in Git and released under an open license.
+Everything Hadith Archive preserves is public and independently inspectable, which is what lets every other principle be verified rather than merely trusted. It lives in a public GitHub repository anyone can clone or download without an account, stored as plain-text files that need no special software, with its full history kept in Git and released under an open license.
 
 ## Provenance
 

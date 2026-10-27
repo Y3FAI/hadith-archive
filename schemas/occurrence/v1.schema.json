@@ -1,5 +1,5 @@
 {
-  "$id": "https://raw.githubusercontent.com/Y3FAI/open-hadith/main/schemas/occurrence/v1.schema.json",
+  "$id": "https://haditharchive.org/schemas/occurrence/v1.schema.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
   "description": "A version-one authoritative OCCURRENCE record.",
@@ -44,6 +44,6 @@
     "schema_version",
     "witness_id"
   ],
-  "title": "Open Hadith OCCURRENCE record version one",
+  "title": "Hadith Archive OCCURRENCE record version one",
   "type": "object"
 }

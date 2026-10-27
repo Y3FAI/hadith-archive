@@ -6,7 +6,7 @@ import {
   isRuleId,
   serializeVerificationReport,
   VERIFICATION_VERSION,
-} from "@open-hadith/verifier";
+} from "@hadith-archive/verifier";
 
 describe("verification protocol", () => {
   test("accepts only stable dotted rule identifiers", () => {

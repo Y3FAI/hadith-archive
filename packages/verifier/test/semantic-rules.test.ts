@@ -4,8 +4,8 @@ import { readFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { formatCanonicalJson } from "@open-hadith/canonical-json";
-import { EXPECTED_SCHEMA_PATHS } from "@open-hadith/core-loader";
+import { formatCanonicalJson } from "@hadith-archive/canonical-json";
+import { EXPECTED_SCHEMA_PATHS } from "@hadith-archive/core-loader";
 import {
   createRepositorySnapshot,
   createStructuralVerificationContext,
@@ -13,7 +13,7 @@ import {
   runVerification,
   SEMANTIC_RULES,
   type RepositoryFileInput,
-} from "@open-hadith/verifier";
+} from "@hadith-archive/verifier";
 
 const currentDirectory = dirname(fileURLToPath(import.meta.url));
 const repositoryRoot = resolve(currentDirectory, "../../..");

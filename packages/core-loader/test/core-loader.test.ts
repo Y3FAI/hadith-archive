@@ -3,11 +3,11 @@ import { readFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { MAX_NESTING_DEPTH } from "@open-hadith/canonical-json";
+import { MAX_NESTING_DEPTH } from "@hadith-archive/canonical-json";
 import {
   createCoreLoader,
   type LoadedCoreRecord,
-} from "@open-hadith/core-loader";
+} from "@hadith-archive/core-loader";
 
 const currentDirectory = dirname(fileURLToPath(import.meta.url));
 const repositoryRoot = resolve(currentDirectory, "../../..");

@@ -4,8 +4,8 @@ import {
   decodeUtf8,
   parseCanonicalJsonBytes,
   parseJsonSource,
-} from "@open-hadith/canonical-json";
-import { EXPECTED_SCHEMA_PATHS } from "@open-hadith/core-loader";
+} from "@hadith-archive/canonical-json";
+import { EXPECTED_SCHEMA_PATHS } from "@hadith-archive/core-loader";
 
 import type { VerificationFindingInput, VerificationRule } from "../protocol.ts";
 import { isRegularFile, type RepositorySnapshot, type TrackedFile } from "../repository.ts";

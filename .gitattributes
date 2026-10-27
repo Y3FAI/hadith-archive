@@ -1,4 +1,4 @@
-# Open Hadith — one canonical byte form on every platform.
+# Hadith Archive — one canonical byte form on every platform.
 # Supports docs/data-policy.md (UTF-8, NFC, LF line endings; byte-exact fingerprints).
 
 # All text files: normalized to LF, never CRLF, on every operating system.

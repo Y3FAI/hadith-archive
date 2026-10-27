@@ -225,7 +225,7 @@ export interface ReferenceScheme {
   volume: boolean;
 }
 
-export type OpenHadithRecord =
+export type HadithArchiveRecord =
   | HadithRecord
   | OccurrenceRecord
   | SectionRecord

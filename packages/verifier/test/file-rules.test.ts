@@ -4,7 +4,7 @@ import {
   type CanonicalJsonValue,
   formatCanonicalJson,
   MAX_NESTING_DEPTH,
-} from "@open-hadith/canonical-json";
+} from "@hadith-archive/canonical-json";
 import {
   createRepositorySnapshot,
   REPOSITORY_FILE_RULES,
@@ -12,7 +12,7 @@ import {
   repositorySchemaPaths,
   runVerification,
   type RepositorySnapshot,
-} from "@open-hadith/verifier";
+} from "@hadith-archive/verifier";
 
 const encoder = new TextEncoder();
 const bytes = (source: string): Uint8Array => encoder.encode(source);

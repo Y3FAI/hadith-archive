@@ -3,7 +3,7 @@ import type {
   OccurrenceRecord,
   SectionRecord,
   SourceWitnessRecord,
-} from "@open-hadith/core-loader";
+} from "@hadith-archive/core-loader";
 
 import type { VerificationFindingInput, VerificationRule } from "../protocol.ts";
 import type {

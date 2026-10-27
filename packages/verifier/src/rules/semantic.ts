@@ -4,7 +4,7 @@ import type {
   LoadedCoreRecord,
   OccurrenceRecord,
   SourceWitnessRecord,
-} from "@open-hadith/core-loader";
+} from "@hadith-archive/core-loader";
 
 import type { VerificationFindingInput, VerificationRule } from "../protocol.ts";
 import type {

@@ -1,12 +1,12 @@
 # Terms
 
-This document defines the core vocabulary of Open Hadith.
+This document defines the core vocabulary of Hadith Archive.
 
 These terms are intentionally small and foundational. They exist to prevent ambiguity before data models, validation rules, tools, or applications are designed.
 
 ## Foundations
 
-### Open Hadith
+### Hadith Archive
 
 The project defined by this repository: an open, integrity-focused infrastructure for preserving Hadith text under a principled data architecture.
 
@@ -14,13 +14,13 @@ The project defined by this repository: an open, integrity-focused infrastructur
 
 A transmitted report of what the Prophet Muhammad (peace be upon him) said, did, or approved.
 
-Hadith collections also carry reports attributed to companions and successors rather than to the Prophet. Open Hadith preserves what the collections print, and does not classify which kind a report is. A text states its own attribution, and determining it is scholarship the project does not perform.
+Hadith collections also carry reports attributed to companions and successors rather than to the Prophet. Hadith Archive preserves what the collections print, and does not classify which kind a report is. A text states its own attribution, and determining it is scholarship the project does not perform.
 
 ## Sources
 
 ### Source
 
-A work whose text Open Hadith preserves, such as the Hadith collection *Sahih al-Bukhari*, taken as an abstract work apart from any particular copy.
+A work whose text Hadith Archive preserves, such as the Hadith collection *Sahih al-Bukhari*, taken as an abstract work apart from any particular copy.
 
 ### Source Witness
 
@@ -30,13 +30,13 @@ Physical copies that belong to the same printing are one source witness, because
 
 A witness is identified by whatever lets another person obtain an interchangeable copy: the title as printed, the publisher, the edition or printing, the year of publication, and the ISBN. A source name alone is not a source witness, and neither is an edition described too loosely to be ordered.
 
-Open Hadith preserves text only from print editions in circulation. Manuscripts, scans, and unpublished digital files are not witnesses.
+Hadith Archive preserves text only from print editions in circulation. Manuscripts, scans, and unpublished digital files are not witnesses.
 
 ## Occurrences
 
 ### Occurrence
 
-A single appearance of a Hadith text at a specific location within a source witness. It is the core unit Open Hadith preserves.
+A single appearance of a Hadith text at a specific location within a source witness. It is the core unit Hadith Archive preserves.
 
 The same text appearing in another witness, or at another location in the same witness, is a separate occurrence.
 
@@ -80,7 +80,7 @@ Verification is internal. It proves a record is consistent with itself and with 
 
 ### Independent Verification
 
-The check Open Hadith cannot perform on itself: a person obtains the printed edition a record names, turns to the location it gives, and compares the page against the preserved text.
+The check Hadith Archive cannot perform on itself: a person obtains the printed edition a record names, turns to the location it gives, and compares the page against the preserved text.
 
 This is why a witness must be identified precisely enough to order and a location precise enough to find. The project does not ask to be trusted about what a book says; it says which book, and where.
 

@@ -6,7 +6,7 @@ import {
   presentVerificationResult,
   runVerifierCli,
   type VerificationCliIo,
-} from "@open-hadith/verifier";
+} from "@hadith-archive/verifier";
 
 function memoryIo(): VerificationCliIo & {
   readonly errors: string[];

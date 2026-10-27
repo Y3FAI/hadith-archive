@@ -1,7 +1,7 @@
 import { execFile } from "node:child_process";
 import { promisify } from "node:util";
 
-import { parseCanonicalJsonBytes } from "@open-hadith/canonical-json";
+import { parseCanonicalJsonBytes } from "@hadith-archive/canonical-json";
 
 import {
   createRepositorySnapshot,
@@ -13,7 +13,7 @@ import type { StructuralVerificationContext } from "./structural-context.ts";
 
 const execFileAsync = promisify(execFile);
 const SCHEMA_BASE_URL =
-  "https://raw.githubusercontent.com/Y3FAI/open-hadith/main/schemas/";
+  "https://haditharchive.org/schemas/";
 
 export interface HistoricalRecord {
   readonly entityKey: string;

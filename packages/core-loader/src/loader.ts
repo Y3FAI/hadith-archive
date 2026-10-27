@@ -5,17 +5,17 @@ import {
   type CanonicalJsonErrorCode,
   isCanonicalJsonObject,
   parseCanonicalJsonBytes,
-} from "@open-hadith/canonical-json";
+} from "@hadith-archive/canonical-json";
 
 import { deepFreeze, type DeepReadonly } from "./deep-readonly.ts";
-import type { OpenHadithRecord } from "./generated/records.ts";
+import type { HadithArchiveRecord } from "./generated/records.ts";
 import {
   createSchemaRegistry,
   type SchemaRegistry,
   type StructuralValidationError,
 } from "./schema-registry.ts";
 
-export type LoadedCoreRecord = DeepReadonly<OpenHadithRecord>;
+export type LoadedCoreRecord = DeepReadonly<HadithArchiveRecord>;
 
 export type CoreRecordLoadFailure =
   | Readonly<{
@@ -102,7 +102,7 @@ export function loadCoreRecordBytes(
 
   return Object.freeze({
     ok: true,
-    record: deepFreeze(candidate as unknown as OpenHadithRecord),
+    record: deepFreeze(candidate as unknown as HadithArchiveRecord),
   });
 }
 

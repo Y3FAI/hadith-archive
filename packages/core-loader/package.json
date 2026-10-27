@@ -1,13 +1,13 @@
 {
   "dependencies": {
-    "@open-hadith/canonical-json": "workspace:*",
+    "@hadith-archive/canonical-json": "workspace:*",
     "ajv": "8.20.0"
   },
   "devDependencies": {
     "json-schema-to-typescript": "15.0.4"
   },
   "exports": "./src/index.ts",
-  "name": "@open-hadith/core-loader",
+  "name": "@hadith-archive/core-loader",
   "private": true,
   "scripts": {
     "check:generated": "bun run scripts/check-record-types.ts",
