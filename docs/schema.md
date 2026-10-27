@@ -128,8 +128,8 @@ packages/
       integration/
       unit/
   design-system/              # Arabic visual foundations for the site
-    fonts/                    # KFGQPC font beside its licence
-    icons/                    # Phosphor icons beside their licence
+    fonts/                    # KFGQPC font, unmodified
+    icons/                    # Phosphor icons, unmodified
   ingestion/                  # future ingestion producer
   minting/                    # future HADITH producer
 
@@ -159,7 +159,7 @@ tsconfig.json                 # shared strict compiler configuration
 
 Only directories containing immediate implementation are created. Future packages and applications remain documented topology rather than empty placeholders.
 
-`canonical-json` owns deterministic parsing, duplicate-key detection, formatting, and byte comparison. `core-loader` owns the offline structural schema registry and exposes read-only typed access to canonical, structurally valid records. `verifier` consumes those boundaries, reads the repository and Git history, and never writes. Its invalid fixtures live beneath its test tree rather than authoritative core paths. `design-system` holds the site's stylesheet, Arabic font and icons; each third-party work is stored unmodified beside its licence and credited in the package's `CREDITS.md`.
+`canonical-json` owns deterministic parsing, duplicate-key detection, formatting, and byte comparison. `core-loader` owns the offline structural schema registry and exposes read-only typed access to canonical, structurally valid records. `verifier` consumes those boundaries, reads the repository and Git history, and never writes. Its invalid fixtures live beneath its test tree rather than authoritative core paths. `design-system` holds the site's stylesheet, Arabic font and icons; each third-party work is stored unmodified and credited in [CREDITS.md](../CREDITS.md).
 
 Ingestion and minting are separate packages. They write provisional records only beneath their respective private workspace directories; promotion into `core/` is an explicit human-reviewed change. The site consumes the supported loader or reproducible artifacts and never imports private workspaces or writes authoritative data.
 
