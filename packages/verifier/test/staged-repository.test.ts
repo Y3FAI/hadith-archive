@@ -234,6 +234,48 @@ describe("staged repository verification", () => {
     });
   }
 
+  test("rejects staged unregistered schemas, even well formed, without changing indexed bytes", async () => {
+    const { base, git, root, write } = await fixture();
+    const namespace = "https://raw.githubusercontent.com/Y3FAI/open-hadith/main/schemas";
+    const strays = new Map<string, string>([
+      // The reproduction from #42: a well-shaped version path with an invalid $id and type.
+      ["schemas/source/v2.schema.json", formatCanonicalJson({
+        $id: "wrong",
+        type: "not-a-json-schema-type",
+      })],
+      ["schemas/relationship/v1.schema.json", formatCanonicalJson({
+        $id: `${namespace}/relationship/v1.schema.json`,
+        $schema: "https://json-schema.org/draft/2020-12/schema",
+        type: "object",
+      })],
+    ]);
+    for (const [path, bytes] of strays) await write(path, bytes);
+    await git("add", "schemas");
+    // A case-insensitive filesystem cannot hold Schemas/ beside schemas/, so the
+    // alias enters the index directly with the bytes of a registered schema.
+    const alias = "Schemas/source/v1.schema.json";
+    const blob = await git("rev-parse", ":schemas/source/v1.schema.json");
+    await git("update-index", "--add", "--cacheinfo", `100644,${blob},${alias}`);
+    expect(await git("ls-files")).toContain(alias);
+    const indexed = async () => (await loadRepositorySnapshot(root)).files
+      .map((file) => [file.path, file.mode, [...file.readBytes()]]);
+    const before = await indexed();
+    expect(await verifyRepository(root, base)).toEqual({
+      kind: "complete",
+      report: {
+        findings: [alias, ...strays.keys()].sort().map((file) => ({
+          file,
+          instance_path: "",
+          message: "Schema paths must match a registered catalog schema",
+          rule_id: "repository.schema_paths",
+        })),
+        valid: false,
+        verification_version: 2,
+      },
+    });
+    expect(await indexed()).toEqual(before);
+  });
+
   test("rejects an external symlink even when its target is valid or absent", async () => {
     const { base, directory, git, root } = await fixture();
     const target = resolve(directory, "outside.json");

@@ -4,6 +4,7 @@ import {
   createRepositorySnapshot,
   REPOSITORY_FILE_RULES,
   repositoryCorePaths,
+  repositorySchemaPaths,
   runVerification,
   type RepositorySnapshot,
 } from "@open-hadith/verifier";
@@ -77,10 +78,50 @@ const rejectedCorePaths = [
   `core/sources/a/witnesses/${"c".repeat(129)}/witness.json`,
 ];
 
+async function schemaPathFindings(snapshot: RepositorySnapshot): Promise<string[]> {
+  const result = await runVerification(snapshot, [repositorySchemaPaths]);
+  if (result.kind !== "complete") throw new Error("Expected complete verification");
+  return result.report.findings.map((finding) => {
+    expect(finding).toMatchObject({
+      instance_path: "",
+      message: "Schema paths must match a registered catalog schema",
+      rule_id: "repository.schema_paths",
+    });
+    return finding.file;
+  });
+}
+
+const registeredSchemaPaths = [
+  "schemas/common/v1.schema.json",
+  "schemas/hadith/v1.schema.json",
+  "schemas/occurrence/v1.schema.json",
+  "schemas/section/v1.schema.json",
+  "schemas/source/v1.schema.json",
+  "schemas/source_witness/v1.schema.json",
+];
+const rejectedSchemaPaths = [
+  "schemas",
+  "schemas/.gitkeep",
+  "schemas/README.md",
+  "schemas/common/v2.schema.json",
+  "schemas/relationship/v1.schema.json",
+  "schemas/source/V1.schema.json",
+  "schemas/source/nested/v1.schema.json",
+  "schemas/source/v01.schema.json",
+  "schemas/source/v1.json",
+  "schemas/source/v1.schema.JSON",
+  "schemas/source/v1.schema.json\n",
+  "schemas/source/v1.schema.json.bak",
+  "schemas/source/v2.schema.json",
+  "schemas/Source/v1.schema.json",
+  "schemas/source-witness/v1.schema.json",
+  "schemas/v1.schema.json",
+];
+
 describe("repository and file rules", () => {
   test("accepts canonical schema and core JSON while ignoring unrelated JSON", async () => {
     const snapshot = createRepositorySnapshot([
-      { bytes: bytes("{}\n"), path: "schemas/example/v1.schema.json" },
+      { bytes: bytes("{}\n"), path: "schemas/hadith/v1.schema.json" },
       { bytes: bytes("{}\n"), path: "core/hadith/1.json" },
       { bytes: bytes("not JSON"), path: "packages/example/fixture.json" },
     ]);
@@ -147,7 +188,7 @@ describe("repository and file rules", () => {
 
   test("collects independent byte failures from one file", async () => {
     const snapshot = createRepositorySnapshot([
-      { bytes: bytes('{"a":1,"a":2}\r\n\n'), path: "schemas/example.json" },
+      { bytes: bytes('{"a":1,"a":2}\r\n\n'), path: "schemas/common/v1.schema.json" },
     ]);
     const result = await runVerification(snapshot, REPOSITORY_FILE_RULES);
 
@@ -239,6 +280,85 @@ describe("repository and file rules", () => {
     };
     // file.regular, not this rule, rejects the symlink at an allowed path.
     expect(await corePathFindings(snapshot)).toEqual(["core", "core/hadith/2.JSON"]);
+  });
+
+  test("accepts the six registered catalog schema paths", async () => {
+    const snapshot = createRepositorySnapshot(registeredSchemaPaths.map((path) => ({
+      bytes: bytes("not JSON"),
+      path,
+    })));
+    expect(await schemaPathFindings(snapshot)).toEqual([]);
+  });
+
+  test("rejects unregistered versions, entities, and every other schema path", async () => {
+    const snapshot = createRepositorySnapshot(rejectedSchemaPaths.map((path, index) => ({
+      bytes: bytes("{}\n"),
+      mode: index % 2 === 0 ? "100644" : "100755",
+      path,
+    })));
+    expect(await schemaPathFindings(snapshot)).toEqual(
+      snapshot.files.map((file) => file.path),
+    );
+  });
+
+  test("rejects every ASCII case variant of the schemas root, even with catalog paths", async () => {
+    const roots = Array.from({ length: 128 }, (_, mask) =>
+      [..."schemas"].map((letter, index) =>
+        mask & (1 << index) ? letter.toUpperCase() : letter
+      ).join("")
+    );
+    const variants = roots.filter((root) => root !== "schemas");
+    expect(new Set(variants).size).toBe(127);
+    const paths = variants.flatMap((root) => [
+      root,
+      `${root}/common/v1.schema.json`,
+      `${root}/source/v1.schema.json`,
+    ]);
+    const snapshot = createRepositorySnapshot([
+      ...paths.map((path, index) => ({
+        bytes: bytes("{}\n"),
+        mode: index % 3 === 0 ? "160000" : "100644",
+        path,
+      })),
+      ...registeredSchemaPaths.map((path) => ({ bytes: bytes("{}\n"), path })),
+    ]);
+    expect(await schemaPathFindings(snapshot)).toEqual(
+      snapshot.files.map((file) => file.path).filter((path) => !path.startsWith("schemas/")),
+    );
+  });
+
+  test("leaves similarly prefixed paths outside schemas to other rules", async () => {
+    const snapshot = createRepositorySnapshot([
+      "SCHEMAS.md",
+      "core/hadith/1.json",
+      "docs/schemas/source/v2.schema.json",
+      "packages/core-loader/test/fixtures/schemas/source/v2.schema.json",
+      "schemas-archive/source/v1.schema.json",
+      "schemas.json",
+    ].map((path) => ({ bytes: bytes("{}\n"), path })));
+    expect(await schemaPathFindings(snapshot)).toEqual([]);
+  });
+
+  test("judges schema paths from metadata without reading content", async () => {
+    const unreadable = (path: string, mode: string) => ({
+      mode,
+      path,
+      readBytes: (): Uint8Array => {
+        throw new Error("content must not be read");
+      },
+    });
+    const snapshot: RepositorySnapshot = {
+      files: [
+        unreadable("schemas", "160000"),
+        unreadable("schemas/source/v1.schema.json", "120000"),
+        unreadable("schemas/source/v2.schema.json", "100644"),
+      ],
+    };
+    // file.regular, not this rule, rejects the symlink at a registered path.
+    expect(await schemaPathFindings(snapshot)).toEqual([
+      "schemas",
+      "schemas/source/v2.schema.json",
+    ]);
   });
 
   test("copies bytes into the repository snapshot", () => {

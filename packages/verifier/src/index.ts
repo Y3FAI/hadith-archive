@@ -50,6 +50,7 @@ export {
   jsonUniqueKeys,
   repositoryCorePaths,
   repositoryPrivateMaterialAbsent,
+  repositorySchemaPaths,
   textNfc,
 } from "./rules/file.ts";
 export {
