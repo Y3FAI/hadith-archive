@@ -1,0 +1,10 @@
+{
+  "exports": {
+    ".": "./style.css",
+    "./fonts/*": "./fonts/*",
+    "./icons/*": "./icons/*"
+  },
+  "name": "@open-hadith/design-system",
+  "private": true,
+  "type": "module"
+}

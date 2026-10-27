@@ -1,0 +1,163 @@
+/* Open Hadith design system: the visual foundations every page of the site is built on.
+   Third-party font and icons keep their own licences; see CREDITS.md. */
+
+/* KFGQPC Uthman Taha Naskh, regular only. WOFF2 is a lossless repackaging of the
+   original TTF (same glyphs, hinting and metrics); the untouched TTF is the fallback.
+   The licence forbids modification: never subset, edit or add glyphs. */
+@font-face {
+  font-family: 'OH Naskh';
+  src: url('fonts/UthmanTN_v2-0.woff2') format('woff2'),
+       url('fonts/UthmanTN_v2-0.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+:root {
+  --bg: #f5f5f7;
+  --surface: #fff;
+  --ink: #000;
+  /* Arabic uses the Naskh; it has no Latin, so code values such as hex codes use the system font. */
+  --font-ar: 'OH Naskh', system-ui, sans-serif;
+  --font-ui: system-ui, sans-serif;
+  --s1: .25rem; --s2: .5rem; --s3: .75rem; --s4: 1rem;
+  --s5: 1.5rem; --s6: 2rem; --s7: 3rem; --s8: 4rem;
+  --page: 72rem; --content: 52rem; --reading: 36rem;
+  --gutter: clamp(1rem, .25rem + 4vw, 3rem);
+  --radius: 12px;
+  --radius-panel: 20px;
+  /* Approved: a hair edge plus a short soft shadow on every white surface at rest.
+     Diluted black appears only in shadows. */
+  --shadow: 0 0 0 .5px rgb(0 0 0 / .04), 0 1px 2px rgb(0 0 0 / .04);
+  --shadow-hover: 0 0 0 .5px rgb(0 0 0 / .05), 0 2px 4px rgb(0 0 0 / .06);
+  --shadow-pressed: 0 0 0 .5px rgb(0 0 0 / .05), inset 0 1px 2px rgb(0 0 0 / .08);
+  /* Keyboard focus: a stronger lift of the same shadow, never a line. */
+  --shadow-focus: 0 0 0 .5px rgb(0 0 0 / .06), 0 4px 16px rgb(0 0 0 / .16);
+  --target: 2.75rem;
+}
+*, *::before, *::after { box-sizing: border-box; }
+html { text-size-adjust: 100%; -webkit-text-size-adjust: 100%; }
+body { margin: 0; color: var(--ink); background: var(--bg); font: 400 1.125rem/2rem var(--font-ar);
+  font-synthesis: none; overflow-wrap: anywhere; }
+/* Code values keep their own LTR order but sit on the page's right edge. */
+:lang(en) { font-family: var(--font-ui); }
+[dir="ltr"] { text-align: right; }
+h1, h2, h3, p, ol, ul { margin: 0; }
+h1, h2, h3, strong, b { font-weight: 400; }
+ul, ol { padding: 0; list-style: none; }
+a { color: inherit; text-decoration: none; -webkit-tap-highlight-color: transparent; }
+button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent; }
+:focus-visible { outline: none; box-shadow: var(--shadow-focus); }
+a:focus-visible { background: var(--surface); }
+main:focus { box-shadow: none; }
+[id] { scroll-margin-top: var(--s5); }
+.sprite { position: absolute; width: 0; height: 0; overflow: hidden; }
+
+/* Layout */
+.page { max-width: calc(var(--page) + 2 * var(--gutter)); margin-inline: auto; padding-inline: var(--gutter); }
+.skip { position: absolute; inset-block-start: -8rem; inset-inline-start: var(--gutter); z-index: 5;
+  padding: var(--s2) var(--s4); background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow); }
+.skip:focus { inset-block-start: var(--s4); box-shadow: var(--shadow-focus); }
+.masthead { padding-block: var(--s8) var(--s6); }
+h1 { font-size: 2.25rem; line-height: 3.75rem; }
+.label { font-size: 1rem; line-height: 1.75rem; }
+.value { display: block; }
+.toc { margin-block-start: var(--s5); }
+.toc ol { display: flex; flex-wrap: wrap; gap: var(--s1) var(--s2); margin-inline: calc(-1 * var(--s3)); }
+.toc a { display: inline-flex; align-items: center; min-height: var(--target); padding-inline: var(--s3);
+  border-radius: var(--radius); }
+.section { padding-block: var(--s8); max-width: var(--content); }
+.section h2 { font-size: 1.75rem; line-height: 3rem; margin-block-end: var(--s6); }
+.sub { font-size: 1.5rem; line-height: 2.75rem; margin-block: var(--s7) var(--s4); }
+.section h2 + .sub { margin-block-start: 0; }
+
+/* Colors */
+.swatches { display: grid; grid-template-columns: repeat(3, minmax(0, 11rem)); gap: var(--s4); }
+.swatches li, .tiles li { display: grid; gap: var(--s1); align-content: start; }
+.chip { display: block; height: 4.5rem; border-radius: var(--radius); margin-block-end: var(--s2); box-shadow: var(--shadow); }
+.c-bg { background: var(--bg); }
+.c-surface { background: var(--surface); }
+.c-ink { background: var(--ink); }
+
+/* Typography: one weight, so hierarchy comes from size and space.
+   Uthman Taha draws small for its size and stacks tall marks, so Arabic never goes
+   below 16px and line heights stay near 1.75. */
+.type-list { display: grid; gap: var(--s6); }
+.type-row { display: grid; gap: var(--s1); }
+.t-display { font-size: 2.25rem; line-height: 3.75rem; }
+.t-heading { font-size: 1.75rem; line-height: 3rem; }
+.t-read { font-size: 1.5rem; line-height: 2.75rem; max-width: var(--reading); }
+.t-body { font-size: 1.125rem; line-height: 2rem; }
+.t-small { font-size: 1rem; line-height: 1.75rem; }
+.facts { margin-block-start: var(--s7); }
+
+/* Containers & spacing */
+.measure { display: grid; gap: var(--s4); }
+.track { height: var(--s2); margin-block-start: var(--s1); }
+.bar { height: 100%; background: var(--ink); border-radius: 999px; }
+.w-page { width: 100%; } .w-content { width: 72.222%; } .w-reading { width: 50%; }
+.scale { display: flex; flex-wrap: wrap; align-items: flex-end; gap: var(--s4) var(--s5); margin-block-start: var(--s7); }
+.scale li { display: grid; gap: var(--s2); justify-items: center; }
+.step { display: block; width: var(--s4); background: var(--ink); border-radius: 3px; }
+.sz-1 { height: var(--s1); } .sz-2 { height: var(--s2); } .sz-3 { height: var(--s3); } .sz-4 { height: var(--s4); }
+.sz-5 { height: var(--s5); } .sz-6 { height: var(--s6); } .sz-7 { height: var(--s7); } .sz-8 { height: var(--s8); }
+
+/* Radius & shadow */
+.tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(9.5rem, 1fr)); gap: var(--s6) var(--s5); }
+.tile { display: block; height: 5rem; margin-block-end: var(--s2); background: var(--surface); box-shadow: var(--shadow); }
+.r-sm { border-radius: var(--radius); } .r-lg { border-radius: var(--radius-panel); }
+
+/* Icons: Phosphor thin, filled outlines in a 20px box, never mirrored. */
+.icon { width: 1.25rem; height: 1.25rem; flex-shrink: 0; fill: currentColor; }
+/* Direction marks are the font's own angle quotes, set left to right so bidi never mirrors them:
+   ‹ is next (the reading direction), › is back, and ‹ turned upright is up. */
+.arrow { display: inline-grid; place-items: center; width: 1.25rem; height: 1.25rem; flex-shrink: 0;
+  direction: ltr; font-size: 1.5rem; line-height: 1; }
+.arrow.up { transform: rotate(90deg); }
+.icons { display: flex; flex-wrap: wrap; gap: var(--s3) var(--s6); }
+.icons li, .pair { display: inline-flex; align-items: center; gap: var(--s2); }
+.icons li { min-height: var(--target); font-size: 1rem; }
+
+/* Button: the single white style; states differ by shadow only. */
+.button { display: inline-flex; align-items: center; justify-content: center; gap: var(--s2);
+  min-height: var(--target); max-width: 100%; padding: var(--s2) var(--s5); border: 0; border-radius: var(--radius);
+  vertical-align: middle; /* not baseline: otherwise the whole button rises to meet the dropped label */
+  background: var(--surface); color: var(--ink); box-shadow: var(--shadow); font-size: 1.125rem; line-height: 1.75rem; cursor: pointer; }
+.states { display: flex; flex-wrap: wrap; gap: var(--s5); margin-block-start: var(--s6); }
+.states li { display: grid; gap: var(--s2); justify-items: start; }
+.states .button { cursor: default; }
+.button.is-hover { box-shadow: var(--shadow-hover); }
+/* Pressing sinks the surface, so the label and icon drop 1px with it. The total padding is
+   unchanged, so the button keeps its size and nothing around it moves. */
+.button.is-active { box-shadow: var(--shadow-pressed); padding-block: calc(var(--s2) + 1px) calc(var(--s2) - 1px); }
+.button.is-focus { box-shadow: var(--shadow-focus); }
+.button.is-disabled, .button:disabled { box-shadow: none; cursor: default; }
+
+/* Card: static, no hover or cursor change. */
+.card { display: grid; gap: var(--s3); max-width: var(--reading); padding: var(--s5);
+  background: var(--surface); border-radius: var(--radius-panel); box-shadow: var(--shadow); }
+
+/* Interaction: feedback on specific targets only; the only movement is the pressed label. */
+.button, .toc a { transition: box-shadow 120ms ease-out, background-color 120ms ease-out, padding 120ms ease-out;
+  touch-action: manipulation; }
+/* Hover never covers focus, so a keyboard user keeps the stronger lift under a resting pointer. */
+@media (hover: hover) and (pointer: fine) {
+  button.button:hover:not(:disabled, :focus-visible) { box-shadow: var(--shadow-hover); }
+  .toc a:hover:not(:focus-visible) { background: var(--surface); box-shadow: var(--shadow); }
+}
+button.button:focus-visible { box-shadow: var(--shadow-focus); }
+button.button:active:not(:disabled) { box-shadow: var(--shadow-pressed);
+  padding-block: calc(var(--s2) + 1px) calc(var(--s2) - 1px); }
+.toc a:active { background: var(--surface); box-shadow: var(--shadow-pressed); }
+
+@media (min-width: 48rem) {
+  .type-row { grid-template-columns: 12rem minmax(0, 1fr); gap: var(--s5); align-items: baseline; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; animation: none !important; }
+}
+/* High-contrast modes remove shadows, so focus falls back to the system outline there only. */
+@media (forced-colors: active) {
+  :focus-visible, button.button:focus-visible, .toc a:focus-visible { outline: 2px solid Highlight; outline-offset: 3px; }
+  .button, .card, .chip, .tile { border: 1px solid CanvasText; }
+  .button.is-disabled, .button:disabled { color: GrayText; border-color: GrayText; }
+}
