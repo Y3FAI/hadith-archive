@@ -6,8 +6,10 @@ import { fileURLToPath } from "node:url";
 import {
   CanonicalJsonError,
   type CanonicalJsonErrorCode,
+  type CanonicalJsonValue,
   encodeCanonicalJson,
   formatCanonicalJson,
+  MAX_NESTING_DEPTH,
   parseCanonicalJsonBytes,
   parseJsonSource,
 } from "../src/index.ts";
@@ -42,6 +44,37 @@ function expectErrorCode(
     expect(error).toBeInstanceOf(CanonicalJsonError);
     expect((error as CanonicalJsonError).code).toBe(expectedCode);
   }
+}
+
+// An object holding levels - 1 nested arrays, built without recursion.
+function nestedValue(levels: number): CanonicalJsonValue {
+  let value: CanonicalJsonValue = [];
+  for (let level = 2; level < levels; level += 1) {
+    value = [value];
+  }
+  return { a: value };
+}
+
+// The canonical bytes of nestedValue(levels), written by hand so they can exceed
+// what the formatter accepts.
+function nestedSource(levels: number): string {
+  const arrays = levels - 1;
+  const lines = ["{"];
+  if (arrays === 1) {
+    lines.push('  "a": []');
+  } else {
+    lines.push('  "a": [');
+    for (let depth = 2; depth < arrays; depth += 1) {
+      lines.push(`${"  ".repeat(depth)}[`);
+    }
+    lines.push(`${"  ".repeat(arrays)}[]`);
+    for (let depth = arrays - 1; depth >= 2; depth -= 1) {
+      lines.push(`${"  ".repeat(depth)}]`);
+    }
+    lines.push("  ]");
+  }
+  lines.push("}");
+  return `${lines.join("\n")}\n`;
 }
 
 describe("canonical JSON bytes", () => {
@@ -131,6 +164,25 @@ describe("canonical JSON bytes", () => {
     const bytes = new TextEncoder().encode('{\n  "text": "\\ud83d\\ude00"\n}\n');
     expectErrorCode(() => parseCanonicalJsonBytes(bytes), "non_canonical");
   });
+
+  test("accepts nesting up to the limit and rejects one level deeper", () => {
+    for (const levels of [2, 3, MAX_NESTING_DEPTH]) {
+      expect(nestedSource(levels)).toBe(formatCanonicalJson(nestedValue(levels)));
+    }
+    const atLimit = new TextEncoder().encode(nestedSource(MAX_NESTING_DEPTH));
+    expect(encodeCanonicalJson(parseCanonicalJsonBytes(atLimit))).toEqual(atLimit);
+
+    const beyond = new TextEncoder().encode(nestedSource(MAX_NESTING_DEPTH + 1));
+    expectErrorCode(() => parseCanonicalJsonBytes(beyond), "nesting_depth");
+  });
+
+  test("rejects very deep nesting without exhausting the call stack", () => {
+    const depth = 200_000;
+    const bytes = new TextEncoder().encode(
+      `{"a":${"[".repeat(depth)}${"]".repeat(depth)}}\n`,
+    );
+    expectErrorCode(() => parseCanonicalJsonBytes(bytes), "nesting_depth");
+  });
 });
 
 describe("duplicate-aware parser", () => {
@@ -203,6 +255,40 @@ describe("duplicate-aware parser", () => {
   test("preserves integer literals beyond JavaScript's safe range", () => {
     const value = parseJsonSource("9007199254740993123456789");
     expect(value).toBe(9007199254740993123456789n);
+  });
+
+  test("limits object and array nesting at the opening bracket", () => {
+    const levels = Array.from(
+      { length: MAX_NESTING_DEPTH + 1 },
+      (_, index) => index % 2 === 0 ? '{"k":' : "[",
+    );
+    const closers = levels.map((opener) => opener === "[" ? "]" : "}").reverse();
+    const atLimit = `${levels.slice(1).join("")}0${closers.slice(0, -1).join("")}`;
+    expect(() => parseJsonSource(atLimit)).not.toThrow();
+
+    const beyond = `${levels.join("")}0${closers.join("")}`;
+    try {
+      parseJsonSource(beyond);
+      throw new Error("Expected CanonicalJsonError nesting_depth");
+    } catch (error: unknown) {
+      expect(error).toBeInstanceOf(CanonicalJsonError);
+      expect((error as CanonicalJsonError).code).toBe("nesting_depth");
+      expect((error as CanonicalJsonError).offset).toBe(
+        levels.slice(0, -1).join("").length,
+      );
+    }
+  });
+
+  test("rejects very deep arrays and objects without exhausting the call stack", () => {
+    const depth = 200_000;
+    expectErrorCode(
+      () => parseJsonSource(`${"[".repeat(depth)}${"]".repeat(depth)}`),
+      "nesting_depth",
+    );
+    expectErrorCode(
+      () => parseJsonSource(`${'{"k":'.repeat(depth)}0${"}".repeat(depth)}`),
+      "nesting_depth",
+    );
   });
 });
 
@@ -301,6 +387,20 @@ describe("canonical formatter", () => {
     expectErrorCode(
       () => formatCanonicalJson({ "é": 1, "é": 2 }),
       "duplicate_key",
+    );
+  });
+
+  test("formats nesting up to the limit and rejects deeper values", () => {
+    expect(formatCanonicalJson(nestedValue(MAX_NESTING_DEPTH))).toBe(
+      nestedSource(MAX_NESTING_DEPTH),
+    );
+    expectErrorCode(
+      () => formatCanonicalJson(nestedValue(MAX_NESTING_DEPTH + 1)),
+      "nesting_depth",
+    );
+    expectErrorCode(
+      () => formatCanonicalJson(nestedValue(200_000)),
+      "nesting_depth",
     );
   });
 

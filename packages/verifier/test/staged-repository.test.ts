@@ -276,6 +276,30 @@ describe("staged repository verification", () => {
     expect(await indexed()).toEqual(before);
   });
 
+  test("completes with a json.canonical finding for a deeply nested staged file", async () => {
+    const { base, git, root, write } = await fixture();
+    const path = "core/hadith/1.json";
+    const depth = 200_000;
+    await write(path, `{"a":${"[".repeat(depth)}${"]".repeat(depth)}}\n`);
+    await git("add", "core");
+    const result = await verifyRepository(root, base);
+    expect(result).toEqual({
+      kind: "complete",
+      report: {
+        findings: [{
+          file: path,
+          instance_path: "",
+          message: "JSON bytes are not canonical",
+          rule_id: "json.canonical",
+        }],
+        valid: false,
+        verification_version: 2,
+      },
+    });
+    const io = { stderr: { write() {} }, stdout: { write() {} } };
+    expect(presentVerificationResult(result, io)).toBe(1);
+  });
+
   test("rejects an external symlink even when its target is valid or absent", async () => {
     const { base, directory, git, root } = await fixture();
     const target = resolve(directory, "outside.json");

@@ -8,6 +8,10 @@ import type {
 const JSON_NUMBER = /-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?(?:[eE][+-]?[0-9]+)?/y;
 const JSON_WHITESPACE = new Set(["\u0009", "\u000a", "\u000d", "\u0020"]);
 
+// Objects and arrays nest at most this many levels, counting the top level, so
+// recursive parsing, formatting, and validation stay far below the call-stack limit.
+export const MAX_NESTING_DEPTH = 64;
+
 function parseIntegerToken(token: string): bigint | number {
   const integer = BigInt(token);
   if (
@@ -37,6 +41,7 @@ function parseNumberToken(token: string): bigint | number {
 }
 
 class Parser {
+  private depth = 0;
   private offset = 0;
 
   constructor(private readonly source: string) {}
@@ -229,11 +234,18 @@ class Parser {
       this.fail("Expected a JSON value");
     }
 
-    if (character === "{") {
-      return this.parseObject();
-    }
-    if (character === "[") {
-      return this.parseArray();
+    if (character === "{" || character === "[") {
+      this.depth += 1;
+      if (this.depth > MAX_NESTING_DEPTH) {
+        throw new CanonicalJsonError(
+          "nesting_depth",
+          `JSON nests more than ${MAX_NESTING_DEPTH} levels`,
+          { offset: this.offset },
+        );
+      }
+      const value = character === "{" ? this.parseObject() : this.parseArray();
+      this.depth -= 1;
+      return value;
     }
     if (character === '"') {
       return this.parseString();

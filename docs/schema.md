@@ -298,6 +298,7 @@ The record is one direct JSON object. Metadata and entity fields are not wrapped
 Every core file has one canonical byte representation:
 
 - exactly one top-level JSON object;
+- at most 64 levels of nested objects and arrays, counting the top-level object;
 - UTF-8 without BOM;
 - Unicode scalar values only, with no unpaired UTF-16 surrogate in any string or key;
 - Unicode Normalization Form C;
@@ -764,7 +765,7 @@ The version-two catalog contains the following authoritative rules. Relative to 
 | `file.final_lf` | A tracked schema or core JSON file does not end with exactly one LF. |
 | `json.parseable` | A tracked schema or core JSON file is not valid JSON. |
 | `json.unique_keys` | A JSON object contains a duplicate key, including equal duplicate values. |
-| `json.canonical` | Formatting, key order, escaping, indentation, integer notation, or whitespace differs from canonical output, or a string or key contains an unpaired UTF-16 surrogate. |
+| `json.canonical` | Formatting, key order, escaping, indentation, integer notation, or whitespace differs from canonical output, a string or key contains an unpaired UTF-16 surrogate, or objects and arrays nest more than 64 levels deep. |
 | `text.nfc` | A string value in a core record is not NFC. |
 
 ### Schema and record rules

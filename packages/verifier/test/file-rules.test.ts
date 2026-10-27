@@ -1,6 +1,11 @@
 import { describe, expect, test } from "bun:test";
 
 import {
+  type CanonicalJsonValue,
+  formatCanonicalJson,
+  MAX_NESTING_DEPTH,
+} from "@open-hadith/canonical-json";
+import {
   createRepositorySnapshot,
   REPOSITORY_FILE_RULES,
   repositoryCorePaths,
@@ -185,6 +190,39 @@ describe("repository and file rules", () => {
       }
     });
   }
+
+  test("reports nesting beyond the limit as json.canonical instead of failing", async () => {
+    // An object holding MAX_NESTING_DEPTH - 1 nested arrays is canonical at the limit;
+    // one more array around its innermost line goes one level beyond it.
+    let value: CanonicalJsonValue = [];
+    for (let level = 2; level < MAX_NESTING_DEPTH; level += 1) value = [value];
+    const atLimit = formatCanonicalJson({ a: value });
+    const indent = (depth: number) => "  ".repeat(depth);
+    const innermost = `${indent(MAX_NESTING_DEPTH - 1)}[]`;
+    const beyond = atLimit.replace(
+      innermost,
+      `${indent(MAX_NESTING_DEPTH - 1)}[\n${indent(MAX_NESTING_DEPTH)}[]\n${indent(MAX_NESTING_DEPTH - 1)}]`,
+    );
+    const deep = 200_000;
+    const findings = async (source: string) => {
+      const snapshot = createRepositorySnapshot([
+        { bytes: bytes(source), path: "core/hadith/1.json" },
+      ]);
+      const result = await runVerification(snapshot, REPOSITORY_FILE_RULES);
+      if (result.kind !== "complete") throw new Error("Expected complete verification");
+      return result.report.findings;
+    };
+    const canonical = [{
+      file: "core/hadith/1.json",
+      instance_path: "",
+      message: "JSON bytes are not canonical",
+      rule_id: "json.canonical",
+    }];
+
+    expect(await findings(atLimit)).toEqual([]);
+    expect(await findings(beyond)).toEqual(canonical);
+    expect(await findings(`{"a":${"[".repeat(deep)}${"]".repeat(deep)}}\n`)).toEqual(canonical);
+  });
 
   test("collects independent byte failures from one file", async () => {
     const snapshot = createRepositorySnapshot([

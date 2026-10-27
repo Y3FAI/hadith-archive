@@ -3,6 +3,7 @@ import { readFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
+import { MAX_NESTING_DEPTH } from "@open-hadith/canonical-json";
 import {
   createCoreLoader,
   type LoadedCoreRecord,
@@ -133,6 +134,20 @@ describe("core loader", () => {
         kind: "canonical_json",
         message: "JSON string contains an unpaired UTF-16 surrogate",
         offset: source.indexOf('"مثال \\udc00"'),
+      },
+      ok: false,
+    });
+  });
+
+  test("rejects excessive nesting as a structured failure", () => {
+    const arrays = MAX_NESTING_DEPTH;
+    const source = `{"a":${"[".repeat(arrays)}${"]".repeat(arrays)}}\n`;
+    expect(loader.loadBytes(new TextEncoder().encode(source))).toEqual({
+      failure: {
+        code: "nesting_depth",
+        kind: "canonical_json",
+        message: `JSON nests more than ${MAX_NESTING_DEPTH} levels`,
+        offset: source.lastIndexOf("["),
       },
       ok: false,
     });
