@@ -1,4 +1,5 @@
 import { CanonicalJsonError } from "./errors.ts";
+import { MAX_NESTING_DEPTH } from "./parser.ts";
 import type { CanonicalJsonValue } from "./types.ts";
 
 const INDENT = "  ";
@@ -112,6 +113,12 @@ function formatValue(
     throw new CanonicalJsonError(
       "unsupported_value",
       "Canonical JSON cannot represent cyclic values",
+    );
+  }
+  if (depth >= MAX_NESTING_DEPTH) {
+    throw new CanonicalJsonError(
+      "nesting_depth",
+      `Canonical JSON nests at most ${MAX_NESTING_DEPTH} levels`,
     );
   }
 

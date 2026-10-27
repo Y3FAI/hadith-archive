@@ -10,7 +10,7 @@ export {
   type CanonicalJsonErrorOptions,
 } from "./errors.ts";
 export { formatCanonicalJson } from "./format.ts";
-export { parseJsonSource } from "./parser.ts";
+export { MAX_NESTING_DEPTH, parseJsonSource } from "./parser.ts";
 export {
   isCanonicalJsonObject,
   type CanonicalJsonArray,

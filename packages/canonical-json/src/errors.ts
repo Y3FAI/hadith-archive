@@ -6,6 +6,7 @@ export type CanonicalJsonErrorCode =
   | "ill_formed_unicode"
   | "invalid_utf8"
   | "line_ending"
+  | "nesting_depth"
   | "non_canonical"
   | "non_nfc"
   | "syntax"
