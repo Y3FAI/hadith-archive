@@ -1,0 +1,138 @@
+<!doctype html>
+<!--
+  Open Hadith design system: foundations. The site is Arabic only, so this page is Arabic and RTL;
+  only code values such as hex codes stay in Latin. Arabic sample sentences are invented for layout
+  review; none of them is a hadith, a prophetic saying or a real citation.
+-->
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>نظام التصميم</title>
+  <link rel="preload" href="fonts/UthmanTN_v2-0.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a class="skip" href="#main">تخطَّ إلى المحتوى</a>
+
+  <!-- Icons: Phosphor Icons 2.1.1, thin weight, unmodified (MIT, © 2023 Phosphor Icons; originals
+       and licence in icons/, credits in CREDITS.md). Direction marks are not icons: they are the
+       font's own ‹ ›. -->
+  <svg class="sprite" aria-hidden="true" focusable="false">
+    <symbol id="i-book" viewBox="0 0 256 256"><path d="M232,52H160a36,36,0,0,0-32,19.54A36,36,0,0,0,96,52H24a4,4,0,0,0-4,4V200a4,4,0,0,0,4,4H96a28,28,0,0,1,28,28,4,4,0,0,0,8,0,28,28,0,0,1,28-28h72a4,4,0,0,0,4-4V56A4,4,0,0,0,232,52ZM96,196H28V60H96a28,28,0,0,1,28,28V209.4A35.93,35.93,0,0,0,96,196Zm132,0H160a35.94,35.94,0,0,0-28,13.41V88a28,28,0,0,1,28-28h68Z"/></symbol>
+    <symbol id="i-page" viewBox="0 0 256 256"><path d="M210.83,85.17l-56-56A4,4,0,0,0,152,28H56A12,12,0,0,0,44,40V216a12,12,0,0,0,12,12H200a12,12,0,0,0,12-12V88A4,4,0,0,0,210.83,85.17ZM156,41.65,198.34,84H156ZM200,220H56a4,4,0,0,1-4-4V40a4,4,0,0,1,4-4h92V88a4,4,0,0,0,4,4h52V216A4,4,0,0,1,200,220Zm-36-84a4,4,0,0,1-4,4H96a4,4,0,0,1,0-8h64A4,4,0,0,1,164,136Zm0,32a4,4,0,0,1-4,4H96a4,4,0,0,1,0-8h64A4,4,0,0,1,164,168Z"/></symbol>
+  </svg>
+
+  <header class="masthead page" id="top">
+    <h1>نظام التصميم</h1>
+    <nav class="toc" aria-label="الأقسام">
+      <ol role="list">
+        <li><a href="#colors">الألوان</a></li>
+        <li><a href="#typography">الخط</a></li>
+        <li><a href="#containers">الحاويات والمسافات</a></li>
+        <li><a href="#surface">الزوايا والظل</a></li>
+        <li><a href="#elements">الأيقونات والزر</a></li>
+        <li><a href="#card">البطاقة</a></li>
+        <li><a href="#credits">المصادر</a></li>
+      </ol>
+    </nav>
+  </header>
+
+  <main id="main" class="page" tabindex="-1">
+
+    <section class="section" id="colors" aria-labelledby="colors-title">
+      <h2 id="colors-title">الألوان</h2>
+      <ul class="swatches" role="list">
+        <li><span class="chip c-bg"></span><span class="label">الخلفية<span class="value" lang="en" dir="ltr">#F5F5F7</span></span></li>
+        <li><span class="chip c-surface"></span><span class="label">البطاقات والأزرار<span class="value" lang="en" dir="ltr">#FFFFFF</span></span></li>
+        <li><span class="chip c-ink"></span><span class="label">النص والأيقونات<span class="value" lang="en" dir="ltr">#000000</span></span></li>
+      </ul>
+    </section>
+
+    <section class="section" id="typography" aria-labelledby="reading">
+      <h2 id="reading">الخط</h2>
+      <div class="type-list">
+        <div class="type-row"><p class="label">عنوان رئيسي<span class="value">الحجم ٣٦ · السطر ٦٠</span></p><p class="t-display">كتاب المثال</p></div>
+        <div class="type-row"><p class="label">عنوان قسم<span class="value">الحجم ٢٨ · السطر ٤٨</span></p><p class="t-heading">في القراءة والتعلّم</p></div>
+        <div class="type-row"><p class="label">نص القراءة<span class="value">الحجم ٢٤ · السطر ٤٤</span></p><p class="t-read">يَجْلِسُ الْقَارِئُ فِي مَكَانٍ هَادِئٍ، وَيَفْتَحُ كِتَابَهُ عَلَى مَهَلٍ. يَقْرَأُ سَطْرًا، ثُمَّ يَعُودُ إِلَيْهِ، وَيَتَأَمَّلُ مَعْنَاهُ.</p></div>
+        <div class="type-row"><p class="label">نص الواجهة<span class="value">الحجم ١٨ · السطر ٣٢</span></p><p class="t-body">نص الواجهة بالعربية · الصفحة ١٢</p></div>
+        <div class="type-row"><p class="label">نص صغير<span class="value">الحجم ١٦ · السطر ٢٨</span></p><p class="t-small">كتاب المثال · الطبعة الأولى · الصفحة ١٢</p></div>
+        <div class="type-row"><p class="label">الأرقام<span class="value">الحجم ١٨ · السطر ٣٢</span></p><p class="t-body">٠١٢٣٤٥٦٧٨٩ · 0123456789</p></div>
+        <div class="type-row"><p class="label">حروف ليست في الخط<span class="value">يرسمها خط الجهاز</span></p><p class="t-read">يَقْرَأُ ٱلْكِتَابَ سَطْرًا سَطْرًا ۖ ثُمَّ يَعُودُ إِلَيْهِ …</p></div>
+      </div>
+      <p class="label facts">خط عثمان طه للنسخ من مجمع الملك فهد لطباعة المصحف الشريف، بوزن واحد</p>
+    </section>
+
+    <section class="section" id="containers" aria-labelledby="containers-title">
+      <h2 id="containers-title">الحاويات والمسافات</h2>
+      <div class="measure">
+        <div><p class="label">الصفحة · ١١٥٢ بكسل</p><div class="track" aria-hidden="true"><div class="bar w-page"></div></div></div>
+        <div><p class="label">المحتوى · ٨٣٢ بكسل</p><div class="track" aria-hidden="true"><div class="bar w-content"></div></div></div>
+        <div><p class="label">القراءة · ٥٧٦ بكسل</p><div class="track" aria-hidden="true"><div class="bar w-reading"></div></div></div>
+        <p class="label">الهامش الجانبي · من ١٦ إلى ٤٨ بكسل حسب عرض الشاشة</p>
+      </div>
+      <ol class="scale" role="list" aria-label="مقياس المسافات بالبكسل">
+        <li><span class="step sz-1"></span><span class="label">٤</span></li>
+        <li><span class="step sz-2"></span><span class="label">٨</span></li>
+        <li><span class="step sz-3"></span><span class="label">١٢</span></li>
+        <li><span class="step sz-4"></span><span class="label">١٦</span></li>
+        <li><span class="step sz-5"></span><span class="label">٢٤</span></li>
+        <li><span class="step sz-6"></span><span class="label">٣٢</span></li>
+        <li><span class="step sz-7"></span><span class="label">٤٨</span></li>
+        <li><span class="step sz-8"></span><span class="label">٦٤</span></li>
+      </ol>
+    </section>
+
+    <section class="section" id="surface" aria-labelledby="surface-title">
+      <h2 id="surface-title">الزوايا والظل</h2>
+      <ul class="tiles" role="list">
+        <li><span class="tile r-sm"></span><span class="label">زاوية الأزرار<span class="value">١٢ بكسل</span></span></li>
+        <li><span class="tile r-lg"></span><span class="label">زاوية البطاقات<span class="value">٢٠ بكسل</span></span></li>
+      </ul>
+    </section>
+
+    <section class="section" id="elements" aria-labelledby="elements-title">
+      <h2 id="elements-title">الأيقونات والزر</h2>
+
+      <h3 class="sub">الأيقونات</h3>
+      <ul class="icons" role="list">
+        <li><svg class="icon" aria-hidden="true"><use href="#i-book"/></svg>كتاب</li>
+        <li><svg class="icon" aria-hidden="true"><use href="#i-page"/></svg>صفحة</li>
+        <li><span class="arrow" aria-hidden="true">‹</span>التالي</li>
+        <li><span class="arrow" aria-hidden="true">›</span>السابق</li>
+        <li><span class="arrow up" aria-hidden="true">‹</span>أعلى</li>
+      </ul>
+
+      <h3 class="sub" id="button">الزر</h3>
+      <button class="button" type="button">التالي<span class="arrow" aria-hidden="true">‹</span></button>
+      <ul class="states" role="list" aria-label="معاينة ثابتة لحالات الزر">
+        <li><span class="button">التالي</span><span class="label">عادي</span></li>
+        <li><span class="button is-hover">التالي</span><span class="label">مرور المؤشر</span></li>
+        <li><span class="button is-active">التالي</span><span class="label">الضغط</span></li>
+        <li><span class="button is-focus">التالي</span><span class="label">التركيز</span></li>
+        <li><span class="button is-disabled">التالي</span><span class="label">معطّل</span></li>
+      </ul>
+    </section>
+
+    <section class="section" id="card" aria-labelledby="card-title">
+      <h2 id="card-title">البطاقة</h2>
+      <div class="card">
+        <p class="pair t-small"><svg class="icon" aria-hidden="true"><use href="#i-page"/></svg>كتاب المثال · الصفحة ١٢</p>
+        <p class="t-heading">في القراءة والتعلّم</p>
+        <p class="t-read">وَتَبْقَى الْكَلِمَاتُ وَاضِحَةً، وَالْمَسَافَاتُ مُرِيحَةً.</p>
+      </div>
+    </section>
+
+    <section class="section" id="credits" aria-labelledby="credits-title">
+      <h2 id="credits-title">المصادر</h2>
+      <div class="type-list">
+        <div class="type-row"><p class="label">الخط</p><p class="t-body">خط عثمان طه للنسخ، الإصدار ٢٫٠، من مجمع الملك فهد لطباعة المصحف الشريف، تصميم <span lang="en" dir="ltr">Ashfaq&nbsp;A.&nbsp;Niazi</span>
+          <a class="value" href="https://fonts.qurancomplex.gov.sa/" lang="en" dir="ltr">fonts.qurancomplex.gov.sa</a></p></div>
+        <div class="type-row"><p class="label">الأيقونات</p><p class="t-body"><span lang="en" dir="ltr">Phosphor Icons</span> بالوزن الرفيع، برخصة <span lang="en" dir="ltr">MIT</span>
+          <a class="value" href="https://phosphoricons.com/" lang="en" dir="ltr">phosphoricons.com</a></p></div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

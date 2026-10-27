@@ -4,6 +4,10 @@
 # All text files: normalized to LF, never CRLF, on every operating system.
 * text=auto eol=lf
 
+# Fonts: binary, kept byte for byte; the original TTF carries a digital signature.
+*.ttf    binary
+*.woff2  binary
+
 # Core data: explicit text with LF, no re-encoding or content filters.
 *.json   text eol=lf -filter -working-tree-encoding
 *.jsonl  text eol=lf -filter -working-tree-encoding
