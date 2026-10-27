@@ -5,7 +5,7 @@ import { tmpdir } from "node:os";
 import { dirname, resolve } from "node:path";
 import { promisify } from "node:util";
 
-import { formatCanonicalJson } from "@open-hadith/canonical-json";
+import { formatCanonicalJson } from "@hadith-archive/canonical-json";
 
 import {
   assertCompleteGitHistory,
@@ -38,7 +38,7 @@ async function linkDependencies(root: string) {
 // Accepted history merges a record, deletes it, then makes an unrelated change.
 // Only the full history reveals the deletion.
 async function origin() {
-  const directory = await mkdtemp(resolve(tmpdir(), "open-hadith-shallow-"));
+  const directory = await mkdtemp(resolve(tmpdir(), "hadith-archive-shallow-"));
   directories.push(directory);
   const root = resolve(directory, "origin");
   const write = async (path: string, contents: string) => {
@@ -146,7 +146,7 @@ test("a complete clone still reports the historical deletion", async () => {
 }, 30_000);
 
 test("fails closed without the shallow-clone message when Git cannot answer", async () => {
-  const directory = await mkdtemp(resolve(tmpdir(), "open-hadith-not-git-"));
+  const directory = await mkdtemp(resolve(tmpdir(), "hadith-archive-not-git-"));
   directories.push(directory);
   const failure = await assertCompleteGitHistory(directory).catch((error: unknown) => error);
   expect(failure).toBeInstanceOf(Error);

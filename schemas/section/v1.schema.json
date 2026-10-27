@@ -1,5 +1,5 @@
 {
-  "$id": "https://raw.githubusercontent.com/Y3FAI/open-hadith/main/schemas/section/v1.schema.json",
+  "$id": "https://haditharchive.org/schemas/section/v1.schema.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
   "description": "A version-one authoritative SECTION record.",
@@ -40,6 +40,6 @@
     "source_id",
     "title"
   ],
-  "title": "Open Hadith SECTION record version one",
+  "title": "Hadith Archive SECTION record version one",
   "type": "object"
 }

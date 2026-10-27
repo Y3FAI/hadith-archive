@@ -5,8 +5,8 @@ import { tmpdir } from "node:os";
 import { dirname, resolve } from "node:path";
 import { promisify } from "node:util";
 
-import { formatCanonicalJson } from "@open-hadith/canonical-json";
-import { loadGitHistoryState, loadRepositorySnapshotAtCommit } from "@open-hadith/verifier";
+import { formatCanonicalJson } from "@hadith-archive/canonical-json";
+import { loadGitHistoryState, loadRepositorySnapshotAtCommit } from "@hadith-archive/verifier";
 
 const execFileAsync = promisify(execFile);
 const root = resolve(import.meta.dir, "../../..");
@@ -20,7 +20,7 @@ const source = (id = "example") => formatCanonicalJson({
 });
 
 async function fixture(objectFormat = "sha1") {
-  const directory = await mkdtemp(resolve(tmpdir(), "open-hadith-history-stream-"));
+  const directory = await mkdtemp(resolve(tmpdir(), "hadith-archive-history-stream-"));
   directories.push(directory);
   const repository = resolve(directory, "repo");
   await mkdir(repository);

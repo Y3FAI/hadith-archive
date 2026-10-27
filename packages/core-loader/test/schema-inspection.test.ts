@@ -3,11 +3,11 @@ import { readFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { parseCanonicalJsonBytes } from "@open-hadith/canonical-json";
+import { parseCanonicalJsonBytes } from "@hadith-archive/canonical-json";
 import {
   EXPECTED_SCHEMA_PATHS,
   inspectSchemaCatalog,
-} from "@open-hadith/core-loader";
+} from "@hadith-archive/core-loader";
 
 const currentDirectory = dirname(fileURLToPath(import.meta.url));
 const repositoryRoot = resolve(currentDirectory, "../../..");

@@ -1,4 +1,4 @@
-import { formatCanonicalJson } from "@open-hadith/canonical-json";
+import { formatCanonicalJson } from "@hadith-archive/canonical-json";
 
 import {
   VERIFICATION_VERSION,

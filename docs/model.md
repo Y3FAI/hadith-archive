@@ -1,8 +1,8 @@
 # Data Model
 
-This document defines the entities of Open Hadith, the relationships between them, and the schema they produce. It builds on the vocabulary in [terms.md](terms.md), the commitments in [principles.md](principles.md), and the layers in [layers.md](layers.md).
+This document defines the entities of Hadith Archive, the relationships between them, and the schema they produce. It builds on the vocabulary in [terms.md](terms.md), the commitments in [principles.md](principles.md), and the layers in [layers.md](layers.md).
 
-Open Hadith preserves text from print editions and publishes it as public HTML. The model serves both. Preservation decides what may be stored; publication decides what must be addressable by a stable identifier. Where the two pull against each other, the model says which one gives way.
+Hadith Archive preserves text from print editions and publishes it as public HTML. The model serves both. Preservation decides what may be stored; publication decides what must be addressable by a stable identifier. Where the two pull against each other, the model says which one gives way.
 
 ## Entities
 
@@ -52,13 +52,13 @@ An occurrence belonging to no hadith is a valid and expected state. Ingestion pr
 
 The canonical unit. A hadith gathers the occurrences of one narration wherever it appears — across editions and, more importantly, across works — selects one of them to supply its published text, and owns the public address at which it is served.
 
-It is the only entity Open Hadith authors. A source, a witness, and an occurrence are all discoveries: a work exists, a book exists, ink on a page exists. A hadith is a judgement that several appearances are one narration.
+It is the only entity Hadith Archive authors. A source, a witness, and an occurrence are all discoveries: a work exists, a book exists, ink on a page exists. A hadith is a judgement that several appearances are one narration.
 
 That judgement is still authoritative core data. The core holds the source-bound records and, beside them, the human-reviewed hadith records that group them. A hadith record is not derived and cannot be regenerated from the others; it is kept, verified, and preserved under the same rules as the records it groups.
 
 That judgement is made deliberately. Scripts and assisted review propose candidates — whether a narration is already recorded, whether a new occurrence belongs with existing ones — and a person decides. Hadith are not regenerated. An existing hadith is altered only to correct a clear mistake.
 
-The published text is selected, never composed. Where occurrences differ, the one that best represents their weighted agreement is published verbatim, in full, as one witness printed it. Open Hadith does not assemble a text that no edition contains.
+The published text is selected, never composed. Where occurrences differ, the one that best represents their weighted agreement is published verbatim, in full, as one witness printed it. Hadith Archive does not assemble a text that no edition contains.
 
 A hadith also carries the text its page needs to be found: a title, a heading, and a description. These are chosen when the hadith is minted, by the same combination of scripts, assisted review, and human decision. They are drawn from the displayed occurrence and never written, which keeps a published page free of any sentence the project composed. Every occurrence a hadith gathers is presented on that page beneath the selected text, with its edition and location, so that a reader sees each appearance in full rather than a single version standing for all of them.
 

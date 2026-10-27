@@ -154,7 +154,7 @@
       "type": "string"
     }
   },
-  "$id": "https://raw.githubusercontent.com/Y3FAI/open-hadith/main/schemas/common/v1.schema.json",
+  "$id": "https://haditharchive.org/schemas/common/v1.schema.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "Open Hadith version-one common semantic types"
+  "title": "Hadith Archive version-one common semantic types"
 }

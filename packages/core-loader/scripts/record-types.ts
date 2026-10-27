@@ -1,7 +1,7 @@
 import { readFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 
-import { parseCanonicalJsonBytes } from "@open-hadith/canonical-json";
+import { parseCanonicalJsonBytes } from "@hadith-archive/canonical-json";
 import { RECORD_SCHEMA_CATALOG } from "../src/catalog.ts";
 
 const BANNER = `/**
@@ -72,5 +72,5 @@ export async function generateRecordTypes(
     "\n  | ",
   );
 
-  return `${BANNER}\n${declarations.join("\n\n")}\n\nexport type OpenHadithRecord =\n  | ${union};\n`;
+  return `${BANNER}\n${declarations.join("\n\n")}\n\nexport type HadithArchiveRecord =\n  | ${union};\n`;
 }

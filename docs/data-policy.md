@@ -1,8 +1,8 @@
 # Data Policy
 
-This document defines the single rule for how Open Hadith represents and verifies core text. Identifiers, records, and source witnesses are defined separately.
+This document defines the single rule for how Hadith Archive represents and verifies core text. Identifiers, records, and source witnesses are defined separately.
 
-Open Hadith preserves the *representation* of a text — its exact characters in one uniform form — not the original bytes of its source.
+Hadith Archive preserves the *representation* of a text — its exact characters in one uniform form — not the original bytes of its source.
 
 ## Canonical form
 

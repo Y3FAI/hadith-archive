@@ -6,7 +6,7 @@ import { tmpdir } from "node:os";
 import { dirname, resolve } from "node:path";
 import { promisify } from "node:util";
 
-import { formatCanonicalJson } from "@open-hadith/canonical-json";
+import { formatCanonicalJson } from "@hadith-archive/canonical-json";
 
 const execFileAsync = promisify(execFile);
 const projectRoot = resolve(import.meta.dir, "../../..");
@@ -15,7 +15,7 @@ const sourcePath = "core/sources/example/source.json";
 const witnessPath = "core/sources/example/witnesses/example-edition/witness.json";
 
 async function fixture() {
-  const root = await mkdtemp(resolve(tmpdir(), "open-hadith-base-"));
+  const root = await mkdtemp(resolve(tmpdir(), "hadith-archive-base-"));
   directories.push(root);
   const git = async (...args: string[]) => (await execFileAsync("git", ["-C", root, ...args])).stdout.trim();
   const write = async (path: string, contents: string) => {

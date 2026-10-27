@@ -4,7 +4,7 @@
     "./fonts/*": "./fonts/*",
     "./icons/*": "./icons/*"
   },
-  "name": "@open-hadith/design-system",
+  "name": "@hadith-archive/design-system",
   "private": true,
   "type": "module"
 }

@@ -1,8 +1,8 @@
 import {
   EXPECTED_SCHEMA_PATHS,
   RECORD_SCHEMA_CATALOG,
-  type OpenHadithRecord,
-} from "@open-hadith/core-loader";
+  type HadithArchiveRecord,
+} from "@hadith-archive/core-loader";
 
 import type { VerificationFindingInput, VerificationRule } from "../protocol.ts";
 import type {
@@ -26,7 +26,7 @@ function isKnownRecord(candidate: CoreRecordCandidate): boolean {
 }
 
 function expectedRecordPath(
-  record: OpenHadithRecord,
+  record: HadithArchiveRecord,
   actualPath: string,
   context: StructuralVerificationContext,
 ): string {
@@ -141,7 +141,7 @@ export const recordPathMatches: VerificationRule<StructuralVerificationContext> 
       if (!result.valid) {
         return [];
       }
-      const record = candidate.value as unknown as OpenHadithRecord;
+      const record = candidate.value as unknown as HadithArchiveRecord;
       return candidate.file.path === expectedRecordPath(
         record,
         candidate.file.path,

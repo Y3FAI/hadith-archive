@@ -1,10 +1,10 @@
 {
   "dependencies": {
-    "@open-hadith/canonical-json": "workspace:*",
-    "@open-hadith/core-loader": "workspace:*"
+    "@hadith-archive/canonical-json": "workspace:*",
+    "@hadith-archive/core-loader": "workspace:*"
   },
   "exports": "./src/index.ts",
-  "name": "@open-hadith/verifier",
+  "name": "@hadith-archive/verifier",
   "private": true,
   "scripts": {
     "test": "bun test test",

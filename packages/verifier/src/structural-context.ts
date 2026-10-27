@@ -1,11 +1,11 @@
-import { parseCanonicalJsonBytes } from "@open-hadith/canonical-json";
+import { parseCanonicalJsonBytes } from "@hadith-archive/canonical-json";
 import {
   EXPECTED_SCHEMA_PATHS,
   inspectSchemaCatalog,
   loadCoreRecordBytes,
   type LoadedCoreRecord,
   type SchemaCatalogInspection,
-} from "@open-hadith/core-loader";
+} from "@hadith-archive/core-loader";
 
 import { isRegularFile, type RepositorySnapshot, type TrackedFile } from "./repository.ts";
 

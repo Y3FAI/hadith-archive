@@ -1,6 +1,6 @@
 # Layers
 
-This document defines the layers of Open Hadith and how data moves through them. Each layer has one job and is built from the layer before it. Two cross-cutting controls — verification and governance — protect the whole flow. This makes the Separation of Concerns principle concrete; it builds on the vocabulary in [terms.md](terms.md) and the commitments in [principles.md](principles.md). The software boundaries that read and enforce core data are defined separately in [tooling.md](tooling.md).
+This document defines the layers of Hadith Archive and how data moves through them. Each layer has one job and is built from the layer before it. Two cross-cutting controls — verification and governance — protect the whole flow. This makes the Separation of Concerns principle concrete; it builds on the vocabulary in [terms.md](terms.md) and the commitments in [principles.md](principles.md). The software boundaries that read and enforce core data are defined separately in [tooling.md](tooling.md).
 
 ```
 Sources ───────┐
@@ -15,7 +15,7 @@ Data flows top to bottom. Verification and governance apply across every layer.
 
 ## Sources
 
-The published print editions outside the project that text comes from. Open Hadith does not own, control, or redistribute its sources; it records which witness each record came from, described precisely enough that anyone can obtain the same edition and turn to the same page.
+The published print editions outside the project that text comes from. Hadith Archive does not own, control, or redistribute its sources; it records which witness each record came from, described precisely enough that anyone can obtain the same edition and turn to the same page.
 
 ## Ingestion
 
@@ -47,4 +47,4 @@ A cross-cutting control that decides the rules themselves: what each layer may c
 
 ## The rule
 
-Data flows one direction: each layer is built from the one before it and never rewrites it. Only ingestion transforms text, and only on the way into the core. Verification judges every step but changes nothing. Within Open Hadith, the core is the authoritative project record — relationships, derived data, and applications depend on it and can be rebuilt, but the core depends on none of them.
+Data flows one direction: each layer is built from the one before it and never rewrites it. Only ingestion transforms text, and only on the way into the core. Verification judges every step but changes nothing. Within Hadith Archive, the core is the authoritative project record — relationships, derived data, and applications depend on it and can be rebuilt, but the core depends on none of them.

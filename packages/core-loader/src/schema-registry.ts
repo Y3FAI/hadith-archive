@@ -1,7 +1,7 @@
 import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
 
-import { parseCanonicalJsonBytes } from "@open-hadith/canonical-json";
+import { parseCanonicalJsonBytes } from "@hadith-archive/canonical-json";
 import Ajv2020, {
   type AnySchemaObject,
   type ErrorObject,
@@ -11,7 +11,7 @@ import Ajv2020, {
 import { RECORD_SCHEMA_CATALOG, type RecordType } from "./catalog.ts";
 
 export const SCHEMA_BASE_URL =
-  "https://raw.githubusercontent.com/Y3FAI/open-hadith/main/schemas/";
+  "https://haditharchive.org/schemas/";
 
 export const EXPECTED_SCHEMA_PATHS = Object.freeze([
   "common/v1.schema.json",

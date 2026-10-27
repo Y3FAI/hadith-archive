@@ -1,6 +1,6 @@
 # Core Toolchain
 
-This document defines the high-level software architecture that reads and verifies Open Hadith core data. It explains the responsibilities and trust boundaries of `canonical-json`, `core-loader`, and `verifier`. Detailed byte rules remain in [data-policy.md](data-policy.md), entity meaning remains in [model.md](model.md), and the structural and verification contracts remain in [schema.md](schema.md).
+This document defines the high-level software architecture that reads and verifies Hadith Archive core data. It explains the responsibilities and trust boundaries of `canonical-json`, `core-loader`, and `verifier`. Detailed byte rules remain in [data-policy.md](data-policy.md), entity meaning remains in [model.md](model.md), and the structural and verification contracts remain in [schema.md](schema.md).
 
 The three packages form a one-directional control chain. They are not three interchangeable validators. Each answers a different question, and each later boundary relies on the guarantees of the earlier boundary without expanding its authority.
 
@@ -18,21 +18,21 @@ flowchart LR
     verifier --> report[Deterministic verification report]
 ```
 
-The arrows express dependency and trust direction. `canonical-json` knows nothing about Open Hadith entities or repository layout. `core-loader` adds the versioned structural contract but knows nothing about whole-repository relationships or Git history. `verifier` adds repository-wide and historical checks but never becomes a data source. No arrow points back toward an earlier boundary, and none of the three packages writes authoritative core data.
+The arrows express dependency and trust direction. `canonical-json` knows nothing about Hadith Archive entities or repository layout. `core-loader` adds the versioned structural contract but knows nothing about whole-repository relationships or Git history. `verifier` adds repository-wide and historical checks but never becomes a data source. No arrow points back toward an earlier boundary, and none of the three packages writes authoritative core data.
 
 ## The three questions
 
 | Boundary | Question answered | Successful guarantee | Deliberately not guaranteed |
 |---|---|---|---|
 | `canonical-json` | Are these bytes the one approved JSON representation? | The bytes decode, parse without duplicate keys, and exactly match canonical JSON policy. | Entity type, schema validity, repository path, relationships, or source accuracy. |
-| `core-loader` | Is this one canonical object a structurally valid Open Hadith record? | The declared type and version select a known schema, structural validation passes, and the returned typed record is deeply immutable. | Semantic checks, foreign references, uniqueness, path agreement, history, or agreement with a printed witness. |
+| `core-loader` | Is this one canonical object a structurally valid Hadith Archive record? | The declared type and version select a known schema, structural validation passes, and the returned typed record is deeply immutable. | Semantic checks, foreign references, uniqueness, path agreement, history, or agreement with a printed witness. |
 | `verifier` | Does this repository state obey every applicable machine-checkable project rule? | Verification completed and every applicable versioned rule passed. | Scholarly judgement or proof that a transcription matches ink on a physical page. |
 
 A later success includes the earlier guarantees. A verifier cannot evaluate a record as structurally valid before its canonical bytes are trusted, and it cannot evaluate relationships before the record is structurally valid. A canonical or structurally valid record may still be false, misplaced, inconsistent, or historically impermissible.
 
 ## `canonical-json`
 
-`packages/canonical-json/` owns deterministic JSON representation. It is a general byte and value boundary rather than an Open Hadith record library.
+`packages/canonical-json/` owns deterministic JSON representation. It is a general byte and value boundary rather than an Hadith Archive record library.
 
 For canonical input, it:
 

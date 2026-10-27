@@ -6,12 +6,12 @@ import { tmpdir } from "node:os";
 import { dirname, resolve } from "node:path";
 import { promisify } from "node:util";
 
-import { formatCanonicalJson } from "@open-hadith/canonical-json";
+import { formatCanonicalJson } from "@hadith-archive/canonical-json";
 import {
   loadRepositorySnapshot,
   presentVerificationResult,
   verifyRepository,
-} from "@open-hadith/verifier";
+} from "@hadith-archive/verifier";
 
 const execFileAsync = promisify(execFile);
 const repositoryRoot = resolve(import.meta.dir, "../../..");
@@ -27,7 +27,7 @@ const sourceBytes = formatCanonicalJson({
 });
 
 async function fixture(objectFormat: "sha1" | "sha256" = "sha1") {
-  const directory = await mkdtemp(resolve(tmpdir(), "open-hadith-index-"));
+  const directory = await mkdtemp(resolve(tmpdir(), "hadith-archive-index-"));
   temporaryDirectories.push(directory);
   const root = resolve(directory, "repository");
   await mkdir(root);
@@ -236,7 +236,7 @@ describe("staged repository verification", () => {
 
   test("rejects staged unregistered schemas, even well formed, without changing indexed bytes", async () => {
     const { base, git, root, write } = await fixture();
-    const namespace = "https://raw.githubusercontent.com/Y3FAI/open-hadith/main/schemas";
+    const namespace = "https://haditharchive.org/schemas";
     const strays = new Map<string, string>([
       // The reproduction from #42: a well-shaped version path with an invalid $id and type.
       ["schemas/source/v2.schema.json", formatCanonicalJson({

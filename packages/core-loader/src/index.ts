@@ -9,7 +9,7 @@ export type {
   HadithRecord,
   Location,
   OccurrenceRecord,
-  OpenHadithRecord,
+  HadithArchiveRecord,
   ReferenceScheme,
   SectionRecord,
   SourceRecord,

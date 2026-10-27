@@ -2,7 +2,7 @@ import { expect, test } from "bun:test";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { loadRepositorySnapshot } from "@open-hadith/verifier";
+import { loadRepositorySnapshot } from "@hadith-archive/verifier";
 
 const currentDirectory = dirname(fileURLToPath(import.meta.url));
 const repositoryRoot = resolve(currentDirectory, "../../..");

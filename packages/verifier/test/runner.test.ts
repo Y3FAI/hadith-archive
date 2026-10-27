@@ -3,7 +3,7 @@ import { describe, expect, test } from "bun:test";
 import {
   runVerification,
   type VerificationRule,
-} from "@open-hadith/verifier";
+} from "@hadith-archive/verifier";
 
 interface TestContext {
   readonly events: string[];

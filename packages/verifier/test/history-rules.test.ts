@@ -6,8 +6,8 @@ import { dirname, resolve } from "node:path";
 import { promisify } from "node:util";
 import { fileURLToPath } from "node:url";
 
-import { formatCanonicalJson } from "@open-hadith/canonical-json";
-import { EXPECTED_SCHEMA_PATHS } from "@open-hadith/core-loader";
+import { formatCanonicalJson } from "@hadith-archive/canonical-json";
+import { EXPECTED_SCHEMA_PATHS } from "@hadith-archive/core-loader";
 import {
   createHistoryVerificationContext,
   createRepositorySnapshot,
@@ -17,7 +17,7 @@ import {
   runVerification,
   type GitHistoryState,
   type RepositoryFileInput,
-} from "@open-hadith/verifier";
+} from "@hadith-archive/verifier";
 
 const currentDirectory = dirname(fileURLToPath(import.meta.url));
 const repositoryRoot = resolve(currentDirectory, "../../..");
@@ -174,7 +174,7 @@ describe("Git-history rules", () => {
   });
 
   test("remembers historical deletion and schema mutation after restoration", async () => {
-    const directory = await mkdtemp(resolve(tmpdir(), "open-hadith-history-"));
+    const directory = await mkdtemp(resolve(tmpdir(), "hadith-archive-history-"));
     try {
       await execFileAsync("git", ["init", "--quiet"], { cwd: directory });
       await execFileAsync("git", ["config", "user.name", "Verifier Test"], {
