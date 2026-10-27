@@ -28,4 +28,6 @@ This repository holds two kinds of work, licensed separately.
 
 **Code — [MIT](LICENSE-CODE).** Ingestion, verification, and any other tooling.
 
+**Font and icons — their own licences.** The Arabic font (KFGQPC Uthman Taha Naskh, from the King Fahd Glorious Quran Printing Complex) and the Phosphor icons in `packages/design-system/` are third-party works covered by neither licence above. Each is redistributed under its own licence, kept beside it and credited in [CREDITS.md](packages/design-system/CREDITS.md).
+
 Open Hadith does not redistribute the print editions it cites. Their typesetting, footnotes, and editorial apparatus remain their publishers' own; this repository records which edition a text came from and where in it to look, so that anyone may obtain the same book and check the page. See [docs/terms.md](docs/terms.md).
