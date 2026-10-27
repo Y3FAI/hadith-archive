@@ -22,12 +22,6 @@ Unstaged changes are excluded from the repository report. Core and schema symlin
 
 ## License
 
-This repository holds two kinds of work, licensed separately.
-
-**Data and documentation — [CC0 1.0 Universal](LICENSE).** The preserved text, witness definitions, identifiers, and the documents in `docs/` are dedicated to the public domain. The hadith texts themselves are centuries old and already free of copyright; Hadith Archive claims nothing over them, and waives whatever thin rights might otherwise attach to its own selection, arrangement, and metadata — including database rights.
-
-**Code — [MIT](LICENSE-CODE).** Ingestion, verification, and any other tooling.
-
-**Font and icons — their own licences.** The Arabic font (KFGQPC Uthman Taha Naskh, from the King Fahd Glorious Quran Printing Complex) and the Phosphor icons in `packages/design-system/` are third-party works covered by neither licence above. Each is redistributed under its own licence, kept beside it and credited in [CREDITS.md](packages/design-system/CREDITS.md).
+Everything Hadith Archive made, its data, documents and code, is under the [Hadith Archive Licence](LICENSE), in Arabic and English. The hadith texts themselves are centuries old and belong to no one. The Arabic font and the icons are outside works under their own licences; see [CREDITS.md](CREDITS.md).
 
 Hadith Archive does not redistribute the print editions it cites. Their typesetting, footnotes, and editorial apparatus remain their publishers' own; this repository records which edition a text came from and where in it to look, so that anyone may obtain the same book and check the page. See [docs/terms.md](docs/terms.md).

@@ -1,5 +1,4 @@
-/* Hadith Archive design system: the visual foundations every page of the site is built on.
-   Third-party font and icons keep their own licences; see CREDITS.md. */
+/* Hadith Archive design system: the visual foundations every page of the site is built on. */
 
 /* KFGQPC Uthman Taha Naskh, regular only. WOFF2 is a lossless repackaging of the
    original TTF (same glyphs, hinting and metrics); the untouched TTF is the fallback.
@@ -60,7 +59,6 @@ main:focus { box-shadow: none; }
 .masthead { padding-block: var(--s8) var(--s6); }
 h1 { font-size: 2.25rem; line-height: 3.75rem; }
 .label { font-size: 1rem; line-height: 1.75rem; }
-.value { display: block; }
 .toc { margin-block-start: var(--s5); }
 .toc ol { display: flex; flex-wrap: wrap; gap: var(--s1) var(--s2); margin-inline: calc(-1 * var(--s3)); }
 .toc a { display: inline-flex; align-items: center; min-height: var(--target); padding-inline: var(--s3);
