@@ -5,6 +5,7 @@ import {
   parseCanonicalJsonBytes,
   parseJsonSource,
 } from "@open-hadith/canonical-json";
+import { EXPECTED_SCHEMA_PATHS } from "@open-hadith/core-loader";
 
 import type { VerificationFindingInput, VerificationRule } from "../protocol.ts";
 import { isRegularFile, type RepositorySnapshot, type TrackedFile } from "../repository.ts";
@@ -160,6 +161,24 @@ export const repositoryCorePaths: VerificationRule<RepositorySnapshot> = {
   prerequisites: [],
 };
 
+const SCHEMA_PATHS = new Set(EXPECTED_SCHEMA_PATHS.map((path) => `schemas/${path}`));
+
+// As with core/, every ASCII case variant of the root aliases schemas/.
+function hasSchemasRoot(path: string): boolean {
+  return /^[sS][cC][hH][eE][mM][aA][sS]$/.test(path.split("/", 1)[0] ?? "");
+}
+
+// Inspects path metadata only. main holds just the registered catalog, so a new
+// version or entity schema fails until the verifier registers it; the schema.*
+// rules then inspect its contents.
+export const repositorySchemaPaths: VerificationRule<RepositorySnapshot> = {
+  evaluate: (snapshot) => snapshot.files
+    .filter((file) => hasSchemasRoot(file.path) && !SCHEMA_PATHS.has(file.path))
+    .map((file) => finding(file, "Schema paths must match a registered catalog schema")),
+  id: "repository.schema_paths",
+  prerequisites: [],
+};
+
 export const fileRegular: VerificationRule<RepositorySnapshot> = {
   evaluate: (snapshot) => snapshot.files.filter((file) =>
     !isRegularFile(file) &&
@@ -286,6 +305,7 @@ export const textNfc: VerificationRule<RepositorySnapshot> = {
 export const REPOSITORY_FILE_RULES = Object.freeze([
   repositoryPrivateMaterialAbsent,
   repositoryCorePaths,
+  repositorySchemaPaths,
   fileRegular,
   fileValidUtf8,
   fileNoBom,

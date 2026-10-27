@@ -756,6 +756,7 @@ The version-two catalog contains the following authoritative rules. Relative to 
 |---|---|
 | `repository.private_material_absent` | Git tracks `AGENTS.md`, `decisions/`, `sources/`, a source PDF, scan, or other prohibited private material. Ignored local files are permitted. |
 | `repository.core_paths` | An index entry at `core` or beneath `core/` does not match one of the five record paths in the core topology, using the approved identifier spellings and unpadded positive decimal filenames, or any index entry has a top-level root that is another ASCII case variant of `core`, such as `Core/` or `CORE`. Only path metadata is inspected, so scans, backups, uppercase extensions, case aliases, and other non-record files are rejected regardless of content. |
+| `repository.schema_paths` | An index entry at `schemas` or beneath `schemas/` is not one of the six registered catalog schemas (the common schema and the five entity schemas), or any index entry has a top-level root that is another ASCII case variant of `schemas`, such as `Schemas/`. Only path metadata is inspected, so an unregistered version or entity schema is rejected even when its path is well shaped and its content valid. |
 | `file.regular` | An index entry at or beneath `core/` or `schemas/` is not a regular Git file (mode `100644` or `100755`). Symlinks and submodules are rejected without reading their targets. |
 | `file.valid_utf8` | A tracked schema or core JSON file is not valid UTF-8. |
 | `file.no_bom` | A tracked schema or core JSON file begins with a BOM. |
@@ -860,7 +861,7 @@ Each entity type has an independent positive integer schema version. Shared comm
 
 A schema may change while it is a draft and no record on `main` references it. Once a core record on `main` references that version, the schema's bytes and meaning are immutable. Any later structural, validation, semantic, or descriptive change creates the next integer version. Old schemas remain in the repository permanently.
 
-The authoritative `main` branch contains only the current schema version for each entity type. A migration branch may temporarily contain mixed versions, but verification fails until the migration is complete. A schema migration changes all affected records, the verifier, and generated bindings together in one reviewed change.
+The authoritative `main` branch contains only the current schema version for each entity type. A migration branch may temporarily contain mixed versions, but verification fails until the migration is complete. A schema migration changes all affected records, the verifier, and generated bindings together in one reviewed change. `repository.schema_paths` enforces this from paths alone: `schemas/` admits only the schemas registered with the verifier, so a new version or entity schema fails until the same change registers it, after which the schema rules inspect its contents. A top-level root spelled as another ASCII case variant of `schemas` is rejected, never normalized.
 
 Historical tags and releases retain their original records and corresponding schemas, so no historical record is interpreted using a later definition.
 
