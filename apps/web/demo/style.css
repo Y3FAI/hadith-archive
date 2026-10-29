@@ -5,12 +5,39 @@
   font-display: swap;
 }
 
+/* Until the Naskh arrives, the system's Arabic font stands in, scaled to
+   the Naskh's size and line height so the page barely moves when it
+   swaps in: Noto Naskh Arabic on Android, Arial elsewhere. */
+@font-face {
+  font-family: "Naskh fallback noto";
+  src: local("Noto Naskh Arabic"), local("NotoNaskhArabic-Regular");
+  size-adjust: 86.3%;
+  ascent-override: 130%;
+  descent-override: 65%;
+}
+
+@font-face {
+  font-family: "Naskh fallback arial";
+  src: local("Arial"), local("ArialMT");
+  size-adjust: 92.6%;
+  ascent-override: 121%;
+  descent-override: 61%;
+}
+
 :root {
   --text: clamp(1.25rem, 1.088rem + .69vw, 1.5625rem);
   --card-padding: clamp(1.25rem, .5rem + 3vw, 2.5rem);
   --space-s: clamp(.75rem, .5rem + 1vw, 1rem);
   --space-m: clamp(1.75rem, 1.25rem + 2vw, 2.5rem);
   --space-l: clamp(2.5rem, 1.5rem + 3.2vw, 4rem);
+  --leading: 1.85;
+  --radius: 12px;
+  --radius-panel: 20px;
+  --target: 2.75rem;
+  --shadow: 0 0 0 .5px rgb(0 0 0 / .04), 0 1px 2px rgb(0 0 0 / .04);
+  --shadow-hover: 0 0 0 .5px rgb(0 0 0 / .05), 0 2px 4px rgb(0 0 0 / .06);
+  --shadow-pressed: 0 0 0 .5px rgb(0 0 0 / .05), inset 0 1px 2px rgb(0 0 0 / .08);
+  --shadow-focus: 0 0 0 1px rgb(0 0 0 / .14), 0 4px 16px rgb(0 0 0 / .32);
 }
 
 html {
@@ -20,7 +47,7 @@ html {
 }
 
 body {
-  font-family: "Uthman Taha Naskh", system-ui, sans-serif;
+  font-family: "Uthman Taha Naskh", "Naskh fallback noto", "Naskh fallback arial", system-ui, sans-serif;
   font-synthesis: none;
   font-size: 1.125rem;
   line-height: 2rem;
@@ -38,6 +65,13 @@ a {
   text-decoration: none;
 }
 
+ul,
+ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
 header,
 main,
 footer {
@@ -52,7 +86,7 @@ main {
 h1 {
   margin: 0;
   font-size: calc(var(--text) * 1.25);
-  line-height: 1.85;
+  line-height: var(--leading);
   font-weight: 400;
 }
 
@@ -74,7 +108,26 @@ header {
 
 header > a {
   font-size: var(--text);
-  line-height: 2.75rem;
+  line-height: var(--target);
+}
+
+button {
+  align-items: center;
+  justify-content: center;
+  width: var(--target);
+  height: var(--target);
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius);
+  background: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+button svg {
+  width: 1.5rem;
+  height: 1.5rem;
+  fill: currentColor;
 }
 
 header button {
@@ -101,9 +154,6 @@ nav ul {
   display: flex;
   flex-wrap: wrap;
   gap: 2rem;
-  margin: 0;
-  padding: 0;
-  list-style: none;
 }
 
 h2 {
@@ -126,21 +176,17 @@ dd svg {
   fill: currentColor;
 }
 
-ol > li {
+li[id] {
   scroll-margin-block-start: 1.5rem;
 }
 
 section > ol {
   display: grid;
   gap: var(--space-m);
-  margin: 0;
-  padding: 0;
-  list-style: none;
 }
 
-/* A dot sits before every item; the clip hides the one before an item
-   that starts a line (the right edge, as the page is always RTL). */
-/* Citations. */
+/* Citations. The clip hides the dot before an item that starts a line
+   (the right edge, as the page is always RTL). */
 dl {
   display: flex;
   flex-wrap: wrap;
@@ -166,8 +212,10 @@ dl div {
   gap: .375rem;
 }
 
+/* A dot sits before every item. */
 dl div::before {
   content: "·";
+  content: "·" / "";
   position: absolute;
   inset-inline-start: -1.25rem;
   width: 1.25rem;
@@ -175,9 +223,10 @@ dl div::before {
 }
 
 /* Hidden on screen, still read by screen readers: a book title's label,
-   and the search's label (the field's placeholder says what to do). */
-dt:has(+ dd > cite),
-search h1 {
+   and the search's label (the field's placeholder says what to do).
+   In a browser without :has(), :is() drops only that part, so the
+   search's label stays hidden there too. */
+:is(dt:has(+ dd > cite), search h1) {
   position: absolute;
   width: 1px;
   height: 1px;
@@ -198,13 +247,13 @@ article > h1,
 li > div,
 main > div {
   background: #FFFFFF;
-  border-radius: 20px;
-  box-shadow: 0 0 0 .5px rgb(0 0 0 / .04), 0 1px 2px rgb(0 0 0 / .04);
+  border-radius: var(--radius-panel);
+  box-shadow: var(--shadow);
 }
 
 li > div {
   font-size: var(--text);
-  line-height: 1.85;
+  line-height: var(--leading);
 }
 
 blockquote {
@@ -212,7 +261,7 @@ blockquote {
   padding: var(--card-padding);
 }
 
-/* A long narration shows its first 4 lines (4 x line height 1.85) until
+/* A long narration shows its first 4 lines (4 x the line height) until
    opened, then grows smoothly. Only the first row animates, between 0fr
    and 1fr; the 4 lines are held by a fixed row beside it, so a new window
    size or a late font changes the height at once instead of animating. */
@@ -229,7 +278,7 @@ li > div:has(details[open]) {
 li > div:has(details)::before {
   content: "";
   grid-area: 2 / 1;
-  block-size: calc(var(--card-padding) + 7.4em);
+  block-size: calc(var(--card-padding) + 4em * var(--leading));
 }
 
 blockquote:has(+ details) {
@@ -244,9 +293,9 @@ blockquote:has(+ details)::after {
   content: "...";
   position: absolute;
   inset-block-end: 0;
-  inset-inline-end: var(--card-padding);
-  padding-inline-start: 2em;
-  background: linear-gradient(to right, #FFFFFF 55%, rgb(255 255 255 / 0));
+  inset-inline-end: calc(var(--card-padding) - .25em);
+  padding-inline: 5em .25em;
+  background: linear-gradient(to right, #FFFFFF 2.5em, rgb(255 255 255 / 0));
   transition: opacity .2s .2s;
 }
 
@@ -271,9 +320,9 @@ summary {
   justify-content: center;
   align-items: center;
   gap: .25em;
-  min-height: 2.75rem;
+  min-height: var(--target);
   background: #FAFAFB;
-  border-radius: 0 0 20px 20px;
+  border-radius: 0 0 var(--radius-panel) var(--radius-panel);
   color: #636366;
   font-size: 1rem;
   list-style: none;
@@ -320,12 +369,28 @@ summary:active {
   }
 }
 
+/* On paper every narration prints whole, without «...» or its toggle. */
+@media print {
+  li > div:has(details) {
+    grid-template-rows: minmax(0, 1fr) auto auto;
+  }
+
+  blockquote:has(+ details) {
+    padding-block-end: var(--card-padding);
+  }
+
+  blockquote:has(+ details)::after,
+  details {
+    display: none;
+  }
+}
+
 cite {
   font-style: normal;
 }
 
 cite a {
-  border-radius: 12px;
+  border-radius: var(--radius);
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -355,9 +420,9 @@ search input {
   padding-block: 0;
   padding-inline: 1.5rem 4rem;
   border: 0;
-  border-radius: 20px;
+  border-radius: var(--radius-panel);
   background: #FFFFFF;
-  box-shadow: 0 0 0 .5px rgb(0 0 0 / .04), 0 1px 2px rgb(0 0 0 / .04);
+  box-shadow: var(--shadow);
   color: inherit;
   font: inherit;
   font-size: var(--text);
@@ -375,23 +440,7 @@ search button {
   inset-block: 0;
   inset-inline-end: .625rem;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 2.75rem;
-  height: 2.75rem;
   margin-block: auto;
-  padding: 0;
-  border: 0;
-  border-radius: 12px;
-  background: none;
-  color: inherit;
-  cursor: pointer;
-}
-
-search button svg {
-  width: 1.5rem;
-  height: 1.5rem;
-  fill: currentColor;
 }
 
 /* A heading that leads to its own page. Like the menu links, the 44px
@@ -401,11 +450,11 @@ h2 > a {
   display: flex;
   align-items: center;
   gap: .25em;
-  min-height: 2.75rem;
-  margin-block: calc((var(--text) * 1.5 - 2.75rem) / 2);
+  min-height: var(--target);
+  margin-block: calc((var(--text) * 1.5 - var(--target)) / 2);
   margin-inline: -.75rem;
   padding-inline: .75rem;
-  border-radius: 12px;
+  border-radius: var(--radius);
 }
 
 /* A section whose heading row ends with «المزيد» on the far side. */
@@ -425,25 +474,25 @@ h2 + a {
   display: flex;
   align-items: center;
   gap: .125em;
-  min-height: 2.75rem;
-  margin-block: calc(var(--space-l) - var(--text) * .3 + (var(--text) * 1.5 - 2.75rem) / 2) calc(var(--space-s) - var(--text) * .125 + (var(--text) * 1.5 - 2.75rem) / 2);
+  min-height: var(--target);
+  margin-block: calc(var(--space-l) - var(--text) * .3 + (var(--text) * 1.5 - var(--target)) / 2) calc(var(--space-s) - var(--text) * .125 + (var(--text) * 1.5 - var(--target)) / 2);
   margin-inline: 1rem -.75rem;
   padding-inline: .75rem;
-  border-radius: 12px;
+  border-radius: var(--radius);
   color: #636366;
   font-size: 1rem;
 }
 
+/* Cards sit a little further apart than a heading from its content, so
+   the heavy green cards and long hadith cards each read as one piece. */
 main > section > ul {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--space-s);
-  margin: 0;
-  padding: 0;
-  list-style: none;
+  gap: calc(var(--space-s) + .25rem);
 }
 
-[aria-labelledby="kutub"] ul {
+/* A book's sections («abwab») use the same cards as the books. */
+:is([aria-labelledby="kutub"], [aria-labelledby="abwab"]) ul {
   grid-template-columns: minmax(0, 1fr);
 }
 
@@ -452,67 +501,196 @@ main > section > ul {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 
-  [aria-labelledby="kutub"] ul {
+  :is([aria-labelledby="kutub"], [aria-labelledby="abwab"]) ul {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
+/* Category, book and bab cards: a green binding with gold text and a thin
+   gold frame tooled inside it, so only hadith cards are white. */
 main > section > ul a {
+  --fill: #2F4A3E;
+  --frame: inset 0 0 0 .5rem var(--fill), inset 0 0 0 calc(.5rem + 1px) #C2A365;
   display: flex;
-  background: #FFFFFF;
-  box-shadow: 0 0 0 .5px rgb(0 0 0 / .04), 0 1px 2px rgb(0 0 0 / .04);
+  background: var(--fill);
+  box-sizing: border-box;
+  height: 100%;
+  box-shadow: var(--frame), 0 1px 3px rgb(0 0 0 / .2);
+  color: #D6BC80;
   -webkit-tap-highlight-color: transparent;
 }
 
+/* Categories sit in a pointed cartouche. Its shape clips shadows, so the
+   frame is a gold cartouche and a green one, layered behind the name;
+   the books' straight frame is turned off. The inner points (1.29rem,
+   1.25rem) keep the gold line even on a one-line tile: 1.5rem x 3.875 /
+   4.5; a taller tile with a long name stays close to even. */
 [aria-labelledby="aqsam"] ul a {
+  --frame: 0 0 transparent;
+  position: relative;
+  isolation: isolate;
   align-items: center;
   justify-content: center;
   min-height: 4.5rem;
-  padding-inline: .75rem;
-  border-radius: 20px;
+  padding: .875rem 2rem;
   font-size: var(--text);
   line-height: 1.5;
   text-align: center;
+  text-wrap: balance;
+  clip-path: polygon(1.5rem 0, calc(100% - 1.5rem) 0, 100% 50%, calc(100% - 1.5rem) 100%, 1.5rem 100%, 0 50%);
 }
 
-[aria-labelledby="kutub"] ul a {
+[aria-labelledby="aqsam"] ul a::before,
+[aria-labelledby="aqsam"] ul a::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+}
+
+[aria-labelledby="aqsam"] ul a::before {
+  inset: .3125rem;
+  background: #C2A365;
+  clip-path: polygon(1.29rem 0, calc(100% - 1.29rem) 0, 100% 50%, calc(100% - 1.29rem) 100%, 1.29rem 100%, 0 50%);
+}
+
+[aria-labelledby="aqsam"] ul a::after {
+  inset: calc(.3125rem + 1px);
+  background: var(--fill);
+  clip-path: polygon(1.25rem 0, calc(100% - 1.25rem) 0, 100% 50%, calc(100% - 1.25rem) 100%, 1.25rem 100%, 0 50%);
+}
+
+/* Inside the frame, the text keeps about as much room above and below as
+   at its sides; the card's height follows its text. */
+:is([aria-labelledby="kutub"], [aria-labelledby="abwab"]) ul a {
   flex-direction: column;
   justify-content: center;
-  min-height: 4.5rem;
-  padding: .75rem 1.5rem;
-  border-radius: 20px;
+  padding: 1.25rem 1.5rem 1.375rem;
+  border-radius: var(--radius-panel);
   font-size: var(--text);
   line-height: 1.5;
+  text-wrap: balance;
 }
 
 [aria-labelledby="kutub"] ul span {
-  color: #636366;
+  margin-block-start: .25rem;
+  color: #C9B488;
   font-size: 1rem;
+}
+
+/* Category and bab pages: one white card per hadith, leading to its own
+   page. It shows the hadith's first two lines; the second fades out at
+   its end, where the grey arrow sits, so the text is seen to go on.
+   Justified, so the second line always reaches the fade. */
+main > ol {
+  display: grid;
+  gap: calc(var(--space-s) + .25rem);
+}
+
+main > ol a {
+  position: relative;
+  display: block;
+  padding: .75rem 1.5rem;
+  background: #FFFFFF;
+  border-radius: var(--radius-panel);
+  box-shadow: var(--shadow);
+  font-size: var(--text);
+  line-height: var(--leading);
+  text-align: justify;
+  text-wrap: pretty;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* The first line shows whole; a white fade over the second leads to the
+   arrow. Laid on top, it paints faster than a mask on long lists. */
+main > ol a span {
+  position: relative;
+  display: block;
+  max-height: calc(2em * var(--leading));
+  overflow: hidden;
+}
+
+main > ol a span::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  inset-block-start: calc(1em * var(--leading));
+  height: calc(1em * var(--leading));
+  background: linear-gradient(to right, #FFFFFF 3rem, rgb(255 255 255 / 0) 45%);
+}
+
+main > ol a svg {
+  position: absolute;
+  inset-inline-end: 1.25rem;
+  inset-block-end: calc(.75rem + (1em * var(--leading) - 1.5rem) / 2);
+  width: 1.5rem;
+  height: 1.5rem;
+  color: #636366;
 }
 
 @media (hover: hover) and (pointer: fine) {
   main > section > ul a:hover:not(:focus-visible) {
-    box-shadow: 0 0 0 .5px rgb(0 0 0 / .05), 0 2px 4px rgb(0 0 0 / .06);
+    box-shadow: var(--frame), 0 4px 12px rgb(0 0 0 / .2);
+  }
+
+  [aria-labelledby="aqsam"] ul a:hover {
+    --fill: #38574A;
+  }
+
+  main > ol a:hover:not(:focus-visible) {
+    box-shadow: var(--shadow-hover);
   }
 }
 
 main > section > ul a:active {
-  box-shadow: 0 0 0 .5px rgb(0 0 0 / .05), inset 0 1px 2px rgb(0 0 0 / .08);
+  box-shadow: var(--frame);
+  filter: brightness(.9);
 }
 
-/* The about page: its title, then one card of paragraphs. */
+main > ol a:active {
+  box-shadow: var(--shadow-pressed);
+}
+
+/* Focus keeps the green, lifted further than on white, where a dark card
+   would hide the usual shadow; the cartouche clips that shadow, so its
+   item is lifted instead, by the same amount. */
+main > section > ul a:focus-visible {
+  background: var(--fill);
+  box-shadow: var(--frame), 0 0 1px rgb(0 0 0 / .6), 0 4px 12px rgb(0 0 0 / .55);
+}
+
+[aria-labelledby="aqsam"] li:has(> a:focus-visible) {
+  filter: drop-shadow(0 0 1px rgb(0 0 0 / .6)) drop-shadow(0 4px 12px rgb(0 0 0 / .55));
+}
+
+/* A page's title is no larger than the site's name, like the home page's
+   section headings. */
 main > h1 {
   display: flex;
   align-items: center;
   gap: .25em;
   margin-block-end: calc(var(--space-s) - .125em);
+  font-size: var(--text);
   line-height: 1.5;
 }
 
+/* Its facts (count, author, book) sit close under it, starting under the
+   title's words, not its icon, in the citation style. Title and facts
+   head the whole list, so the list starts two heading steps below (less
+   the facts' line spacing), further than the cards are from each other. */
+main > h1:has(+ dl) {
+  margin-block-end: 0;
+}
+
+main > h1 + dl {
+  margin-block: -.125rem calc(var(--space-s) * 2 - .3125rem);
+  margin-inline-start: calc(var(--text) * 1.5);
+}
+
+/* The about page: one card of paragraphs. */
 main > div {
   padding: var(--card-padding);
   font-size: var(--text);
-  line-height: 1.85;
+  line-height: var(--leading);
 }
 
 /* Justified like hadith text, so every full line reaches the card's
@@ -539,9 +717,6 @@ footer ul {
   flex-wrap: wrap;
   justify-content: center;
   gap: 2rem;
-  margin: 0;
-  padding: 0;
-  list-style: none;
 }
 
 footer a {
@@ -553,15 +728,15 @@ footer a {
   display: inline-flex;
   align-items: center;
   gap: .25em;
-  min-height: 2.75rem;
+  min-height: var(--target);
   padding-inline: .75rem;
   margin-inline: -.75rem;
-  border-radius: 12px;
+  border-radius: var(--radius);
 }
 
 :focus-visible {
   outline: none;
-  box-shadow: 0 0 0 .5px rgb(0 0 0 / .06), 0 4px 16px rgb(0 0 0 / .16);
+  box-shadow: var(--shadow-focus);
 }
 
 a:focus-visible,
@@ -572,11 +747,12 @@ button:focus-visible {
 @media (hover: hover) and (pointer: fine) {
   header a:hover:not(:focus-visible),
   header button:hover:not(:focus-visible),
+  search button:hover:not(:focus-visible),
   h2 > a:hover:not(:focus-visible),
   h2 + a:hover:not(:focus-visible),
   footer a:hover:not(:focus-visible) {
     background: #FFFFFF;
-    box-shadow: 0 0 0 .5px rgb(0 0 0 / .04), 0 1px 2px rgb(0 0 0 / .04);
+    box-shadow: var(--shadow);
   }
 }
 
@@ -589,29 +765,23 @@ button:focus-visible {
   nav[popover]:popover-open {
     border: 1px solid CanvasText;
   }
+
+  /* The cartouche's clip would cut off the focus outline. */
+  [aria-labelledby="aqsam"] ul a {
+    clip-path: none;
+  }
+
+  /* The field's shadow is removed here, so it needs an edge. */
+  search input {
+    border: 1px solid CanvasText;
+  }
 }
 
 @supports selector(:popover-open) {
   @media (width < 40em) {
     header button {
       display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 2.75rem;
-      height: 2.75rem;
       margin-inline-end: -.75rem;
-      padding: 0;
-      border: 0;
-      border-radius: 12px;
-      background: none;
-      color: inherit;
-      cursor: pointer;
-    }
-
-    header button svg {
-      width: 1.5rem;
-      height: 1.5rem;
-      fill: currentColor;
     }
 
     nav[popover] {
@@ -682,11 +852,16 @@ button:focus-visible {
       -webkit-tap-highlight-color: transparent;
     }
 
-    nav[popover] ul a:hover:not(:focus-visible),
     nav[popover] ul a:active {
       background: #F5F5F7;
       box-shadow: none;
     }
 
+    @media (hover: hover) and (pointer: fine) {
+      nav[popover] ul a:hover:not(:focus-visible) {
+        background: #F5F5F7;
+        box-shadow: none;
+      }
+    }
   }
 }

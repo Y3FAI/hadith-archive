@@ -1,0 +1,3099 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>تصاميم البطاقات</title>
+  <link rel="preload" href="../font/UthmanTN_v2-0.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../style.css?v=4">
+  <style>
+    /* Review page only. */
+    main > section > p,
+    :is(.c, .v) > p {
+      margin: 0 0 var(--space-s);
+      color: #636366;
+      font-size: 1rem;
+      line-height: 1.75rem;
+    }
+
+    :is(.c, .v) > h3 {
+      margin: var(--space-l) 0 .25rem;
+      font-size: var(--text);
+      font-weight: 400;
+      line-height: 1.5;
+    }
+
+    .toc {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0 1.5rem;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .toc a {
+      display: inline-flex;
+      align-items: center;
+      min-height: 2.75rem;
+      color: #636366;
+    }
+
+    /* Category and book cards: each option sets these values. */
+    .c {
+      --bg: #E8E8ED;
+      --fg: #000000;
+      --sub: #636366;
+      --rest: none;
+      --hover: 0 1px 3px rgb(0 0 0 / .1);
+      --press: inset 0 1px 2px rgb(0 0 0 / .1);
+      --focus: 0 0 0 .5px rgb(0 0 0 / .06), 0 4px 16px rgb(0 0 0 / .16);
+    }
+
+    .c ul {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--space-s);
+      margin: 0 0 var(--space-s);
+      padding: 0;
+      list-style: none;
+    }
+
+    .c ul.kutub {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    @media (width >= 40em) {
+      .c ul.aqsam {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+
+      .c ul.kutub {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    .c ul a {
+      display: flex;
+      min-height: 4.5rem;
+      background: var(--bg);
+      border-radius: 20px;
+      box-shadow: var(--rest);
+      color: var(--title, var(--fg));
+      font-size: var(--text);
+      line-height: 1.5;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .c ul.aqsam a {
+      align-items: center;
+      justify-content: center;
+      padding-inline: .75rem;
+      text-align: center;
+    }
+
+    .c ul.kutub a {
+      flex-direction: column;
+      justify-content: center;
+      padding: .75rem 1.5rem;
+    }
+
+    .c ul.kutub a > span + span {
+      color: var(--sub);
+      font-size: 1rem;
+    }
+
+    .c ul a:focus-visible {
+      background-color: var(--bg);
+      box-shadow: var(--focus);
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      .c ul a:hover:not(:focus-visible) {
+        box-shadow: var(--hover);
+      }
+    }
+
+    .c ul a:active {
+      box-shadow: var(--press);
+    }
+
+    /* 1. Green binding. */
+    .c1 {
+      --bg: #2F4A3E;
+      --sub: #B7C6BD;
+      --fg: #FFFFFF;
+      --hover: 0 2px 8px rgb(0 0 0 / .22);
+      --press: inset 0 1px 3px rgb(0 0 0 / .45);
+    }
+
+    /* 2. A binding colour per book; dark categories. */
+    .c2 .aqsam,
+    .c2 .kutub {
+      --bg: #2C2C2E;
+      --sub: #D1D1D6;
+      --fg: #FFFFFF;
+      --hover: 0 2px 8px rgb(0 0 0 / .22);
+      --press: inset 0 1px 3px rgb(0 0 0 / .45);
+    }
+
+    .c2 .kutub li:nth-child(5n + 1) {
+      --bg: #2F4A3E;
+    }
+
+    .c2 .kutub li:nth-child(5n + 2) {
+      --bg: #5B2C2F;
+    }
+
+    .c2 .kutub li:nth-child(5n + 3) {
+      --bg: #1F2B3A;
+    }
+
+    .c2 .kutub li:nth-child(5n + 4) {
+      --bg: #4A3426;
+    }
+
+    .c2 .kutub li:nth-child(5n + 5) {
+      --bg: #1C1C1E;
+    }
+
+    /* 3. Yellow paper. */
+    .c3 {
+      --bg: #EDE4D0;
+      --sub: #6A604C;
+    }
+
+    /* 4. A dark spine on the starting side. */
+    .c4 .kutub {
+      --spine: inset -.625rem 0 0 #2F4A3E;
+      --rest: var(--spine);
+      --hover: var(--spine), 0 1px 3px rgb(0 0 0 / .1);
+      --press: var(--spine), inset 0 1px 2px rgb(0 0 0 / .1);
+      --focus: var(--spine), 0 0 0 .5px rgb(0 0 0 / .06), 0 4px 16px rgb(0 0 0 / .16);
+    }
+
+    .c4 ul.kutub a {
+      padding-inline-start: 2rem;
+    }
+
+    /* 5 to 7. Gold titles on green, maroon and black bindings. */
+    .c5 {
+      --bg: #2F4A3E;
+      --fg: #FFFFFF;
+      --hover: 0 2px 8px rgb(0 0 0 / .22);
+      --press: inset 0 1px 3px rgb(0 0 0 / .45);
+      --title: #D6BC80;
+      --sub: #C9B488;
+    }
+
+    .c6 {
+      --bg: #5B2C2F;
+      --fg: #FFFFFF;
+      --hover: 0 2px 8px rgb(0 0 0 / .22);
+      --press: inset 0 1px 3px rgb(0 0 0 / .45);
+      --title: #D6BC80;
+      --sub: #C9B488;
+    }
+
+    .c7 {
+      --bg: #1C1C1E;
+      --fg: #FFFFFF;
+      --hover: 0 2px 8px rgb(0 0 0 / .22);
+      --press: inset 0 1px 3px rgb(0 0 0 / .45);
+      --title: #D6BC80;
+      --sub: #C9B488;
+    }
+
+    /* 8. Gilt bindings per book; categories on paper. */
+    .c8 .aqsam {
+      --bg: #EDE4D0;
+      --fg: #3B2F22;
+      --sub: #6F5F45;
+    }
+
+    .c8 .kutub {
+      --fg: #FFFFFF;
+      --hover: 0 2px 8px rgb(0 0 0 / .22);
+      --press: inset 0 1px 3px rgb(0 0 0 / .45);
+      --title: #D6BC80;
+      --sub: #C9B488;
+    }
+
+    .c8 .kutub li:nth-child(5n + 1) {
+      --bg: #2F4A3E;
+    }
+
+    .c8 .kutub li:nth-child(5n + 2) {
+      --bg: #5B2C2F;
+    }
+
+    .c8 .kutub li:nth-child(5n + 3) {
+      --bg: #1F2B3A;
+    }
+
+    .c8 .kutub li:nth-child(5n + 4) {
+      --bg: #4A3426;
+    }
+
+    .c8 .kutub li:nth-child(5n + 5) {
+      --bg: #1C1C1E;
+    }
+
+    /* 9. The title on a paper label on the binding. */
+    .c9 {
+      --bg: #2F4A3E;
+      --sub: #C9D3CC;
+      --fg: #FFFFFF;
+      --hover: 0 2px 8px rgb(0 0 0 / .22);
+      --press: inset 0 1px 3px rgb(0 0 0 / .45);
+    }
+
+    .c9 ul a > span:first-child {
+      padding: .125rem .875rem;
+      background: #EDE4D0;
+      border-radius: 8px;
+      color: #3B2F22;
+    }
+
+    .c9 ul.kutub a {
+      align-items: flex-start;
+      gap: .375rem;
+    }
+
+    /* 10. Paper with a green spine and two gold bands. */
+    .c10 {
+      --bg: #EDE4D0;
+      --fg: #3B2F22;
+      --sub: #6F5F45;
+    }
+
+    .c10 ul.kutub a {
+      position: relative;
+      overflow: hidden;
+      padding-inline-start: 2.5rem;
+    }
+
+    .c10 .kutub a::before {
+      content: "";
+      position: absolute;
+      inset-block: 0;
+      inset-inline-start: 0;
+      width: 1.125rem;
+      background: linear-gradient(#2F4A3E 20%, #C2A365 20% 26%, #2F4A3E 26% 74%, #C2A365 74% 80%, #2F4A3E 80%);
+    }
+
+    /* 11. A closed volume: its pages and back cover show beneath it. */
+    .c11 .aqsam {
+      --bg: #EDE4D0;
+      --fg: #3B2F22;
+      --sub: #6F5F45;
+    }
+
+    .c11 .kutub {
+      --bg: #2F4A3E;
+      --sub: #B7C6BD;
+      --fg: #FFFFFF;
+      --hover: 0 2px 8px rgb(0 0 0 / .22);
+      --press: inset 0 1px 3px rgb(0 0 0 / .45);
+      --rest: -5px 5px 0 #EDE4D0, -8px 8px 0 #24392F;
+      --hover: -5px 5px 0 #EDE4D0, -8px 8px 0 #24392F, -8px 10px 16px rgb(0 0 0 / .2);
+      --press: -2px 2px 0 #EDE4D0, -4px 4px 0 #24392F;
+      --focus: -5px 5px 0 #EDE4D0, -8px 8px 0 #24392F, 0 4px 16px rgb(0 0 0 / .3);
+    }
+
+    /* The spine, on the right of an Arabic book, has the tighter corners. */
+    .c11 .kutub a {
+      border-radius: 14px 6px 6px 14px;
+    }
+
+    /* 12. Standing covers with gold titles; categories on paper. */
+    .c12 .aqsam {
+      --bg: #EDE4D0;
+      --fg: #3B2F22;
+      --sub: #6F5F45;
+    }
+
+    .c12 .kutub {
+      --fg: #FFFFFF;
+      --hover: 0 2px 8px rgb(0 0 0 / .22);
+      --press: inset 0 1px 3px rgb(0 0 0 / .45);
+      --title: #D6BC80;
+      --sub: #C9B488;
+      --rest: inset -.5rem 0 0 rgb(0 0 0 / .2);
+      --hover: inset -.5rem 0 0 rgb(0 0 0 / .2), 0 4px 12px rgb(0 0 0 / .2);
+      --press: inset -.5rem 0 0 rgb(0 0 0 / .2), inset 0 1px 3px rgb(0 0 0 / .45);
+      --focus: inset -.5rem 0 0 rgb(0 0 0 / .2), 0 0 0 .5px rgb(0 0 0 / .06), 0 4px 16px rgb(0 0 0 / .16);
+    }
+
+    .c12 .kutub li:nth-child(5n + 1) {
+      --bg: #2F4A3E;
+    }
+
+    .c12 .kutub li:nth-child(5n + 2) {
+      --bg: #5B2C2F;
+    }
+
+    .c12 .kutub li:nth-child(5n + 3) {
+      --bg: #1F2B3A;
+    }
+
+    .c12 .kutub li:nth-child(5n + 4) {
+      --bg: #4A3426;
+    }
+
+    .c12 .kutub li:nth-child(5n + 5) {
+      --bg: #1C1C1E;
+    }
+
+    .c12 ul.kutub {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    @media (width >= 40em) {
+      .c12 ul.kutub {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+    }
+
+    .c12 ul.kutub a {
+      aspect-ratio: 3 / 4;
+      align-items: center;
+      gap: .5rem;
+      padding: 1rem 1.5rem 1rem 1rem;
+      border-radius: 12px 4px 4px 12px;
+      text-align: center;
+    }
+
+    /* 13. Spines on a shelf, titles along them. */
+    .c13 .aqsam {
+      --bg: #EDE4D0;
+      --fg: #3B2F22;
+      --sub: #6F5F45;
+    }
+
+    .c13 .kutub {
+      --fg: #FFFFFF;
+      --hover: 0 2px 8px rgb(0 0 0 / .22);
+      --press: inset 0 1px 3px rgb(0 0 0 / .45);
+      --title: #D6BC80;
+      --sub: #C9B488;
+    }
+
+    .c13 .kutub li:nth-child(5n + 1) {
+      --bg: #2F4A3E;
+    }
+
+    .c13 .kutub li:nth-child(5n + 2) {
+      --bg: #5B2C2F;
+    }
+
+    .c13 .kutub li:nth-child(5n + 3) {
+      --bg: #1F2B3A;
+    }
+
+    .c13 .kutub li:nth-child(5n + 4) {
+      --bg: #4A3426;
+    }
+
+    .c13 .kutub li:nth-child(5n + 5) {
+      --bg: #1C1C1E;
+    }
+
+    .c13 ul.kutub {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-end;
+      gap: .375rem;
+    }
+
+    .c13 ul.kutub a {
+      writing-mode: vertical-rl;
+      align-items: center;
+      gap: .25rem;
+      min-height: 15rem;
+      padding: 1.75rem .5rem;
+      border-radius: 6px;
+      background-image: linear-gradient(transparent .75rem, #C2A365 .75rem 1rem, transparent 1rem calc(100% - 1rem), #C2A365 calc(100% - 1rem) calc(100% - .75rem), transparent calc(100% - .75rem));
+    }
+
+    /* 14. Categories in a title cartouche; gilt green books. */
+    .c14 {
+      --bg: #2F4A3E;
+      --fg: #FFFFFF;
+      --hover: 0 2px 8px rgb(0 0 0 / .22);
+      --press: inset 0 1px 3px rgb(0 0 0 / .45);
+      --title: #D6BC80;
+      --sub: #C9B488;
+    }
+
+    .c14 ul.aqsam a {
+      border-radius: 0;
+      clip-path: polygon(1.5rem 0, calc(100% - 1.5rem) 0, 100% 50%, calc(100% - 1.5rem) 100%, 1.5rem 100%, 0 50%);
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      .c14 ul.aqsam a:hover {
+        background: #38574A;
+      }
+    }
+
+    .c14 ul.aqsam a:active {
+      background: #263D33;
+    }
+
+    /* The cartouche's shape clips a shadow, so focus lifts its item. */
+    .c14 ul.aqsam li:focus-within {
+      filter: drop-shadow(0 4px 8px rgb(0 0 0 / .35));
+    }
+
+    /* 15. Paper and brown ink. */
+    .c15 {
+      --bg: #EDE4D0;
+      --fg: #3B2F22;
+      --sub: #6F5F45;
+      --rest: 0 1px 2px rgb(59 47 34 / .12);
+      --hover: 0 2px 6px rgb(59 47 34 / .18);
+      --press: inset 0 1px 2px rgb(59 47 34 / .18);
+    }
+
+    /* 16. A gilt binding with a ribbon marker; categories on paper. */
+    .c16 .aqsam {
+      --bg: #EDE4D0;
+      --fg: #3B2F22;
+      --sub: #6F5F45;
+    }
+
+    .c16 .kutub {
+      --bg: #2F4A3E;
+      --fg: #FFFFFF;
+      --hover: 0 2px 8px rgb(0 0 0 / .22);
+      --press: inset 0 1px 3px rgb(0 0 0 / .45);
+      --title: #D6BC80;
+      --sub: #C9B488;
+    }
+
+    .c16 .kutub a {
+      position: relative;
+    }
+
+    .c16 .kutub a::after {
+      content: "";
+      position: absolute;
+      inset-block-start: 0;
+      inset-inline-end: 2rem;
+      width: .875rem;
+      height: 2.75rem;
+      background: #C2A365;
+      clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 72%, 0 100%);
+    }
+
+    /* 41 to 50. Option 25's frame: each option sets the binding (--bg),
+       the frame (--foil), and the cartouche's hover fill (--raised). */
+    .fr {
+      --foil: #C2A365;
+      --lift: 0 1px 3px rgb(0 0 0 / .2);
+    }
+
+    .fr ul.kutub a {
+      --frame: inset 0 0 0 .5rem var(--bg), inset 0 0 0 calc(.5rem + 1px) var(--foil);
+      --rest: var(--frame), var(--lift);
+      --hover: var(--frame), 0 4px 12px rgb(0 0 0 / .2);
+      --press: var(--frame);
+      --focus: var(--frame), 0 0 0 .5px rgb(0 0 0 / .06), 0 4px 16px rgb(0 0 0 / .16);
+    }
+
+    .fr ul a:active {
+      filter: brightness(.9);
+    }
+
+    .fr ul.aqsam a {
+      --fill: var(--bg);
+      position: relative;
+      isolation: isolate;
+      padding-inline: 2.25rem;
+      background-color: var(--fill);
+      border-radius: 0;
+      clip-path: polygon(1.5rem 0, calc(100% - 1.5rem) 0, 100% 50%, calc(100% - 1.5rem) 100%, 1.5rem 100%, 0 50%);
+    }
+
+    .fr ul.aqsam a::before,
+    .fr ul.aqsam a::after {
+      content: "";
+      position: absolute;
+      z-index: -1;
+    }
+
+    .fr ul.aqsam a::before {
+      inset: .3125rem;
+      background: var(--foil);
+      clip-path: polygon(1.29rem 0, calc(100% - 1.29rem) 0, 100% 50%, calc(100% - 1.29rem) 100%, 1.29rem 100%, 0 50%);
+    }
+
+    .fr ul.aqsam a::after {
+      inset: calc(.3125rem + 1px);
+      background: var(--fill);
+      clip-path: polygon(1.25rem 0, calc(100% - 1.25rem) 0, 100% 50%, calc(100% - 1.25rem) 100%, 1.25rem 100%, 0 50%);
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      .fr ul.aqsam a:hover {
+        --fill: var(--raised);
+      }
+    }
+
+    .fr ul.aqsam li:has(> a:focus-visible) {
+      filter: drop-shadow(0 4px 8px rgb(0 0 0 / .35));
+    }
+
+    .c41 {
+      --bg: #2F4A3E;
+      --raised: #38574A;
+      --fg: #FFFFFF;
+      --hover: 0 2px 8px rgb(0 0 0 / .22);
+      --press: inset 0 1px 3px rgb(0 0 0 / .45);
+      --title: #D6BC80;
+      --sub: #C9B488;
+    }
+
+    .c42 {
+      --bg: #5B2C2F;
+      --raised: #6A3437;
+      --fg: #FFFFFF;
+      --hover: 0 2px 8px rgb(0 0 0 / .22);
+      --press: inset 0 1px 3px rgb(0 0 0 / .45);
+      --title: #D6BC80;
+      --sub: #C9B488;
+    }
+
+    .c43 {
+      --bg: #1F2B3A;
+      --raised: #2A394C;
+      --fg: #FFFFFF;
+      --hover: 0 2px 8px rgb(0 0 0 / .22);
+      --press: inset 0 1px 3px rgb(0 0 0 / .45);
+      --title: #D6BC80;
+      --sub: #C9B488;
+    }
+
+    .c44 {
+      --bg: #4A3426;
+      --raised: #5A4030;
+      --fg: #FFFFFF;
+      --hover: 0 2px 8px rgb(0 0 0 / .22);
+      --press: inset 0 1px 3px rgb(0 0 0 / .45);
+      --title: #D6BC80;
+      --sub: #C9B488;
+    }
+
+    .c45 {
+      --bg: #3A3A3C;
+      --raised: #48484A;
+      --fg: #FFFFFF;
+      --hover: 0 2px 8px rgb(0 0 0 / .22);
+      --press: inset 0 1px 3px rgb(0 0 0 / .45);
+      --title: #D6BC80;
+      --sub: #C9B488;
+    }
+
+    .c50 {
+      --bg: #1C1C1E;
+      --raised: #2C2C2E;
+      --fg: #FFFFFF;
+      --hover: 0 2px 8px rgb(0 0 0 / .22);
+      --press: inset 0 1px 3px rgb(0 0 0 / .45);
+      --title: #D6BC80;
+      --sub: #C9B488;
+    }
+
+    /* 46 to 48. Light bindings take a darker gold, or black, for the frame. */
+    .c46 {
+      --bg: #E8E8ED;
+      --raised: #DEDEE3;
+      --foil: #A8894F;
+      --lift: 0 1px 2px rgb(0 0 0 / .08);
+    }
+
+    .c47 {
+      --bg: #EDE4D0;
+      --fg: #3B2F22;
+      --sub: #6F5F45;
+      --raised: #E4D9C0;
+      --foil: #A8894F;
+      --lift: 0 1px 2px rgb(59 47 34 / .12);
+    }
+
+    .c48 {
+      --bg: #D6BC80;
+      --raised: #DEC793;
+      --fg: #1C1C1E;
+      --sub: #3A3A3C;
+      --foil: #1C1C1E;
+      --lift: 0 1px 2px rgb(0 0 0 / .12);
+    }
+
+    /* 49. A silver frame, white text. */
+    .c49 {
+      --bg: #1C1C1E;
+      --raised: #2C2C2E;
+      --sub: #AEAEB2;
+      --foil: #AEAEB2;
+      --fg: #FFFFFF;
+      --hover: 0 2px 8px rgb(0 0 0 / .22);
+      --press: inset 0 1px 3px rgb(0 0 0 / .45);
+    }
+
+    /* 50. Each book in its own binding. */
+    .c50 .kutub li:nth-child(5n + 1) {
+      --bg: #2F4A3E;
+    }
+
+    .c50 .kutub li:nth-child(5n + 2) {
+      --bg: #5B2C2F;
+    }
+
+    .c50 .kutub li:nth-child(5n + 3) {
+      --bg: #1F2B3A;
+    }
+
+    .c50 .kutub li:nth-child(5n + 4) {
+      --bg: #4A3426;
+    }
+
+    .c50 .kutub li:nth-child(5n + 5) {
+      --bg: #1C1C1E;
+    }
+
+    /* 51 to 60. Option 41, each with one device of Islamic book art. */
+    .ia {
+      --bg: #2F4A3E;
+      --raised: #38574A;
+      --fg: #FFFFFF;
+      --hover: 0 2px 8px rgb(0 0 0 / .22);
+      --press: inset 0 1px 3px rgb(0 0 0 / .45);
+      --title: #D6BC80;
+      --sub: #C9B488;
+    }
+
+    /* 51 and 60. Two gold rules. */
+    :is(.c51, .c60) ul.kutub a {
+      --frame: inset 0 0 0 .375rem var(--bg), inset 0 0 0 calc(.375rem + 1px) var(--foil), inset 0 0 0 calc(.375rem + 4px) var(--bg), inset 0 0 0 calc(.375rem + 5px) var(--foil);
+    }
+
+    :is(.c51, .c60) ul.aqsam a::before {
+      inset: .25rem;
+      clip-path: polygon(evenodd, 1.333rem 0, calc(100% - 1.333rem) 0, 100% 50%, calc(100% - 1.333rem) 100%, 1.333rem 100%, 0 50%, 1.333rem 0, calc(1.333rem + .5px) 1px, calc(100% - calc(1.333rem + .5px)) 1px, calc(100% - 1.8px) 50%, calc(100% - calc(1.333rem + .5px)) calc(100% - 1px), calc(1.333rem + .5px) calc(100% - 1px), 1.8px 50%, calc(1.333rem + .5px) 1px);
+    }
+
+    :is(.c51, .c60) ul.aqsam a::after {
+      inset: .5rem;
+      background: var(--foil);
+      clip-path: polygon(evenodd, 1.167rem 0, calc(100% - 1.167rem) 0, 100% 50%, calc(100% - 1.167rem) 100%, 1.167rem 100%, 0 50%, 1.167rem 0, calc(1.167rem + .5px) 1px, calc(100% - calc(1.167rem + .5px)) 1px, calc(100% - 1.8px) 50%, calc(100% - calc(1.167rem + .5px)) calc(100% - 1px), calc(1.167rem + .5px) calc(100% - 1px), 1.8px 50%, calc(1.167rem + .5px) 1px);
+    }
+
+    /* 52. Stepped corners, on the books' frame and on the cartouche. */
+    .c52 ul.kutub a {
+      --frame: 0 0 0 transparent;
+      position: relative;
+      border-radius: 10px;
+    }
+
+    .c52 ul.kutub a::before {
+      content: "";
+      position: absolute;
+      inset: .5rem;
+      background: var(--foil);
+      clip-path: polygon(evenodd, calc(.75rem + 0px) 0px, calc(100% - .75rem - 0px) 0px, calc(100% - .75rem - 0px) calc(.75rem + 0px), calc(100% - 0px) calc(.75rem + 0px), calc(100% - 0px) calc(100% - .75rem - 0px), calc(100% - .75rem - 0px) calc(100% - .75rem - 0px), calc(100% - .75rem - 0px) calc(100% - 0px), calc(.75rem + 0px) calc(100% - 0px), calc(.75rem + 0px) calc(100% - .75rem - 0px), 0px calc(100% - .75rem - 0px), 0px calc(.75rem + 0px), calc(.75rem + 0px) calc(.75rem + 0px), calc(.75rem + 0px) 0px, calc(.75rem + 1px) 1px, calc(100% - .75rem - 1px) 1px, calc(100% - .75rem - 1px) calc(.75rem + 1px), calc(100% - 1px) calc(.75rem + 1px), calc(100% - 1px) calc(100% - .75rem - 1px), calc(100% - .75rem - 1px) calc(100% - .75rem - 1px), calc(100% - .75rem - 1px) calc(100% - 1px), calc(.75rem + 1px) calc(100% - 1px), calc(.75rem + 1px) calc(100% - .75rem - 1px), 1px calc(100% - .75rem - 1px), 1px calc(.75rem + 1px), calc(.75rem + 1px) calc(.75rem + 1px), calc(.75rem + 1px) 1px);
+    }
+
+    .c52 ul.aqsam a {
+      clip-path: polygon(calc(.75rem + 0px) 0px, calc(100% - .75rem - 0px) 0px, calc(100% - .75rem - 0px) calc(.75rem + 0px), calc(100% - 0px) calc(.75rem + 0px), calc(100% - 0px) calc(100% - .75rem - 0px), calc(100% - .75rem - 0px) calc(100% - .75rem - 0px), calc(100% - .75rem - 0px) calc(100% - 0px), calc(.75rem + 0px) calc(100% - 0px), calc(.75rem + 0px) calc(100% - .75rem - 0px), 0px calc(100% - .75rem - 0px), 0px calc(.75rem + 0px), calc(.75rem + 0px) calc(.75rem + 0px));
+    }
+
+    .c52 ul.aqsam a::before {
+      clip-path: polygon(evenodd, calc(.75rem + 0px) 0px, calc(100% - .75rem - 0px) 0px, calc(100% - .75rem - 0px) calc(.75rem + 0px), calc(100% - 0px) calc(.75rem + 0px), calc(100% - 0px) calc(100% - .75rem - 0px), calc(100% - .75rem - 0px) calc(100% - .75rem - 0px), calc(100% - .75rem - 0px) calc(100% - 0px), calc(.75rem + 0px) calc(100% - 0px), calc(.75rem + 0px) calc(100% - .75rem - 0px), 0px calc(100% - .75rem - 0px), 0px calc(.75rem + 0px), calc(.75rem + 0px) calc(.75rem + 0px), calc(.75rem + 0px) 0px, calc(.75rem + 1px) 1px, calc(100% - .75rem - 1px) 1px, calc(100% - .75rem - 1px) calc(.75rem + 1px), calc(100% - 1px) calc(.75rem + 1px), calc(100% - 1px) calc(100% - .75rem - 1px), calc(100% - .75rem - 1px) calc(100% - .75rem - 1px), calc(100% - .75rem - 1px) calc(100% - 1px), calc(.75rem + 1px) calc(100% - 1px), calc(.75rem + 1px) calc(100% - .75rem - 1px), 1px calc(100% - .75rem - 1px), 1px calc(.75rem + 1px), calc(.75rem + 1px) calc(.75rem + 1px), calc(.75rem + 1px) 1px);
+    }
+
+    .c52 ul.aqsam a::after {
+      content: none;
+    }
+
+    /* 53 and 60. Gold quarter discs in the frame's corners. */
+    :is(.c53, .c60) ul.kutub a {
+      border-radius: 10px;
+      background-repeat: no-repeat;
+    }
+
+    .c53 ul.kutub a {
+      background-image: radial-gradient(circle at 0 0, var(--foil) .625rem, transparent calc(.625rem + .5px)), radial-gradient(circle at 100% 0, var(--foil) .625rem, transparent calc(.625rem + .5px)), radial-gradient(circle at 0 100%, var(--foil) .625rem, transparent calc(.625rem + .5px)), radial-gradient(circle at 100% 100%, var(--foil) .625rem, transparent calc(.625rem + .5px));
+      background-position: left .5rem top .5rem, right .5rem top .5rem, left .5rem bottom .5rem, right .5rem bottom .5rem;
+      background-size: .75rem .75rem;
+    }
+
+    /* 54. The title in an oval medallion. */
+    .c54 ul.kutub a {
+      position: relative;
+      isolation: isolate;
+      align-items: center;
+      padding-block: 1.25rem;
+      text-align: center;
+    }
+
+    .c54 ul.kutub a::before {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      inset: .875rem 14%;
+      background: #38574A;
+      border: 1px solid var(--foil);
+      border-radius: 50%;
+    }
+
+    /* 55 and 60. A carved lattice of eight-pointed stars. */
+    .c55 ul.kutub a {
+      background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2232%22%20height%3D%2232%22%3E%3Cg%20fill%3D%22none%22%20stroke%3D%22%23FFFFFF%22%20stroke-opacity%3D%22.08%22%3E%3Crect%20x%3D%229.5%22%20y%3D%229.5%22%20width%3D%2213%22%20height%3D%2213%22%2F%3E%3Crect%20x%3D%229.5%22%20y%3D%229.5%22%20width%3D%2213%22%20height%3D%2213%22%20transform%3D%22rotate(45%2016%2016)%22%2F%3E%3Cpath%20d%3D%22M16%200v6.8M16%2025.2V32M0%2016h6.8M25.2%2016H32%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+      background-position: center;
+      background-size: 2rem 2rem;
+    }
+
+    .c55 ul.aqsam a::after {
+      background: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2232%22%20height%3D%2232%22%3E%3Cg%20fill%3D%22none%22%20stroke%3D%22%23FFFFFF%22%20stroke-opacity%3D%22.08%22%3E%3Crect%20x%3D%229.5%22%20y%3D%229.5%22%20width%3D%2213%22%20height%3D%2213%22%2F%3E%3Crect%20x%3D%229.5%22%20y%3D%229.5%22%20width%3D%2213%22%20height%3D%2213%22%20transform%3D%22rotate(45%2016%2016)%22%2F%3E%3Cpath%20d%3D%22M16%200v6.8M16%2025.2V32M0%2016h6.8M25.2%2016H32%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E") center / 2rem 2rem, var(--fill);
+    }
+
+    .c60 ul.kutub a {
+      background-image: radial-gradient(circle at 0 0, var(--foil) .625rem, transparent calc(.625rem + .5px)), radial-gradient(circle at 100% 0, var(--foil) .625rem, transparent calc(.625rem + .5px)), radial-gradient(circle at 0 100%, var(--foil) .625rem, transparent calc(.625rem + .5px)), radial-gradient(circle at 100% 100%, var(--foil) .625rem, transparent calc(.625rem + .5px)), url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2232%22%20height%3D%2232%22%3E%3Cg%20fill%3D%22none%22%20stroke%3D%22%23FFFFFF%22%20stroke-opacity%3D%22.08%22%3E%3Crect%20x%3D%229.5%22%20y%3D%229.5%22%20width%3D%2213%22%20height%3D%2213%22%2F%3E%3Crect%20x%3D%229.5%22%20y%3D%229.5%22%20width%3D%2213%22%20height%3D%2213%22%20transform%3D%22rotate(45%2016%2016)%22%2F%3E%3Cpath%20d%3D%22M16%200v6.8M16%2025.2V32M0%2016h6.8M25.2%2016H32%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+      background-position: left calc(.375rem + 6px) top calc(.375rem + 6px), right calc(.375rem + 6px) top calc(.375rem + 6px), left calc(.375rem + 6px) bottom calc(.375rem + 6px), right calc(.375rem + 6px) bottom calc(.375rem + 6px), center;
+      background-size: .75rem .75rem, .75rem .75rem, .75rem .75rem, .75rem .75rem, 2rem 2rem;
+      background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, repeat;
+    }
+
+    .c60 ul.aqsam a {
+      background: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2232%22%20height%3D%2232%22%3E%3Cg%20fill%3D%22none%22%20stroke%3D%22%23FFFFFF%22%20stroke-opacity%3D%22.08%22%3E%3Crect%20x%3D%229.5%22%20y%3D%229.5%22%20width%3D%2213%22%20height%3D%2213%22%2F%3E%3Crect%20x%3D%229.5%22%20y%3D%229.5%22%20width%3D%2213%22%20height%3D%2213%22%20transform%3D%22rotate(45%2016%2016)%22%2F%3E%3Cpath%20d%3D%22M16%200v6.8M16%2025.2V32M0%2016h6.8M25.2%2016H32%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E") center / 2rem 2rem, var(--fill);
+    }
+
+    /* 56. A groove tooled into the leather, no gold; the title pressed in. */
+    .c56 ul.kutub a {
+      --frame: inset 0 0 0 .5rem var(--bg), inset 0 0 0 calc(.5rem + 1px) rgb(0 0 0 / .4), inset 0 0 0 calc(.5rem + 2px) rgb(255 255 255 / .14);
+    }
+
+    .c56 ul a {
+      text-shadow: 0 -1px 0 rgb(0 0 0 / .45);
+    }
+
+    .c56 ul.aqsam a::before {
+      background: rgb(0 0 0 / .4);
+      clip-path: polygon(evenodd, 1.29rem 0, calc(100% - 1.29rem) 0, 100% 50%, calc(100% - 1.29rem) 100%, 1.29rem 100%, 0 50%, 1.29rem 0, calc(1.29rem + .5px) 1px, calc(100% - calc(1.29rem + .5px)) 1px, calc(100% - 1.8px) 50%, calc(100% - calc(1.29rem + .5px)) calc(100% - 1px), calc(1.29rem + .5px) calc(100% - 1px), 1.8px 50%, calc(1.29rem + .5px) 1px);
+    }
+
+    .c56 ul.aqsam a::after {
+      background: rgb(255 255 255 / .14);
+      clip-path: polygon(evenodd, 1.27rem 0, calc(100% - 1.27rem) 0, 100% 50%, calc(100% - 1.27rem) 100%, 1.27rem 100%, 0 50%, 1.27rem 0, calc(1.27rem + .5px) 1px, calc(100% - calc(1.27rem + .5px)) 1px, calc(100% - 1.8px) 50%, calc(100% - calc(1.27rem + .5px)) calc(100% - 1px), calc(1.27rem + .5px) calc(100% - 1px), 1.8px 50%, calc(1.27rem + .5px) 1px);
+    }
+
+    /* 57. The title in a small framed cartouche. */
+    .c57 ul.kutub a {
+      align-items: center;
+      gap: .375rem;
+      padding-block: 1rem;
+      text-align: center;
+    }
+
+    .c57 ul.kutub a > span:first-child {
+      position: relative;
+      padding: .25rem 1.75rem;
+      background: #38574A;
+      clip-path: polygon(1rem 0, calc(100% - 1rem) 0, 100% 50%, calc(100% - 1rem) 100%, 1rem 100%, 0 50%);
+    }
+
+    .c57 ul.kutub a > span:first-child::before {
+      content: "";
+      position: absolute;
+      inset: 3px;
+      background: var(--foil);
+      clip-path: polygon(evenodd, .85rem 0, calc(100% - .85rem) 0, 100% 50%, calc(100% - .85rem) 100%, .85rem 100%, 0 50%, .85rem 0, calc(.85rem + .5px) 1px, calc(100% - calc(.85rem + .5px)) 1px, calc(100% - 1.8px) 50%, calc(100% - calc(.85rem + .5px)) calc(100% - 1px), calc(.85rem + .5px) calc(100% - 1px), 1.8px 50%, calc(.85rem + .5px) 1px);
+    }
+
+    /* 58. A band of small diamonds between two rules. */
+    .c58 ul.kutub a {
+      --frame: inset 0 0 0 .375rem var(--bg), inset 0 0 0 calc(.375rem + 1px) var(--foil), inset 0 0 0 calc(.875rem - 1px) var(--bg), inset 0 0 0 .875rem var(--foil);
+      position: relative;
+      padding: 1.125rem 1.875rem;
+      border-radius: 6px;
+    }
+
+    .c58 ul.kutub a::before {
+      content: "";
+      position: absolute;
+      inset: calc(.375rem + 1px);
+      background: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%226%22%20height%3D%226%22%3E%3Cpath%20d%3D%22M3%20.75%205.25%203%203%205.25%20.75%203Z%22%20fill%3D%22%23C2A365%22%2F%3E%3C%2Fsvg%3E") 0 0 / 6px 6px space;
+      clip-path: polygon(evenodd, 0 0, 100% 0, 100% 100%, 0 100%, 0 0, 6px 6px, 6px calc(100% - 6px), calc(100% - 6px) calc(100% - 6px), calc(100% - 6px) 6px, 6px 6px);
+    }
+
+    /* 59. Categories as pointed arches, framed on the same curves. */
+    .c59 ul.aqsam li {
+      container-type: inline-size;
+    }
+
+    .c59 ul.aqsam a {
+      align-items: flex-end;
+      min-height: calc(59cqw + 3.5rem);
+      padding-block-end: 1rem;
+      clip-path: none;
+      mask: linear-gradient(#000000, #000000) 0 calc(59cqw - 0px) / 100% calc(100% - calc(59cqw - 0px)) no-repeat, radial-gradient(circle calc(60cqw - 0px) at calc(60cqw - 0px) calc(59cqw - 0px), #000000 calc(calc(60cqw - 0px) - .5px), transparent calc(60cqw - 0px)) no-repeat, radial-gradient(circle calc(60cqw - 0px) at calc(40cqw - 0px) calc(59cqw - 0px), #000000 calc(calc(60cqw - 0px) - .5px), transparent calc(60cqw - 0px)) no-repeat;
+      mask-composite: add, intersect, add;
+    }
+
+    .c59 ul.aqsam a::before {
+      clip-path: none;
+      mask: linear-gradient(#000000, #000000) 0 calc(59cqw - .3125rem) / 100% calc(100% - calc(59cqw - .3125rem)) no-repeat, radial-gradient(circle calc(60cqw - .3125rem) at calc(60cqw - .3125rem) calc(59cqw - .3125rem), #000000 calc(calc(60cqw - .3125rem) - .5px), transparent calc(60cqw - .3125rem)) no-repeat, radial-gradient(circle calc(60cqw - .3125rem) at calc(40cqw - .3125rem) calc(59cqw - .3125rem), #000000 calc(calc(60cqw - .3125rem) - .5px), transparent calc(60cqw - .3125rem)) no-repeat;
+      mask-composite: add, intersect, add;
+    }
+
+    .c59 ul.aqsam a::after {
+      clip-path: none;
+      mask: linear-gradient(#000000, #000000) 0 calc(59cqw - calc(.3125rem + 1px)) / 100% calc(100% - calc(59cqw - calc(.3125rem + 1px))) no-repeat, radial-gradient(circle calc(60cqw - calc(.3125rem + 1px)) at calc(60cqw - calc(.3125rem + 1px)) calc(59cqw - calc(.3125rem + 1px)), #000000 calc(calc(60cqw - calc(.3125rem + 1px)) - .5px), transparent calc(60cqw - calc(.3125rem + 1px))) no-repeat, radial-gradient(circle calc(60cqw - calc(.3125rem + 1px)) at calc(40cqw - calc(.3125rem + 1px)) calc(59cqw - calc(.3125rem + 1px)), #000000 calc(calc(60cqw - calc(.3125rem + 1px)) - .5px), transparent calc(60cqw - calc(.3125rem + 1px))) no-repeat;
+      mask-composite: add, intersect, add;
+    }
+
+    /* 32 to 40. Minimal: flat grey or black, a little gold, nothing else. */
+    .m ul a > span + span {
+      color: var(--sub);
+      font-size: 1rem;
+    }
+
+    /* 33. A small gold mark on the card's starting edge. */
+    .c33 ul a {
+      position: relative;
+    }
+
+    .c33 ul a::before {
+      content: "";
+      position: absolute;
+      inset-block-start: calc(50% - .75rem);
+      inset-inline-start: 0;
+      width: .25rem;
+      height: 1.5rem;
+      background: #C2A365;
+      border-start-end-radius: 2px;
+      border-end-end-radius: 2px;
+    }
+
+    /* 34. Black, white text. */
+    .c34 {
+      --bg: #1C1C1E;
+      --sub: #AEAEB2;
+      --fg: #FFFFFF;
+      --hover: 0 2px 8px rgb(0 0 0 / .22);
+      --press: inset 0 1px 3px rgb(0 0 0 / .45);
+    }
+
+    /* 35 and 39. Black books with gold titles, so a book never looks like a category. */
+    :is(.c35, .c39) .kutub {
+      --bg: #1C1C1E;
+      --fg: #FFFFFF;
+      --hover: 0 2px 8px rgb(0 0 0 / .22);
+      --press: inset 0 1px 3px rgb(0 0 0 / .45);
+      --title: #D6BC80;
+      --sub: #C9B488;
+    }
+
+    /* 36. No cards: rows on the page, a small arrow at each end. */
+    .c36 {
+      --bg: transparent;
+      --hover: none;
+      --press: none;
+    }
+
+    .c36 ul:is(.aqsam, .kutub) {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 0;
+    }
+
+    @media (width >= 40em) {
+      .c36 ul:is(.aqsam, .kutub) {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        column-gap: var(--space-s);
+      }
+    }
+
+    .c36 ul:is(.aqsam, .kutub) a {
+      position: relative;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 3.5rem;
+      padding-block: .375rem;
+      padding-inline: .75rem 3rem;
+      border-radius: 12px;
+      text-align: start;
+    }
+
+    .c36 ul a > svg {
+      position: absolute;
+      inset-block-start: calc(50% - .625rem);
+      inset-inline-end: .75rem;
+      width: 1.25rem;
+      height: 1.25rem;
+      color: #636366;
+    }
+
+    /* 37. Joined grey rows, the count at each row's end. */
+    .c37 {
+      --hover: none;
+      --press: none;
+    }
+
+    .c37 ul:is(.aqsam, .kutub) {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 2px;
+    }
+
+    .c37 ul:is(.aqsam, .kutub) a {
+      flex-flow: row wrap;
+      align-items: baseline;
+      align-content: center;
+      justify-content: flex-start;
+      column-gap: 1rem;
+      min-height: 3.5rem;
+      padding: .5rem 1.5rem;
+      border-radius: 0;
+      text-align: start;
+    }
+
+    .c37 ul a > span:last-child {
+      margin-inline-start: auto;
+    }
+
+    .c37 li:first-child a {
+      border-start-start-radius: 16px;
+      border-start-end-radius: 16px;
+    }
+
+    .c37 li:last-child a {
+      border-end-start-radius: 16px;
+      border-end-end-radius: 16px;
+    }
+
+    /* 36 and 37 answer a pointer with a darker grey, not a shadow. */
+    @media (hover: hover) and (pointer: fine) {
+      .c36 ul a:hover,
+      .c37 ul a:hover {
+        background-color: #E8E8ED;
+      }
+
+      .c37 ul a:hover {
+        background-color: #DEDEE3;
+      }
+    }
+
+    .c36 ul a:active {
+      background-color: #E0E0E5;
+    }
+
+    .c37 ul a:active {
+      background-color: #D5D5DA;
+    }
+
+    /* 38. The count under each name. */
+    .c38 ul.aqsam a {
+      flex-direction: column;
+    }
+
+    /* 39. Categories as small buttons side by side. */
+    .c39 ul.aqsam {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .5rem;
+    }
+
+    .c39 ul.aqsam a {
+      min-height: 2.75rem;
+      padding-inline: 1.25rem;
+      border-radius: 999px;
+    }
+
+    /* 40. The page's colour, edged by a soft shadow. */
+    .c40 {
+      --bg: #F5F5F7;
+      --rest: 0 0 0 .5px rgb(0 0 0 / .08), 0 1px 3px rgb(0 0 0 / .1);
+      --hover: 0 0 0 .5px rgb(0 0 0 / .08), 0 3px 8px rgb(0 0 0 / .12);
+      --press: inset 0 1px 3px rgb(0 0 0 / .12);
+    }
+
+    /* The hadith card's ending: none, dots, the words, or the arrow. The
+       doubled class outranks the hadith card's own rules further down. */
+    .m.cue-fade ol a {
+      --clear: 0rem;
+    }
+
+    .m.cue-word ol a {
+      --clear: 8rem;
+    }
+
+    .c.m ol a > em {
+      inset-block-end: .75rem;
+      inset-inline-end: 1.5rem;
+      width: auto;
+      height: auto;
+      font-size: 1rem;
+      font-style: normal;
+      line-height: calc(1.85 * var(--text));
+      white-space: nowrap;
+    }
+
+    .c.m ol a > em.dots {
+      font-size: var(--text);
+    }
+
+    /* 17 to 31. Black bindings with gold titles. */
+    .k {
+      --bg: #1C1C1E;
+      --fg: #FFFFFF;
+      --hover: 0 2px 8px rgb(0 0 0 / .22);
+      --press: inset 0 1px 3px rgb(0 0 0 / .45);
+      --title: #D6BC80;
+      --sub: #C9B488;
+    }
+
+    /* 17. Categories in a pointed cartouche. */
+    .c17 ul.aqsam a {
+      padding-inline: 2rem;
+      border-radius: 0;
+      clip-path: polygon(1.5rem 0, calc(100% - 1.5rem) 0, 100% 50%, calc(100% - 1.5rem) 100%, 1.5rem 100%, 0 50%);
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      .c17 ul.aqsam a:hover {
+        background-color: #2C2C2E;
+      }
+    }
+
+    .c17 ul.aqsam a:active {
+      background-color: #000000;
+    }
+
+    /* The shape clips a shadow, so focus lifts the item. */
+    .c17 ul.aqsam li:has(> a:focus-visible) {
+      filter: drop-shadow(0 4px 8px rgb(0 0 0 / .35));
+    }
+
+    /* 18, 21 and 31. A closed black volume: its pages and back cover show. */
+    :is(.c18, .c21, .c31) .kutub {
+      --rest: -5px 5px 0 #EDE4D0, -8px 8px 0 #000000;
+      --hover: -5px 5px 0 #EDE4D0, -8px 8px 0 #000000, -8px 10px 16px rgb(0 0 0 / .25);
+      --press: -2px 2px 0 #EDE4D0, -4px 4px 0 #000000;
+      --focus: -5px 5px 0 #EDE4D0, -8px 8px 0 #000000, 0 4px 16px rgb(0 0 0 / .3);
+    }
+
+    :is(.c18, .c21, .c31) ul.kutub a {
+      border-radius: 14px 6px 6px 14px;
+    }
+
+    .c18 ul.aqsam a {
+      padding-inline: 2rem;
+      border-radius: 0;
+      clip-path: polygon(1.5rem 0, calc(100% - 1.5rem) 0, 100% 50%, calc(100% - 1.5rem) 100%, 1.5rem 100%, 0 50%);
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      .c18 ul.aqsam a:hover {
+        background-color: #2C2C2E;
+      }
+    }
+
+    .c18 ul.aqsam a:active {
+      background-color: #000000;
+    }
+
+    /* The shape clips a shadow, so focus lifts the item. */
+    .c18 ul.aqsam li:has(> a:focus-visible) {
+      filter: drop-shadow(0 4px 8px rgb(0 0 0 / .35));
+    }
+
+    /* 19. Standing black covers; categories in a cartouche with handles. */
+    .c19 .kutub {
+      --hinge: inset -.5rem 0 0 rgb(255 255 255 / .08);
+      --rest: var(--hinge), 0 1px 3px rgb(0 0 0 / .2);
+      --hover: var(--hinge), 0 4px 12px rgb(0 0 0 / .25);
+      --press: var(--hinge), inset 0 1px 3px rgb(0 0 0 / .45);
+      --focus: var(--hinge), 0 0 0 .5px rgb(0 0 0 / .06), 0 4px 16px rgb(0 0 0 / .16);
+    }
+
+    :is(.c19, .c26) ul.kutub {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    @media (width >= 40em) {
+      :is(.c19, .c26) ul.kutub {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+    }
+
+    :is(.c19, .c26) ul.kutub a {
+      aspect-ratio: 3 / 4;
+      align-items: center;
+      gap: .5rem;
+      text-align: center;
+    }
+
+    .c19 ul.kutub a {
+      padding: 1rem 1.5rem 1rem 1rem;
+      border-radius: 12px 4px 4px 12px;
+    }
+
+    .c19 ul.aqsam a {
+      padding-inline: 2rem;
+      border-radius: 0;
+      clip-path: polygon(1.25rem 0, calc(100% - 1.25rem) 0, calc(100% - 1.25rem) 22%, 100% 50%, calc(100% - 1.25rem) 78%, calc(100% - 1.25rem) 100%, 1.25rem 100%, 1.25rem 78%, 0 50%, 1.25rem 22%);
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      .c19 ul.aqsam a:hover {
+        background-color: #2C2C2E;
+      }
+    }
+
+    .c19 ul.aqsam a:active {
+      background-color: #000000;
+    }
+
+    /* The shape clips a shadow, so focus lifts the item. */
+    .c19 ul.aqsam li:has(> a:focus-visible) {
+      filter: drop-shadow(0 4px 8px rgb(0 0 0 / .35));
+    }
+
+    /* 20. A gold ribbon over the cover. */
+    .c20 .kutub a {
+      position: relative;
+    }
+
+    .c20 .kutub a::after {
+      content: "";
+      position: absolute;
+      inset-block-start: 0;
+      inset-inline-end: 2rem;
+      width: .875rem;
+      height: 2.75rem;
+      background: #C2A365;
+      clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 72%, 0 100%);
+    }
+
+    .c20 ul.aqsam a {
+      padding-inline: 2rem;
+      border-radius: 0;
+      clip-path: polygon(1.5rem 0, calc(100% - 1.5rem) 0, 100% 50%, calc(100% - 1.5rem) 100%, 1.5rem 100%, 0 50%);
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      .c20 ul.aqsam a:hover {
+        background-color: #2C2C2E;
+      }
+    }
+
+    .c20 ul.aqsam a:active {
+      background-color: #000000;
+    }
+
+    /* The shape clips a shadow, so focus lifts the item. */
+    .c20 ul.aqsam li:has(> a:focus-visible) {
+      filter: drop-shadow(0 4px 8px rgb(0 0 0 / .35));
+    }
+
+    /* 21. The ribbon comes out between the volume's pages. */
+    .c21 ul.kutub {
+      row-gap: calc(var(--space-s) + 1.5rem);
+      margin-block-end: calc(var(--space-s) + 1.5rem);
+    }
+
+    .c21 .kutub a {
+      position: relative;
+    }
+
+    .c21 .kutub a::after {
+      content: "";
+      position: absolute;
+      inset-block-start: 100%;
+      inset-inline-end: 2.5rem;
+      width: .75rem;
+      height: 1.75rem;
+      background: #C2A365;
+      clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 75%, 0 100%);
+    }
+
+    .c21 ul.aqsam a {
+      padding-inline: 2rem;
+      border-radius: 0;
+      clip-path: polygon(1.25rem 0, calc(100% - 1.25rem) 0, calc(100% - 1.25rem) 22%, 100% 50%, calc(100% - 1.25rem) 78%, calc(100% - 1.25rem) 100%, 1.25rem 100%, 1.25rem 78%, 0 50%, 1.25rem 22%);
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      .c21 ul.aqsam a:hover {
+        background-color: #2C2C2E;
+      }
+    }
+
+    .c21 ul.aqsam a:active {
+      background-color: #000000;
+    }
+
+    /* The shape clips a shadow, so focus lifts the item. */
+    .c21 ul.aqsam li:has(> a:focus-visible) {
+      filter: drop-shadow(0 4px 8px rgb(0 0 0 / .35));
+    }
+
+    /* 22. A raised black spine with two gold bands. */
+    .c22 ul.kutub a {
+      position: relative;
+      overflow: hidden;
+      padding-inline-start: 2.75rem;
+    }
+
+    .c22 ul.kutub a::before {
+      content: "";
+      position: absolute;
+      inset-block: 0;
+      inset-inline-start: 0;
+      width: 1.25rem;
+      background: linear-gradient(transparent 1rem, #C2A365 1rem calc(1rem + 3px), transparent calc(1rem + 3px) calc(100% - 1rem - 3px), #C2A365 calc(100% - 1rem - 3px) calc(100% - 1rem), transparent calc(100% - 1rem)), #2C2C2E;
+    }
+
+    .c22 ul.aqsam a {
+      padding-inline: 2rem;
+      border-radius: 0;
+      clip-path: polygon(1.5rem 0, calc(100% - 1.5rem) 0, 100% 50%, calc(100% - 1.5rem) 100%, 1.5rem 100%, 0 50%);
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      .c22 ul.aqsam a:hover {
+        background-color: #2C2C2E;
+      }
+    }
+
+    .c22 ul.aqsam a:active {
+      background-color: #000000;
+    }
+
+    /* The shape clips a shadow, so focus lifts the item. */
+    .c22 ul.aqsam li:has(> a:focus-visible) {
+      filter: drop-shadow(0 4px 8px rgb(0 0 0 / .35));
+    }
+
+    /* 23. Half binding: charcoal boards, black leather spine and corners. */
+    .c23 .kutub {
+      --bg: #2E2E30;
+      --spine: inset -1.25rem 0 0 #111112;
+      --rest: var(--spine);
+      --hover: var(--spine), 0 2px 8px rgb(0 0 0 / .22);
+      --press: var(--spine), inset 0 1px 3px rgb(0 0 0 / .45);
+      --focus: var(--spine), 0 0 0 .5px rgb(0 0 0 / .06), 0 4px 16px rgb(0 0 0 / .16);
+    }
+
+    .c23 ul.kutub a {
+      padding-inline-start: 2.75rem;
+      border-radius: 8px;
+      background-image: linear-gradient(135deg, #111112 1.25rem, transparent 1.25rem), linear-gradient(45deg, #111112 1.25rem, transparent 1.25rem);
+      background-position: 0 0, 0 100%;
+      background-size: 2.5rem 2.5rem;
+      background-repeat: no-repeat;
+    }
+
+    .c23 ul.aqsam a {
+      padding-inline: 2rem;
+      border-radius: 0;
+      -webkit-mask: radial-gradient(circle at 0 0, transparent .875rem, #000000 calc(.875rem + .5px)) 0 0 / 51% 51% no-repeat, radial-gradient(circle at 100% 0, transparent .875rem, #000000 calc(.875rem + .5px)) 100% 0 / 51% 51% no-repeat, radial-gradient(circle at 0 100%, transparent .875rem, #000000 calc(.875rem + .5px)) 0 100% / 51% 51% no-repeat, radial-gradient(circle at 100% 100%, transparent .875rem, #000000 calc(.875rem + .5px)) 100% 100% / 51% 51% no-repeat;
+      mask: radial-gradient(circle at 0 0, transparent .875rem, #000000 calc(.875rem + .5px)) 0 0 / 51% 51% no-repeat, radial-gradient(circle at 100% 0, transparent .875rem, #000000 calc(.875rem + .5px)) 100% 0 / 51% 51% no-repeat, radial-gradient(circle at 0 100%, transparent .875rem, #000000 calc(.875rem + .5px)) 0 100% / 51% 51% no-repeat, radial-gradient(circle at 100% 100%, transparent .875rem, #000000 calc(.875rem + .5px)) 100% 100% / 51% 51% no-repeat;
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      .c23 ul.aqsam a:hover {
+        background-color: #2C2C2E;
+      }
+    }
+
+    .c23 ul.aqsam a:active {
+      background-color: #000000;
+    }
+
+    /* The shape clips a shadow, so focus lifts the item. */
+    .c23 ul.aqsam li:has(> a:focus-visible) {
+      filter: drop-shadow(0 4px 8px rgb(0 0 0 / .35));
+    }
+
+    /* 24. The gold title on a maroon label; maroon cartouches. */
+    .c24 .aqsam {
+      --bg: #5B2C2F;
+    }
+
+    .c24 ul.aqsam a {
+      padding-inline: 2rem;
+      border-radius: 0;
+      clip-path: polygon(1.5rem 0, calc(100% - 1.5rem) 0, 100% 50%, calc(100% - 1.5rem) 100%, 1.5rem 100%, 0 50%);
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      .c24 ul.aqsam a:hover {
+        background-color: #6A3437;
+      }
+    }
+
+    .c24 ul.aqsam a:active {
+      background-color: #4B2427;
+    }
+
+    /* The shape clips a shadow, so focus lifts the item. */
+    .c24 ul.aqsam li:has(> a:focus-visible) {
+      filter: drop-shadow(0 4px 8px rgb(0 0 0 / .35));
+    }
+
+    .c24 ul.kutub a {
+      align-items: flex-start;
+      gap: .375rem;
+    }
+
+    .c24 ul.kutub a > span:first-child {
+      padding: .125rem .875rem;
+      background: #5B2C2F;
+      border-radius: 6px;
+    }
+
+    /* 25 and 26. A thin gold frame tooled inside the cover. */
+    :is(.c25, .c26) ul.kutub a {
+      --inset: .5rem;
+      --frame: inset 0 0 0 var(--inset) var(--bg), inset 0 0 0 calc(var(--inset) + 1px) #C2A365;
+      --rest: var(--frame), 0 1px 3px rgb(0 0 0 / .2);
+      --hover: var(--frame), 0 4px 12px rgb(0 0 0 / .25);
+      --press: var(--frame);
+      --focus: var(--frame), 0 0 0 .5px rgb(0 0 0 / .06), 0 4px 16px rgb(0 0 0 / .16);
+    }
+
+    :is(.c25, .c26) ul.kutub a:active {
+      --bg: #0E0E0F;
+    }
+
+    /* The cartouche's frame: a gold shape, then a black one inside it. */
+    .c25 ul.aqsam a {
+      --fill: var(--bg);
+      position: relative;
+      isolation: isolate;
+      padding-inline: 2.25rem;
+      background-color: var(--fill);
+      border-radius: 0;
+      clip-path: polygon(1.5rem 0, calc(100% - 1.5rem) 0, 100% 50%, calc(100% - 1.5rem) 100%, 1.5rem 100%, 0 50%);
+    }
+
+    .c25 ul.aqsam a::before,
+    .c25 ul.aqsam a::after {
+      content: "";
+      position: absolute;
+      z-index: -1;
+    }
+
+    .c25 ul.aqsam a::before {
+      inset: .3125rem;
+      background: #C2A365;
+      clip-path: polygon(1.29rem 0, calc(100% - 1.29rem) 0, 100% 50%, calc(100% - 1.29rem) 100%, 1.29rem 100%, 0 50%);
+    }
+
+    .c25 ul.aqsam a::after {
+      inset: calc(.3125rem + 1px);
+      background: var(--fill);
+      clip-path: polygon(1.25rem 0, calc(100% - 1.25rem) 0, 100% 50%, calc(100% - 1.25rem) 100%, 1.25rem 100%, 0 50%);
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      .c25 ul.aqsam a:hover {
+        --fill: #2C2C2E;
+      }
+    }
+
+    .c25 ul.aqsam a:active {
+      --fill: #000000;
+    }
+
+    .c25 ul.aqsam li:has(> a:focus-visible) {
+      filter: drop-shadow(0 4px 8px rgb(0 0 0 / .35));
+    }
+
+    /* 26. A standing cover: the frame, and the title in a cartouche. */
+    .c26 ul.kutub a {
+      --inset: .625rem;
+      padding: 1.25rem;
+      border-radius: 6px;
+    }
+
+    .c26 ul.kutub a > span:first-child {
+      padding: .375rem 1.5rem;
+      background: #2C2C2E;
+      clip-path: polygon(1rem 0, calc(100% - 1rem) 0, 100% 50%, calc(100% - 1rem) 100%, 1rem 100%, 0 50%);
+    }
+
+    .c26 ul.aqsam a {
+      padding-inline: 2rem;
+      border-radius: 0;
+      clip-path: polygon(1.5rem 0, calc(100% - 1.5rem) 0, 100% 50%, calc(100% - 1.5rem) 100%, 1.5rem 100%, 0 50%);
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      .c26 ul.aqsam a:hover {
+        background-color: #2C2C2E;
+      }
+    }
+
+    .c26 ul.aqsam a:active {
+      background-color: #000000;
+    }
+
+    /* The shape clips a shadow, so focus lifts the item. */
+    .c26 ul.aqsam li:has(> a:focus-visible) {
+      filter: drop-shadow(0 4px 8px rgb(0 0 0 / .35));
+    }
+
+    /* 27. A set of black volumes on a shelf. */
+    .c27 ul.kutub {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-end;
+      gap: .375rem;
+    }
+
+    .c27 ul.kutub a {
+      writing-mode: vertical-rl;
+      align-items: center;
+      gap: .25rem;
+      min-height: 15rem;
+      padding: 1.75rem .5rem;
+      border-radius: 6px;
+      background-image: linear-gradient(transparent 1rem, #C2A365 1rem calc(1rem + 3px), transparent calc(1rem + 3px) calc(100% - 1rem - 3px), #C2A365 calc(100% - 1rem - 3px) calc(100% - 1rem), transparent calc(100% - 1rem));
+    }
+
+    .c27 ul.aqsam a {
+      padding-inline: 2rem;
+      border-radius: 0;
+      clip-path: polygon(1.5rem 0, calc(100% - 1.5rem) 0, 100% 50%, calc(100% - 1.5rem) 100%, 1.5rem 100%, 0 50%);
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      .c27 ul.aqsam a:hover {
+        background-color: #2C2C2E;
+      }
+    }
+
+    .c27 ul.aqsam a:active {
+      background-color: #000000;
+    }
+
+    /* The shape clips a shadow, so focus lifts the item. */
+    .c27 ul.aqsam li:has(> a:focus-visible) {
+      filter: drop-shadow(0 4px 8px rgb(0 0 0 / .35));
+    }
+
+    /* 28. Books lying in a pile, spines out, titles level. */
+    .c28 ul.kutub {
+      grid-template-columns: minmax(0, 1fr);
+      gap: .25rem;
+      max-inline-size: 36rem;
+    }
+
+    .c28 ul.kutub a {
+      flex-flow: row wrap;
+      align-items: baseline;
+      align-content: center;
+      column-gap: 1rem;
+      min-height: 3.75rem;
+      padding: .5rem 2.25rem;
+      border-radius: 6px;
+      background-image: linear-gradient(to left, transparent 1rem, #C2A365 1rem calc(1rem + 3px), transparent calc(1rem + 3px) calc(100% - 1rem - 3px), #C2A365 calc(100% - 1rem - 3px) calc(100% - 1rem), transparent calc(100% - 1rem));
+    }
+
+    .c28 ul.aqsam a {
+      padding-inline: 2rem;
+      border-radius: 0;
+      clip-path: polygon(1.5rem 0, calc(100% - 1.5rem) 0, 100% 50%, calc(100% - 1.5rem) 100%, 1.5rem 100%, 0 50%);
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      .c28 ul.aqsam a:hover {
+        background-color: #2C2C2E;
+      }
+    }
+
+    .c28 ul.aqsam a:active {
+      background-color: #000000;
+    }
+
+    /* The shape clips a shadow, so focus lifts the item. */
+    .c28 ul.aqsam li:has(> a:focus-visible) {
+      filter: drop-shadow(0 4px 8px rgb(0 0 0 / .35));
+    }
+
+    /* 29. Gold cartouches with black ink. */
+    .c29 .aqsam {
+      --bg: #D6BC80;
+      --fg: #1C1C1E;
+      --title: #1C1C1E;
+    }
+
+    .c29 ul.aqsam a {
+      padding-inline: 2rem;
+      border-radius: 0;
+      clip-path: polygon(1.5rem 0, calc(100% - 1.5rem) 0, 100% 50%, calc(100% - 1.5rem) 100%, 1.5rem 100%, 0 50%);
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      .c29 ul.aqsam a:hover {
+        background-color: #DEC793;
+      }
+    }
+
+    .c29 ul.aqsam a:active {
+      background-color: #C9AD6E;
+    }
+
+    /* The shape clips a shadow, so focus lifts the item. */
+    .c29 ul.aqsam li:has(> a:focus-visible) {
+      filter: drop-shadow(0 4px 8px rgb(0 0 0 / .35));
+    }
+
+    .c29 .kutub {
+      --hinge: inset -.5rem 0 0 rgb(255 255 255 / .08);
+      --rest: var(--hinge), 0 1px 3px rgb(0 0 0 / .2);
+      --hover: var(--hinge), 0 4px 12px rgb(0 0 0 / .25);
+      --press: var(--hinge), inset 0 1px 3px rgb(0 0 0 / .45);
+      --focus: var(--hinge), 0 0 0 .5px rgb(0 0 0 / .06), 0 4px 16px rgb(0 0 0 / .16);
+    }
+
+    /* 30. Gold corners on the cover's outer edge; eight-sided cartouches. */
+    .c30 .kutub {
+      --hinge: inset -.5rem 0 0 rgb(255 255 255 / .08);
+      --rest: var(--hinge), 0 1px 3px rgb(0 0 0 / .2);
+      --hover: var(--hinge), 0 4px 12px rgb(0 0 0 / .25);
+      --press: var(--hinge), inset 0 1px 3px rgb(0 0 0 / .45);
+      --focus: var(--hinge), 0 0 0 .5px rgb(0 0 0 / .06), 0 4px 16px rgb(0 0 0 / .16);
+    }
+
+    .c30 ul.kutub a {
+      border-radius: 6px;
+      background-image: linear-gradient(135deg, #C2A365 .75rem, transparent .75rem), linear-gradient(45deg, #C2A365 .75rem, transparent .75rem);
+      background-position: 0 0, 0 100%;
+      background-size: 1.5rem 1.5rem;
+      background-repeat: no-repeat;
+    }
+
+    .c30 ul.aqsam a {
+      padding-inline: 2rem;
+      border-radius: 0;
+      clip-path: polygon(1rem 0, calc(100% - 1rem) 0, 100% 1rem, 100% calc(100% - 1rem), calc(100% - 1rem) 100%, 1rem 100%, 0 calc(100% - 1rem), 0 1rem);
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      .c30 ul.aqsam a:hover {
+        background-color: #2C2C2E;
+      }
+    }
+
+    .c30 ul.aqsam a:active {
+      background-color: #000000;
+    }
+
+    /* The shape clips a shadow, so focus lifts the item. */
+    .c30 ul.aqsam li:has(> a:focus-visible) {
+      filter: drop-shadow(0 4px 8px rgb(0 0 0 / .35));
+    }
+
+    /* 31. Paper cartouches; black volumes. */
+    .c31 .aqsam {
+      --bg: #EDE4D0;
+      --fg: #3B2F22;
+      --title: #3B2F22;
+    }
+
+    .c31 ul.aqsam a {
+      padding-inline: 2rem;
+      border-radius: 0;
+      clip-path: polygon(1.5rem 0, calc(100% - 1.5rem) 0, 100% 50%, calc(100% - 1.5rem) 100%, 1.5rem 100%, 0 50%);
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      .c31 ul.aqsam a:hover {
+        background-color: #E4D9C0;
+      }
+    }
+
+    .c31 ul.aqsam a:active {
+      background-color: #DCCFB2;
+    }
+
+    /* The shape clips a shadow, so focus lifts the item. */
+    .c31 ul.aqsam li:has(> a:focus-visible) {
+      filter: drop-shadow(0 4px 8px rgb(0 0 0 / .35));
+    }
+
+    /* The hadith card, as on the category page, for cards in a section. */
+    :is(.c, .v) ol {
+      display: grid;
+      gap: var(--space-s);
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    :is(.c, .v) ol a {
+      --clear: 3rem;
+      position: relative;
+      display: block;
+      padding: .75rem 1.5rem;
+      background: #FFFFFF;
+      border-radius: 20px;
+      box-shadow: var(--h-rest, 0 0 0 .5px rgb(0 0 0 / .04), 0 1px 2px rgb(0 0 0 / .04));
+      color: #000000;
+      font-size: var(--text);
+      line-height: 1.85;
+      text-align: justify;
+      text-wrap: pretty;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    :is(.c, .v) ol a:focus-visible {
+      box-shadow: var(--h-focus, 0 0 0 .5px rgb(0 0 0 / .06), 0 4px 16px rgb(0 0 0 / .16));
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      :is(.c, .v) ol a:hover:not(:focus-visible) {
+        box-shadow: var(--h-hover, 0 0 0 .5px rgb(0 0 0 / .05), 0 2px 4px rgb(0 0 0 / .06));
+      }
+    }
+
+    :is(.c, .v) ol a:active {
+      box-shadow: var(--h-press, 0 0 0 .5px rgb(0 0 0 / .05), inset 0 1px 2px rgb(0 0 0 / .08));
+    }
+
+    :is(.c, .v) ol a > span {
+      display: block;
+      max-height: calc(2 * 1.85em);
+      overflow: hidden;
+      -webkit-mask-image: linear-gradient(#000000, #000000), linear-gradient(to right, transparent var(--clear), #000000 45%);
+      mask-image: linear-gradient(#000000, #000000), linear-gradient(to right, transparent var(--clear), #000000 45%);
+      -webkit-mask-size: 100% 1.85em, 100% 1.85em;
+      mask-size: 100% 1.85em, 100% 1.85em;
+      -webkit-mask-position: 0 0, 0 1.85em;
+      mask-position: 0 0, 0 1.85em;
+      -webkit-mask-repeat: no-repeat;
+      mask-repeat: no-repeat;
+    }
+
+    :is(.c, .v) ol a > :is(svg, em) {
+      position: absolute;
+      inset-inline-end: 1.25rem;
+      inset-block-end: calc(.75rem + (1.85em - 1.5rem) / 2);
+      width: 1.5rem;
+      height: 1.5rem;
+      color: #636366;
+    }
+
+    /* Arrow 2: on a light grey disc. */
+    .o2 ol a {
+      --clear: 3.5rem;
+    }
+
+    .o2 ol a > svg {
+      inset-inline-end: 1rem;
+      inset-block-end: calc(.75rem + (1.85em - 2.25rem) / 2);
+      box-sizing: border-box;
+      width: 2.25rem;
+      height: 2.25rem;
+      padding: .375rem;
+      background: #F5F5F7;
+      border-radius: 50%;
+    }
+
+    /* Arrow 3: a grey word before it. */
+    .o3 ol a {
+      --clear: 9rem;
+    }
+
+    .o3 ol a > em {
+      display: flex;
+      align-items: center;
+      gap: .25rem;
+      width: auto;
+      font-size: 1rem;
+      font-style: normal;
+      line-height: 1.5rem;
+    }
+
+    .o3 ol a > em svg {
+      width: 1.5rem;
+      height: 1.5rem;
+    }
+
+    /* Arrow 5: none; the fade reaches the card's end. */
+    .o5 ol a {
+      --clear: 0rem;
+    }
+
+    /* Shapes 6 on. A shape that clips the card, or grows past it, draws one
+       shadow around the whole item instead. */
+    .vs ol {
+      --h-rest: none;
+      --h-hover: none;
+      --h-focus: none;
+      --h-press: none;
+    }
+
+    .vs ol li {
+      filter: drop-shadow(0 0 1px rgb(0 0 0 / .2)) drop-shadow(0 1px 3px rgb(0 0 0 / .06));
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      .vs ol li:hover:not(:has(a:focus-visible)) {
+        filter: drop-shadow(0 0 1px rgb(0 0 0 / .22)) drop-shadow(0 3px 8px rgb(0 0 0 / .1));
+      }
+    }
+
+    .vs ol li:has(a:focus-visible) {
+      filter: drop-shadow(0 0 1px rgb(0 0 0 / .2)) drop-shadow(0 4px 12px rgb(0 0 0 / .22));
+    }
+
+    .vs ol li:has(a:active) {
+      filter: drop-shadow(0 0 1px rgb(0 0 0 / .28));
+    }
+
+    /* 6. A signpost: the card's end is a point. */
+    .o6 ol a {
+      --clear: 0rem;
+      padding-inline-end: 3rem;
+      clip-path: polygon(100% 0, 2.25rem 0, 0 50%, 2.25rem 100%, 100% 100%);
+    }
+
+    /* 7. A chevron: pointed at one end, notched at the other. */
+    .o7 ol a {
+      --clear: 0rem;
+      padding-inline: 3rem;
+      border-radius: 0;
+      clip-path: polygon(100% 0, 2rem 0, 0 50%, 2rem 100%, 100% 100%, calc(100% - 2rem) 50%);
+    }
+
+    /* 8. The bottom edge points down. */
+    .o8 ol a {
+      --clear: 0rem;
+      padding-block-end: 2.5rem;
+      clip-path: polygon(0 0, 100% 0, 100% calc(100% - 1.75rem), 50% 100%, 0 calc(100% - 1.75rem));
+    }
+
+    /* 9. The page's corner folded up, where a page is turned. */
+    .o9 ol a {
+      --clear: 3.5rem;
+      clip-path: polygon(0 0, 100% 0, 100% 100%, 2.75rem 100%, 0 calc(100% - 2.75rem));
+    }
+
+    .o9 ol a::after {
+      content: "";
+      position: absolute;
+      inset-block-end: 0;
+      left: 0;
+      width: 2.75rem;
+      height: 2.75rem;
+      background: linear-gradient(to bottom left, #D8D8DE, #EDEDF1 49.5%, transparent 50%);
+    }
+
+    /* 10. Sheets beneath the card. */
+    .o10 ol {
+      gap: calc(var(--space-s) + .5rem);
+    }
+
+    .o10 ol a {
+      --sheets: 0 7px 0 -3px #FFFFFF, 0 7px 0 -2.5px rgb(0 0 0 / .16), 0 14px 0 -7px #FFFFFF, 0 14px 0 -6.5px rgb(0 0 0 / .16);
+      --h-rest: 0 0 0 .5px rgb(0 0 0 / .04), 0 1px 2px rgb(0 0 0 / .04), var(--sheets);
+      --h-hover: 0 0 0 .5px rgb(0 0 0 / .05), 0 2px 4px rgb(0 0 0 / .06), var(--sheets);
+      --h-focus: 0 0 0 .5px rgb(0 0 0 / .06), 0 4px 16px rgb(0 0 0 / .16), var(--sheets);
+      --h-press: 0 0 0 .5px rgb(0 0 0 / .05), inset 0 1px 2px rgb(0 0 0 / .08), var(--sheets);
+    }
+
+    /* 11. Page edges on the side a page turns to. */
+    .o11 ol a {
+      --pages: -7px 0 0 -3px #FFFFFF, -7px 0 0 -2.5px rgb(0 0 0 / .16), -14px 0 0 -7px #FFFFFF, -14px 0 0 -6.5px rgb(0 0 0 / .16);
+      --h-rest: 0 0 0 .5px rgb(0 0 0 / .04), 0 1px 2px rgb(0 0 0 / .04), var(--pages);
+      --h-hover: 0 0 0 .5px rgb(0 0 0 / .05), 0 2px 4px rgb(0 0 0 / .06), var(--pages);
+      --h-focus: 0 0 0 .5px rgb(0 0 0 / .06), 0 4px 16px rgb(0 0 0 / .16), var(--pages);
+      --h-press: 0 0 0 .5px rgb(0 0 0 / .05), inset 0 1px 2px rgb(0 0 0 / .08), var(--pages);
+    }
+
+    /* 12. A round button grown from the card's end. */
+    .o12 ol {
+      gap: calc(var(--space-s) + 1.25rem);
+    }
+
+    .o12 ol a {
+      --clear: 4.5rem;
+    }
+
+    .o12 ol a > svg {
+      inset-inline-end: 1.25rem;
+      inset-block-end: -1.25rem;
+      box-sizing: border-box;
+      width: 3rem;
+      height: 3rem;
+      padding: .75rem;
+      background: #FFFFFF;
+      border-radius: 50%;
+      color: #000000;
+    }
+
+    /* 13. A tab beneath the card with the words. */
+    .o13 ol {
+      gap: calc(var(--space-s) + 2rem);
+    }
+
+    .o13 ol a {
+      --clear: 0rem;
+    }
+
+    .o13 ol a > em {
+      inset-block: calc(100% - 1px) auto;
+      inset-inline-end: 1.5rem;
+      width: auto;
+      height: auto;
+      padding: 0 1rem .25rem;
+      background: #FFFFFF;
+      border-radius: 0 0 12px 12px;
+      font-size: 1rem;
+      font-style: normal;
+      line-height: 1.75rem;
+    }
+
+    /* 14. A reading ribbon out of the card's bottom. */
+    .o14 ol {
+      gap: calc(var(--space-s) + 1.5rem);
+    }
+
+    .o14 ol a::after {
+      content: "";
+      position: absolute;
+      inset-block-start: 100%;
+      inset-inline-end: 2rem;
+      width: .75rem;
+      height: 1.75rem;
+      background: #1C1C1E;
+      clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 75%, 0 100%);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="../index.html"><svg viewBox="0 0 256 256" aria-hidden="true" focusable="false"><path d="M100,104a4,4,0,0,1,4-4h64a4,4,0,0,1,0,8H104A4,4,0,0,1,100,104Zm4,36h64a4,4,0,0,0,0-8H104a4,4,0,0,0,0,8Zm124,52a28,28,0,0,1-28,28H88a28,28,0,0,1-28-28V64a20,20,0,0,0-40,0c0,7.78,6.34,12.75,6.4,12.8a4,4,0,1,1-4.8,6.4C21.21,82.91,12,75.86,12,64A28,28,0,0,1,40,36H176a28,28,0,0,1,28,28V172h12a4,4,0,0,1,2.4.8C218.79,173.09,228,180.14,228,192Zm-120,0c0-7.78-6.34-12.75-6.4-12.8A4,4,0,0,1,104,172h92V64a20,20,0,0,0-20-20H59.57A27.9,27.9,0,0,1,68,64V192a20,20,0,0,0,40,0Zm112,0c0-6-3.74-10.3-5.5-12H112.61A23.31,23.31,0,0,1,116,192a27.94,27.94,0,0,1-8.42,20H200A20,20,0,0,0,220,192Z"/></svg>أرشيف الحديث</a>
+    <button type="button" popovertarget="menu" aria-label="القائمة">
+      <svg viewBox="0 0 256 256" aria-hidden="true" focusable="false"><path d="M220,128a4,4,0,0,1-4,4H40a4,4,0,0,1,0-8H216A4,4,0,0,1,220,128ZM40,68H216a4,4,0,0,0,0-8H40a4,4,0,0,0,0,8ZM216,188H40a4,4,0,0,0,0,8H216a4,4,0,0,0,0-8Z"/></svg>
+    </button>
+    <nav id="menu" popover>
+      <button type="button" popovertarget="menu" popovertargetaction="hide" aria-label="إغلاق القائمة">
+        <svg viewBox="0 0 256 256" aria-hidden="true" focusable="false"><path d="M202.83,197.17a4,4,0,0,1-5.66,5.66L128,133.66,58.83,202.83a4,4,0,0,1-5.66-5.66L122.34,128,53.17,58.83a4,4,0,0,1,5.66-5.66L128,122.34l69.17-69.17a4,4,0,1,1,5.66,5.66L133.66,128Z"/></svg>
+      </button>
+      <ul>
+        <li><a href="../index.html"><svg viewBox="0 0 256 256" aria-hidden="true" focusable="false"><path d="M216.49,111.51l-80-80a12,12,0,0,0-17,0l-80,80A12,12,0,0,0,36,120v96a4,4,0,0,0,4,4h64a4,4,0,0,0,4-4V156h40v60a4,4,0,0,0,4,4h64a4,4,0,0,0,4-4V120A12,12,0,0,0,216.49,111.51ZM212,212H156V152a4,4,0,0,0-4-4H104a4,4,0,0,0-4,4v60H44V120a4,4,0,0,1,1.17-2.83l80-80a4,4,0,0,1,5.66,0l80,80A4,4,0,0,1,212,120Z"/></svg>الرئيسية</a></li>
+        <li><a href="../categories.html"><svg viewBox="0 0 256 256" aria-hidden="true" focusable="false"><path d="M104,44H56A12,12,0,0,0,44,56v48a12,12,0,0,0,12,12h48a12,12,0,0,0,12-12V56A12,12,0,0,0,104,44Zm4,60a4,4,0,0,1-4,4H56a4,4,0,0,1-4-4V56a4,4,0,0,1,4-4h48a4,4,0,0,1,4,4Zm92-60H152a12,12,0,0,0-12,12v48a12,12,0,0,0,12,12h48a12,12,0,0,0,12-12V56A12,12,0,0,0,200,44Zm4,60a4,4,0,0,1-4,4H152a4,4,0,0,1-4-4V56a4,4,0,0,1,4-4h48a4,4,0,0,1,4,4ZM104,140H56a12,12,0,0,0-12,12v48a12,12,0,0,0,12,12h48a12,12,0,0,0,12-12V152A12,12,0,0,0,104,140Zm4,60a4,4,0,0,1-4,4H56a4,4,0,0,1-4-4V152a4,4,0,0,1,4-4h48a4,4,0,0,1,4,4Zm92-60H152a12,12,0,0,0-12,12v48a12,12,0,0,0,12,12h48a12,12,0,0,0,12-12V152A12,12,0,0,0,200,140Zm4,60a4,4,0,0,1-4,4H152a4,4,0,0,1-4-4V152a4,4,0,0,1,4-4h48a4,4,0,0,1,4,4Z"/></svg>الأقسام</a></li>
+        <li><a href="../books.html"><svg viewBox="0 0 256 256" aria-hidden="true" focusable="false"><path d="M104,36H56A12,12,0,0,0,44,48V208a12,12,0,0,0,12,12h48a12,12,0,0,0,12-12V48A12,12,0,0,0,104,36ZM52,76h56V180H52Zm4-32h48a4,4,0,0,1,4,4V68H52V48A4,4,0,0,1,56,44Zm48,168H56a4,4,0,0,1-4-4V188h56v20A4,4,0,0,1,104,212Zm123.74-16.62L194.55,37.57a12,12,0,0,0-14.25-9.3L133.49,38.32a12.1,12.1,0,0,0-9.23,14.3l33.19,157.81a12,12,0,0,0,14.25,9.3l46.81-10.06h0A12.08,12.08,0,0,0,227.74,195.38Zm-83.21-85.27,54.63-11.73,15,71.07-54.63,11.74Zm-6.64-31.56,54.64-11.74,5,23.74-54.64,11.73Zm-2.71-32.4L182,36.09a4,4,0,0,1,.84-.09,3.94,3.94,0,0,1,2.14.64,4,4,0,0,1,1.76,2.58L190.88,59,136.24,70.72,132.09,51A4.07,4.07,0,0,1,135.18,46.15Zm81.65,155.7L170,211.91a4,4,0,0,1-3-.55,4,4,0,0,1-1.76-2.58L161.12,189l54.64-11.73L219.91,197A4.07,4.07,0,0,1,216.83,201.85Z"/></svg>الكتب</a></li>
+      </ul>
+    </nav>
+  </header>
+  <main>
+    <h1>تصاميم البطاقات</h1>
+    <ul class="toc">
+      <li><a href="#part-art">من الخيار ٤١: الفن الإسلامي</a></li>
+      <li><a href="#part-frame">ألوان الإطار المذهّب</a></li>
+      <li><a href="#part-0">البسيطة</a></li>
+      <li><a href="#part-1">الأسود المذهّب بأشكال الكتب</a></li>
+      <li><a href="#part-2">بطاقة الحديث: السهم والشكل</a></li>
+      <li><a href="#part-3">التصاميم السابقة</a></li>
+    </ul>
+    <section aria-labelledby="part-art">
+      <h2 id="part-art">من الخيار ٤١: الفن الإسلامي</h2>
+      <p>الأخضر والذهب من الخيار الحادي والأربعين، وفي كل خيار شيء واحد من فنون الكتاب الإسلامي: الجداول والأركان والشمسة والنقش والحفر والمحراب.</p>
+    <section class="c fr ia c51" aria-labelledby="c51">
+      <h3 id="c51">٥١. الإطار المزدوج</h3>
+      <p>جدولان مذهّبان بدل الواحد، كإطارات الصفحات في المخطوطات.</p>
+      <ul class="aqsam">
+        <li><a href="../category.html"><span>الإيمان</span></a></li>
+        <li><a href="../category.html"><span>الطهارة</span></a></li>
+        <li><a href="../category.html"><span>الصلاة</span></a></li>
+        <li><a href="../category.html"><span>الزكاة</span></a></li>
+      </ul>
+      <ul class="kutub">
+        <li><a href="../book.html"><span>الكتاب التجريبي الأول</span><span>مؤلف تجريبي</span></a></li>
+        <li><a href="../book.html"><span>الكتاب التجريبي الثاني</span><span>مؤلف تجريبي</span></a></li>
+      </ul>
+      <ol>
+        <li><a href="../hadith.html"><span>عَنِ الرَّاوِي التَّجْرِيبِيِّ قَالَ: هَذَا نَصٌّ تَجْرِيبِيٌّ يُوضَعُ فِي مَكَانِ نَصِّ الْحَدِيثِ لِاخْتِبَارِ شَكْلِ الصَّفْحَةِ، وَلَيْسَ حَدِيثًا وَلَا مَنْقُولًا عَنْ كِتَابٍ. يُرَادُ بِهِ قِيَاسُ طُولِ السَّطْرِ وَالْمَسَافَةِ بَيْنَ الْأَسْطُرِ، وَوُضُوحِ الْحَرَكَاتِ فَوْقَ الْحُرُوفِ وَتَحْتَهَا</span><svg viewBox="0 0 256 256" aria-hidden="true" focusable="false"><path d="M220,128a4,4,0,0,1-4,4H49.66l65.17,65.17a4,4,0,0,1-5.66,5.66l-72-72a4,4,0,0,1,0-5.66l72-72a4,4,0,0,1,5.66,5.66L49.66,124H216A4,4,0,0,1,220,128Z"/></svg></a></li>
+      </ol>
+    </section>
+    <section class="c fr ia c52" aria-labelledby="c52">
+      <h3 id="c52">٥٢. الإطار المدرّج</h3>
+      <p>إطار بزوايا مدرّجة، والأقسام في خرطوشة مدرّجة الزوايا.</p>
+      <ul class="aqsam">
+        <li><a href="../category.html"><span>الإيمان</span></a></li>
+        <li><a href="../category.html"><span>الطهارة</span></a></li>
+        <li><a href="../category.html"><span>الصلاة</span></a></li>
+        <li><a href="../category.html"><span>الزكاة</span></a></li>
+      </ul>
+      <ul class="kutub">
+        <li><a href="../book.html"><span>الكتاب التجريبي الأول</span><span>مؤلف تجريبي</span></a></li>
+        <li><a href="../book.html"><span>الكتاب التجريبي الثاني</span><span>مؤلف تجريبي</span></a></li>
+      </ul>
+      <ol>
+        <li><a href="../hadith.html"><span>عَنِ الرَّاوِي التَّجْرِيبِيِّ قَالَ: هَذَا نَصٌّ تَجْرِيبِيٌّ يُوضَعُ فِي مَكَانِ نَصِّ الْحَدِيثِ لِاخْتِبَارِ شَكْلِ الصَّفْحَةِ، وَلَيْسَ حَدِيثًا وَلَا مَنْقُولًا عَنْ كِتَابٍ. يُرَادُ بِهِ قِيَاسُ طُولِ السَّطْرِ وَالْمَسَافَةِ بَيْنَ الْأَسْطُرِ، وَوُضُوحِ الْحَرَكَاتِ فَوْقَ الْحُرُوفِ وَتَحْتَهَا</span><svg viewBox="0 0 256 256" aria-hidden="true" focusable="false"><path d="M220,128a4,4,0,0,1-4,4H49.66l65.17,65.17a4,4,0,0,1-5.66,5.66l-72-72a4,4,0,0,1,0-5.66l72-72a4,4,0,0,1,5.66,5.66L49.66,124H216A4,4,0,0,1,220,128Z"/></svg></a></li>
+      </ol>
+    </section>
+    <section class="c fr ia c53" aria-labelledby="c53">
+      <h3 id="c53">٥٣. الأركان</h3>
+      <p>أرباع دوائر مذهّبة في زوايا الإطار، كأركان جلود الكتب القديمة.</p>
+      <ul class="aqsam">
+        <li><a href="../category.html"><span>الإيمان</span></a></li>
+        <li><a href="../category.html"><span>الطهارة</span></a></li>
+        <li><a href="../category.html"><span>الصلاة</span></a></li>
+        <li><a href="../category.html"><span>الزكاة</span></a></li>
+      </ul>
+      <ul class="kutub">
+        <li><a href="../book.html"><span>الكتاب التجريبي الأول</span><span>مؤلف تجريبي</span></a></li>
+        <li><a href="../book.html"><span>الكتاب التجريبي الثاني</span><span>مؤلف تجريبي</span></a></li>
+      </ul>
+      <ol>
+        <li><a href="../hadith.html"><span>عَنِ الرَّاوِي التَّجْرِيبِيِّ قَالَ: هَذَا نَصٌّ تَجْرِيبِيٌّ يُوضَعُ فِي مَكَانِ نَصِّ الْحَدِيثِ لِاخْتِبَارِ شَكْلِ الصَّفْحَةِ، وَلَيْسَ حَدِيثًا وَلَا مَنْقُولًا عَنْ كِتَابٍ. يُرَادُ بِهِ قِيَاسُ طُولِ السَّطْرِ وَالْمَسَافَةِ بَيْنَ الْأَسْطُرِ، وَوُضُوحِ الْحَرَكَاتِ فَوْقَ الْحُرُوفِ وَتَحْتَهَا</span><svg viewBox="0 0 256 256" aria-hidden="true" focusable="false"><path d="M220,128a4,4,0,0,1-4,4H49.66l65.17,65.17a4,4,0,0,1-5.66,5.66l-72-72a4,4,0,0,1,0-5.66l72-72a4,4,0,0,1,5.66,5.66L49.66,124H216A4,4,0,0,1,220,128Z"/></svg></a></li>
+      </ol>
+    </section>
+    <section class="c fr ia c54" aria-labelledby="c54">
+      <h3 id="c54">٥٤. الشمسة</h3>
+      <p>العنوان في شمسة بيضوية وسط الغلاف، كما في التجليد الإسلامي القديم.</p>
+      <ul class="aqsam">
+        <li><a href="../category.html"><span>الإيمان</span></a></li>
+        <li><a href="../category.html"><span>الطهارة</span></a></li>
+        <li><a href="../category.html"><span>الصلاة</span></a></li>
+        <li><a href="../category.html"><span>الزكاة</span></a></li>
+      </ul>
+      <ul class="kutub">
+        <li><a href="../book.html"><span>الكتاب التجريبي الأول</span><span>مؤلف تجريبي</span></a></li>
+        <li><a href="../book.html"><span>الكتاب التجريبي الثاني</span><span>مؤلف تجريبي</span></a></li>
+      </ul>
+      <ol>
+        <li><a href="../hadith.html"><span>عَنِ الرَّاوِي التَّجْرِيبِيِّ قَالَ: هَذَا نَصٌّ تَجْرِيبِيٌّ يُوضَعُ فِي مَكَانِ نَصِّ الْحَدِيثِ لِاخْتِبَارِ شَكْلِ الصَّفْحَةِ، وَلَيْسَ حَدِيثًا وَلَا مَنْقُولًا عَنْ كِتَابٍ. يُرَادُ بِهِ قِيَاسُ طُولِ السَّطْرِ وَالْمَسَافَةِ بَيْنَ الْأَسْطُرِ، وَوُضُوحِ الْحَرَكَاتِ فَوْقَ الْحُرُوفِ وَتَحْتَهَا</span><svg viewBox="0 0 256 256" aria-hidden="true" focusable="false"><path d="M220,128a4,4,0,0,1-4,4H49.66l65.17,65.17a4,4,0,0,1-5.66,5.66l-72-72a4,4,0,0,1,0-5.66l72-72a4,4,0,0,1,5.66,5.66L49.66,124H216A4,4,0,0,1,220,128Z"/></svg></a></li>
+      </ol>
+    </section>
+    <section class="c fr ia c55" aria-labelledby="c55">
+      <h3 id="c55">٥٥. النقش</h3>
+      <p>نقش هندسي خفيف من نجوم ثمانية داخل الإطار، كالخشب المحفور.</p>
+      <ul class="aqsam">
+        <li><a href="../category.html"><span>الإيمان</span></a></li>
+        <li><a href="../category.html"><span>الطهارة</span></a></li>
+        <li><a href="../category.html"><span>الصلاة</span></a></li>
+        <li><a href="../category.html"><span>الزكاة</span></a></li>
+      </ul>
+      <ul class="kutub">
+        <li><a href="../book.html"><span>الكتاب التجريبي الأول</span><span>مؤلف تجريبي</span></a></li>
+        <li><a href="../book.html"><span>الكتاب التجريبي الثاني</span><span>مؤلف تجريبي</span></a></li>
+      </ul>
+      <ol>
+        <li><a href="../hadith.html"><span>عَنِ الرَّاوِي التَّجْرِيبِيِّ قَالَ: هَذَا نَصٌّ تَجْرِيبِيٌّ يُوضَعُ فِي مَكَانِ نَصِّ الْحَدِيثِ لِاخْتِبَارِ شَكْلِ الصَّفْحَةِ، وَلَيْسَ حَدِيثًا وَلَا مَنْقُولًا عَنْ كِتَابٍ. يُرَادُ بِهِ قِيَاسُ طُولِ السَّطْرِ وَالْمَسَافَةِ بَيْنَ الْأَسْطُرِ، وَوُضُوحِ الْحَرَكَاتِ فَوْقَ الْحُرُوفِ وَتَحْتَهَا</span><svg viewBox="0 0 256 256" aria-hidden="true" focusable="false"><path d="M220,128a4,4,0,0,1-4,4H49.66l65.17,65.17a4,4,0,0,1-5.66,5.66l-72-72a4,4,0,0,1,0-5.66l72-72a4,4,0,0,1,5.66,5.66L49.66,124H216A4,4,0,0,1,220,128Z"/></svg></a></li>
+      </ol>
+    </section>
+    <section class="c fr ia c56" aria-labelledby="c56">
+      <h3 id="c56">٥٦. الحفر</h3>
+      <p>الإطار محفور في الجلد بلا ذهب، والعنوان وحده مذهّب.</p>
+      <ul class="aqsam">
+        <li><a href="../category.html"><span>الإيمان</span></a></li>
+        <li><a href="../category.html"><span>الطهارة</span></a></li>
+        <li><a href="../category.html"><span>الصلاة</span></a></li>
+        <li><a href="../category.html"><span>الزكاة</span></a></li>
+      </ul>
+      <ul class="kutub">
+        <li><a href="../book.html"><span>الكتاب التجريبي الأول</span><span>مؤلف تجريبي</span></a></li>
+        <li><a href="../book.html"><span>الكتاب التجريبي الثاني</span><span>مؤلف تجريبي</span></a></li>
+      </ul>
+      <ol>
+        <li><a href="../hadith.html"><span>عَنِ الرَّاوِي التَّجْرِيبِيِّ قَالَ: هَذَا نَصٌّ تَجْرِيبِيٌّ يُوضَعُ فِي مَكَانِ نَصِّ الْحَدِيثِ لِاخْتِبَارِ شَكْلِ الصَّفْحَةِ، وَلَيْسَ حَدِيثًا وَلَا مَنْقُولًا عَنْ كِتَابٍ. يُرَادُ بِهِ قِيَاسُ طُولِ السَّطْرِ وَالْمَسَافَةِ بَيْنَ الْأَسْطُرِ، وَوُضُوحِ الْحَرَكَاتِ فَوْقَ الْحُرُوفِ وَتَحْتَهَا</span><svg viewBox="0 0 256 256" aria-hidden="true" focusable="false"><path d="M220,128a4,4,0,0,1-4,4H49.66l65.17,65.17a4,4,0,0,1-5.66,5.66l-72-72a4,4,0,0,1,0-5.66l72-72a4,4,0,0,1,5.66,5.66L49.66,124H216A4,4,0,0,1,220,128Z"/></svg></a></li>
+      </ol>
+    </section>
+    <section class="c fr ia c57" aria-labelledby="c57">
+      <h3 id="c57">٥٧. رقعة العنوان المؤطّرة</h3>
+      <p>العنوان في خرطوشة صغيرة مؤطّرة وسط الكتاب.</p>
+      <ul class="aqsam">
+        <li><a href="../category.html"><span>الإيمان</span></a></li>
+        <li><a href="../category.html"><span>الطهارة</span></a></li>
+        <li><a href="../category.html"><span>الصلاة</span></a></li>
+        <li><a href="../category.html"><span>الزكاة</span></a></li>
+      </ul>
+      <ul class="kutub">
+        <li><a href="../book.html"><span>الكتاب التجريبي الأول</span><span>مؤلف تجريبي</span></a></li>
+        <li><a href="../book.html"><span>الكتاب التجريبي الثاني</span><span>مؤلف تجريبي</span></a></li>
+      </ul>
+      <ol>
+        <li><a href="../hadith.html"><span>عَنِ الرَّاوِي التَّجْرِيبِيِّ قَالَ: هَذَا نَصٌّ تَجْرِيبِيٌّ يُوضَعُ فِي مَكَانِ نَصِّ الْحَدِيثِ لِاخْتِبَارِ شَكْلِ الصَّفْحَةِ، وَلَيْسَ حَدِيثًا وَلَا مَنْقُولًا عَنْ كِتَابٍ. يُرَادُ بِهِ قِيَاسُ طُولِ السَّطْرِ وَالْمَسَافَةِ بَيْنَ الْأَسْطُرِ، وَوُضُوحِ الْحَرَكَاتِ فَوْقَ الْحُرُوفِ وَتَحْتَهَا</span><svg viewBox="0 0 256 256" aria-hidden="true" focusable="false"><path d="M220,128a4,4,0,0,1-4,4H49.66l65.17,65.17a4,4,0,0,1-5.66,5.66l-72-72a4,4,0,0,1,0-5.66l72-72a4,4,0,0,1,5.66,5.66L49.66,124H216A4,4,0,0,1,220,128Z"/></svg></a></li>
+      </ol>
+    </section>
+    <section class="c fr ia c58" aria-labelledby="c58">
+      <h3 id="c58">٥٨. الشريط المزخرف</h3>
+      <p>شريط من معيّنات صغيرة بين جدولين، كحواشي التذهيب. أكثرها زخرفة.</p>
+      <ul class="aqsam">
+        <li><a href="../category.html"><span>الإيمان</span></a></li>
+        <li><a href="../category.html"><span>الطهارة</span></a></li>
+        <li><a href="../category.html"><span>الصلاة</span></a></li>
+        <li><a href="../category.html"><span>الزكاة</span></a></li>
+      </ul>
+      <ul class="kutub">
+        <li><a href="../book.html"><span>الكتاب التجريبي الأول</span><span>مؤلف تجريبي</span></a></li>
+        <li><a href="../book.html"><span>الكتاب التجريبي الثاني</span><span>مؤلف تجريبي</span></a></li>
+      </ul>
+      <ol>
+        <li><a href="../hadith.html"><span>عَنِ الرَّاوِي التَّجْرِيبِيِّ قَالَ: هَذَا نَصٌّ تَجْرِيبِيٌّ يُوضَعُ فِي مَكَانِ نَصِّ الْحَدِيثِ لِاخْتِبَارِ شَكْلِ الصَّفْحَةِ، وَلَيْسَ حَدِيثًا وَلَا مَنْقُولًا عَنْ كِتَابٍ. يُرَادُ بِهِ قِيَاسُ طُولِ السَّطْرِ وَالْمَسَافَةِ بَيْنَ الْأَسْطُرِ، وَوُضُوحِ الْحَرَكَاتِ فَوْقَ الْحُرُوفِ وَتَحْتَهَا</span><svg viewBox="0 0 256 256" aria-hidden="true" focusable="false"><path d="M220,128a4,4,0,0,1-4,4H49.66l65.17,65.17a4,4,0,0,1-5.66,5.66l-72-72a4,4,0,0,1,0-5.66l72-72a4,4,0,0,1,5.66,5.66L49.66,124H216A4,4,0,0,1,220,128Z"/></svg></a></li>
+      </ol>
+    </section>
+    <section class="c fr ia c59" aria-labelledby="c59">
+      <h3 id="c59">٥٩. المحراب</h3>
+      <p>الأقسام أقواس مدبّبة كالمحاريب والنوافذ، والكتب بالإطار المذهّب.</p>
+      <ul class="aqsam">
+        <li><a href="../category.html"><span>الإيمان</span></a></li>
+        <li><a href="../category.html"><span>الطهارة</span></a></li>
+        <li><a href="../category.html"><span>الصلاة</span></a></li>
+        <li><a href="../category.html"><span>الزكاة</span></a></li>
+      </ul>
+      <ul class="kutub">
+        <li><a href="../book.html"><span>الكتاب التجريبي الأول</span><span>مؤلف تجريبي</span></a></li>
+        <li><a href="../book.html"><span>الكتاب التجريبي الثاني</span><span>مؤلف تجريبي</span></a></li>
+      </ul>
+      <ol>
+        <li><a href="../hadith.html"><span>عَنِ الرَّاوِي التَّجْرِيبِيِّ قَالَ: هَذَا نَصٌّ تَجْرِيبِيٌّ يُوضَعُ فِي مَكَانِ نَصِّ الْحَدِيثِ لِاخْتِبَارِ شَكْلِ الصَّفْحَةِ، وَلَيْسَ حَدِيثًا وَلَا مَنْقُولًا عَنْ كِتَابٍ. يُرَادُ بِهِ قِيَاسُ طُولِ السَّطْرِ وَالْمَسَافَةِ بَيْنَ الْأَسْطُرِ، وَوُضُوحِ الْحَرَكَاتِ فَوْقَ الْحُرُوفِ وَتَحْتَهَا</span><svg viewBox="0 0 256 256" aria-hidden="true" focusable="false"><path d="M220,128a4,4,0,0,1-4,4H49.66l65.17,65.17a4,4,0,0,1-5.66,5.66l-72-72a4,4,0,0,1,0-5.66l72-72a4,4,0,0,1,5.66,5.66L49.66,124H216A4,4,0,0,1,220,128Z"/></svg></a></li>
+      </ol>
+    </section>
+    <section class="c fr ia c60" aria-labelledby="c60">
+      <h3 id="c60">٦٠. الغلاف المزخرف</h3>
+      <p>الجدولان والأركان والنقش معًا، للمقارنة بأكثر ما يمكن.</p>
+      <ul class="aqsam">
+        <li><a href="../category.html"><span>الإيمان</span></a></li>
+        <li><a href="../category.html"><span>الطهارة</span></a></li>
+        <li><a href="../category.html"><span>الصلاة</span></a></li>
+        <li><a href="../category.html"><span>الزكاة</span></a></li>
+      </ul>
+      <ul class="kutub">
+        <li><a href="../book.html"><span>الكتاب التجريبي الأول</span><span>مؤلف تجريبي</span></a></li>
+        <li><a href="../book.html"><span>الكتاب التجريبي الثاني</span><span>مؤلف تجريبي</span></a></li>
+      </ul>
+      <ol>
+        <li><a href="../hadith.html"><span>عَنِ الرَّاوِي التَّجْرِيبِيِّ قَالَ: هَذَا نَصٌّ تَجْرِيبِيٌّ يُوضَعُ فِي مَكَانِ نَصِّ الْحَدِيثِ لِاخْتِبَارِ شَكْلِ الصَّفْحَةِ، وَلَيْسَ حَدِيثًا وَلَا مَنْقُولًا عَنْ كِتَابٍ. يُرَادُ بِهِ قِيَاسُ طُولِ السَّطْرِ وَالْمَسَافَةِ بَيْنَ الْأَسْطُرِ، وَوُضُوحِ الْحَرَكَاتِ فَوْقَ الْحُرُوفِ وَتَحْتَهَا</span><svg viewBox="0 0 256 256" aria-hidden="true" focusable="false"><path d="M220,128a4,4,0,0,1-4,4H49.66l65.17,65.17a4,4,0,0,1-5.66,5.66l-72-72a4,4,0,0,1,0-5.66l72-72a4,4,0,0,1,5.66,5.66L49.66,124H216A4,4,0,0,1,220,128Z"/></svg></a></li>
+      </ol>
+    </section>
+    </section>
+    <section aria-labelledby="part-frame">
+      <h2 id="part-frame">ألوان الإطار المذهّب</h2>
+      <p>الخيار الخامس والعشرون بألوان أخرى: إطار رفيع داخل الكتاب وداخل خرطوشة القسم، بألوان التجليد القديمة وبألوان الموقع.</p>
+    <section class="c fr c41" aria-labelledby="c41">
+      <h3 id="c41">٤١. الأخضر المؤطّر</h3>
+      <p>تجليد أخضر بإطار مذهّب وعنوان مذهّب.</p>
+      <ul class="aqsam">
+        <li><a href="../category.html"><span>الإيمان</span></a></li>
+        <li><a href="../category.html"><span>الطهارة</span></a></li>
+        <li><a href="../category.html"><span>الصلاة</span></a></li>
+        <li><a href="../category.html"><span>الزكاة</span></a></li>
+      </ul>
+      <ul class="kutub">
+        <li><a href="../book.html"><span>الكتاب التجريبي الأول</span><span>مؤلف تجريبي</span></a></li>
+        <li><a href="../book.html"><span>الكتاب التجريبي الثاني</span><span>مؤلف تجريبي</span></a></li>
+      </ul>
+      <ol>
+        <li><a href="../hadith.html"><span>عَنِ الرَّاوِي التَّجْرِيبِيِّ قَالَ: هَذَا نَصٌّ تَجْرِيبِيٌّ يُوضَعُ فِي مَكَانِ نَصِّ الْحَدِيثِ لِاخْتِبَارِ شَكْلِ الصَّفْحَةِ، وَلَيْسَ حَدِيثًا وَلَا مَنْقُولًا عَنْ كِتَابٍ. يُرَادُ بِهِ قِيَاسُ طُولِ السَّطْرِ وَالْمَسَافَةِ بَيْنَ الْأَسْطُرِ، وَوُضُوحِ الْحَرَكَاتِ فَوْقَ الْحُرُوفِ وَتَحْتَهَا</span><svg viewBox="0 0 256 256" aria-hidden="true" focusable="false"><path d="M220,128a4,4,0,0,1-4,4H49.66l65.17,65.17a4,4,0,0,1-5.66,5.66l-72-72a4,4,0,0,1,0-5.66l72-72a4,4,0,0,1,5.66,5.66L49.66,124H216A4,4,0,0,1,220,128Z"/></svg></a></li>
+      </ol>
+    </section>
+    <section class="c fr c42" aria-labelledby="c42">
+      <h3 id="c42">٤٢. العنابي المؤطّر</h3>
+      <p>تجليد عنابي بإطار مذهّب وعنوان مذهّب.</p>
+      <ul class="aqsam">
+        <li><a href="../category.html"><span>الإيمان</span></a></li>
+        <li><a href="../category.html"><span>الطهارة</span></a></li>
+        <li><a href="../category.html"><span>الصلاة</span></a></li>
+        <li><a href="../category.html"><span>الزكاة</span></a></li>
+      </ul>
+      <ul class="kutub">
+        <li><a href="../book.html"><span>الكتاب التجريبي الأول</span><span>مؤلف تجريبي</span></a></li>
+        <li><a href="../book.html"><span>الكتاب التجريبي الثاني</span><span>مؤلف تجريبي</span></a></li>
+      </ul>
+      <ol>
+        <li><a href="../hadith.html"><span>عَنِ الرَّاوِي التَّجْرِيبِيِّ قَالَ: هَذَا نَصٌّ تَجْرِيبِيٌّ يُوضَعُ فِي مَكَانِ نَصِّ الْحَدِيثِ لِاخْتِبَارِ شَكْلِ الصَّفْحَةِ، وَلَيْسَ حَدِيثًا وَلَا مَنْقُولًا عَنْ كِتَابٍ. يُرَادُ بِهِ قِيَاسُ طُولِ السَّطْرِ وَالْمَسَافَةِ بَيْنَ الْأَسْطُرِ، وَوُضُوحِ الْحَرَكَاتِ فَوْقَ الْحُرُوفِ وَتَحْتَهَا</span><svg viewBox="0 0 256 256" aria-hidden="true" focusable="false"><path d="M220,128a4,4,0,0,1-4,4H49.66l65.17,65.17a4,4,0,0,1-5.66,5.66l-72-72a4,4,0,0,1,0-5.66l72-72a4,4,0,0,1,5.66,5.66L49.66,124H216A4,4,0,0,1,220,128Z"/></svg></a></li>
+      </ol>
+    </section>
+    <section class="c fr c43" aria-labelledby="c43">
+      <h3 id="c43">٤٣. الكحلي المؤطّر</h3>
+      <p>تجليد كحلي بإطار مذهّب وعنوان مذهّب.</p>
+      <ul class="aqsam">
+        <li><a href="../category.html"><span>الإيمان</span></a></li>
+        <li><a href="../category.html"><span>الطهارة</span></a></li>
+        <li><a href="../category.html"><span>الصلاة</span></a></li>
+        <li><a href="../category.html"><span>الزكاة</span></a></li>
+      </ul>
+      <ul class="kutub">
+        <li><a href="../book.html"><span>الكتاب التجريبي الأول</span><span>مؤلف تجريبي</span></a></li>
+        <li><a href="../book.html"><span>الكتاب التجريبي الثاني</span><span>مؤلف تجريبي</span></a></li>
+      </ul>
+      <ol>
+        <li><a href="../hadith.html"><span>عَنِ الرَّاوِي التَّجْرِيبِيِّ قَالَ: هَذَا نَصٌّ تَجْرِيبِيٌّ يُوضَعُ فِي مَكَانِ نَصِّ الْحَدِيثِ لِاخْتِبَارِ شَكْلِ الصَّفْحَةِ، وَلَيْسَ حَدِيثًا وَلَا مَنْقُولًا عَنْ كِتَابٍ. يُرَادُ بِهِ قِيَاسُ طُولِ السَّطْرِ وَالْمَسَافَةِ بَيْنَ الْأَسْطُرِ، وَوُضُوحِ الْحَرَكَاتِ فَوْقَ الْحُرُوفِ وَتَحْتَهَا</span><svg viewBox="0 0 256 256" aria-hidden="true" focusable="false"><path d="M220,128a4,4,0,0,1-4,4H49.66l65.17,65.17a4,4,0,0,1-5.66,5.66l-72-72a4,4,0,0,1,0-5.66l72-72a4,4,0,0,1,5.66,5.66L49.66,124H216A4,4,0,0,1,220,128Z"/></svg></a></li>
+      </ol>
+    </section>
+    <section class="c fr c44" aria-labelledby="c44">
+      <h3 id="c44">٤٤. البني المؤطّر</h3>
+      <p>تجليد بني كالجلد القديم بإطار مذهّب.</p>
+      <ul class="aqsam">
+        <li><a href="../category.html"><span>الإيمان</span></a></li>
+        <li><a href="../category.html"><span>الطهارة</span></a></li>
+        <li><a href="../category.html"><span>الصلاة</span></a></li>
+        <li><a href="../category.html"><span>الزكاة</span></a></li>
+      </ul>
+      <ul class="kutub">
+        <li><a href="../book.html"><span>الكتاب التجريبي الأول</span><span>مؤلف تجريبي</span></a></li>
+        <li><a href="../book.html"><span>الكتاب التجريبي الثاني</span><span>مؤلف تجريبي</span></a></li>
+      </ul>
+      <ol>
+        <li><a href="../hadith.html"><span>عَنِ الرَّاوِي التَّجْرِيبِيِّ قَالَ: هَذَا نَصٌّ تَجْرِيبِيٌّ يُوضَعُ فِي مَكَانِ نَصِّ الْحَدِيثِ لِاخْتِبَارِ شَكْلِ الصَّفْحَةِ، وَلَيْسَ حَدِيثًا وَلَا مَنْقُولًا عَنْ كِتَابٍ. يُرَادُ بِهِ قِيَاسُ طُولِ السَّطْرِ وَالْمَسَافَةِ بَيْنَ الْأَسْطُرِ، وَوُضُوحِ الْحَرَكَاتِ فَوْقَ الْحُرُوفِ وَتَحْتَهَا</span><svg viewBox="0 0 256 256" aria-hidden="true" focusable="false"><path d="M220,128a4,4,0,0,1-4,4H49.66l65.17,65.17a4,4,0,0,1-5.66,5.66l-72-72a4,4,0,0,1,0-5.66l72-72a4,4,0,0,1,5.66,5.66L49.66,124H216A4,4,0,0,1,220,128Z"/></svg></a></li>
+      </ol>
+    </section>
+    <section class="c fr c45" aria-labelledby="c45">
+      <h3 id="c45">٤٥. الفحمي المؤطّر</h3>
+      <p>رمادي داكن بإطار مذهّب، أهدأ من الأسود.</p>
+      <ul class="aqsam">
+        <li><a href="../category.html"><span>الإيمان</span></a></li>
+        <li><a href="../category.html"><span>الطهارة</span></a></li>
+        <li><a href="../category.html"><span>الصلاة</span></a></li>
+        <li><a href="../category.html"><span>الزكاة</span></a></li>
+      </ul>
+      <ul class="kutub">
+        <li><a href="../book.html"><span>الكتاب التجريبي الأول</span><span>مؤلف تجريبي</span></a></li>
+        <li><a href="../book.html"><span>الكتاب التجريبي الثاني</span><span>مؤلف تجريبي</span></a></li>
+      </ul>
+      <ol>
+        <li><a href="../hadith.html"><span>عَنِ الرَّاوِي التَّجْرِيبِيِّ قَالَ: هَذَا نَصٌّ تَجْرِيبِيٌّ يُوضَعُ فِي مَكَانِ نَصِّ الْحَدِيثِ لِاخْتِبَارِ شَكْلِ الصَّفْحَةِ، وَلَيْسَ حَدِيثًا وَلَا مَنْقُولًا عَنْ كِتَابٍ. يُرَادُ بِهِ قِيَاسُ طُولِ السَّطْرِ وَالْمَسَافَةِ بَيْنَ الْأَسْطُرِ، وَوُضُوحِ الْحَرَكَاتِ فَوْقَ الْحُرُوفِ وَتَحْتَهَا</span><svg viewBox="0 0 256 256" aria-hidden="true" focusable="false"><path d="M220,128a4,4,0,0,1-4,4H49.66l65.17,65.17a4,4,0,0,1-5.66,5.66l-72-72a4,4,0,0,1,0-5.66l72-72a4,4,0,0,1,5.66,5.66L49.66,124H216A4,4,0,0,1,220,128Z"/></svg></a></li>
+      </ol>
+    </section>
+    <section class="c fr c46" aria-labelledby="c46">
+      <h3 id="c46">٤٦. الرمادي المؤطّر</h3>
+      <p>رمادي فاتح بإطار ذهبي داكن ونص أسود، أخف الخيارات.</p>
+      <ul class="aqsam">
+        <li><a href="../category.html"><span>الإيمان</span></a></li>
+        <li><a href="../category.html"><span>الطهارة</span></a></li>
+        <li><a href="../category.html"><span>الصلاة</span></a></li>
+        <li><a href="../category.html"><span>الزكاة</span></a></li>
+      </ul>
+      <ul class="kutub">
+        <li><a href="../book.html"><span>الكتاب التجريبي الأول</span><span>مؤلف تجريبي</span></a></li>
+        <li><a href="../book.html"><span>الكتاب التجريبي الثاني</span><span>مؤلف تجريبي</span></a></li>
+      </ul>
+      <ol>
+        <li><a href="../hadith.html"><span>عَنِ الرَّاوِي التَّجْرِيبِيِّ قَالَ: هَذَا نَصٌّ تَجْرِيبِيٌّ يُوضَعُ فِي مَكَانِ نَصِّ الْحَدِيثِ لِاخْتِبَارِ شَكْلِ الصَّفْحَةِ، وَلَيْسَ حَدِيثًا وَلَا مَنْقُولًا عَنْ كِتَابٍ. يُرَادُ بِهِ قِيَاسُ طُولِ السَّطْرِ وَالْمَسَافَةِ بَيْنَ الْأَسْطُرِ، وَوُضُوحِ الْحَرَكَاتِ فَوْقَ الْحُرُوفِ وَتَحْتَهَا</span><svg viewBox="0 0 256 256" aria-hidden="true" focusable="false"><path d="M220,128a4,4,0,0,1-4,4H49.66l65.17,65.17a4,4,0,0,1-5.66,5.66l-72-72a4,4,0,0,1,0-5.66l72-72a4,4,0,0,1,5.66,5.66L49.66,124H216A4,4,0,0,1,220,128Z"/></svg></a></li>
+      </ol>
+    </section>
+    <section class="c fr c47" aria-labelledby="c47">
+      <h3 id="c47">٤٧. الورق المؤطّر</h3>
+      <p>ورق أصفر بإطار ذهبي داكن وحبر بني.</p>
+      <ul class="aqsam">
+        <li><a href="../category.html"><span>الإيمان</span></a></li>
+        <li><a href="../category.html"><span>الطهارة</span></a></li>
+        <li><a href="../category.html"><span>الصلاة</span></a></li>
+        <li><a href="../category.html"><span>الزكاة</span></a></li>
+      </ul>
+      <ul class="kutub">
+        <li><a href="../book.html"><span>الكتاب التجريبي الأول</span><span>مؤلف تجريبي</span></a></li>
+        <li><a href="../book.html"><span>الكتاب التجريبي الثاني</span><span>مؤلف تجريبي</span></a></li>
+      </ul>
+      <ol>
+        <li><a href="../hadith.html"><span>عَنِ الرَّاوِي التَّجْرِيبِيِّ قَالَ: هَذَا نَصٌّ تَجْرِيبِيٌّ يُوضَعُ فِي مَكَانِ نَصِّ الْحَدِيثِ لِاخْتِبَارِ شَكْلِ الصَّفْحَةِ، وَلَيْسَ حَدِيثًا وَلَا مَنْقُولًا عَنْ كِتَابٍ. يُرَادُ بِهِ قِيَاسُ طُولِ السَّطْرِ وَالْمَسَافَةِ بَيْنَ الْأَسْطُرِ، وَوُضُوحِ الْحَرَكَاتِ فَوْقَ الْحُرُوفِ وَتَحْتَهَا</span><svg viewBox="0 0 256 256" aria-hidden="true" focusable="false"><path d="M220,128a4,4,0,0,1-4,4H49.66l65.17,65.17a4,4,0,0,1-5.66,5.66l-72-72a4,4,0,0,1,0-5.66l72-72a4,4,0,0,1,5.66,5.66L49.66,124H216A4,4,0,0,1,220,128Z"/></svg></a></li>
+      </ol>
+    </section>
+    <section class="c fr c48" aria-labelledby="c48">
+      <h3 id="c48">٤٨. الذهبي المؤطّر</h3>
+      <p>أرضية ذهبية بإطار أسود ونص أسود، عكس الأسود المذهّب.</p>
+      <ul class="aqsam">
+        <li><a href="../category.html"><span>الإيمان</span></a></li>
+        <li><a href="../category.html"><span>الطهارة</span></a></li>
+        <li><a href="../category.html"><span>الصلاة</span></a></li>
+        <li><a href="../category.html"><span>الزكاة</span></a></li>
+      </ul>
+      <ul class="kutub">
+        <li><a href="../book.html"><span>الكتاب التجريبي الأول</span><span>مؤلف تجريبي</span></a></li>
+        <li><a href="../book.html"><span>الكتاب التجريبي الثاني</span><span>مؤلف تجريبي</span></a></li>
+      </ul>
+      <ol>
+        <li><a href="../hadith.html"><span>عَنِ الرَّاوِي التَّجْرِيبِيِّ قَالَ: هَذَا نَصٌّ تَجْرِيبِيٌّ يُوضَعُ فِي مَكَانِ نَصِّ الْحَدِيثِ لِاخْتِبَارِ شَكْلِ الصَّفْحَةِ، وَلَيْسَ حَدِيثًا وَلَا مَنْقُولًا عَنْ كِتَابٍ. يُرَادُ بِهِ قِيَاسُ طُولِ السَّطْرِ وَالْمَسَافَةِ بَيْنَ الْأَسْطُرِ، وَوُضُوحِ الْحَرَكَاتِ فَوْقَ الْحُرُوفِ وَتَحْتَهَا</span><svg viewBox="0 0 256 256" aria-hidden="true" focusable="false"><path d="M220,128a4,4,0,0,1-4,4H49.66l65.17,65.17a4,4,0,0,1-5.66,5.66l-72-72a4,4,0,0,1,0-5.66l72-72a4,4,0,0,1,5.66,5.66L49.66,124H216A4,4,0,0,1,220,128Z"/></svg></a></li>
+      </ol>
+    </section>
+    <section class="c fr c49" aria-labelledby="c49">
+      <h3 id="c49">٤٩. الإطار الفضي</h3>
+      <p>تجليد أسود بإطار فضي ونص أبيض، بلا ذهب.</p>
+      <ul class="aqsam">
+        <li><a href="../category.html"><span>الإيمان</span></a></li>
+        <li><a href="../category.html"><span>الطهارة</span></a></li>
+        <li><a href="../category.html"><span>الصلاة</span></a></li>
+        <li><a href="../category.html"><span>الزكاة</span></a></li>
+      </ul>
+      <ul class="kutub">
+        <li><a href="../book.html"><span>الكتاب التجريبي الأول</span><span>مؤلف تجريبي</span></a></li>
+        <li><a href="../book.html"><span>الكتاب التجريبي الثاني</span><span>مؤلف تجريبي</span></a></li>
+      </ul>
+      <ol>
+        <li><a href="../hadith.html"><span>عَنِ الرَّاوِي التَّجْرِيبِيِّ قَالَ: هَذَا نَصٌّ تَجْرِيبِيٌّ يُوضَعُ فِي مَكَانِ نَصِّ الْحَدِيثِ لِاخْتِبَارِ شَكْلِ الصَّفْحَةِ، وَلَيْسَ حَدِيثًا وَلَا مَنْقُولًا عَنْ كِتَابٍ. يُرَادُ بِهِ قِيَاسُ طُولِ السَّطْرِ وَالْمَسَافَةِ بَيْنَ الْأَسْطُرِ، وَوُضُوحِ الْحَرَكَاتِ فَوْقَ الْحُرُوفِ وَتَحْتَهَا</span><svg viewBox="0 0 256 256" aria-hidden="true" focusable="false"><path d="M220,128a4,4,0,0,1-4,4H49.66l65.17,65.17a4,4,0,0,1-5.66,5.66l-72-72a4,4,0,0,1,0-5.66l72-72a4,4,0,0,1,5.66,5.66L49.66,124H216A4,4,0,0,1,220,128Z"/></svg></a></li>
+      </ol>
+    </section>
+    <section class="c fr c50" aria-labelledby="c50">
+      <h3 id="c50">٥٠. مكتبة مؤطّرة</h3>
+      <p>كل كتاب بلون تجليد وإطار مذهّب، والأقسام بالأسود.</p>
+      <ul class="aqsam">
+        <li><a href="../category.html"><span>الإيمان</span></a></li>
+        <li><a href="../category.html"><span>الطهارة</span></a></li>
+        <li><a href="../category.html"><span>الصلاة</span></a></li>
+        <li><a href="../category.html"><span>الزكاة</span></a></li>
+      </ul>
+      <ul class="kutub">
+        <li><a href="../book.html"><span>الكتاب التجريبي الأول</span><span>مؤلف تجريبي</span></a></li>
+        <li><a href="../book.html"><span>الكتاب التجريبي الثاني</span><span>مؤلف تجريبي</span></a></li>
+        <li><a href="../book.html"><span>الكتاب التجريبي الثالث</span><span>مؤلف تجريبي</span></a></li>
+        <li><a href="../book.html"><span>الكتاب التجريبي الرابع</span><span>مؤلف تجريبي</span></a></li>
+      </ul>
+      <ol>
+        <li><a href="../hadith.html"><span>عَنِ الرَّاوِي التَّجْرِيبِيِّ قَالَ: هَذَا نَصٌّ تَجْرِيبِيٌّ يُوضَعُ فِي مَكَانِ نَصِّ الْحَدِيثِ لِاخْتِبَارِ شَكْلِ الصَّفْحَةِ، وَلَيْسَ حَدِيثًا وَلَا مَنْقُولًا عَنْ كِتَابٍ. يُرَادُ بِهِ قِيَاسُ طُولِ السَّطْرِ وَالْمَسَافَةِ بَيْنَ الْأَسْطُرِ، وَوُضُوحِ الْحَرَكَاتِ فَوْقَ الْحُرُوفِ وَتَحْتَهَا</span><svg viewBox="0 0 256 256" aria-hidden="true" focusable="false"><path d="M220,128a4,4,0,0,1-4,4H49.66l65.17,65.17a4,4,0,0,1-5.66,5.66l-72-72a4,4,0,0,1,0-5.66l72-72a4,4,0,0,1,5.66,5.66L49.66,124H216A4,4,0,0,1,220,128Z"/></svg></a></li>
+      </ol>
+    </section>
+    </section>
+    <section aria-labelledby="part-0">
+      <h2 id="part-0">البسيطة</h2>
+      <p>أبسط الخيارات: لون واحد للبطاقة، ونص قليل، وشيء واحد يعين القارئ. الأقسام والكتب بالرمادي أو الأسود، والذهب علامة صغيرة، والحديث وحده أبيض.</p>
+    <section class="c m cue-fade c32" aria-labelledby="c32">
+      <h3 id="c32">٣٢. الرمادي</h3>
+      <p>بطاقات رمادية مسطحة بلا ظل ولا زخرفة. الحديث وحده أبيض، وآخره يتلاشى.</p>
+      <ul class="aqsam">
+        <li><a href="../category.html"><span>الإيمان</span></a></li>
+        <li><a href="../category.html"><span>الطهارة</span></a></li>
+        <li><a href="../category.html"><span>الصلاة</span></a></li>
+        <li><a href="../category.html"><span>الزكاة</span></a></li>
+      </ul>
+      <ul class="kutub">
+        <li><a href="../book.html"><span>الكتاب التجريبي الأول</span><span>مؤلف تجريبي</span></a></li>
+        <li><a href="../book.html"><span>الكتاب التجريبي الثاني</span><span>مؤلف تجريبي</span></a></li>
+      </ul>
+      <ol>
+        <li><a href="../hadith.html"><span>عَنِ الرَّاوِي التَّجْرِيبِيِّ قَالَ: هَذَا نَصٌّ تَجْرِيبِيٌّ يُوضَعُ فِي مَكَانِ نَصِّ الْحَدِيثِ لِاخْتِبَارِ شَكْلِ الصَّفْحَةِ، وَلَيْسَ حَدِيثًا وَلَا مَنْقُولًا عَنْ كِتَابٍ. يُرَادُ بِهِ قِيَاسُ طُولِ السَّطْرِ وَالْمَسَافَةِ بَيْنَ الْأَسْطُرِ، وَوُضُوحِ الْحَرَكَاتِ فَوْقَ الْحُرُوفِ وَتَحْتَهَا</span></a></li>
+      </ol>
+    </section>
+    <section class="c m cue-dots c33" aria-labelledby="c33">
+      <h3 id="c33">٣٣. العلامة الذهبية</h3>
+      <p>رمادي مسطح وعلامة ذهبية صغيرة على طرف البطاقة. في آخر الحديث نقاط تدل على البقية.</p>
+      <ul class="aqsam">
+        <li><a href="../category.html"><span>الإيمان</span></a></li>
+        <li><a href="../category.html"><span>الطهارة</span></a></li>
+        <li><a href="../category.html"><span>الصلاة</span></a></li>
+        <li><a href="../category.html"><span>الزكاة</span></a></li>
+      </ul>
+      <ul class="kutub">
+        <li><a href="../book.html"><span>الكتاب التجريبي الأول</span><span>مؤلف تجريبي</span></a></li>
+        <li><a href="../book.html"><span>الكتاب التجريبي الثاني</span><span>مؤلف تجريبي</span></a></li>
+      </ul>
+      <ol>
+        <li><a href="../hadith.html"><span>عَنِ الرَّاوِي التَّجْرِيبِيِّ قَالَ: هَذَا نَصٌّ تَجْرِيبِيٌّ يُوضَعُ فِي مَكَانِ نَصِّ الْحَدِيثِ لِاخْتِبَارِ شَكْلِ الصَّفْحَةِ، وَلَيْسَ حَدِيثًا وَلَا مَنْقُولًا عَنْ كِتَابٍ. يُرَادُ بِهِ قِيَاسُ طُولِ السَّطْرِ وَالْمَسَافَةِ بَيْنَ الْأَسْطُرِ، وَوُضُوحِ الْحَرَكَاتِ فَوْقَ الْحُرُوفِ وَتَحْتَهَا</span><em class="dots">...</em></a></li>
+      </ol>
+    </section>
+    <section class="c m cue-word c34" aria-labelledby="c34">
+      <h3 id="c34">٣٤. الأسود</h3>
+      <p>بطاقات سوداء بنص أبيض، بلا ذهب. في آخر الحديث «تتمة الحديث».</p>
+      <ul class="aqsam">
+        <li><a href="../category.html"><span>الإيمان</span></a></li>
+        <li><a href="../category.html"><span>الطهارة</span></a></li>
+        <li><a href="../category.html"><span>الصلاة</span></a></li>
+        <li><a href="../category.html"><span>الزكاة</span></a></li>
+      </ul>
+      <ul class="kutub">
+        <li><a href="../book.html"><span>الكتاب التجريبي الأول</span><span>مؤلف تجريبي</span></a></li>
+        <li><a href="../book.html"><span>الكتاب التجريبي الثاني</span><span>مؤلف تجريبي</span></a></li>
+      </ul>
+      <ol>
+        <li><a href="../hadith.html"><span>عَنِ الرَّاوِي التَّجْرِيبِيِّ قَالَ: هَذَا نَصٌّ تَجْرِيبِيٌّ يُوضَعُ فِي مَكَانِ نَصِّ الْحَدِيثِ لِاخْتِبَارِ شَكْلِ الصَّفْحَةِ، وَلَيْسَ حَدِيثًا وَلَا مَنْقُولًا عَنْ كِتَابٍ. يُرَادُ بِهِ قِيَاسُ طُولِ السَّطْرِ وَالْمَسَافَةِ بَيْنَ الْأَسْطُرِ، وَوُضُوحِ الْحَرَكَاتِ فَوْقَ الْحُرُوفِ وَتَحْتَهَا</span><em>تتمة الحديث</em></a></li>
+      </ol>
+    </section>
+    <section class="c m cue-fade c35" aria-labelledby="c35">
+      <h3 id="c35">٣٥. الرمادي والأسود</h3>
+      <p>الأقسام رمادية والكتب سوداء بعنوان مذهّب، فيُعرف القسم من الكتاب بلونه.</p>
+      <ul class="aqsam">
+        <li><a href="../category.html"><span>الإيمان</span></a></li>
+        <li><a href="../category.html"><span>الطهارة</span></a></li>
+        <li><a href="../category.html"><span>الصلاة</span></a></li>
+        <li><a href="../category.html"><span>الزكاة</span></a></li>
+      </ul>
+      <ul class="kutub">
+        <li><a href="../book.html"><span>الكتاب التجريبي الأول</span><span>مؤلف تجريبي</span></a></li>
+        <li><a href="../book.html"><span>الكتاب التجريبي الثاني</span><span>مؤلف تجريبي</span></a></li>
+      </ul>
+      <ol>
+        <li><a href="../hadith.html"><span>عَنِ الرَّاوِي التَّجْرِيبِيِّ قَالَ: هَذَا نَصٌّ تَجْرِيبِيٌّ يُوضَعُ فِي مَكَانِ نَصِّ الْحَدِيثِ لِاخْتِبَارِ شَكْلِ الصَّفْحَةِ، وَلَيْسَ حَدِيثًا وَلَا مَنْقُولًا عَنْ كِتَابٍ. يُرَادُ بِهِ قِيَاسُ طُولِ السَّطْرِ وَالْمَسَافَةِ بَيْنَ الْأَسْطُرِ، وَوُضُوحِ الْحَرَكَاتِ فَوْقَ الْحُرُوفِ وَتَحْتَهَا</span></a></li>
+      </ol>
+    </section>
+    <section class="c m cue-arrow c36" aria-labelledby="c36">
+      <h3 id="c36">٣٦. بلا بطاقات</h3>
+      <p>الأقسام والكتب أسطر على خلفية الصفحة بسهم صغير، والحديث وحده في بطاقة.</p>
+      <ul class="aqsam">
+        <li><a href="../category.html"><span>الإيمان</span><svg viewBox="0 0 256 256" aria-hidden="true" focusable="false"><path d="M220,128a4,4,0,0,1-4,4H49.66l65.17,65.17a4,4,0,0,1-5.66,5.66l-72-72a4,4,0,0,1,0-5.66l72-72a4,4,0,0,1,5.66,5.66L49.66,124H216A4,4,0,0,1,220,128Z"/></svg></a></li>
+        <li><a href="../category.html"><span>الطهارة</span><svg viewBox="0 0 256 256" aria-hidden="true" focusable="false"><path d="M220,128a4,4,0,0,1-4,4H49.66l65.17,65.17a4,4,0,0,1-5.66,5.66l-72-72a4,4,0,0,1,0-5.66l72-72a4,4,0,0,1,5.66,5.66L49.66,124H216A4,4,0,0,1,220,128Z"/></svg></a></li>
+        <li><a href="../category.html"><span>الصلاة</span><svg viewBox="0 0 256 256" aria-hidden="true" focusable="false"><path d="M220,128a4,4,0,0,1-4,4H49.66l65.17,65.17a4,4,0,0,1-5.66,5.66l-72-72a4,4,0,0,1,0-5.66l72-72a4,4,0,0,1,5.66,5.66L49.66,124H216A4,4,0,0,1,220,128Z"/></svg></a></li>
+        <li><a href="../category.html"><span>الزكاة</span><svg viewBox="0 0 256 256" aria-hidden="true" focusable="false"><path d="M220,128a4,4,0,0,1-4,4H49.66l65.17,65.17a4,4,0,0,1-5.66,5.66l-72-72a4,4,0,0,1,0-5.66l72-72a4,4,0,0,1,5.66,5.66L49.66,124H216A4,4,0,0,1,220,128Z"/></svg></a></li>
+      </ul>
+      <ul class="kutub">
+        <li><a href="../book.html"><span>الكتاب التجريبي الأول</span><span>مؤلف تجريبي</span><svg viewBox="0 0 256 256" aria-hidden="true" focusable="false"><path d="M220,128a4,4,0,0,1-4,4H49.66l65.17,65.17a4,4,0,0,1-5.66,5.66l-72-72a4,4,0,0,1,0-5.66l72-72a4,4,0,0,1,5.66,5.66L49.66,124H216A4,4,0,0,1,220,128Z"/></svg></a></li>
+        <li><a href="../book.html"><span>الكتاب التجريبي الثاني</span><span>مؤلف تجريبي</span><svg viewBox="0 0 256 256" aria-hidden="true" focusable="false"><path d="M220,128a4,4,0,0,1-4,4H49.66l65.17,65.17a4,4,0,0,1-5.66,5.66l-72-72a4,4,0,0,1,0-5.66l72-72a4,4,0,0,1,5.66,5.66L49.66,124H216A4,4,0,0,1,220,128Z"/></svg></a></li>
+      </ul>
+      <ol>
+        <li><a href="../hadith.html"><span>عَنِ الرَّاوِي التَّجْرِيبِيِّ قَالَ: هَذَا نَصٌّ تَجْرِيبِيٌّ يُوضَعُ فِي مَكَانِ نَصِّ الْحَدِيثِ لِاخْتِبَارِ شَكْلِ الصَّفْحَةِ، وَلَيْسَ حَدِيثًا وَلَا مَنْقُولًا عَنْ كِتَابٍ. يُرَادُ بِهِ قِيَاسُ طُولِ السَّطْرِ وَالْمَسَافَةِ بَيْنَ الْأَسْطُرِ، وَوُضُوحِ الْحَرَكَاتِ فَوْقَ الْحُرُوفِ وَتَحْتَهَا</span><svg viewBox="0 0 256 256" aria-hidden="true" focusable="false"><path d="M220,128a4,4,0,0,1-4,4H49.66l65.17,65.17a4,4,0,0,1-5.66,5.66l-72-72a4,4,0,0,1,0-5.66l72-72a4,4,0,0,1,5.66,5.66L49.66,124H216A4,4,0,0,1,220,128Z"/></svg></a></li>
+      </ol>
+    </section>
+    <section class="c m cue-dots c37" aria-labelledby="c37">
+      <h3 id="c37">٣٧. القائمة المتصلة</h3>
+      <p>الأقسام والكتب صفوف رمادية متصلة، وعدد الأحاديث في آخر كل صف.</p>
+      <ul class="aqsam">
+        <li><a href="../category.html"><span>الإيمان</span><span>٨٦ حديثًا</span></a></li>
+        <li><a href="../category.html"><span>الطهارة</span><span>١٢٠ حديثًا</span></a></li>
+        <li><a href="../category.html"><span>الصلاة</span><span>٢٧٥ حديثًا</span></a></li>
+        <li><a href="../category.html"><span>الزكاة</span><span>٥٤ حديثًا</span></a></li>
+      </ul>
+      <ul class="kutub">
+        <li><a href="../book.html"><span>الكتاب التجريبي الأول</span><span>مؤلف تجريبي</span><span>٧٥٦٣ حديثًا</span></a></li>
+        <li><a href="../book.html"><span>الكتاب التجريبي الثاني</span><span>مؤلف تجريبي</span><span>٥٢٧٤ حديثًا</span></a></li>
+      </ul>
+      <ol>
+        <li><a href="../hadith.html"><span>عَنِ الرَّاوِي التَّجْرِيبِيِّ قَالَ: هَذَا نَصٌّ تَجْرِيبِيٌّ يُوضَعُ فِي مَكَانِ نَصِّ الْحَدِيثِ لِاخْتِبَارِ شَكْلِ الصَّفْحَةِ، وَلَيْسَ حَدِيثًا وَلَا مَنْقُولًا عَنْ كِتَابٍ. يُرَادُ بِهِ قِيَاسُ طُولِ السَّطْرِ وَالْمَسَافَةِ بَيْنَ الْأَسْطُرِ، وَوُضُوحِ الْحَرَكَاتِ فَوْقَ الْحُرُوفِ وَتَحْتَهَا</span><em class="dots">...</em></a></li>
+      </ol>
+    </section>
+    <section class="c m cue-word c38" aria-labelledby="c38">
+      <h3 id="c38">٣٨. العدد</h3>
+      <p>تحت كل اسم عدد أحاديثه، فيُعرف حجم القسم أو الكتاب قبل فتحه.</p>
+      <ul class="aqsam">
+        <li><a href="../category.html"><span>الإيمان</span><span>٨٦ حديثًا</span></a></li>
+        <li><a href="../category.html"><span>الطهارة</span><span>١٢٠ حديثًا</span></a></li>
+        <li><a href="../category.html"><span>الصلاة</span><span>٢٧٥ حديثًا</span></a></li>
+        <li><a href="../category.html"><span>الزكاة</span><span>٥٤ حديثًا</span></a></li>
+      </ul>
+      <ul class="kutub">
+        <li><a href="../book.html"><span>الكتاب التجريبي الأول</span><span>مؤلف تجريبي، ٧٥٦٣ حديثًا</span></a></li>
+        <li><a href="../book.html"><span>الكتاب التجريبي الثاني</span><span>مؤلف تجريبي، ٥٢٧٤ حديثًا</span></a></li>
+      </ul>
+      <ol>
+        <li><a href="../hadith.html"><span>عَنِ الرَّاوِي التَّجْرِيبِيِّ قَالَ: هَذَا نَصٌّ تَجْرِيبِيٌّ يُوضَعُ فِي مَكَانِ نَصِّ الْحَدِيثِ لِاخْتِبَارِ شَكْلِ الصَّفْحَةِ، وَلَيْسَ حَدِيثًا وَلَا مَنْقُولًا عَنْ كِتَابٍ. يُرَادُ بِهِ قِيَاسُ طُولِ السَّطْرِ وَالْمَسَافَةِ بَيْنَ الْأَسْطُرِ، وَوُضُوحِ الْحَرَكَاتِ فَوْقَ الْحُرُوفِ وَتَحْتَهَا</span><em>تتمة الحديث</em></a></li>
+      </ol>
+    </section>
+    <section class="c m cue-fade c39" aria-labelledby="c39">
+      <h3 id="c39">٣٩. الأقسام المختصرة</h3>
+      <p>الأقسام أزرار صغيرة متجاورة تأخذ مساحة أقل، والكتب سوداء بعنوان مذهّب.</p>
+      <ul class="aqsam">
+        <li><a href="../category.html"><span>الإيمان</span></a></li>
+        <li><a href="../category.html"><span>الطهارة</span></a></li>
+        <li><a href="../category.html"><span>الصلاة</span></a></li>
+        <li><a href="../category.html"><span>الزكاة</span></a></li>
+      </ul>
+      <ul class="kutub">
+        <li><a href="../book.html"><span>الكتاب التجريبي الأول</span><span>مؤلف تجريبي</span></a></li>
+        <li><a href="../book.html"><span>الكتاب التجريبي الثاني</span><span>مؤلف تجريبي</span></a></li>
+      </ul>
+      <ol>
+        <li><a href="../hadith.html"><span>عَنِ الرَّاوِي التَّجْرِيبِيِّ قَالَ: هَذَا نَصٌّ تَجْرِيبِيٌّ يُوضَعُ فِي مَكَانِ نَصِّ الْحَدِيثِ لِاخْتِبَارِ شَكْلِ الصَّفْحَةِ، وَلَيْسَ حَدِيثًا وَلَا مَنْقُولًا عَنْ كِتَابٍ. يُرَادُ بِهِ قِيَاسُ طُولِ السَّطْرِ وَالْمَسَافَةِ بَيْنَ الْأَسْطُرِ، وَوُضُوحِ الْحَرَكَاتِ فَوْقَ الْحُرُوفِ وَتَحْتَهَا</span></a></li>
+      </ol>
+    </section>
+    <section class="c m cue-dots c40" aria-labelledby="c40">
+      <h3 id="c40">٤٠. الظل وحده</h3>
+      <p>بطاقات بلون الصفحة يحدّها ظل خفيف، والحديث وحده أبيض.</p>
+      <ul class="aqsam">
+        <li><a href="../category.html"><span>الإيمان</span></a></li>
+        <li><a href="../category.html"><span>الطهارة</span></a></li>
+        <li><a href="../category.html"><span>الصلاة</span></a></li>
+        <li><a href="../category.html"><span>الزكاة</span></a></li>
+      </ul>
+      <ul class="kutub">
+        <li><a href="../book.html"><span>الكتاب التجريبي الأول</span><span>مؤلف تجريبي</span></a></li>
+        <li><a href="../book.html"><span>الكتاب التجريبي الثاني</span><span>مؤلف تجريبي</span></a></li>
+      </ul>
+      <ol>
+        <li><a href="../hadith.html"><span>عَنِ الرَّاوِي التَّجْرِيبِيِّ قَالَ: هَذَا نَصٌّ تَجْرِيبِيٌّ يُوضَعُ فِي مَكَانِ نَصِّ الْحَدِيثِ لِاخْتِبَارِ شَكْلِ الصَّفْحَةِ، وَلَيْسَ حَدِيثًا وَلَا مَنْقُولًا عَنْ كِتَابٍ. يُرَادُ بِهِ قِيَاسُ طُولِ السَّطْرِ وَالْمَسَافَةِ بَيْنَ الْأَسْطُرِ، وَوُضُوحِ الْحَرَكَاتِ فَوْقَ الْحُرُوفِ وَتَحْتَهَا</span><em class="dots">...</em></a></li>
+      </ol>
+    </section>
+    </section>
+    <section aria-labelledby="part-1">
+      <h2 id="part-1">الأسود المذهّب بأشكال الكتب</h2>
+      <p>من الخيار السابع: تجليد أسود وعنوان مذهّب، والكتب على هيئة الكتب، والأقسام في خرطوشة، مع الشريط والكعب والإطار والزوايا. بطاقة الحديث تحت كل خيار بيضاء للمقارنة.</p>
+    <section class="c k c17" aria-labelledby="c17">
+      <h3 id="c17">١٧. الأسود والخرطوشة</h3>
+      <p>الأسود المذهّب، والأقسام في خرطوشة كعناوين الأبواب في الكتب المطبوعة.</p>
+      <ul class="aqsam">
+        <li><a href="../category.html"><span>الإيمان</span></a></li>
+        <li><a href="../category.html"><span>الطهارة</span></a></li>
+        <li><a href="../category.html"><span>الصلاة</span></a></li>
+        <li><a href="../category.html"><span>الزكاة</span></a></li>
+      </ul>
+      <ul class="kutub">
+        <li><a href="../book.html"><span>الكتاب التجريبي الأول</span><span>مؤلف تجريبي</span></a></li>
+        <li><a href="../book.html"><span>الكتاب التجريبي الثاني</span><span>مؤلف تجريبي</span></a></li>
+      </ul>
+      <ol>
+        <li><a href="../hadith.html"><span>عَنِ الرَّاوِي التَّجْرِيبِيِّ قَالَ: هَذَا نَصٌّ تَجْرِيبِيٌّ يُوضَعُ فِي مَكَانِ نَصِّ الْحَدِيثِ لِاخْتِبَارِ شَكْلِ الصَّفْحَةِ، وَلَيْسَ حَدِيثًا وَلَا مَنْقُولًا عَنْ كِتَابٍ. يُرَادُ بِهِ قِيَاسُ طُولِ السَّطْرِ وَالْمَسَافَةِ بَيْنَ الْأَسْطُرِ، وَوُضُوحِ الْحَرَكَاتِ فَوْقَ الْحُرُوفِ وَتَحْتَهَا</span><svg viewBox="0 0 256 256" aria-hidden="true" focusable="false"><path d="M220,128a4,4,0,0,1-4,4H49.66l65.17,65.17a4,4,0,0,1-5.66,5.66l-72-72a4,4,0,0,1,0-5.66l72-72a4,4,0,0,1,5.66,5.66L49.66,124H216A4,4,0,0,1,220,128Z"/></svg></a></li>
+      </ol>
+    </section>
+    <section class="c k c18" aria-labelledby="c18">
+      <h3 id="c18">١٨. المجلد الأسود</h3>
+      <p>الكتاب مجلد أسود مغلق تظهر أوراقه وغلافه الخلفي من طرفه، والأقسام في خرطوشة.</p>
+      <ul class="aqsam">
+        <li><a href="../category.html"><span>الإيمان</span></a></li>
+        <li><a href="../category.html"><span>الطهارة</span></a></li>
+        <li><a href="../category.html"><span>الصلاة</span></a></li>
+        <li><a href="../category.html"><span>الزكاة</span></a></li>
+      </ul>
+      <ul class="kutub">
+        <li><a href="../book.html"><span>الكتاب التجريبي الأول</span><span>مؤلف تجريبي</span></a></li>
+        <li><a href="../book.html"><span>الكتاب التجريبي الثاني</span><span>مؤلف تجريبي</span></a></li>
+      </ul>
+      <ol>
+        <li><a href="../hadith.html"><span>عَنِ الرَّاوِي التَّجْرِيبِيِّ قَالَ: هَذَا نَصٌّ تَجْرِيبِيٌّ يُوضَعُ فِي مَكَانِ نَصِّ الْحَدِيثِ لِاخْتِبَارِ شَكْلِ الصَّفْحَةِ، وَلَيْسَ حَدِيثًا وَلَا مَنْقُولًا عَنْ كِتَابٍ. يُرَادُ بِهِ قِيَاسُ طُولِ السَّطْرِ وَالْمَسَافَةِ بَيْنَ الْأَسْطُرِ، وَوُضُوحِ الْحَرَكَاتِ فَوْقَ الْحُرُوفِ وَتَحْتَهَا</span><svg viewBox="0 0 256 256" aria-hidden="true" focusable="false"><path d="M220,128a4,4,0,0,1-4,4H49.66l65.17,65.17a4,4,0,0,1-5.66,5.66l-72-72a4,4,0,0,1,0-5.66l72-72a4,4,0,0,1,5.66,5.66L49.66,124H216A4,4,0,0,1,220,128Z"/></svg></a></li>
+      </ol>
+    </section>
+    <section class="c k c19" aria-labelledby="c19">
+      <h3 id="c19">١٩. الأغلفة السوداء</h3>
+      <p>الكتب أغلفة سوداء قائمة، والأقسام في خرطوشة ذات مقبضين كما في المخطوطات.</p>
+      <ul class="aqsam">
+        <li><a href="../category.html"><span>الإيمان</span></a></li>
+        <li><a href="../category.html"><span>الطهارة</span></a></li>
+        <li><a href="../category.html"><span>الصلاة</span></a></li>
+        <li><a href="../category.html"><span>الزكاة</span></a></li>
+      </ul>
+      <ul class="kutub">
+        <li><a href="../book.html"><span>الكتاب التجريبي الأول</span><span>مؤلف تجريبي</span></a></li>
+        <li><a href="../book.html"><span>الكتاب التجريبي الثاني</span><span>مؤلف تجريبي</span></a></li>
+        <li><a href="../book.html"><span>الكتاب التجريبي الثالث</span><span>مؤلف تجريبي</span></a></li>
+        <li><a href="../book.html"><span>الكتاب التجريبي الرابع</span><span>مؤلف تجريبي</span></a></li>
+      </ul>
+      <ol>
+        <li><a href="../hadith.html"><span>عَنِ الرَّاوِي التَّجْرِيبِيِّ قَالَ: هَذَا نَصٌّ تَجْرِيبِيٌّ يُوضَعُ فِي مَكَانِ نَصِّ الْحَدِيثِ لِاخْتِبَارِ شَكْلِ الصَّفْحَةِ، وَلَيْسَ حَدِيثًا وَلَا مَنْقُولًا عَنْ كِتَابٍ. يُرَادُ بِهِ قِيَاسُ طُولِ السَّطْرِ وَالْمَسَافَةِ بَيْنَ الْأَسْطُرِ، وَوُضُوحِ الْحَرَكَاتِ فَوْقَ الْحُرُوفِ وَتَحْتَهَا</span><svg viewBox="0 0 256 256" aria-hidden="true" focusable="false"><path d="M220,128a4,4,0,0,1-4,4H49.66l65.17,65.17a4,4,0,0,1-5.66,5.66l-72-72a4,4,0,0,1,0-5.66l72-72a4,4,0,0,1,5.66,5.66L49.66,124H216A4,4,0,0,1,220,128Z"/></svg></a></li>
+      </ol>
+    </section>
+    <section class="c k c20" aria-labelledby="c20">
+      <h3 id="c20">٢٠. الشريط المذهّب</h3>
+      <p>شريط قراءة مذهّب يتدلى على الغلاف الأسود، والأقسام في خرطوشة.</p>
+      <ul class="aqsam">
+        <li><a href="../category.html"><span>الإيمان</span></a></li>
+        <li><a href="../category.html"><span>الطهارة</span></a></li>
+        <li><a href="../category.html"><span>الصلاة</span></a></li>
+        <li><a href="../category.html"><span>الزكاة</span></a></li>
+      </ul>
+      <ul class="kutub">
+        <li><a href="../book.html"><span>الكتاب التجريبي الأول</span><span>مؤلف تجريبي</span></a></li>
+        <li><a href="../book.html"><span>الكتاب التجريبي الثاني</span><span>مؤلف تجريبي</span></a></li>
+      </ul>
+      <ol>
+        <li><a href="../hadith.html"><span>عَنِ الرَّاوِي التَّجْرِيبِيِّ قَالَ: هَذَا نَصٌّ تَجْرِيبِيٌّ يُوضَعُ فِي مَكَانِ نَصِّ الْحَدِيثِ لِاخْتِبَارِ شَكْلِ الصَّفْحَةِ، وَلَيْسَ حَدِيثًا وَلَا مَنْقُولًا عَنْ كِتَابٍ. يُرَادُ بِهِ قِيَاسُ طُولِ السَّطْرِ وَالْمَسَافَةِ بَيْنَ الْأَسْطُرِ، وَوُضُوحِ الْحَرَكَاتِ فَوْقَ الْحُرُوفِ وَتَحْتَهَا</span><svg viewBox="0 0 256 256" aria-hidden="true" focusable="false"><path d="M220,128a4,4,0,0,1-4,4H49.66l65.17,65.17a4,4,0,0,1-5.66,5.66l-72-72a4,4,0,0,1,0-5.66l72-72a4,4,0,0,1,5.66,5.66L49.66,124H216A4,4,0,0,1,220,128Z"/></svg></a></li>
+      </ol>
+    </section>
+    <section class="c k c21" aria-labelledby="c21">
+      <h3 id="c21">٢١. المجلد والشريط</h3>
+      <p>مجلد أسود يخرج شريط القراءة من بين أوراقه، والأقسام في خرطوشة ذات مقبضين.</p>
+      <ul class="aqsam">
+        <li><a href="../category.html"><span>الإيمان</span></a></li>
+        <li><a href="../category.html"><span>الطهارة</span></a></li>
+        <li><a href="../category.html"><span>الصلاة</span></a></li>
+        <li><a href="../category.html"><span>الزكاة</span></a></li>
+      </ul>
+      <ul class="kutub">
+        <li><a href="../book.html"><span>الكتاب التجريبي الأول</span><span>مؤلف تجريبي</span></a></li>
+        <li><a href="../book.html"><span>الكتاب التجريبي الثاني</span><span>مؤلف تجريبي</span></a></li>
+      </ul>
+      <ol>
+        <li><a href="../hadith.html"><span>عَنِ الرَّاوِي التَّجْرِيبِيِّ قَالَ: هَذَا نَصٌّ تَجْرِيبِيٌّ يُوضَعُ فِي مَكَانِ نَصِّ الْحَدِيثِ لِاخْتِبَارِ شَكْلِ الصَّفْحَةِ، وَلَيْسَ حَدِيثًا وَلَا مَنْقُولًا عَنْ كِتَابٍ. يُرَادُ بِهِ قِيَاسُ طُولِ السَّطْرِ وَالْمَسَافَةِ بَيْنَ الْأَسْطُرِ، وَوُضُوحِ الْحَرَكَاتِ فَوْقَ الْحُرُوفِ وَتَحْتَهَا</span><svg viewBox="0 0 256 256" aria-hidden="true" focusable="false"><path d="M220,128a4,4,0,0,1-4,4H49.66l65.17,65.17a4,4,0,0,1-5.66,5.66l-72-72a4,4,0,0,1,0-5.66l72-72a4,4,0,0,1,5.66,5.66L49.66,124H216A4,4,0,0,1,220,128Z"/></svg></a></li>
+      </ol>
+    </section>
+    <section class="c k c22" aria-labelledby="c22">
+      <h3 id="c22">٢٢. أعصاب الكعب</h3>
+      <p>كعب أسود عليه شريطان مذهّبان على جانب الكتاب، والأقسام في خرطوشة.</p>
+      <ul class="aqsam">
+        <li><a href="../category.html"><span>الإيمان</span></a></li>
+        <li><a href="../category.html"><span>الطهارة</span></a></li>
+        <li><a href="../category.html"><span>الصلاة</span></a></li>
+        <li><a href="../category.html"><span>الزكاة</span></a></li>
+      </ul>
+      <ul class="kutub">
+        <li><a href="../book.html"><span>الكتاب التجريبي الأول</span><span>مؤلف تجريبي</span></a></li>
+        <li><a href="../book.html"><span>الكتاب التجريبي الثاني</span><span>مؤلف تجريبي</span></a></li>
+      </ul>
+      <ol>
+        <li><a href="../hadith.html"><span>عَنِ الرَّاوِي التَّجْرِيبِيِّ قَالَ: هَذَا نَصٌّ تَجْرِيبِيٌّ يُوضَعُ فِي مَكَانِ نَصِّ الْحَدِيثِ لِاخْتِبَارِ شَكْلِ الصَّفْحَةِ، وَلَيْسَ حَدِيثًا وَلَا مَنْقُولًا عَنْ كِتَابٍ. يُرَادُ بِهِ قِيَاسُ طُولِ السَّطْرِ وَالْمَسَافَةِ بَيْنَ الْأَسْطُرِ، وَوُضُوحِ الْحَرَكَاتِ فَوْقَ الْحُرُوفِ وَتَحْتَهَا</span><svg viewBox="0 0 256 256" aria-hidden="true" focusable="false"><path d="M220,128a4,4,0,0,1-4,4H49.66l65.17,65.17a4,4,0,0,1-5.66,5.66l-72-72a4,4,0,0,1,0-5.66l72-72a4,4,0,0,1,5.66,5.66L49.66,124H216A4,4,0,0,1,220,128Z"/></svg></a></li>
+      </ol>
+    </section>
+    <section class="c k c23" aria-labelledby="c23">
+      <h3 id="c23">٢٣. التجليد النصفي</h3>
+      <p>غلاف فحمي بكعب وزوايا من جلد أسود، والأقسام في خرطوشة مقعّرة الزوايا.</p>
+      <ul class="aqsam">
+        <li><a href="../category.html"><span>الإيمان</span></a></li>
+        <li><a href="../category.html"><span>الطهارة</span></a></li>
+        <li><a href="../category.html"><span>الصلاة</span></a></li>
+        <li><a href="../category.html"><span>الزكاة</span></a></li>
+      </ul>
+      <ul class="kutub">
+        <li><a href="../book.html"><span>الكتاب التجريبي الأول</span><span>مؤلف تجريبي</span></a></li>
+        <li><a href="../book.html"><span>الكتاب التجريبي الثاني</span><span>مؤلف تجريبي</span></a></li>
+      </ul>
+      <ol>
+        <li><a href="../hadith.html"><span>عَنِ الرَّاوِي التَّجْرِيبِيِّ قَالَ: هَذَا نَصٌّ تَجْرِيبِيٌّ يُوضَعُ فِي مَكَانِ نَصِّ الْحَدِيثِ لِاخْتِبَارِ شَكْلِ الصَّفْحَةِ، وَلَيْسَ حَدِيثًا وَلَا مَنْقُولًا عَنْ كِتَابٍ. يُرَادُ بِهِ قِيَاسُ طُولِ السَّطْرِ وَالْمَسَافَةِ بَيْنَ الْأَسْطُرِ، وَوُضُوحِ الْحَرَكَاتِ فَوْقَ الْحُرُوفِ وَتَحْتَهَا</span><svg viewBox="0 0 256 256" aria-hidden="true" focusable="false"><path d="M220,128a4,4,0,0,1-4,4H49.66l65.17,65.17a4,4,0,0,1-5.66,5.66l-72-72a4,4,0,0,1,0-5.66l72-72a4,4,0,0,1,5.66,5.66L49.66,124H216A4,4,0,0,1,220,128Z"/></svg></a></li>
+      </ol>
+    </section>
+    <section class="c k c24" aria-labelledby="c24">
+      <h3 id="c24">٢٤. الرقعة العنابية</h3>
+      <p>العنوان المذهّب على رقعة عنابية فوق الغلاف الأسود، والأقسام في خرطوشة عنابية.</p>
+      <ul class="aqsam">
+        <li><a href="../category.html"><span>الإيمان</span></a></li>
+        <li><a href="../category.html"><span>الطهارة</span></a></li>
+        <li><a href="../category.html"><span>الصلاة</span></a></li>
+        <li><a href="../category.html"><span>الزكاة</span></a></li>
+      </ul>
+      <ul class="kutub">
+        <li><a href="../book.html"><span>الكتاب التجريبي الأول</span><span>مؤلف تجريبي</span></a></li>
+        <li><a href="../book.html"><span>الكتاب التجريبي الثاني</span><span>مؤلف تجريبي</span></a></li>
+      </ul>
+      <ol>
+        <li><a href="../hadith.html"><span>عَنِ الرَّاوِي التَّجْرِيبِيِّ قَالَ: هَذَا نَصٌّ تَجْرِيبِيٌّ يُوضَعُ فِي مَكَانِ نَصِّ الْحَدِيثِ لِاخْتِبَارِ شَكْلِ الصَّفْحَةِ، وَلَيْسَ حَدِيثًا وَلَا مَنْقُولًا عَنْ كِتَابٍ. يُرَادُ بِهِ قِيَاسُ طُولِ السَّطْرِ وَالْمَسَافَةِ بَيْنَ الْأَسْطُرِ، وَوُضُوحِ الْحَرَكَاتِ فَوْقَ الْحُرُوفِ وَتَحْتَهَا</span><svg viewBox="0 0 256 256" aria-hidden="true" focusable="false"><path d="M220,128a4,4,0,0,1-4,4H49.66l65.17,65.17a4,4,0,0,1-5.66,5.66l-72-72a4,4,0,0,1,0-5.66l72-72a4,4,0,0,1,5.66,5.66L49.66,124H216A4,4,0,0,1,220,128Z"/></svg></a></li>
+      </ol>
+    </section>
+    <section class="c k c25" aria-labelledby="c25">
+      <h3 id="c25">٢٥. الإطار المذهّب</h3>
+      <p>إطار مذهّب رفيع داخل الغلاف كما يُطبع على الجلد، وكذلك في خرطوشة الأقسام.</p>
+      <ul class="aqsam">
+        <li><a href="../category.html"><span>الإيمان</span></a></li>
+        <li><a href="../category.html"><span>الطهارة</span></a></li>
+        <li><a href="../category.html"><span>الصلاة</span></a></li>
+        <li><a href="../category.html"><span>الزكاة</span></a></li>
+      </ul>
+      <ul class="kutub">
+        <li><a href="../book.html"><span>الكتاب التجريبي الأول</span><span>مؤلف تجريبي</span></a></li>
+        <li><a href="../book.html"><span>الكتاب التجريبي الثاني</span><span>مؤلف تجريبي</span></a></li>
+      </ul>
+      <ol>
+        <li><a href="../hadith.html"><span>عَنِ الرَّاوِي التَّجْرِيبِيِّ قَالَ: هَذَا نَصٌّ تَجْرِيبِيٌّ يُوضَعُ فِي مَكَانِ نَصِّ الْحَدِيثِ لِاخْتِبَارِ شَكْلِ الصَّفْحَةِ، وَلَيْسَ حَدِيثًا وَلَا مَنْقُولًا عَنْ كِتَابٍ. يُرَادُ بِهِ قِيَاسُ طُولِ السَّطْرِ وَالْمَسَافَةِ بَيْنَ الْأَسْطُرِ، وَوُضُوحِ الْحَرَكَاتِ فَوْقَ الْحُرُوفِ وَتَحْتَهَا</span><svg viewBox="0 0 256 256" aria-hidden="true" focusable="false"><path d="M220,128a4,4,0,0,1-4,4H49.66l65.17,65.17a4,4,0,0,1-5.66,5.66l-72-72a4,4,0,0,1,0-5.66l72-72a4,4,0,0,1,5.66,5.66L49.66,124H216A4,4,0,0,1,220,128Z"/></svg></a></li>
+      </ol>
+    </section>
+    <section class="c k c26" aria-labelledby="c26">
+      <h3 id="c26">٢٦. الغلاف الكامل</h3>
+      <p>غلاف قائم بإطار مذهّب والعنوان في خرطوشة وسطه، كأغلفة كتب الحديث.</p>
+      <ul class="aqsam">
+        <li><a href="../category.html"><span>الإيمان</span></a></li>
+        <li><a href="../category.html"><span>الطهارة</span></a></li>
+        <li><a href="../category.html"><span>الصلاة</span></a></li>
+        <li><a href="../category.html"><span>الزكاة</span></a></li>
+      </ul>
+      <ul class="kutub">
+        <li><a href="../book.html"><span>الكتاب التجريبي الأول</span><span>مؤلف تجريبي</span></a></li>
+        <li><a href="../book.html"><span>الكتاب التجريبي الثاني</span><span>مؤلف تجريبي</span></a></li>
+        <li><a href="../book.html"><span>الكتاب التجريبي الثالث</span><span>مؤلف تجريبي</span></a></li>
+        <li><a href="../book.html"><span>الكتاب التجريبي الرابع</span><span>مؤلف تجريبي</span></a></li>
+      </ul>
+      <ol>
+        <li><a href="../hadith.html"><span>عَنِ الرَّاوِي التَّجْرِيبِيِّ قَالَ: هَذَا نَصٌّ تَجْرِيبِيٌّ يُوضَعُ فِي مَكَانِ نَصِّ الْحَدِيثِ لِاخْتِبَارِ شَكْلِ الصَّفْحَةِ، وَلَيْسَ حَدِيثًا وَلَا مَنْقُولًا عَنْ كِتَابٍ. يُرَادُ بِهِ قِيَاسُ طُولِ السَّطْرِ وَالْمَسَافَةِ بَيْنَ الْأَسْطُرِ، وَوُضُوحِ الْحَرَكَاتِ فَوْقَ الْحُرُوفِ وَتَحْتَهَا</span><svg viewBox="0 0 256 256" aria-hidden="true" focusable="false"><path d="M220,128a4,4,0,0,1-4,4H49.66l65.17,65.17a4,4,0,0,1-5.66,5.66l-72-72a4,4,0,0,1,0-5.66l72-72a4,4,0,0,1,5.66,5.66L49.66,124H216A4,4,0,0,1,220,128Z"/></svg></a></li>
+      </ol>
+    </section>
+    <section class="c k c27" aria-labelledby="c27">
+      <h3 id="c27">٢٧. الرف الأسود</h3>
+      <p>مجموعة مجلدات سوداء على رف، عناوينها على طول الكعب.</p>
+      <ul class="aqsam">
+        <li><a href="../category.html"><span>الإيمان</span></a></li>
+        <li><a href="../category.html"><span>الطهارة</span></a></li>
+        <li><a href="../category.html"><span>الصلاة</span></a></li>
+        <li><a href="../category.html"><span>الزكاة</span></a></li>
+      </ul>
+      <ul class="kutub">
+        <li><a href="../book.html"><span>الكتاب التجريبي الأول</span><span>مؤلف تجريبي</span></a></li>
+        <li><a href="../book.html"><span>الكتاب التجريبي الثاني</span><span>مؤلف تجريبي</span></a></li>
+        <li><a href="../book.html"><span>الكتاب التجريبي الثالث</span><span>مؤلف تجريبي</span></a></li>
+        <li><a href="../book.html"><span>الكتاب التجريبي الرابع</span><span>مؤلف تجريبي</span></a></li>
+        <li><a href="../book.html"><span>الكتاب التجريبي الخامس</span><span>مؤلف تجريبي</span></a></li>
+        <li><a href="../book.html"><span>الكتاب التجريبي السادس</span><span>مؤلف تجريبي</span></a></li>
+        <li><a href="../book.html"><span>الكتاب التجريبي السابع</span><span>مؤلف تجريبي</span></a></li>
+        <li><a href="../book.html"><span>الكتاب التجريبي الثامن</span><span>مؤلف تجريبي</span></a></li>
+      </ul>
+      <ol>
+        <li><a href="../hadith.html"><span>عَنِ الرَّاوِي التَّجْرِيبِيِّ قَالَ: هَذَا نَصٌّ تَجْرِيبِيٌّ يُوضَعُ فِي مَكَانِ نَصِّ الْحَدِيثِ لِاخْتِبَارِ شَكْلِ الصَّفْحَةِ، وَلَيْسَ حَدِيثًا وَلَا مَنْقُولًا عَنْ كِتَابٍ. يُرَادُ بِهِ قِيَاسُ طُولِ السَّطْرِ وَالْمَسَافَةِ بَيْنَ الْأَسْطُرِ، وَوُضُوحِ الْحَرَكَاتِ فَوْقَ الْحُرُوفِ وَتَحْتَهَا</span><svg viewBox="0 0 256 256" aria-hidden="true" focusable="false"><path d="M220,128a4,4,0,0,1-4,4H49.66l65.17,65.17a4,4,0,0,1-5.66,5.66l-72-72a4,4,0,0,1,0-5.66l72-72a4,4,0,0,1,5.66,5.66L49.66,124H216A4,4,0,0,1,220,128Z"/></svg></a></li>
+      </ol>
+    </section>
+    <section class="c k c28" aria-labelledby="c28">
+      <h3 id="c28">٢٨. الكتب المرصوصة</h3>
+      <p>كتب مرصوصة بعضها فوق بعض تظهر كعوبها، والعناوين أفقية تُقرأ بسهولة.</p>
+      <ul class="aqsam">
+        <li><a href="../category.html"><span>الإيمان</span></a></li>
+        <li><a href="../category.html"><span>الطهارة</span></a></li>
+        <li><a href="../category.html"><span>الصلاة</span></a></li>
+        <li><a href="../category.html"><span>الزكاة</span></a></li>
+      </ul>
+      <ul class="kutub">
+        <li><a href="../book.html"><span>الكتاب التجريبي الأول</span><span>مؤلف تجريبي</span></a></li>
+        <li><a href="../book.html"><span>الكتاب التجريبي الثاني</span><span>مؤلف تجريبي</span></a></li>
+        <li><a href="../book.html"><span>الكتاب التجريبي الثالث</span><span>مؤلف تجريبي</span></a></li>
+        <li><a href="../book.html"><span>الكتاب التجريبي الرابع</span><span>مؤلف تجريبي</span></a></li>
+      </ul>
+      <ol>
+        <li><a href="../hadith.html"><span>عَنِ الرَّاوِي التَّجْرِيبِيِّ قَالَ: هَذَا نَصٌّ تَجْرِيبِيٌّ يُوضَعُ فِي مَكَانِ نَصِّ الْحَدِيثِ لِاخْتِبَارِ شَكْلِ الصَّفْحَةِ، وَلَيْسَ حَدِيثًا وَلَا مَنْقُولًا عَنْ كِتَابٍ. يُرَادُ بِهِ قِيَاسُ طُولِ السَّطْرِ وَالْمَسَافَةِ بَيْنَ الْأَسْطُرِ، وَوُضُوحِ الْحَرَكَاتِ فَوْقَ الْحُرُوفِ وَتَحْتَهَا</span><svg viewBox="0 0 256 256" aria-hidden="true" focusable="false"><path d="M220,128a4,4,0,0,1-4,4H49.66l65.17,65.17a4,4,0,0,1-5.66,5.66l-72-72a4,4,0,0,1,0-5.66l72-72a4,4,0,0,1,5.66,5.66L49.66,124H216A4,4,0,0,1,220,128Z"/></svg></a></li>
+      </ol>
+    </section>
+    <section class="c k c29" aria-labelledby="c29">
+      <h3 id="c29">٢٩. الخرطوشة المذهّبة</h3>
+      <p>الأقسام في خرطوشة مذهّبة بحبر أسود، والكتب بالأسود المذهّب.</p>
+      <ul class="aqsam">
+        <li><a href="../category.html"><span>الإيمان</span></a></li>
+        <li><a href="../category.html"><span>الطهارة</span></a></li>
+        <li><a href="../category.html"><span>الصلاة</span></a></li>
+        <li><a href="../category.html"><span>الزكاة</span></a></li>
+      </ul>
+      <ul class="kutub">
+        <li><a href="../book.html"><span>الكتاب التجريبي الأول</span><span>مؤلف تجريبي</span></a></li>
+        <li><a href="../book.html"><span>الكتاب التجريبي الثاني</span><span>مؤلف تجريبي</span></a></li>
+      </ul>
+      <ol>
+        <li><a href="../hadith.html"><span>عَنِ الرَّاوِي التَّجْرِيبِيِّ قَالَ: هَذَا نَصٌّ تَجْرِيبِيٌّ يُوضَعُ فِي مَكَانِ نَصِّ الْحَدِيثِ لِاخْتِبَارِ شَكْلِ الصَّفْحَةِ، وَلَيْسَ حَدِيثًا وَلَا مَنْقُولًا عَنْ كِتَابٍ. يُرَادُ بِهِ قِيَاسُ طُولِ السَّطْرِ وَالْمَسَافَةِ بَيْنَ الْأَسْطُرِ، وَوُضُوحِ الْحَرَكَاتِ فَوْقَ الْحُرُوفِ وَتَحْتَهَا</span><svg viewBox="0 0 256 256" aria-hidden="true" focusable="false"><path d="M220,128a4,4,0,0,1-4,4H49.66l65.17,65.17a4,4,0,0,1-5.66,5.66l-72-72a4,4,0,0,1,0-5.66l72-72a4,4,0,0,1,5.66,5.66L49.66,124H216A4,4,0,0,1,220,128Z"/></svg></a></li>
+      </ol>
+    </section>
+    <section class="c k c30" aria-labelledby="c30">
+      <h3 id="c30">٣٠. الزوايا المذهّبة</h3>
+      <p>زوايا مذهّبة على طرف الغلاف الأسود، والأقسام في خرطوشة مثمّنة.</p>
+      <ul class="aqsam">
+        <li><a href="../category.html"><span>الإيمان</span></a></li>
+        <li><a href="../category.html"><span>الطهارة</span></a></li>
+        <li><a href="../category.html"><span>الصلاة</span></a></li>
+        <li><a href="../category.html"><span>الزكاة</span></a></li>
+      </ul>
+      <ul class="kutub">
+        <li><a href="../book.html"><span>الكتاب التجريبي الأول</span><span>مؤلف تجريبي</span></a></li>
+        <li><a href="../book.html"><span>الكتاب التجريبي الثاني</span><span>مؤلف تجريبي</span></a></li>
+      </ul>
+      <ol>
+        <li><a href="../hadith.html"><span>عَنِ الرَّاوِي التَّجْرِيبِيِّ قَالَ: هَذَا نَصٌّ تَجْرِيبِيٌّ يُوضَعُ فِي مَكَانِ نَصِّ الْحَدِيثِ لِاخْتِبَارِ شَكْلِ الصَّفْحَةِ، وَلَيْسَ حَدِيثًا وَلَا مَنْقُولًا عَنْ كِتَابٍ. يُرَادُ بِهِ قِيَاسُ طُولِ السَّطْرِ وَالْمَسَافَةِ بَيْنَ الْأَسْطُرِ، وَوُضُوحِ الْحَرَكَاتِ فَوْقَ الْحُرُوفِ وَتَحْتَهَا</span><svg viewBox="0 0 256 256" aria-hidden="true" focusable="false"><path d="M220,128a4,4,0,0,1-4,4H49.66l65.17,65.17a4,4,0,0,1-5.66,5.66l-72-72a4,4,0,0,1,0-5.66l72-72a4,4,0,0,1,5.66,5.66L49.66,124H216A4,4,0,0,1,220,128Z"/></svg></a></li>
+      </ol>
+    </section>
+    <section class="c k c31" aria-labelledby="c31">
+      <h3 id="c31">٣١. الورق والأسود</h3>
+      <p>الأقسام في خرطوشة من الورق الأصفر، والكتب مجلدات سوداء.</p>
+      <ul class="aqsam">
+        <li><a href="../category.html"><span>الإيمان</span></a></li>
+        <li><a href="../category.html"><span>الطهارة</span></a></li>
+        <li><a href="../category.html"><span>الصلاة</span></a></li>
+        <li><a href="../category.html"><span>الزكاة</span></a></li>
+      </ul>
+      <ul class="kutub">
+        <li><a href="../book.html"><span>الكتاب التجريبي الأول</span><span>مؤلف تجريبي</span></a></li>
+        <li><a href="../book.html"><span>الكتاب التجريبي الثاني</span><span>مؤلف تجريبي</span></a></li>
+      </ul>
+      <ol>
+        <li><a href="../hadith.html"><span>عَنِ الرَّاوِي التَّجْرِيبِيِّ قَالَ: هَذَا نَصٌّ تَجْرِيبِيٌّ يُوضَعُ فِي مَكَانِ نَصِّ الْحَدِيثِ لِاخْتِبَارِ شَكْلِ الصَّفْحَةِ، وَلَيْسَ حَدِيثًا وَلَا مَنْقُولًا عَنْ كِتَابٍ. يُرَادُ بِهِ قِيَاسُ طُولِ السَّطْرِ وَالْمَسَافَةِ بَيْنَ الْأَسْطُرِ، وَوُضُوحِ الْحَرَكَاتِ فَوْقَ الْحُرُوفِ وَتَحْتَهَا</span><svg viewBox="0 0 256 256" aria-hidden="true" focusable="false"><path d="M220,128a4,4,0,0,1-4,4H49.66l65.17,65.17a4,4,0,0,1-5.66,5.66l-72-72a4,4,0,0,1,0-5.66l72-72a4,4,0,0,1,5.66,5.66L49.66,124H216A4,4,0,0,1,220,128Z"/></svg></a></li>
+      </ol>
+    </section>
+    </section>
+    <section aria-labelledby="part-2">
+      <h2 id="part-2">بطاقة الحديث: السهم والشكل</h2>
+      <p>بطاقة الحديث بيضاء في كل خيار. الخمسة الأولى سهم في طرف البطاقة، والبقية يدل فيها شكل البطاقة نفسه على أن للحديث بقية تُقرأ بالضغط.</p>
+    <section class="v o1" aria-labelledby="o1">
+      <h3 id="o1">١. سهم طويل</h3>
+      <p>سهم بخط وذيل، أوضح في معنى الانتقال من رأس السهم وحده.</p>
+      <ol>
+        <li><a href="../hadith.html"><span>عَنِ الرَّاوِي التَّجْرِيبِيِّ قَالَ: هَذَا نَصٌّ تَجْرِيبِيٌّ يُوضَعُ فِي مَكَانِ نَصِّ الْحَدِيثِ لِاخْتِبَارِ شَكْلِ الصَّفْحَةِ، وَلَيْسَ حَدِيثًا وَلَا مَنْقُولًا عَنْ كِتَابٍ. يُرَادُ بِهِ قِيَاسُ طُولِ السَّطْرِ وَالْمَسَافَةِ بَيْنَ الْأَسْطُرِ، وَوُضُوحِ الْحَرَكَاتِ فَوْقَ الْحُرُوفِ وَتَحْتَهَا</span><svg viewBox="0 0 256 256" aria-hidden="true" focusable="false"><path d="M220,128a4,4,0,0,1-4,4H49.66l65.17,65.17a4,4,0,0,1-5.66,5.66l-72-72a4,4,0,0,1,0-5.66l72-72a4,4,0,0,1,5.66,5.66L49.66,124H216A4,4,0,0,1,220,128Z"/></svg></a></li>
+        <li><a href="../hadith.html"><span>هَذَا نَصٌّ تَجْرِيبِيٌّ يُوضَعُ فِي مَكَانِ نَصِّ الْحَدِيثِ لِاخْتِبَارِ شَكْلِ الصَّفْحَةِ، وَلَيْسَ حَدِيثًا وَلَا مَنْقُولًا عَنْ كِتَابٍ. وَهَذِهِ جُمَلٌ أُخْرَى تُزَادُ عَلَى النَّصِّ لِيَطُولَ، فَيُخْتَبَرَ بِهَا طَيُّ الرِّوَايَاتِ الطَّوِيلَةِ وَإِظْهَارُ أَوَّلِهَا فَقَطْ</span><svg viewBox="0 0 256 256" aria-hidden="true" focusable="false"><path d="M220,128a4,4,0,0,1-4,4H49.66l65.17,65.17a4,4,0,0,1-5.66,5.66l-72-72a4,4,0,0,1,0-5.66l72-72a4,4,0,0,1,5.66,5.66L49.66,124H216A4,4,0,0,1,220,128Z"/></svg></a></li>
+      </ol>
+    </section>
+    <section class="v o2" aria-labelledby="o2">
+      <h3 id="o2">٢. سهم في دائرة</h3>
+      <p>السهم الطويل على دائرة رمادية فاتحة، فيبدو زرًّا واضحًا.</p>
+      <ol>
+        <li><a href="../hadith.html"><span>عَنِ الرَّاوِي التَّجْرِيبِيِّ قَالَ: هَذَا نَصٌّ تَجْرِيبِيٌّ يُوضَعُ فِي مَكَانِ نَصِّ الْحَدِيثِ لِاخْتِبَارِ شَكْلِ الصَّفْحَةِ، وَلَيْسَ حَدِيثًا وَلَا مَنْقُولًا عَنْ كِتَابٍ. يُرَادُ بِهِ قِيَاسُ طُولِ السَّطْرِ وَالْمَسَافَةِ بَيْنَ الْأَسْطُرِ، وَوُضُوحِ الْحَرَكَاتِ فَوْقَ الْحُرُوفِ وَتَحْتَهَا</span><svg viewBox="0 0 256 256" aria-hidden="true" focusable="false"><path d="M220,128a4,4,0,0,1-4,4H49.66l65.17,65.17a4,4,0,0,1-5.66,5.66l-72-72a4,4,0,0,1,0-5.66l72-72a4,4,0,0,1,5.66,5.66L49.66,124H216A4,4,0,0,1,220,128Z"/></svg></a></li>
+        <li><a href="../hadith.html"><span>هَذَا نَصٌّ تَجْرِيبِيٌّ يُوضَعُ فِي مَكَانِ نَصِّ الْحَدِيثِ لِاخْتِبَارِ شَكْلِ الصَّفْحَةِ، وَلَيْسَ حَدِيثًا وَلَا مَنْقُولًا عَنْ كِتَابٍ. وَهَذِهِ جُمَلٌ أُخْرَى تُزَادُ عَلَى النَّصِّ لِيَطُولَ، فَيُخْتَبَرَ بِهَا طَيُّ الرِّوَايَاتِ الطَّوِيلَةِ وَإِظْهَارُ أَوَّلِهَا فَقَطْ</span><svg viewBox="0 0 256 256" aria-hidden="true" focusable="false"><path d="M220,128a4,4,0,0,1-4,4H49.66l65.17,65.17a4,4,0,0,1-5.66,5.66l-72-72a4,4,0,0,1,0-5.66l72-72a4,4,0,0,1,5.66,5.66L49.66,124H216A4,4,0,0,1,220,128Z"/></svg></a></li>
+      </ol>
+    </section>
+    <section class="v o3" aria-labelledby="o3">
+      <h3 id="o3">٣. كلمة وسهم</h3>
+      <p>«اقرأ الحديث» بالرمادي مع السهم، فيُقرأ ما يحدث عند الضغط.</p>
+      <ol>
+        <li><a href="../hadith.html"><span>عَنِ الرَّاوِي التَّجْرِيبِيِّ قَالَ: هَذَا نَصٌّ تَجْرِيبِيٌّ يُوضَعُ فِي مَكَانِ نَصِّ الْحَدِيثِ لِاخْتِبَارِ شَكْلِ الصَّفْحَةِ، وَلَيْسَ حَدِيثًا وَلَا مَنْقُولًا عَنْ كِتَابٍ. يُرَادُ بِهِ قِيَاسُ طُولِ السَّطْرِ وَالْمَسَافَةِ بَيْنَ الْأَسْطُرِ، وَوُضُوحِ الْحَرَكَاتِ فَوْقَ الْحُرُوفِ وَتَحْتَهَا</span><em>اقرأ الحديث<svg viewBox="0 0 256 256" aria-hidden="true" focusable="false"><path d="M220,128a4,4,0,0,1-4,4H49.66l65.17,65.17a4,4,0,0,1-5.66,5.66l-72-72a4,4,0,0,1,0-5.66l72-72a4,4,0,0,1,5.66,5.66L49.66,124H216A4,4,0,0,1,220,128Z"/></svg></em></a></li>
+        <li><a href="../hadith.html"><span>هَذَا نَصٌّ تَجْرِيبِيٌّ يُوضَعُ فِي مَكَانِ نَصِّ الْحَدِيثِ لِاخْتِبَارِ شَكْلِ الصَّفْحَةِ، وَلَيْسَ حَدِيثًا وَلَا مَنْقُولًا عَنْ كِتَابٍ. وَهَذِهِ جُمَلٌ أُخْرَى تُزَادُ عَلَى النَّصِّ لِيَطُولَ، فَيُخْتَبَرَ بِهَا طَيُّ الرِّوَايَاتِ الطَّوِيلَةِ وَإِظْهَارُ أَوَّلِهَا فَقَطْ</span><em>اقرأ الحديث<svg viewBox="0 0 256 256" aria-hidden="true" focusable="false"><path d="M220,128a4,4,0,0,1-4,4H49.66l65.17,65.17a4,4,0,0,1-5.66,5.66l-72-72a4,4,0,0,1,0-5.66l72-72a4,4,0,0,1,5.66,5.66L49.66,124H216A4,4,0,0,1,220,128Z"/></svg></em></a></li>
+      </ol>
+    </section>
+    <section class="v o4" aria-labelledby="o4">
+      <h3 id="o4">٤. رأس السهم السابق</h3>
+      <p>للمقارنة: رأس السهم الذي في الصفحات الآن.</p>
+      <ol>
+        <li><a href="../hadith.html"><span>عَنِ الرَّاوِي التَّجْرِيبِيِّ قَالَ: هَذَا نَصٌّ تَجْرِيبِيٌّ يُوضَعُ فِي مَكَانِ نَصِّ الْحَدِيثِ لِاخْتِبَارِ شَكْلِ الصَّفْحَةِ، وَلَيْسَ حَدِيثًا وَلَا مَنْقُولًا عَنْ كِتَابٍ. يُرَادُ بِهِ قِيَاسُ طُولِ السَّطْرِ وَالْمَسَافَةِ بَيْنَ الْأَسْطُرِ، وَوُضُوحِ الْحَرَكَاتِ فَوْقَ الْحُرُوفِ وَتَحْتَهَا</span><svg viewBox="0 0 256 256" aria-hidden="true" focusable="false"><path d="M162.83,205.17a4,4,0,0,1-5.66,5.66l-80-80a4,4,0,0,1,0-5.66l80-80a4,4,0,1,1,5.66,5.66L85.66,128Z"/></svg></a></li>
+        <li><a href="../hadith.html"><span>هَذَا نَصٌّ تَجْرِيبِيٌّ يُوضَعُ فِي مَكَانِ نَصِّ الْحَدِيثِ لِاخْتِبَارِ شَكْلِ الصَّفْحَةِ، وَلَيْسَ حَدِيثًا وَلَا مَنْقُولًا عَنْ كِتَابٍ. وَهَذِهِ جُمَلٌ أُخْرَى تُزَادُ عَلَى النَّصِّ لِيَطُولَ، فَيُخْتَبَرَ بِهَا طَيُّ الرِّوَايَاتِ الطَّوِيلَةِ وَإِظْهَارُ أَوَّلِهَا فَقَطْ</span><svg viewBox="0 0 256 256" aria-hidden="true" focusable="false"><path d="M162.83,205.17a4,4,0,0,1-5.66,5.66l-80-80a4,4,0,0,1,0-5.66l80-80a4,4,0,1,1,5.66,5.66L85.66,128Z"/></svg></a></li>
+      </ol>
+    </section>
+    <section class="v o5" aria-labelledby="o5">
+      <h3 id="o5">٥. بلا سهم</h3>
+      <p>التلاشي وحده يدل على أن للنص بقية، والبطاقة كلها تُضغط.</p>
+      <ol>
+        <li><a href="../hadith.html"><span>عَنِ الرَّاوِي التَّجْرِيبِيِّ قَالَ: هَذَا نَصٌّ تَجْرِيبِيٌّ يُوضَعُ فِي مَكَانِ نَصِّ الْحَدِيثِ لِاخْتِبَارِ شَكْلِ الصَّفْحَةِ، وَلَيْسَ حَدِيثًا وَلَا مَنْقُولًا عَنْ كِتَابٍ. يُرَادُ بِهِ قِيَاسُ طُولِ السَّطْرِ وَالْمَسَافَةِ بَيْنَ الْأَسْطُرِ، وَوُضُوحِ الْحَرَكَاتِ فَوْقَ الْحُرُوفِ وَتَحْتَهَا</span></a></li>
+        <li><a href="../hadith.html"><span>هَذَا نَصٌّ تَجْرِيبِيٌّ يُوضَعُ فِي مَكَانِ نَصِّ الْحَدِيثِ لِاخْتِبَارِ شَكْلِ الصَّفْحَةِ، وَلَيْسَ حَدِيثًا وَلَا مَنْقُولًا عَنْ كِتَابٍ. وَهَذِهِ جُمَلٌ أُخْرَى تُزَادُ عَلَى النَّصِّ لِيَطُولَ، فَيُخْتَبَرَ بِهَا طَيُّ الرِّوَايَاتِ الطَّوِيلَةِ وَإِظْهَارُ أَوَّلِهَا فَقَطْ</span></a></li>
+      </ol>
+    </section>
+    <section class="v vs o6" aria-labelledby="o6">
+      <h3 id="o6">٦. اللافتة</h3>
+      <p>طرف البطاقة مدبّب نحو اليسار كاللافتة التي تدل على الطريق، فالبطاقة كلها سهم.</p>
+      <ol>
+        <li><a href="../hadith.html"><span>عَنِ الرَّاوِي التَّجْرِيبِيِّ قَالَ: هَذَا نَصٌّ تَجْرِيبِيٌّ يُوضَعُ فِي مَكَانِ نَصِّ الْحَدِيثِ لِاخْتِبَارِ شَكْلِ الصَّفْحَةِ، وَلَيْسَ حَدِيثًا وَلَا مَنْقُولًا عَنْ كِتَابٍ. يُرَادُ بِهِ قِيَاسُ طُولِ السَّطْرِ وَالْمَسَافَةِ بَيْنَ الْأَسْطُرِ، وَوُضُوحِ الْحَرَكَاتِ فَوْقَ الْحُرُوفِ وَتَحْتَهَا</span></a></li>
+        <li><a href="../hadith.html"><span>هَذَا نَصٌّ تَجْرِيبِيٌّ يُوضَعُ فِي مَكَانِ نَصِّ الْحَدِيثِ لِاخْتِبَارِ شَكْلِ الصَّفْحَةِ، وَلَيْسَ حَدِيثًا وَلَا مَنْقُولًا عَنْ كِتَابٍ. وَهَذِهِ جُمَلٌ أُخْرَى تُزَادُ عَلَى النَّصِّ لِيَطُولَ، فَيُخْتَبَرَ بِهَا طَيُّ الرِّوَايَاتِ الطَّوِيلَةِ وَإِظْهَارُ أَوَّلِهَا فَقَطْ</span></a></li>
+      </ol>
+    </section>
+    <section class="v vs o7" aria-labelledby="o7">
+      <h3 id="o7">٧. الشارة</h3>
+      <p>البطاقة شارة متجهة إلى الأمام: مدبّبة من طرف ومقعّرة من الآخر.</p>
+      <ol>
+        <li><a href="../hadith.html"><span>عَنِ الرَّاوِي التَّجْرِيبِيِّ قَالَ: هَذَا نَصٌّ تَجْرِيبِيٌّ يُوضَعُ فِي مَكَانِ نَصِّ الْحَدِيثِ لِاخْتِبَارِ شَكْلِ الصَّفْحَةِ، وَلَيْسَ حَدِيثًا وَلَا مَنْقُولًا عَنْ كِتَابٍ. يُرَادُ بِهِ قِيَاسُ طُولِ السَّطْرِ وَالْمَسَافَةِ بَيْنَ الْأَسْطُرِ، وَوُضُوحِ الْحَرَكَاتِ فَوْقَ الْحُرُوفِ وَتَحْتَهَا</span></a></li>
+        <li><a href="../hadith.html"><span>هَذَا نَصٌّ تَجْرِيبِيٌّ يُوضَعُ فِي مَكَانِ نَصِّ الْحَدِيثِ لِاخْتِبَارِ شَكْلِ الصَّفْحَةِ، وَلَيْسَ حَدِيثًا وَلَا مَنْقُولًا عَنْ كِتَابٍ. وَهَذِهِ جُمَلٌ أُخْرَى تُزَادُ عَلَى النَّصِّ لِيَطُولَ، فَيُخْتَبَرَ بِهَا طَيُّ الرِّوَايَاتِ الطَّوِيلَةِ وَإِظْهَارُ أَوَّلِهَا فَقَطْ</span></a></li>
+      </ol>
+    </section>
+    <section class="v vs o8" aria-labelledby="o8">
+      <h3 id="o8">٨. الطرف السفلي</h3>
+      <p>أسفل البطاقة مدبّب نحو الأسفل، دلالة على أن للنص بقية.</p>
+      <ol>
+        <li><a href="../hadith.html"><span>عَنِ الرَّاوِي التَّجْرِيبِيِّ قَالَ: هَذَا نَصٌّ تَجْرِيبِيٌّ يُوضَعُ فِي مَكَانِ نَصِّ الْحَدِيثِ لِاخْتِبَارِ شَكْلِ الصَّفْحَةِ، وَلَيْسَ حَدِيثًا وَلَا مَنْقُولًا عَنْ كِتَابٍ. يُرَادُ بِهِ قِيَاسُ طُولِ السَّطْرِ وَالْمَسَافَةِ بَيْنَ الْأَسْطُرِ، وَوُضُوحِ الْحَرَكَاتِ فَوْقَ الْحُرُوفِ وَتَحْتَهَا</span></a></li>
+        <li><a href="../hadith.html"><span>هَذَا نَصٌّ تَجْرِيبِيٌّ يُوضَعُ فِي مَكَانِ نَصِّ الْحَدِيثِ لِاخْتِبَارِ شَكْلِ الصَّفْحَةِ، وَلَيْسَ حَدِيثًا وَلَا مَنْقُولًا عَنْ كِتَابٍ. وَهَذِهِ جُمَلٌ أُخْرَى تُزَادُ عَلَى النَّصِّ لِيَطُولَ، فَيُخْتَبَرَ بِهَا طَيُّ الرِّوَايَاتِ الطَّوِيلَةِ وَإِظْهَارُ أَوَّلِهَا فَقَطْ</span></a></li>
+      </ol>
+    </section>
+    <section class="v vs o9" aria-labelledby="o9">
+      <h3 id="o9">٩. الزاوية المطوية</h3>
+      <p>زاوية الورقة مرفوعة كمن يهمّ بقلب الصفحة.</p>
+      <ol>
+        <li><a href="../hadith.html"><span>عَنِ الرَّاوِي التَّجْرِيبِيِّ قَالَ: هَذَا نَصٌّ تَجْرِيبِيٌّ يُوضَعُ فِي مَكَانِ نَصِّ الْحَدِيثِ لِاخْتِبَارِ شَكْلِ الصَّفْحَةِ، وَلَيْسَ حَدِيثًا وَلَا مَنْقُولًا عَنْ كِتَابٍ. يُرَادُ بِهِ قِيَاسُ طُولِ السَّطْرِ وَالْمَسَافَةِ بَيْنَ الْأَسْطُرِ، وَوُضُوحِ الْحَرَكَاتِ فَوْقَ الْحُرُوفِ وَتَحْتَهَا</span></a></li>
+        <li><a href="../hadith.html"><span>هَذَا نَصٌّ تَجْرِيبِيٌّ يُوضَعُ فِي مَكَانِ نَصِّ الْحَدِيثِ لِاخْتِبَارِ شَكْلِ الصَّفْحَةِ، وَلَيْسَ حَدِيثًا وَلَا مَنْقُولًا عَنْ كِتَابٍ. وَهَذِهِ جُمَلٌ أُخْرَى تُزَادُ عَلَى النَّصِّ لِيَطُولَ، فَيُخْتَبَرَ بِهَا طَيُّ الرِّوَايَاتِ الطَّوِيلَةِ وَإِظْهَارُ أَوَّلِهَا فَقَطْ</span></a></li>
+      </ol>
+    </section>
+    <section class="v o10" aria-labelledby="o10">
+      <h3 id="o10">١٠. الأوراق تحتها</h3>
+      <p>أوراق تحت البطاقة تدل على أن للحديث بقية لم تظهر.</p>
+      <ol>
+        <li><a href="../hadith.html"><span>عَنِ الرَّاوِي التَّجْرِيبِيِّ قَالَ: هَذَا نَصٌّ تَجْرِيبِيٌّ يُوضَعُ فِي مَكَانِ نَصِّ الْحَدِيثِ لِاخْتِبَارِ شَكْلِ الصَّفْحَةِ، وَلَيْسَ حَدِيثًا وَلَا مَنْقُولًا عَنْ كِتَابٍ. يُرَادُ بِهِ قِيَاسُ طُولِ السَّطْرِ وَالْمَسَافَةِ بَيْنَ الْأَسْطُرِ، وَوُضُوحِ الْحَرَكَاتِ فَوْقَ الْحُرُوفِ وَتَحْتَهَا</span></a></li>
+        <li><a href="../hadith.html"><span>هَذَا نَصٌّ تَجْرِيبِيٌّ يُوضَعُ فِي مَكَانِ نَصِّ الْحَدِيثِ لِاخْتِبَارِ شَكْلِ الصَّفْحَةِ، وَلَيْسَ حَدِيثًا وَلَا مَنْقُولًا عَنْ كِتَابٍ. وَهَذِهِ جُمَلٌ أُخْرَى تُزَادُ عَلَى النَّصِّ لِيَطُولَ، فَيُخْتَبَرَ بِهَا طَيُّ الرِّوَايَاتِ الطَّوِيلَةِ وَإِظْهَارُ أَوَّلِهَا فَقَطْ</span></a></li>
+      </ol>
+    </section>
+    <section class="v o11" aria-labelledby="o11">
+      <h3 id="o11">١١. أطراف الصفحات</h3>
+      <p>أطراف صفحات تظهر من جهة اليسار، كالكتاب حين تبقى منه صفحات تُقلب.</p>
+      <ol>
+        <li><a href="../hadith.html"><span>عَنِ الرَّاوِي التَّجْرِيبِيِّ قَالَ: هَذَا نَصٌّ تَجْرِيبِيٌّ يُوضَعُ فِي مَكَانِ نَصِّ الْحَدِيثِ لِاخْتِبَارِ شَكْلِ الصَّفْحَةِ، وَلَيْسَ حَدِيثًا وَلَا مَنْقُولًا عَنْ كِتَابٍ. يُرَادُ بِهِ قِيَاسُ طُولِ السَّطْرِ وَالْمَسَافَةِ بَيْنَ الْأَسْطُرِ، وَوُضُوحِ الْحَرَكَاتِ فَوْقَ الْحُرُوفِ وَتَحْتَهَا</span></a></li>
+        <li><a href="../hadith.html"><span>هَذَا نَصٌّ تَجْرِيبِيٌّ يُوضَعُ فِي مَكَانِ نَصِّ الْحَدِيثِ لِاخْتِبَارِ شَكْلِ الصَّفْحَةِ، وَلَيْسَ حَدِيثًا وَلَا مَنْقُولًا عَنْ كِتَابٍ. وَهَذِهِ جُمَلٌ أُخْرَى تُزَادُ عَلَى النَّصِّ لِيَطُولَ، فَيُخْتَبَرَ بِهَا طَيُّ الرِّوَايَاتِ الطَّوِيلَةِ وَإِظْهَارُ أَوَّلِهَا فَقَطْ</span></a></li>
+      </ol>
+    </section>
+    <section class="v vs o12" aria-labelledby="o12">
+      <h3 id="o12">١٢. الزر الملتحم</h3>
+      <p>دائرة فيها السهم ملتحمة بطرف البطاقة، فهي جزء من شكلها.</p>
+      <ol>
+        <li><a href="../hadith.html"><span>عَنِ الرَّاوِي التَّجْرِيبِيِّ قَالَ: هَذَا نَصٌّ تَجْرِيبِيٌّ يُوضَعُ فِي مَكَانِ نَصِّ الْحَدِيثِ لِاخْتِبَارِ شَكْلِ الصَّفْحَةِ، وَلَيْسَ حَدِيثًا وَلَا مَنْقُولًا عَنْ كِتَابٍ. يُرَادُ بِهِ قِيَاسُ طُولِ السَّطْرِ وَالْمَسَافَةِ بَيْنَ الْأَسْطُرِ، وَوُضُوحِ الْحَرَكَاتِ فَوْقَ الْحُرُوفِ وَتَحْتَهَا</span><svg viewBox="0 0 256 256" aria-hidden="true" focusable="false"><path d="M220,128a4,4,0,0,1-4,4H49.66l65.17,65.17a4,4,0,0,1-5.66,5.66l-72-72a4,4,0,0,1,0-5.66l72-72a4,4,0,0,1,5.66,5.66L49.66,124H216A4,4,0,0,1,220,128Z"/></svg></a></li>
+        <li><a href="../hadith.html"><span>هَذَا نَصٌّ تَجْرِيبِيٌّ يُوضَعُ فِي مَكَانِ نَصِّ الْحَدِيثِ لِاخْتِبَارِ شَكْلِ الصَّفْحَةِ، وَلَيْسَ حَدِيثًا وَلَا مَنْقُولًا عَنْ كِتَابٍ. وَهَذِهِ جُمَلٌ أُخْرَى تُزَادُ عَلَى النَّصِّ لِيَطُولَ، فَيُخْتَبَرَ بِهَا طَيُّ الرِّوَايَاتِ الطَّوِيلَةِ وَإِظْهَارُ أَوَّلِهَا فَقَطْ</span><svg viewBox="0 0 256 256" aria-hidden="true" focusable="false"><path d="M220,128a4,4,0,0,1-4,4H49.66l65.17,65.17a4,4,0,0,1-5.66,5.66l-72-72a4,4,0,0,1,0-5.66l72-72a4,4,0,0,1,5.66,5.66L49.66,124H216A4,4,0,0,1,220,128Z"/></svg></a></li>
+      </ol>
+    </section>
+    <section class="v vs o13" aria-labelledby="o13">
+      <h3 id="o13">١٣. اللسان</h3>
+      <p>لسان تحت البطاقة مكتوب فيه «تتمة الحديث»، والكلمة أوضح شيء لمن لا يعرف الحاسوب.</p>
+      <ol>
+        <li><a href="../hadith.html"><span>عَنِ الرَّاوِي التَّجْرِيبِيِّ قَالَ: هَذَا نَصٌّ تَجْرِيبِيٌّ يُوضَعُ فِي مَكَانِ نَصِّ الْحَدِيثِ لِاخْتِبَارِ شَكْلِ الصَّفْحَةِ، وَلَيْسَ حَدِيثًا وَلَا مَنْقُولًا عَنْ كِتَابٍ. يُرَادُ بِهِ قِيَاسُ طُولِ السَّطْرِ وَالْمَسَافَةِ بَيْنَ الْأَسْطُرِ، وَوُضُوحِ الْحَرَكَاتِ فَوْقَ الْحُرُوفِ وَتَحْتَهَا</span><em>تتمة الحديث</em></a></li>
+        <li><a href="../hadith.html"><span>هَذَا نَصٌّ تَجْرِيبِيٌّ يُوضَعُ فِي مَكَانِ نَصِّ الْحَدِيثِ لِاخْتِبَارِ شَكْلِ الصَّفْحَةِ، وَلَيْسَ حَدِيثًا وَلَا مَنْقُولًا عَنْ كِتَابٍ. وَهَذِهِ جُمَلٌ أُخْرَى تُزَادُ عَلَى النَّصِّ لِيَطُولَ، فَيُخْتَبَرَ بِهَا طَيُّ الرِّوَايَاتِ الطَّوِيلَةِ وَإِظْهَارُ أَوَّلِهَا فَقَطْ</span><em>تتمة الحديث</em></a></li>
+      </ol>
+    </section>
+    <section class="v o14" aria-labelledby="o14">
+      <h3 id="o14">١٤. شريط القراءة</h3>
+      <p>شريط قراءة أسود يخرج من أسفل البطاقة، كالكتاب الذي لم تُتمّ قراءته.</p>
+      <ol>
+        <li><a href="../hadith.html"><span>عَنِ الرَّاوِي التَّجْرِيبِيِّ قَالَ: هَذَا نَصٌّ تَجْرِيبِيٌّ يُوضَعُ فِي مَكَانِ نَصِّ الْحَدِيثِ لِاخْتِبَارِ شَكْلِ الصَّفْحَةِ، وَلَيْسَ حَدِيثًا وَلَا مَنْقُولًا عَنْ كِتَابٍ. يُرَادُ بِهِ قِيَاسُ طُولِ السَّطْرِ وَالْمَسَافَةِ بَيْنَ الْأَسْطُرِ، وَوُضُوحِ الْحَرَكَاتِ فَوْقَ الْحُرُوفِ وَتَحْتَهَا</span></a></li>
+        <li><a href="../hadith.html"><span>هَذَا نَصٌّ تَجْرِيبِيٌّ يُوضَعُ فِي مَكَانِ نَصِّ الْحَدِيثِ لِاخْتِبَارِ شَكْلِ الصَّفْحَةِ، وَلَيْسَ حَدِيثًا وَلَا مَنْقُولًا عَنْ كِتَابٍ. وَهَذِهِ جُمَلٌ أُخْرَى تُزَادُ عَلَى النَّصِّ لِيَطُولَ، فَيُخْتَبَرَ بِهَا طَيُّ الرِّوَايَاتِ الطَّوِيلَةِ وَإِظْهَارُ أَوَّلِهَا فَقَطْ</span></a></li>
+      </ol>
+    </section>
+    </section>
+    <section aria-labelledby="part-3">
+      <h2 id="part-3">التصاميم السابقة</h2>
+      <p>مستوحاة من كتب الحديث: تجليدها وورقها وكعوبها وعناوينها.</p>
+    <section class="c c1" aria-labelledby="c1">
+      <h3 id="c1">١. أخضر التجليد</h3>
+      <p>أخضر داكن كتجليد كتب الحديث القديمة، والنص أبيض.</p>
+      <ul class="aqsam">
+        <li><a href="../category.html"><span>الإيمان</span></a></li>
+        <li><a href="../category.html"><span>الطهارة</span></a></li>
+        <li><a href="../category.html"><span>الصلاة</span></a></li>
+        <li><a href="../category.html"><span>الزكاة</span></a></li>
+      </ul>
+      <ul class="kutub">
+        <li><a href="../book.html"><span>الكتاب التجريبي الأول</span><span>مؤلف تجريبي</span></a></li>
+        <li><a href="../book.html"><span>الكتاب التجريبي الثاني</span><span>مؤلف تجريبي</span></a></li>
+      </ul>
+      <ol>
+        <li><a href="../hadith.html"><span>عَنِ الرَّاوِي التَّجْرِيبِيِّ قَالَ: هَذَا نَصٌّ تَجْرِيبِيٌّ يُوضَعُ فِي مَكَانِ نَصِّ الْحَدِيثِ لِاخْتِبَارِ شَكْلِ الصَّفْحَةِ، وَلَيْسَ حَدِيثًا وَلَا مَنْقُولًا عَنْ كِتَابٍ. يُرَادُ بِهِ قِيَاسُ طُولِ السَّطْرِ وَالْمَسَافَةِ بَيْنَ الْأَسْطُرِ، وَوُضُوحِ الْحَرَكَاتِ فَوْقَ الْحُرُوفِ وَتَحْتَهَا</span><svg viewBox="0 0 256 256" aria-hidden="true" focusable="false"><path d="M220,128a4,4,0,0,1-4,4H49.66l65.17,65.17a4,4,0,0,1-5.66,5.66l-72-72a4,4,0,0,1,0-5.66l72-72a4,4,0,0,1,5.66,5.66L49.66,124H216A4,4,0,0,1,220,128Z"/></svg></a></li>
+      </ol>
+    </section>
+    <section class="c c2" aria-labelledby="c2">
+      <h3 id="c2">٢. ألوان التجليد</h3>
+      <p>لكل كتاب لون من ألوان التجليد القديمة بحسب ترتيبه، والأقسام بالرمادي الداكن.</p>
+      <ul class="aqsam">
+        <li><a href="../category.html"><span>الإيمان</span></a></li>
+        <li><a href="../category.html"><span>الطهارة</span></a></li>
+        <li><a href="../category.html"><span>الصلاة</span></a></li>
+        <li><a href="../category.html"><span>الزكاة</span></a></li>
+      </ul>
+      <ul class="kutub">
+        <li><a href="../book.html"><span>الكتاب التجريبي الأول</span><span>مؤلف تجريبي</span></a></li>
+        <li><a href="../book.html"><span>الكتاب التجريبي الثاني</span><span>مؤلف تجريبي</span></a></li>
+        <li><a href="../book.html"><span>الكتاب التجريبي الثالث</span><span>مؤلف تجريبي</span></a></li>
+        <li><a href="../book.html"><span>الكتاب التجريبي الرابع</span><span>مؤلف تجريبي</span></a></li>
+      </ul>
+      <ol>
+        <li><a href="../hadith.html"><span>عَنِ الرَّاوِي التَّجْرِيبِيِّ قَالَ: هَذَا نَصٌّ تَجْرِيبِيٌّ يُوضَعُ فِي مَكَانِ نَصِّ الْحَدِيثِ لِاخْتِبَارِ شَكْلِ الصَّفْحَةِ، وَلَيْسَ حَدِيثًا وَلَا مَنْقُولًا عَنْ كِتَابٍ. يُرَادُ بِهِ قِيَاسُ طُولِ السَّطْرِ وَالْمَسَافَةِ بَيْنَ الْأَسْطُرِ، وَوُضُوحِ الْحَرَكَاتِ فَوْقَ الْحُرُوفِ وَتَحْتَهَا</span><svg viewBox="0 0 256 256" aria-hidden="true" focusable="false"><path d="M220,128a4,4,0,0,1-4,4H49.66l65.17,65.17a4,4,0,0,1-5.66,5.66l-72-72a4,4,0,0,1,0-5.66l72-72a4,4,0,0,1,5.66,5.66L49.66,124H216A4,4,0,0,1,220,128Z"/></svg></a></li>
+      </ol>
+    </section>
+    <section class="c c3" aria-labelledby="c3">
+      <h3 id="c3">٣. الكتب الصفراء</h3>
+      <p>لون الورق الأصفر الذي طُبعت عليه كتب التراث.</p>
+      <ul class="aqsam">
+        <li><a href="../category.html"><span>الإيمان</span></a></li>
+        <li><a href="../category.html"><span>الطهارة</span></a></li>
+        <li><a href="../category.html"><span>الصلاة</span></a></li>
+        <li><a href="../category.html"><span>الزكاة</span></a></li>
+      </ul>
+      <ul class="kutub">
+        <li><a href="../book.html"><span>الكتاب التجريبي الأول</span><span>مؤلف تجريبي</span></a></li>
+        <li><a href="../book.html"><span>الكتاب التجريبي الثاني</span><span>مؤلف تجريبي</span></a></li>
+      </ul>
+      <ol>
+        <li><a href="../hadith.html"><span>عَنِ الرَّاوِي التَّجْرِيبِيِّ قَالَ: هَذَا نَصٌّ تَجْرِيبِيٌّ يُوضَعُ فِي مَكَانِ نَصِّ الْحَدِيثِ لِاخْتِبَارِ شَكْلِ الصَّفْحَةِ، وَلَيْسَ حَدِيثًا وَلَا مَنْقُولًا عَنْ كِتَابٍ. يُرَادُ بِهِ قِيَاسُ طُولِ السَّطْرِ وَالْمَسَافَةِ بَيْنَ الْأَسْطُرِ، وَوُضُوحِ الْحَرَكَاتِ فَوْقَ الْحُرُوفِ وَتَحْتَهَا</span><svg viewBox="0 0 256 256" aria-hidden="true" focusable="false"><path d="M220,128a4,4,0,0,1-4,4H49.66l65.17,65.17a4,4,0,0,1-5.66,5.66l-72-72a4,4,0,0,1,0-5.66l72-72a4,4,0,0,1,5.66,5.66L49.66,124H216A4,4,0,0,1,220,128Z"/></svg></a></li>
+      </ol>
+    </section>
+    <section class="c c4" aria-labelledby="c4">
+      <h3 id="c4">٤. كعب الكتاب</h3>
+      <p>بطاقة الكتاب رمادية بكعب داكن على جانبها كالكتاب على الرف، والأقسام رمادية.</p>
+      <ul class="aqsam">
+        <li><a href="../category.html"><span>الإيمان</span></a></li>
+        <li><a href="../category.html"><span>الطهارة</span></a></li>
+        <li><a href="../category.html"><span>الصلاة</span></a></li>
+        <li><a href="../category.html"><span>الزكاة</span></a></li>
+      </ul>
+      <ul class="kutub">
+        <li><a href="../book.html"><span>الكتاب التجريبي الأول</span><span>مؤلف تجريبي</span></a></li>
+        <li><a href="../book.html"><span>الكتاب التجريبي الثاني</span><span>مؤلف تجريبي</span></a></li>
+      </ul>
+      <ol>
+        <li><a href="../hadith.html"><span>عَنِ الرَّاوِي التَّجْرِيبِيِّ قَالَ: هَذَا نَصٌّ تَجْرِيبِيٌّ يُوضَعُ فِي مَكَانِ نَصِّ الْحَدِيثِ لِاخْتِبَارِ شَكْلِ الصَّفْحَةِ، وَلَيْسَ حَدِيثًا وَلَا مَنْقُولًا عَنْ كِتَابٍ. يُرَادُ بِهِ قِيَاسُ طُولِ السَّطْرِ وَالْمَسَافَةِ بَيْنَ الْأَسْطُرِ، وَوُضُوحِ الْحَرَكَاتِ فَوْقَ الْحُرُوفِ وَتَحْتَهَا</span><svg viewBox="0 0 256 256" aria-hidden="true" focusable="false"><path d="M220,128a4,4,0,0,1-4,4H49.66l65.17,65.17a4,4,0,0,1-5.66,5.66l-72-72a4,4,0,0,1,0-5.66l72-72a4,4,0,0,1,5.66,5.66L49.66,124H216A4,4,0,0,1,220,128Z"/></svg></a></li>
+      </ol>
+    </section>
+    <section class="c c5" aria-labelledby="c5">
+      <h3 id="c5">٥. التذهيب</h3>
+      <p>أخضر التجليد وعنوان بلون الذهب، كما تُكتب العناوين على أغلفة كتب الحديث.</p>
+      <ul class="aqsam">
+        <li><a href="../category.html"><span>الإيمان</span></a></li>
+        <li><a href="../category.html"><span>الطهارة</span></a></li>
+        <li><a href="../category.html"><span>الصلاة</span></a></li>
+        <li><a href="../category.html"><span>الزكاة</span></a></li>
+      </ul>
+      <ul class="kutub">
+        <li><a href="../book.html"><span>الكتاب التجريبي الأول</span><span>مؤلف تجريبي</span></a></li>
+        <li><a href="../book.html"><span>الكتاب التجريبي الثاني</span><span>مؤلف تجريبي</span></a></li>
+      </ul>
+      <ol>
+        <li><a href="../hadith.html"><span>عَنِ الرَّاوِي التَّجْرِيبِيِّ قَالَ: هَذَا نَصٌّ تَجْرِيبِيٌّ يُوضَعُ فِي مَكَانِ نَصِّ الْحَدِيثِ لِاخْتِبَارِ شَكْلِ الصَّفْحَةِ، وَلَيْسَ حَدِيثًا وَلَا مَنْقُولًا عَنْ كِتَابٍ. يُرَادُ بِهِ قِيَاسُ طُولِ السَّطْرِ وَالْمَسَافَةِ بَيْنَ الْأَسْطُرِ، وَوُضُوحِ الْحَرَكَاتِ فَوْقَ الْحُرُوفِ وَتَحْتَهَا</span><svg viewBox="0 0 256 256" aria-hidden="true" focusable="false"><path d="M220,128a4,4,0,0,1-4,4H49.66l65.17,65.17a4,4,0,0,1-5.66,5.66l-72-72a4,4,0,0,1,0-5.66l72-72a4,4,0,0,1,5.66,5.66L49.66,124H216A4,4,0,0,1,220,128Z"/></svg></a></li>
+      </ol>
+    </section>
+    <section class="c c6" aria-labelledby="c6">
+      <h3 id="c6">٦. العنابي المذهّب</h3>
+      <p>تجليد عنابي وعنوان مذهّب، من أشهر تجليدات المجلدات القديمة.</p>
+      <ul class="aqsam">
+        <li><a href="../category.html"><span>الإيمان</span></a></li>
+        <li><a href="../category.html"><span>الطهارة</span></a></li>
+        <li><a href="../category.html"><span>الصلاة</span></a></li>
+        <li><a href="../category.html"><span>الزكاة</span></a></li>
+      </ul>
+      <ul class="kutub">
+        <li><a href="../book.html"><span>الكتاب التجريبي الأول</span><span>مؤلف تجريبي</span></a></li>
+        <li><a href="../book.html"><span>الكتاب التجريبي الثاني</span><span>مؤلف تجريبي</span></a></li>
+      </ul>
+      <ol>
+        <li><a href="../hadith.html"><span>عَنِ الرَّاوِي التَّجْرِيبِيِّ قَالَ: هَذَا نَصٌّ تَجْرِيبِيٌّ يُوضَعُ فِي مَكَانِ نَصِّ الْحَدِيثِ لِاخْتِبَارِ شَكْلِ الصَّفْحَةِ، وَلَيْسَ حَدِيثًا وَلَا مَنْقُولًا عَنْ كِتَابٍ. يُرَادُ بِهِ قِيَاسُ طُولِ السَّطْرِ وَالْمَسَافَةِ بَيْنَ الْأَسْطُرِ، وَوُضُوحِ الْحَرَكَاتِ فَوْقَ الْحُرُوفِ وَتَحْتَهَا</span><svg viewBox="0 0 256 256" aria-hidden="true" focusable="false"><path d="M220,128a4,4,0,0,1-4,4H49.66l65.17,65.17a4,4,0,0,1-5.66,5.66l-72-72a4,4,0,0,1,0-5.66l72-72a4,4,0,0,1,5.66,5.66L49.66,124H216A4,4,0,0,1,220,128Z"/></svg></a></li>
+      </ol>
+    </section>
+    <section class="c c7" aria-labelledby="c7">
+      <h3 id="c7">٧. الأسود المذهّب</h3>
+      <p>تجليد أسود وعنوان مذهّب، كطبعات الكتب الفاخرة.</p>
+      <ul class="aqsam">
+        <li><a href="../category.html"><span>الإيمان</span></a></li>
+        <li><a href="../category.html"><span>الطهارة</span></a></li>
+        <li><a href="../category.html"><span>الصلاة</span></a></li>
+        <li><a href="../category.html"><span>الزكاة</span></a></li>
+      </ul>
+      <ul class="kutub">
+        <li><a href="../book.html"><span>الكتاب التجريبي الأول</span><span>مؤلف تجريبي</span></a></li>
+        <li><a href="../book.html"><span>الكتاب التجريبي الثاني</span><span>مؤلف تجريبي</span></a></li>
+      </ul>
+      <ol>
+        <li><a href="../hadith.html"><span>عَنِ الرَّاوِي التَّجْرِيبِيِّ قَالَ: هَذَا نَصٌّ تَجْرِيبِيٌّ يُوضَعُ فِي مَكَانِ نَصِّ الْحَدِيثِ لِاخْتِبَارِ شَكْلِ الصَّفْحَةِ، وَلَيْسَ حَدِيثًا وَلَا مَنْقُولًا عَنْ كِتَابٍ. يُرَادُ بِهِ قِيَاسُ طُولِ السَّطْرِ وَالْمَسَافَةِ بَيْنَ الْأَسْطُرِ، وَوُضُوحِ الْحَرَكَاتِ فَوْقَ الْحُرُوفِ وَتَحْتَهَا</span><svg viewBox="0 0 256 256" aria-hidden="true" focusable="false"><path d="M220,128a4,4,0,0,1-4,4H49.66l65.17,65.17a4,4,0,0,1-5.66,5.66l-72-72a4,4,0,0,1,0-5.66l72-72a4,4,0,0,1,5.66,5.66L49.66,124H216A4,4,0,0,1,220,128Z"/></svg></a></li>
+      </ol>
+    </section>
+    <section class="c c8" aria-labelledby="c8">
+      <h3 id="c8">٨. مكتبة مذهّبة</h3>
+      <p>كل كتاب بلون تجليد وعنوان مذهّب، والأقسام على ورق أصفر بحبر بني.</p>
+      <ul class="aqsam">
+        <li><a href="../category.html"><span>الإيمان</span></a></li>
+        <li><a href="../category.html"><span>الطهارة</span></a></li>
+        <li><a href="../category.html"><span>الصلاة</span></a></li>
+        <li><a href="../category.html"><span>الزكاة</span></a></li>
+      </ul>
+      <ul class="kutub">
+        <li><a href="../book.html"><span>الكتاب التجريبي الأول</span><span>مؤلف تجريبي</span></a></li>
+        <li><a href="../book.html"><span>الكتاب التجريبي الثاني</span><span>مؤلف تجريبي</span></a></li>
+        <li><a href="../book.html"><span>الكتاب التجريبي الثالث</span><span>مؤلف تجريبي</span></a></li>
+        <li><a href="../book.html"><span>الكتاب التجريبي الرابع</span><span>مؤلف تجريبي</span></a></li>
+      </ul>
+      <ol>
+        <li><a href="../hadith.html"><span>عَنِ الرَّاوِي التَّجْرِيبِيِّ قَالَ: هَذَا نَصٌّ تَجْرِيبِيٌّ يُوضَعُ فِي مَكَانِ نَصِّ الْحَدِيثِ لِاخْتِبَارِ شَكْلِ الصَّفْحَةِ، وَلَيْسَ حَدِيثًا وَلَا مَنْقُولًا عَنْ كِتَابٍ. يُرَادُ بِهِ قِيَاسُ طُولِ السَّطْرِ وَالْمَسَافَةِ بَيْنَ الْأَسْطُرِ، وَوُضُوحِ الْحَرَكَاتِ فَوْقَ الْحُرُوفِ وَتَحْتَهَا</span><svg viewBox="0 0 256 256" aria-hidden="true" focusable="false"><path d="M220,128a4,4,0,0,1-4,4H49.66l65.17,65.17a4,4,0,0,1-5.66,5.66l-72-72a4,4,0,0,1,0-5.66l72-72a4,4,0,0,1,5.66,5.66L49.66,124H216A4,4,0,0,1,220,128Z"/></svg></a></li>
+      </ol>
+    </section>
+    <section class="c c9" aria-labelledby="c9">
+      <h3 id="c9">٩. رقعة العنوان</h3>
+      <p>العنوان على رقعة ورقية ملصقة على التجليد، كما في كتب المكتبات القديمة.</p>
+      <ul class="aqsam">
+        <li><a href="../category.html"><span>الإيمان</span></a></li>
+        <li><a href="../category.html"><span>الطهارة</span></a></li>
+        <li><a href="../category.html"><span>الصلاة</span></a></li>
+        <li><a href="../category.html"><span>الزكاة</span></a></li>
+      </ul>
+      <ul class="kutub">
+        <li><a href="../book.html"><span>الكتاب التجريبي الأول</span><span>مؤلف تجريبي</span></a></li>
+        <li><a href="../book.html"><span>الكتاب التجريبي الثاني</span><span>مؤلف تجريبي</span></a></li>
+      </ul>
+      <ol>
+        <li><a href="../hadith.html"><span>عَنِ الرَّاوِي التَّجْرِيبِيِّ قَالَ: هَذَا نَصٌّ تَجْرِيبِيٌّ يُوضَعُ فِي مَكَانِ نَصِّ الْحَدِيثِ لِاخْتِبَارِ شَكْلِ الصَّفْحَةِ، وَلَيْسَ حَدِيثًا وَلَا مَنْقُولًا عَنْ كِتَابٍ. يُرَادُ بِهِ قِيَاسُ طُولِ السَّطْرِ وَالْمَسَافَةِ بَيْنَ الْأَسْطُرِ، وَوُضُوحِ الْحَرَكَاتِ فَوْقَ الْحُرُوفِ وَتَحْتَهَا</span><svg viewBox="0 0 256 256" aria-hidden="true" focusable="false"><path d="M220,128a4,4,0,0,1-4,4H49.66l65.17,65.17a4,4,0,0,1-5.66,5.66l-72-72a4,4,0,0,1,0-5.66l72-72a4,4,0,0,1,5.66,5.66L49.66,124H216A4,4,0,0,1,220,128Z"/></svg></a></li>
+      </ol>
+    </section>
+    <section class="c c10" aria-labelledby="c10">
+      <h3 id="c10">١٠. أعصاب الكعب</h3>
+      <p>ورق أصفر بكعب أخضر عليه شريطان مذهّبان، كأعصاب كعوب الكتب الجلدية.</p>
+      <ul class="aqsam">
+        <li><a href="../category.html"><span>الإيمان</span></a></li>
+        <li><a href="../category.html"><span>الطهارة</span></a></li>
+        <li><a href="../category.html"><span>الصلاة</span></a></li>
+        <li><a href="../category.html"><span>الزكاة</span></a></li>
+      </ul>
+      <ul class="kutub">
+        <li><a href="../book.html"><span>الكتاب التجريبي الأول</span><span>مؤلف تجريبي</span></a></li>
+        <li><a href="../book.html"><span>الكتاب التجريبي الثاني</span><span>مؤلف تجريبي</span></a></li>
+      </ul>
+      <ol>
+        <li><a href="../hadith.html"><span>عَنِ الرَّاوِي التَّجْرِيبِيِّ قَالَ: هَذَا نَصٌّ تَجْرِيبِيٌّ يُوضَعُ فِي مَكَانِ نَصِّ الْحَدِيثِ لِاخْتِبَارِ شَكْلِ الصَّفْحَةِ، وَلَيْسَ حَدِيثًا وَلَا مَنْقُولًا عَنْ كِتَابٍ. يُرَادُ بِهِ قِيَاسُ طُولِ السَّطْرِ وَالْمَسَافَةِ بَيْنَ الْأَسْطُرِ، وَوُضُوحِ الْحَرَكَاتِ فَوْقَ الْحُرُوفِ وَتَحْتَهَا</span><svg viewBox="0 0 256 256" aria-hidden="true" focusable="false"><path d="M220,128a4,4,0,0,1-4,4H49.66l65.17,65.17a4,4,0,0,1-5.66,5.66l-72-72a4,4,0,0,1,0-5.66l72-72a4,4,0,0,1,5.66,5.66L49.66,124H216A4,4,0,0,1,220,128Z"/></svg></a></li>
+      </ol>
+    </section>
+    <section class="c c11" aria-labelledby="c11">
+      <h3 id="c11">١١. المجلد</h3>
+      <p>بطاقة الكتاب مجلد مغلق تظهر تحته أوراقه وغلافه الخلفي، والأقسام أوراق صفراء.</p>
+      <ul class="aqsam">
+        <li><a href="../category.html"><span>الإيمان</span></a></li>
+        <li><a href="../category.html"><span>الطهارة</span></a></li>
+        <li><a href="../category.html"><span>الصلاة</span></a></li>
+        <li><a href="../category.html"><span>الزكاة</span></a></li>
+      </ul>
+      <ul class="kutub">
+        <li><a href="../book.html"><span>الكتاب التجريبي الأول</span><span>مؤلف تجريبي</span></a></li>
+        <li><a href="../book.html"><span>الكتاب التجريبي الثاني</span><span>مؤلف تجريبي</span></a></li>
+      </ul>
+      <ol>
+        <li><a href="../hadith.html"><span>عَنِ الرَّاوِي التَّجْرِيبِيِّ قَالَ: هَذَا نَصٌّ تَجْرِيبِيٌّ يُوضَعُ فِي مَكَانِ نَصِّ الْحَدِيثِ لِاخْتِبَارِ شَكْلِ الصَّفْحَةِ، وَلَيْسَ حَدِيثًا وَلَا مَنْقُولًا عَنْ كِتَابٍ. يُرَادُ بِهِ قِيَاسُ طُولِ السَّطْرِ وَالْمَسَافَةِ بَيْنَ الْأَسْطُرِ، وَوُضُوحِ الْحَرَكَاتِ فَوْقَ الْحُرُوفِ وَتَحْتَهَا</span><svg viewBox="0 0 256 256" aria-hidden="true" focusable="false"><path d="M220,128a4,4,0,0,1-4,4H49.66l65.17,65.17a4,4,0,0,1-5.66,5.66l-72-72a4,4,0,0,1,0-5.66l72-72a4,4,0,0,1,5.66,5.66L49.66,124H216A4,4,0,0,1,220,128Z"/></svg></a></li>
+      </ol>
+    </section>
+    <section class="c c12" aria-labelledby="c12">
+      <h3 id="c12">١٢. الأغلفة</h3>
+      <p>الكتب أغلفة قائمة بعناوين مذهّبة، والأقسام أوراق صفراء.</p>
+      <ul class="aqsam">
+        <li><a href="../category.html"><span>الإيمان</span></a></li>
+        <li><a href="../category.html"><span>الطهارة</span></a></li>
+        <li><a href="../category.html"><span>الصلاة</span></a></li>
+        <li><a href="../category.html"><span>الزكاة</span></a></li>
+      </ul>
+      <ul class="kutub">
+        <li><a href="../book.html"><span>الكتاب التجريبي الأول</span><span>مؤلف تجريبي</span></a></li>
+        <li><a href="../book.html"><span>الكتاب التجريبي الثاني</span><span>مؤلف تجريبي</span></a></li>
+        <li><a href="../book.html"><span>الكتاب التجريبي الثالث</span><span>مؤلف تجريبي</span></a></li>
+        <li><a href="../book.html"><span>الكتاب التجريبي الرابع</span><span>مؤلف تجريبي</span></a></li>
+      </ul>
+      <ol>
+        <li><a href="../hadith.html"><span>عَنِ الرَّاوِي التَّجْرِيبِيِّ قَالَ: هَذَا نَصٌّ تَجْرِيبِيٌّ يُوضَعُ فِي مَكَانِ نَصِّ الْحَدِيثِ لِاخْتِبَارِ شَكْلِ الصَّفْحَةِ، وَلَيْسَ حَدِيثًا وَلَا مَنْقُولًا عَنْ كِتَابٍ. يُرَادُ بِهِ قِيَاسُ طُولِ السَّطْرِ وَالْمَسَافَةِ بَيْنَ الْأَسْطُرِ، وَوُضُوحِ الْحَرَكَاتِ فَوْقَ الْحُرُوفِ وَتَحْتَهَا</span><svg viewBox="0 0 256 256" aria-hidden="true" focusable="false"><path d="M220,128a4,4,0,0,1-4,4H49.66l65.17,65.17a4,4,0,0,1-5.66,5.66l-72-72a4,4,0,0,1,0-5.66l72-72a4,4,0,0,1,5.66,5.66L49.66,124H216A4,4,0,0,1,220,128Z"/></svg></a></li>
+      </ol>
+    </section>
+    <section class="c c13" aria-labelledby="c13">
+      <h3 id="c13">١٣. الرف</h3>
+      <p>الكتب كعوب مصفوفة على رف، عناوينها على طول الكعب.</p>
+      <ul class="aqsam">
+        <li><a href="../category.html"><span>الإيمان</span></a></li>
+        <li><a href="../category.html"><span>الطهارة</span></a></li>
+        <li><a href="../category.html"><span>الصلاة</span></a></li>
+        <li><a href="../category.html"><span>الزكاة</span></a></li>
+      </ul>
+      <ul class="kutub">
+        <li><a href="../book.html"><span>الكتاب التجريبي الأول</span><span>مؤلف تجريبي</span></a></li>
+        <li><a href="../book.html"><span>الكتاب التجريبي الثاني</span><span>مؤلف تجريبي</span></a></li>
+        <li><a href="../book.html"><span>الكتاب التجريبي الثالث</span><span>مؤلف تجريبي</span></a></li>
+        <li><a href="../book.html"><span>الكتاب التجريبي الرابع</span><span>مؤلف تجريبي</span></a></li>
+        <li><a href="../book.html"><span>الكتاب التجريبي الخامس</span><span>مؤلف تجريبي</span></a></li>
+        <li><a href="../book.html"><span>الكتاب التجريبي السادس</span><span>مؤلف تجريبي</span></a></li>
+        <li><a href="../book.html"><span>الكتاب التجريبي السابع</span><span>مؤلف تجريبي</span></a></li>
+        <li><a href="../book.html"><span>الكتاب التجريبي الثامن</span><span>مؤلف تجريبي</span></a></li>
+      </ul>
+      <ol>
+        <li><a href="../hadith.html"><span>عَنِ الرَّاوِي التَّجْرِيبِيِّ قَالَ: هَذَا نَصٌّ تَجْرِيبِيٌّ يُوضَعُ فِي مَكَانِ نَصِّ الْحَدِيثِ لِاخْتِبَارِ شَكْلِ الصَّفْحَةِ، وَلَيْسَ حَدِيثًا وَلَا مَنْقُولًا عَنْ كِتَابٍ. يُرَادُ بِهِ قِيَاسُ طُولِ السَّطْرِ وَالْمَسَافَةِ بَيْنَ الْأَسْطُرِ، وَوُضُوحِ الْحَرَكَاتِ فَوْقَ الْحُرُوفِ وَتَحْتَهَا</span><svg viewBox="0 0 256 256" aria-hidden="true" focusable="false"><path d="M220,128a4,4,0,0,1-4,4H49.66l65.17,65.17a4,4,0,0,1-5.66,5.66l-72-72a4,4,0,0,1,0-5.66l72-72a4,4,0,0,1,5.66,5.66L49.66,124H216A4,4,0,0,1,220,128Z"/></svg></a></li>
+      </ol>
+    </section>
+    <section class="c c14" aria-labelledby="c14">
+      <h3 id="c14">١٤. الخرطوشة</h3>
+      <p>الأقسام في إطار كعناوين الكتب والأبواب في المطبوعات القديمة، والكتب بتجليد مذهّب.</p>
+      <ul class="aqsam">
+        <li><a href="../category.html"><span>الإيمان</span></a></li>
+        <li><a href="../category.html"><span>الطهارة</span></a></li>
+        <li><a href="../category.html"><span>الصلاة</span></a></li>
+        <li><a href="../category.html"><span>الزكاة</span></a></li>
+      </ul>
+      <ul class="kutub">
+        <li><a href="../book.html"><span>الكتاب التجريبي الأول</span><span>مؤلف تجريبي</span></a></li>
+        <li><a href="../book.html"><span>الكتاب التجريبي الثاني</span><span>مؤلف تجريبي</span></a></li>
+      </ul>
+      <ol>
+        <li><a href="../hadith.html"><span>عَنِ الرَّاوِي التَّجْرِيبِيِّ قَالَ: هَذَا نَصٌّ تَجْرِيبِيٌّ يُوضَعُ فِي مَكَانِ نَصِّ الْحَدِيثِ لِاخْتِبَارِ شَكْلِ الصَّفْحَةِ، وَلَيْسَ حَدِيثًا وَلَا مَنْقُولًا عَنْ كِتَابٍ. يُرَادُ بِهِ قِيَاسُ طُولِ السَّطْرِ وَالْمَسَافَةِ بَيْنَ الْأَسْطُرِ، وَوُضُوحِ الْحَرَكَاتِ فَوْقَ الْحُرُوفِ وَتَحْتَهَا</span><svg viewBox="0 0 256 256" aria-hidden="true" focusable="false"><path d="M220,128a4,4,0,0,1-4,4H49.66l65.17,65.17a4,4,0,0,1-5.66,5.66l-72-72a4,4,0,0,1,0-5.66l72-72a4,4,0,0,1,5.66,5.66L49.66,124H216A4,4,0,0,1,220,128Z"/></svg></a></li>
+      </ol>
+    </section>
+    <section class="c c15" aria-labelledby="c15">
+      <h3 id="c15">١٥. ورق وحبر</h3>
+      <p>ورق أصفر وحبر بني كصفحات الكتب المطبوعة قديمًا.</p>
+      <ul class="aqsam">
+        <li><a href="../category.html"><span>الإيمان</span></a></li>
+        <li><a href="../category.html"><span>الطهارة</span></a></li>
+        <li><a href="../category.html"><span>الصلاة</span></a></li>
+        <li><a href="../category.html"><span>الزكاة</span></a></li>
+      </ul>
+      <ul class="kutub">
+        <li><a href="../book.html"><span>الكتاب التجريبي الأول</span><span>مؤلف تجريبي</span></a></li>
+        <li><a href="../book.html"><span>الكتاب التجريبي الثاني</span><span>مؤلف تجريبي</span></a></li>
+      </ul>
+      <ol>
+        <li><a href="../hadith.html"><span>عَنِ الرَّاوِي التَّجْرِيبِيِّ قَالَ: هَذَا نَصٌّ تَجْرِيبِيٌّ يُوضَعُ فِي مَكَانِ نَصِّ الْحَدِيثِ لِاخْتِبَارِ شَكْلِ الصَّفْحَةِ، وَلَيْسَ حَدِيثًا وَلَا مَنْقُولًا عَنْ كِتَابٍ. يُرَادُ بِهِ قِيَاسُ طُولِ السَّطْرِ وَالْمَسَافَةِ بَيْنَ الْأَسْطُرِ، وَوُضُوحِ الْحَرَكَاتِ فَوْقَ الْحُرُوفِ وَتَحْتَهَا</span><svg viewBox="0 0 256 256" aria-hidden="true" focusable="false"><path d="M220,128a4,4,0,0,1-4,4H49.66l65.17,65.17a4,4,0,0,1-5.66,5.66l-72-72a4,4,0,0,1,0-5.66l72-72a4,4,0,0,1,5.66,5.66L49.66,124H216A4,4,0,0,1,220,128Z"/></svg></a></li>
+      </ol>
+    </section>
+    <section class="c c16" aria-labelledby="c16">
+      <h3 id="c16">١٦. شريط القراءة</h3>
+      <p>تجليد مذهّب يتدلى منه شريط القراءة، والأقسام أوراق صفراء.</p>
+      <ul class="aqsam">
+        <li><a href="../category.html"><span>الإيمان</span></a></li>
+        <li><a href="../category.html"><span>الطهارة</span></a></li>
+        <li><a href="../category.html"><span>الصلاة</span></a></li>
+        <li><a href="../category.html"><span>الزكاة</span></a></li>
+      </ul>
+      <ul class="kutub">
+        <li><a href="../book.html"><span>الكتاب التجريبي الأول</span><span>مؤلف تجريبي</span></a></li>
+        <li><a href="../book.html"><span>الكتاب التجريبي الثاني</span><span>مؤلف تجريبي</span></a></li>
+      </ul>
+      <ol>
+        <li><a href="../hadith.html"><span>عَنِ الرَّاوِي التَّجْرِيبِيِّ قَالَ: هَذَا نَصٌّ تَجْرِيبِيٌّ يُوضَعُ فِي مَكَانِ نَصِّ الْحَدِيثِ لِاخْتِبَارِ شَكْلِ الصَّفْحَةِ، وَلَيْسَ حَدِيثًا وَلَا مَنْقُولًا عَنْ كِتَابٍ. يُرَادُ بِهِ قِيَاسُ طُولِ السَّطْرِ وَالْمَسَافَةِ بَيْنَ الْأَسْطُرِ، وَوُضُوحِ الْحَرَكَاتِ فَوْقَ الْحُرُوفِ وَتَحْتَهَا</span><svg viewBox="0 0 256 256" aria-hidden="true" focusable="false"><path d="M220,128a4,4,0,0,1-4,4H49.66l65.17,65.17a4,4,0,0,1-5.66,5.66l-72-72a4,4,0,0,1,0-5.66l72-72a4,4,0,0,1,5.66,5.66L49.66,124H216A4,4,0,0,1,220,128Z"/></svg></a></li>
+      </ol>
+    </section>
+    </section>
+  </main>
+  <footer>
+    <ul>
+      <li><a href="../about.html">حول</a></li>
+      <li><a href="https://github.com/Y3FAI/hadith-archive" rel="nofollow">المستودع</a></li>
+      <li><a href="https://github.com/Y3FAI/hadith-archive/blob/main/LICENSE" rel="nofollow">الرخصة</a></li>
+    </ul>
+  </footer>
+  <script src="../script.js?v=4"></script>
+</body>
+</html>
