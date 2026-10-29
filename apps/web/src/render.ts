@@ -346,19 +346,22 @@ ${cards.map((record) =>
     }
   };
 
+  // Before any topic is reviewed, the home page shows books only.
   add("index.html", {
     current: "home",
-    main: `${searchForm("h1")}
-    <section aria-labelledby="aqsam">
+    main: [
+      searchForm("h1"),
+      ...topics.length === 0 ? [] : [`    <section aria-labelledby="aqsam">
       <h2 id="aqsam"><a href="${at(ROUTE.categories)}">${ICON.grid}الأقسام</a></h2>
       <a href="${at(ROUTE.categories)}">المزيد${ICON.caretLeft}</a>
 ${topicTiles(topics.slice(0, HOME_TOPICS))}
-    </section>
-    <section aria-labelledby="kutub">
+    </section>`],
+      `    <section aria-labelledby="kutub">
       <h2 id="kutub"><a href="${at(ROUTE.books)}">${ICON.books}الكتب</a></h2>
       <a href="${at(ROUTE.books)}">المزيد${ICON.caretLeft}</a>
 ${bookCards(sources.slice(0, HOME_BOOKS))}
     </section>`,
+    ].join("\n"),
     title: site.name,
   });
 

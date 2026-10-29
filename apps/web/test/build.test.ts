@@ -285,6 +285,20 @@ describe("pager", () => {
   });
 });
 
+describe("a site before any topic is reviewed", () => {
+  test("builds books only, with no categories on the home page or under a hadith", () => {
+    const inputs = (fixtureInputs as { inputs: SiteInputs }).inputs;
+    const pages = new Map(renderSite({ ...inputs, topics: [] }, {
+      assetVersions: { "script.js": "s", "style.css": "c" },
+      pageSize: 20,
+    }).map((file) => [file.path, file.html]));
+    expect(pages.get("index.html")).not.toContain("aria-labelledby=\"aqsam\"");
+    expect(pages.get("index.html")).toContain("aria-labelledby=\"kutub\"");
+    expect(pages.get("h/1/index.html")).not.toContain("<dt>القسم</dt>");
+    expect(pages.get("h/1/index.html")).not.toContain("application/ld+json");
+  });
+});
+
 describe("reproducibility and output safety", () => {
   test("is byte-identical across builds and input locations", async () => {
     const moved = await fixtureCopy();
