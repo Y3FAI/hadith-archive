@@ -322,7 +322,7 @@ describe("reproducibility and output safety", () => {
         expect(result.findings.some((item) => item.message.startsWith("Output directory overlaps"))).toBe(true);
       }
     }
-    expect(await readdir(join(root, "core"))).toEqual(["hadith", "sources"]);
+    expect((await readdir(join(root, "core"))).sort()).toEqual(["hadith", "sources"]);
   });
 });
 
