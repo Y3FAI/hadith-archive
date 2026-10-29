@@ -38,13 +38,23 @@ function singleLineFields(
     case "section":
       return [{ path: "/title", value: record.title }];
     case "hadith":
-      return [
-        { path: "/description", value: record.description },
-        { path: "/heading", value: record.heading },
-        { path: "/title", value: record.title },
-      ];
     case "occurrence":
       return [];
+  }
+}
+
+// A hadith's text is a span of raw text, so it follows the same whitespace
+// rules, including LF.
+function rawWhitespaceField(
+  record: LoadedCoreRecord,
+): { readonly path: string; readonly value: string } | undefined {
+  switch (record.record_type) {
+    case "occurrence":
+      return { path: "/raw_text", value: record.raw_text };
+    case "hadith":
+      return { path: "/text", value: record.text };
+    default:
+      return undefined;
   }
 }
 
@@ -75,7 +85,7 @@ function hasForbiddenCharacter(value: string, allowLf: boolean): boolean {
   return false;
 }
 
-function validSingleLine(value: string): boolean {
+export function validSingleLine(value: string): boolean {
   return value.length > 0 &&
     !value.startsWith(" ") && !value.endsWith(" ") &&
     !value.includes("  ") && !hasForbiddenCharacter(value, false);
@@ -128,12 +138,12 @@ export const textSingleLine: VerificationRule<StructuralVerificationContext> = {
 };
 
 export const textRawWhitespace: VerificationRule<StructuralVerificationContext> = {
-  evaluate: (context) => context.validRecords.flatMap((entry) =>
-    entry.record.record_type === "occurrence" &&
-      !validRawWhitespace(entry.record.raw_text)
-      ? [finding(entry, "/raw_text", "Raw text violates preserved whitespace rules")]
-      : []
-  ),
+  evaluate: (context) => context.validRecords.flatMap((entry) => {
+    const field = rawWhitespaceField(entry.record);
+    return field === undefined || validRawWhitespace(field.value)
+      ? []
+      : [finding(entry, field.path, "Raw text violates preserved whitespace rules")];
+  }),
   id: "text.raw_whitespace",
   prerequisites: [],
 };

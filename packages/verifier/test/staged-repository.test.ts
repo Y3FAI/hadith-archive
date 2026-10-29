@@ -223,13 +223,13 @@ describe("staged repository verification", () => {
       });
       expect(await verifyRepository(repository, base)).toEqual({
         kind: "complete",
-        report: { findings: [coreFinding(aliasPath)], valid: false, verification_version: 2 },
+        report: { findings: [coreFinding(aliasPath)], valid: false, verification_version: 3 },
       });
       await git("rm", "--quiet", "-r", "--cached", root);
       await git("update-index", "--add", "--cacheinfo", `160000,${base},${root}`);
       expect(await verifyRepository(repository, base)).toEqual({
         kind: "complete",
-        report: { findings: [coreFinding(root)], valid: false, verification_version: 2 },
+        report: { findings: [coreFinding(root)], valid: false, verification_version: 3 },
       });
     });
   }
@@ -270,7 +270,7 @@ describe("staged repository verification", () => {
           rule_id: "repository.schema_paths",
         })),
         valid: false,
-        verification_version: 2,
+        verification_version: 3,
       },
     });
     expect(await indexed()).toEqual(before);
@@ -293,7 +293,7 @@ describe("staged repository verification", () => {
           rule_id: "json.canonical",
         }],
         valid: false,
-        verification_version: 2,
+        verification_version: 3,
       },
     });
     const io = { stderr: { write() {} }, stdout: { write() {} } };
@@ -399,14 +399,12 @@ describe("staged repository verification", () => {
       ...extra,
     });
     const hadith = (id: number, members: number[], display = members[0]) => formatCanonicalJson({
-      description: "كامل",
       display_occurrence_id: display as number,
       hadith_id: id,
-      heading: "حديث",
       member_occurrence_ids: members,
       record_type: "hadith",
       schema_version: 1,
-      title: "عنوان",
+      text: "حديث",
     });
     const findings = async (accepted: string) => {
       const result = await verifyRepository(root, accepted);

@@ -8,10 +8,6 @@
  */
 export interface HadithRecord {
   /**
-   * A single-line value that semantic verification requires to be one exact contiguous substring of the selected raw text.
-   */
-  description: string;
-  /**
    * A permanent globally unique OCCURRENCE identifier.
    */
   display_occurrence_id: number;
@@ -19,10 +15,6 @@ export interface HadithRecord {
    * A permanent globally unique HADITH identifier.
    */
   hadith_id: number;
-  /**
-   * A single-line value that semantic verification requires to be one exact contiguous substring of the selected raw text.
-   */
-  heading: string;
   /**
    * The nonempty set of OCCURRENCE identifiers this HADITH groups, serialized in strictly ascending numeric order; the order carries no editorial or display meaning.
    *
@@ -38,9 +30,9 @@ export interface HadithRecord {
    */
   schema_version: 1;
   /**
-   * A single-line value that semantic verification requires to be one exact contiguous substring of the selected raw text.
+   * A nonempty quotation governed by the raw-text whitespace policy that semantic verification requires to be one exact contiguous substring of the selected raw text, starting and ending on grapheme-cluster boundaries; it may cross an LF.
    */
-  title: string;
+  text: string;
 }
 
 /**

@@ -4,17 +4,11 @@
   "additionalProperties": false,
   "description": "A version-one authoritative HADITH record.",
   "properties": {
-    "description": {
-      "$ref": "../common/v1.schema.json#/$defs/extracted_span_text"
-    },
     "display_occurrence_id": {
       "$ref": "../common/v1.schema.json#/$defs/occurrence_id"
     },
     "hadith_id": {
       "$ref": "../common/v1.schema.json#/$defs/hadith_id"
-    },
-    "heading": {
-      "$ref": "../common/v1.schema.json#/$defs/extracted_span_text"
     },
     "member_occurrence_ids": {
       "description": "The nonempty set of OCCURRENCE identifiers this HADITH groups, serialized in strictly ascending numeric order; the order carries no editorial or display meaning.",
@@ -33,19 +27,17 @@
       "$ref": "../common/v1.schema.json#/$defs/schema_version",
       "const": 1
     },
-    "title": {
+    "text": {
       "$ref": "../common/v1.schema.json#/$defs/extracted_span_text"
     }
   },
   "required": [
-    "description",
     "display_occurrence_id",
     "hadith_id",
-    "heading",
     "member_occurrence_ids",
     "record_type",
     "schema_version",
-    "title"
+    "text"
   ],
   "title": "Hadith Archive HADITH record version one",
   "type": "object"

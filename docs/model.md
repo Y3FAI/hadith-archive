@@ -10,7 +10,7 @@ Hadith Archive preserves text from print editions and publishes it as public HTM
 
 A work, taken apart from any particular copy: *Forty Nawawi*, *Sahih al-Bukhari*, *Sahih Muslim*.
 
-A source carries a required integer priority score from `0` through `100` expressing the relative authority of the work itself. Zero is the ordinary baseline, and only ordering has meaning. The score influences which text a hadith displays; the algorithm that consumes it is a governance decision and is not fixed here.
+A source carries a required integer priority score from `0` through `100` expressing the relative authority of the work itself. Zero is the ordinary baseline, and only ordering has meaning. The score informs the reviewed selection of a display occurrence; the selection is saved before building, not recalculated by the renderer. The review method that combines source and witness priorities is a governance decision and is not fixed here.
 
 The definition is deliberately general. A hadith-grading work is also a source, its printed edition a source witness, and its verdicts occurrences within it. No separate machinery is required when such works are added.
 
@@ -52,19 +52,27 @@ An occurrence belonging to no hadith is a valid and expected state. Ingestion pr
 
 The canonical unit. A hadith gathers the occurrences of one narration wherever it appears — across editions and, more importantly, across works — selects one of them to supply its published text, and owns the public address at which it is served.
 
-It is the only entity Hadith Archive authors. A source, a witness, and an occurrence are all discoveries: a work exists, a book exists, ink on a page exists. A hadith is a judgement that several appearances are one narration.
+It is the only entity in the preservation core that Hadith Archive authors; project topics are separate editorial records outside that core. A source, a witness, and an occurrence are all discoveries: a work exists, a book exists, ink on a page exists. A hadith is a judgement that several appearances are one narration.
 
 That judgement is still authoritative core data. The core holds the source-bound records and, beside them, the human-reviewed hadith records that group them. A hadith record is not derived and cannot be regenerated from the others; it is kept, verified, and preserved under the same rules as the records it groups.
 
 That judgement is made deliberately. Scripts and assisted review propose candidates — whether a narration is already recorded, whether a new occurrence belongs with existing ones — and a person decides. Hadith are not regenerated. An existing hadith is altered only to correct a clear mistake.
 
-The published text is selected, never composed. Where occurrences differ, the one that best represents their weighted agreement is published verbatim, in full, as one witness printed it. Hadith Archive does not assemble a text that no edition contains.
+The published text is selected, never composed. A reviewed hadith record saves both the occurrence that supplies it and the exact selected quotation in one `text` field. Source and witness priorities may inform that review, but neither priority changes nor a new build silently replace the saved selection. Hadith Archive does not assemble a quotation that no edition contains.
 
-A hadith also carries the text its page needs to be found: a title, a heading, and a description. These are chosen when the hadith is minted, by the same combination of scripts, assisted review, and human decision. They are drawn from the displayed occurrence and never written, which keeps a published page free of any sentence the project composed. Every occurrence a hadith gathers is presented on that page beneath the selected text, with its edition and location, so that a reader sees each appearance in full rather than a single version standing for all of them.
+The saved `text` supplies the page's title, heading, and description; the record stores no separate versions for those uses. It is a nonempty contiguous span of the displayed occurrence's raw text and may cross stored LF boundaries. It begins and ends on extended grapheme-cluster boundaries, so neither end cuts a letter from its marks. It cannot join separate passages, normalize characters, paraphrase, add punctuation, or insert an ellipsis. Every member occurrence is presented in full beneath it with its edition and location. The selected quotation therefore never replaces the preserved full report.
 
-The title, heading, and description are nonempty single-line contiguous spans that begin and end on extended grapheme-cluster boundaries, so none starts or stops partway through a letter and its marks. They may overlap or be identical, but they cannot join passages, cross a stored line boundary, normalize characters, paraphrase, or add punctuation.
+Grouping, the display occurrence, and the quotation are editorial decisions made and reviewed before a build. Scripts or AI may propose candidates in private workspaces; a person approves the saved records. A build reads those decisions unchanged and never invokes AI to infer a grouping, choose an occurrence, or locate a passage. A missing or invalid required decision stops the build. Correcting the displayed raw text revalidates the saved quotation. A correction elsewhere can leave it valid; the check fails only if no exact contiguous match with valid grapheme boundaries remains. A person then reviews the saved decision rather than the build silently moving its boundaries.
 
 Membership is recorded once, on the hadith, as the set of its occurrence identifiers. The set is written in strictly ascending numeric order so that one membership has one representation; the order carries no editorial or display meaning, and the displayed occurrence is chosen separately. Occurrence records carry no reference back, so a reviewed change to a grouping edits hadith records and never rewrites preserved text.
+
+## Project topics outside the core
+
+Categories («الأقسام») are the project's own topics, not divisions printed by a source author. A source section belongs to one work; a topic can gather hadith across works, and one hadith can belong to several topics. The owner reviews category membership.
+
+Topic definitions and memberships are saved editorial inputs outside `core/`. They reference hadith identities and contain no copied hadith text or citations. They are authoritative for the project's classification decisions, rather than generated guesses or a second preservation corpus. A membership change is a new reviewed edit; rebuilding pages does not recreate or change it.
+
+The generator combines those saved decisions with core records and fixed presentation rules. Generated pages, indexes and application exports are disposable projections; they may reproduce text resolved from the core, but no hand-edited application projection duplicates that content.
 
 ## Conceptual structure
 
@@ -152,8 +160,8 @@ erDiagram
   SECTION {
     string section_id PK
     string source_id FK
-    string parent_section_id FK "null at top level"
-    string kind "kitab, bab, juz', part"
+    string parent_section_id FK "omitted at top level"
+    string kind "kitab, bab, fasl, juz, qism"
     string title
     int    ordinal
   }
@@ -175,9 +183,7 @@ erDiagram
     int    hadith_id PK "positive global sequence"
     int[]  member_occurrence_ids FK "nonempty set, ascending numeric order"
     int    display_occurrence_id FK "one of member_occurrence_ids"
-    string title "span of the displayed raw_text"
-    string heading "span of the displayed raw_text"
-    string description "span of the displayed raw_text"
+    text   text "saved exact span of the displayed raw_text"
   }
 ```
 
@@ -185,7 +191,7 @@ References between `HADITH` and `OCCURRENCE` run one way. A hadith names every o
 
 ## Constraints
 
-These are the rules verification enforces. Each fails on what a machine can prove.
+These constraints combine machine-checkable rules with human review. Verification enforces what a machine can prove; agreement with the printed witness and the reason for a correction remain human judgements.
 
 **Provenance is mandatory.** `witness_id` on an occurrence and `source_id` on a witness are never absent, and must resolve to a registered record.
 
@@ -211,7 +217,7 @@ These are the rules verification enforces. Each fails on what a machine can prov
 
 **Membership has one representation.** A member list contains no repeated identifier and is written in strictly ascending numeric order.
 
-**Published text is drawn, not written.** A hadith's title, heading, and description each appear verbatim within the raw text of the occurrence it displays, in at least one place where the span starts and ends on extended grapheme-cluster boundaries. No page presents a sentence that no edition printed, and the rule is checkable rather than merely stated.
+**Published text is drawn, not written.** A hadith's saved `text` appears verbatim as one contiguous span within the raw text of its display occurrence, in at least one place where both ends fall on extended grapheme-cluster boundaries. Stored line breaks within that span are retained. A machine checks quotation fidelity; a person decides whether the chosen passage is appropriate.
 
 **Sequence is complete within a witness.** Occurrence ordinals are unique and contiguous from `1`, so the printed order is always total and authoritative ingestion proceeds in that order.
 
@@ -223,9 +229,9 @@ A hadith receives a positive global sequential integer, beginning at `1`, and is
 
 The next identifier is one greater than the highest identifier ever minted. Identifiers are never reused, and gaps carry no meaning. The sequence expresses minting order only; it does not reproduce the numbering of any source.
 
-Books and sections are addressable in their own right, at `/b/<source>/` and `/b/<source>/<section>`. These pages aggregate; they present no text that is not already preserved.
+Books and sections are addressable in their own right, at `/b/<source>/` and `/b/<source>/<section>/`. These pages aggregate; they present no text that is not already preserved.
 
-A section is presented as one witness printed it, in that witness's order, so that the page reflects a book a reader can hold rather than a composite of several. Where a source has more than one witness, the one with the highest priority score presents it, and equal scores are settled on the witness identifier so that a build is never left to chance. The same score therefore governs both which occurrence a hadith displays and which witness presents a section; raising it to correct one will also change the other.
+A section is presented as one witness printed it, in that witness's order, so that the page reflects a book a reader can hold rather than a composite of several. Where a source has more than one witness, the one with the highest priority score presents it, and equal scores are settled on the witness identifier so that a build is never left to chance. The score informs reviewed display-occurrence selection and mechanically selects the witness for section presentation. Changing a score may change the section view, but never replaces a hadith's saved display occurrence without a reviewed edit.
 
 Identifiers behind published addresses are permanent. They are not reused, renumbered, or recomputed. Where a hadith must be split, the original identifier is retained with the narration closest to its established meaning and every additional result receives a new identifier. Where two must be joined, the older identifier survives and the newer becomes a permanent redirect. Where a hadith must be withdrawn, its address remains as a tombstone explaining that the identifier was withdrawn. These operations are avoided by deciding carefully before minting rather than by correcting afterwards.
 

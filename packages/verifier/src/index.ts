@@ -56,7 +56,7 @@ export {
 export {
   GRAPH_RULES,
   hadithDisplayIsMember,
-  hadithExtractedSpans,
+  hadithTextSpan,
   hadithMemberExclusive,
   hadithMemberOrder,
   identifierHadithUnique,
@@ -89,6 +89,7 @@ export {
   occurrencePageOrder,
   textRawWhitespace,
   textSingleLine,
+  validSingleLine,
   witnessIsbnChecksum,
 } from "./rules/semantic.ts";
 export {

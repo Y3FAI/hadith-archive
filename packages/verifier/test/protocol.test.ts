@@ -120,7 +120,7 @@ describe("verification protocol", () => {
     }
   ],
   "valid": false,
-  "verification_version": 2
+  "verification_version": 3
 }
 `);
   });
@@ -130,19 +130,21 @@ describe("verification protocol", () => {
       serializeVerificationReport({
         findings: [],
         valid: false,
-        verification_version: 2,
+        verification_version: 3,
       })
     ).toThrow("validity is inconsistent");
   });
 
-  test("refuses a report from the superseded version-one catalog", () => {
-    expect(VERIFICATION_VERSION).toBe(2);
-    expect(() =>
-      serializeVerificationReport({
-        findings: [],
-        valid: true,
-        verification_version: 1 as typeof VERIFICATION_VERSION,
-      })
-    ).toThrow("version is unsupported");
+  test("refuses a report from a superseded catalog", () => {
+    expect(VERIFICATION_VERSION).toBe(3);
+    for (const version of [1, 2]) {
+      expect(() =>
+        serializeVerificationReport({
+          findings: [],
+          valid: true,
+          verification_version: version as typeof VERIFICATION_VERSION,
+        })
+      ).toThrow("version is unsupported");
+    }
   });
 });

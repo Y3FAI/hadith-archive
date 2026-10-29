@@ -8,7 +8,7 @@ Everything Hadith Archive preserves is public and independently inspectable, whi
 
 ## Provenance
 
-Every record is bound to a specific source it can be traced back to, so nothing stands on unknown origin. Each record names the source witness it comes from and its location within that witness; the witnesses themselves will be defined in their own files in the repository, and validation will reject any record whose witness reference is missing or unresolved. Because every witness is a print edition identified by publisher, edition, year, and ISBN, provenance is not merely recorded but actionable: anyone may obtain the same book and check the page for themselves.
+Every preserved occurrence is bound to a specific source it can be traced back to, so nothing stands on unknown origin. Each occurrence names its source witness and location; witnesses are defined in their own records, and verification rejects a missing or unresolved witness reference. Source and section records describe the work itself, while hadith records trace their provenance through the occurrences they group. Because every witness is a print edition identified by publisher, edition, year, and ISBN, provenance is not merely recorded but actionable: anyone may obtain the same book and check the page for themselves.
 
 ## Fidelity
 
@@ -16,11 +16,11 @@ Preserved text faithfully represents its source witness, including its errors, u
 
 ## Integrity
 
-A record's content stays as it was preserved, and any change to it can be detected. Git already names every file and commit by a hash of its content, so altered content or rewritten history breaks the chain; on top of that, each record will carry a SHA-256 fingerprint of its raw text that automated checks recompute on every change, and the protected `main` branch admits changes only through reviewed pull requests, with no force-pushes.
+A record's content stays as it was preserved, and any change to it can be detected. Git already names every file and commit by a hash of its content, so altered content or rewritten history breaks the chain; on top of that, each occurrence carries a SHA-256 fingerprint of its raw text that automated checks recompute on every change, and the protected `main` branch admits changes only through reviewed pull requests, with no force-pushes.
 
 ## Uniqueness
 
-Each occurrence has one distinct identity that no other record shares; the same or similar text appearing in different places is several occurrences, not one. Each record receives a stable internal identifier separate from its text and source location, validation rejects any two records sharing an identifier, and similar texts are grouped by a hadith rather than merged as occurrences.
+Each occurrence has one distinct identity that no other record shares; the same or similar text appearing in different places is several occurrences, not one. Each occurrence receives a stable internal identifier separate from its text and source location, verification rejects any two occurrences sharing an identifier, and similar texts are grouped by a hadith rather than merged as occurrences.
 
 ## Traceability
 
@@ -32,7 +32,7 @@ Every accepted change is attributable to a verified identity, so an action can b
 
 ## Separation of Concerns
 
-The core preserves source-bound truth and the human-reviewed hadith groupings made over it, and nothing else; search, display, normalization, and linking belong to separate layers built on top of it and may never redefine it. Source-bound records hold only source-bound fields, reviewed groupings live in their own hadith records rather than on the records they group, and anything derived — normalized text, indexes, search forms — is generated from the core into separate files, so it can be rebuilt or discarded without touching the source.
+The core preserves source-bound truth and reviewed hadith decisions: grouping, the display occurrence, and its exact selected quotation. Project topics and their owner-reviewed memberships live in separate saved editorial records outside the core, referring to hadith without copying their text. These decisions are inputs, not disposable build output. Search, rendering, normalization, and linking may never redefine them. Fixed presentation rules live in code; derived files and pages — including normalized text, indexes, and search forms — can be rebuilt from the same saved inputs or discarded without touching them. Builds run without AI and never make editorial decisions.
 
 ## Availability
 

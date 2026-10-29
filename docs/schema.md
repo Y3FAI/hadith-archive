@@ -6,9 +6,11 @@ The schema architecture serves four actors: ingestion pipelines that produce rec
 
 ## Status
 
-The storage architecture, type system, canonical JSON representation, schema-version policy, identifier forms, common semantic types, and exact version-one fields for all five entities are settled. The six version-one JSON Schemas implement that structural contract, and verification catalog version two enforces it. The record schemas remain draft version one; the catalog advanced when hadith membership moved from occurrence records onto hadith records.
+The storage architecture, type system, canonical JSON representation, schema-version policy, identifier forms, common semantic types, and exact version-one fields for all five entities are settled. The six version-one JSON Schemas implement that structural contract, and verification catalog version three enforces it. The record schemas remain draft version one because no accepted core record has used them; the catalog advanced separately as membership and quotation rules changed.
 
-No core record is accepted until all five version-one entity schemas exist and the verifier enforces their structural and semantic rules.
+All five entity schemas and the complete verifier are implemented. Admitting a core record still requires human review against its printed source witness and successful repository verification.
+
+The single-quotation migration is implemented and validated: hadith records save one `text` quotation, which may cross LF boundaries, in place of three display spans. The schemas, generated types, and version-three verifier agree on this contract. Current UI work uses the hand-written static demo with no build step. The partial generator and outside-core topic input loader are preserved, with integration and fresh validation deferred until the owner approves the design.
 
 ## Authority and consumption
 
@@ -37,9 +39,36 @@ Human minting ──────────────────────
 
 Ingestion and hadith minting remain separate. Ingestion produces source-bound occurrences; it does not group them or mint public identities.
 
-The authoritative core therefore holds two kinds of record. `SOURCE`, `SOURCE_WITNESS`, `SECTION`, and `OCCURRENCE` are source-bound: each records something a printed edition shows. `HADITH` is an authoritative human-reviewed judgement: it records which occurrences are one narration, which of them is displayed, and the spans drawn from that display. Both kinds are core data under the same canonical, structural, and historical verification. Neither is derived. Grouping decisions point one way, from a hadith to its member occurrences, so a reviewed grouping can change without rewriting any source-bound record. Derived catalogs, indexes, query databases, language bindings, exports, and HTML are reproducible and disposable. None becomes a source of truth.
+The authoritative core therefore holds two kinds of record. `SOURCE`, `SOURCE_WITNESS`, `SECTION`, and `OCCURRENCE` are source-bound: each records something a printed edition shows. `HADITH` is an authoritative human-reviewed judgement: it records which occurrences are one narration, which of them is displayed, and the exact quotation drawn from that display. Both kinds are core data under the same canonical, structural, and historical verification. Neither is derived. Grouping decisions point one way, from a hadith to its member occurrences, so a reviewed grouping can change without rewriting any source-bound record. Derived catalogs, indexes, query databases, language bindings, exports, and HTML are reproducible and disposable. None becomes a source of truth.
 
 Identifiers, record fields, schemas, and relationships form the durable data contract. Filesystem paths remain predictable and verifiable, but may later be reorganized or sharded without changing entity identity.
+
+## Saved editorial inputs
+
+Grouping, the display occurrence and exact selected quotation are reviewed choices saved on hadith records before a build. Project topics and their owner-reviewed memberships are saved separately outside `core/`. Topics are the project's own classification, may overlap, and reference hadith without copying their text or citations. These saved decisions are authoritative inputs for their own scope; they are not generated artifacts.
+
+A renderer applies fixed mechanical rules to the saved inputs and produces deterministic, disposable output. It runs offline without AI. Missing required decisions or invalid references fail the build instead of causing a new choice. Application exports are generated from these inputs, never maintained by hand as a duplicate content store.
+
+### Topic files for the generated demo
+
+The deferred generator draft accepts a separate topic directory supplied to the builder; the current hand-written pages do not read these files. Its checked-in examples live in `apps/web/fixtures/demo/topics/`; a permanent repository location for reviewed production topics remains undecided. These are editorial input files, not core records, and the repository verifier does not read them. The builder validates them against the supplied core input before rendering.
+
+Each topic is a canonical JSON object in a flat `<topic_id>.json` file, using an unpadded positive decimal identifier. It has exactly three properties:
+
+```json
+{
+  "hadith_ids": [
+    1,
+    3
+  ],
+  "title": "الصلاة",
+  "topic_id": 3
+}
+```
+
+`topic_id` is a positive integer through `9007199254740991` and must equal the filename stem. `title` is a nonempty NFC single-line value under the metadata whitespace and invisible-character rules; topic titles are unique within the supplied topic set. `hadith_ids` is a nonempty set of positive safe integers in strictly ascending numeric order. Every member resolves to a hadith in the supplied core input. A hadith can appear in several topics; category membership is not stored on the hadith record.
+
+The object contains no copied quotation or citation, review-workflow metadata, or version field. Unknown or missing properties, invalid values, and unresolved references refuse the build. Topics sort by numeric identifier and their hadith by numeric hadith identifier; these are mechanical presentation orders rather than editorial ranks. The synthetic fixture memberships illustrate the format and do not claim a real scholarly classification.
 
 ## Record granularity
 
@@ -95,11 +124,16 @@ The private `sources/` directory is separate from `core/sources/`. The former ho
 
 ## Repository topology
 
-The repository is a private Bun workspace monorepo. Authoritative data and schemas remain visible at the root; code is separated by producer, control, and consumer responsibility.
+The repository is a Bun workspace monorepo whose packages are marked private to prevent registry publication. Authoritative data and schemas remain visible at the root; code is separated by producer, control, and consumer responsibility.
 
 ```text
 apps/
-  web/                        # future static public application
+  web/                        # public web application; static design iteration active
+    demo/                     # current hand-written demo and local assets
+    fixtures/
+      demo/                   # saved synthetic core, topics and site configuration
+    src/                      # partial generator, deferred until design approval
+    test/                     # generator tests; alignment and fresh validation pending
 
 packages/
   canonical-json/             # deterministic JSON parsing and representation
@@ -125,8 +159,6 @@ packages/
         valid/
         invalid/
           <rule_id>/
-      integration/
-      unit/
   design-system/              # Arabic visual foundations for the site
     fonts/                    # KFGQPC font, unmodified
     icons/                    # Phosphor icons, unmodified
@@ -161,7 +193,7 @@ Only directories containing immediate implementation are created. Future package
 
 `canonical-json` owns deterministic parsing, duplicate-key detection, formatting, and byte comparison. `core-loader` owns the offline structural schema registry and exposes read-only typed access to canonical, structurally valid records. `verifier` consumes those boundaries, reads the repository and Git history, and never writes. Its invalid fixtures live beneath its test tree rather than authoritative core paths. `design-system` holds the site's stylesheet, Arabic font and icons; each third-party work is stored unmodified and credited in [CREDITS.md](../CREDITS.md).
 
-Ingestion and minting are separate packages. They write provisional records only beneath their respective private workspace directories; promotion into `core/` is an explicit human-reviewed change. The site consumes the supported loader or reproducible artifacts and never imports private workspaces or writes authoritative data.
+Ingestion and minting are planned as separate packages. They will write provisional records only beneath their respective private workspace directories; promotion into `core/` is an explicit human-reviewed change. The generated-demo builder consumes supplied records through the supported loader and non-history verifier rules; it never writes authoritative data. Its synthetic inputs live in `apps/web/fixtures/demo/`, outside root `core/`. The current hand-written demo in `apps/web/demo/` loads no core records and requires no build.
 
 `artifacts/` contains disposable catalogs, exports, indexes, additional generated bindings, and static output. Nothing beneath it is authoritative or committed. The TypeScript bindings required to compile the supported loader are committed within that package and checked against the schemas; they remain derived rather than authoritative. `sources/`, `workspace/`, `decisions/`, `AGENTS.md`, and local agent settings remain entirely excluded from Git. Public source and witness records live only beneath `core/`; no Markdown or JSON exception exists beneath private `sources/`.
 
@@ -169,7 +201,7 @@ The root package and every workspace package declare `private: true` to prevent 
 
 ## Authoritative type system
 
-Strict JSON Schema Draft 2020-12 documents are the sole authoritative type definitions. JSON Schema was chosen because it is a standard, language-neutral JSON format that supports structural validation, reusable definitions, references, precise constraints, and independent meta-schema validation.
+For core records, strict JSON Schema Draft 2020-12 documents are the sole authoritative type definitions. JSON Schema was chosen because it is a standard, language-neutral JSON format that supports structural validation, reusable definitions, references, precise constraints, and independent meta-schema validation.
 
 Each entity schema:
 
@@ -239,7 +271,7 @@ Once a schema is referenced by core data on `main`, its identifier, bytes, and m
 | `publication_year` | Gregorian integer from `1000` through `9999` |
 | `single_line_text` | Nonempty string governed by the approved NFC and single-line whitespace rules |
 | `raw_text` | Nonempty string governed by the approved preservation and raw-whitespace rules |
-| `extracted_span_text` | `single_line_text` with the additional cross-record contiguous-span rule |
+| `extracted_span_text` | Nonempty NFC quotation governed by raw-text whitespace rules, including LF, with the additional cross-record contiguous-span and grapheme-boundary rule |
 | `fingerprint` | String matching `^[0-9a-f]{64}$` |
 | `isbn13` | String matching `^97[89][0-9]{10}$` with a semantic checksum rule |
 | `section_kind` | String enum: `kitab`, `bab`, `fasl`, `juz`, `qism` |
@@ -333,7 +365,7 @@ HadithArchiveRecord = Source | SourceWitness | Section | Occurrence | Hadith
 
 The `record_type` property supplies the discriminator. The supported TypeScript bindings are generated by the pinned `json-schema-to-typescript` tool and committed at `packages/core-loader/src/generated/records.ts`. Committing them gives tools and applications complete type information immediately after a clean checkout without making package installation or a generation step an implicit prerequisite for reading the code.
 
-The generation command produces deterministic source from the five entity schemas. A required freshness check regenerates the source in memory and compares it byte for byte with the committed file. Schema changes therefore fail verification until the binding is regenerated. Other language bindings may be generated from the same schemas later. Generated files are never edited by hand, and compile-time types never replace canonical-byte and runtime structural validation.
+The generation command produces deterministic source from the five entity schemas. A required freshness check regenerates the source in memory and compares it byte for byte with the committed file. Schema changes that alter the generated source therefore fail the freshness check until the binding is regenerated. The root `check` command runs this gate; `verify` alone does not. Other language bindings may be generated from the same schemas later. Generated files are never edited by hand, and compile-time types never replace canonical-byte and runtime structural validation.
 
 ## Identifier types
 
@@ -502,7 +534,7 @@ Every source and source witness carries an explicit `priority_score` with this s
 
 The field is required and has no implicit default. New records begin explicitly at `0` unless a reviewed decision assigns another value. Pipelines never calculate or change scores automatically. A score change is a governance change with potentially broad presentation effects, not a transcription correction.
 
-Source scores compare sources, and source-witness scores compare source witnesses; values across those entity types are never compared directly. The algorithm that eventually combines their influence on display-occurrence selection remains deferred until real multi-witness data exists. For section presentation, the already-settled rule selects the source witness with the highest score and breaks a tie lexicographically by witness identifier.
+Source scores compare sources, and source-witness scores compare source witnesses; values across those entity types are never compared directly. The review method that combines their influence on a saved display-occurrence decision remains deferred until real multi-witness data exists; builds never recalculate that editorial selection. For section presentation, the already-settled rule selects the source witness with the highest score and breaks a tie lexicographically by witness identifier.
 
 Negative values are forbidden. Any future need to exclude a record is represented explicitly rather than hidden in a score.
 
@@ -644,37 +676,37 @@ Normalized text, isnad or matn parts, narrator graphs, OCR confidence, transcrip
 
 ### Hadith record
 
-A version-one hadith record has exactly eight required properties. This illustrative record groups occurrences `2` and `10` and displays occurrence `10`:
+A version-one hadith record has exactly six required properties. This illustrative record groups occurrences `2` and `10` and displays occurrence `10`:
 
 ```json
 {
-  "description": "مثال نص الحديث",
   "display_occurrence_id": 10,
   "hadith_id": 1,
-  "heading": "مثال نص الحديث",
   "member_occurrence_ids": [
     2,
     10
   ],
   "record_type": "hadith",
   "schema_version": 1,
-  "title": "نص الحديث"
+  "text": "مثال نص الحديث"
 }
 ```
 
-`record_type` is the constant `hadith`, `schema_version` is the integer constant `1`, `hadith_id` is the approved `HadithId`, and `display_occurrence_id` is the approved `OccurrenceId` whose record supplies the complete published raw text.
+`record_type` is the constant `hadith`, `schema_version` is the integer constant `1`, `hadith_id` is the approved `HadithId`, and `display_occurrence_id` is the approved `OccurrenceId` whose raw text supplies the saved quotation.
 
 `member_occurrence_ids` is the reviewed membership set: a nonempty array of distinct `OccurrenceId` values. It is a set, not an editorial or display sequence, and it is serialized in strictly ascending numeric order so that one membership has exactly one byte representation: `[2, 10]` is canonical and `[10, 2]` is not, even though `"10"` sorts before `"2"` as text. No arbitrary maximum limits a group, and a group of one is valid. JSON Schema rejects an absent, empty, malformed, or repeated list; semantic verification enforces the numeric order.
 
-`title`, `heading`, and `description` use the common `ExtractedSpanText` type. Each is nonempty NFC single-line text with no leading or trailing whitespace, repeated spaces, or control characters. Each must occur as one exact contiguous substring of the display occurrence's `raw_text` whose start and end both fall on extended grapheme-cluster boundaries of that raw text, so a span cannot begin or end inside a letter's cluster of marks. Any one matching occurrence suffices. A span cannot concatenate passages, normalize characters, rewrite punctuation, summarize, paraphrase, or add an ellipsis. A span cannot cross a stored LF. The three values may overlap or be identical, and no arbitrary maximum length rejects a legitimate phrase.
+`text` uses the common `extracted_span_text` definition: a nonempty NFC string governed by the raw-text whitespace policy. It may contain a stored LF, but no leading or trailing whitespace, repeated spaces, consecutive LF characters, spaces adjacent to LF, other forbidden whitespace or control characters, or the invisible format characters forbidden by the data policy. These checks use `text.raw_whitespace`, rather than the metadata-only `text.single_line` rule.
 
-Every listed member must resolve to exactly one occurrence record. An occurrence belongs to at most one hadith: no occurrence identifier may appear in the member lists of two hadith records, whether or not it is the display occurrence of either. The display occurrence must resolve uniquely and must appear in `member_occurrence_ids`; it is chosen independently of member order. Changing the display occurrence revalidates all three spans, and scripts may propose but never approve a selection or a membership.
+The quotation must appear as one exact contiguous substring of the display occurrence's `raw_text`, with both ends on extended grapheme-cluster boundaries of that raw text. Any one qualifying match suffices, including a later match if an earlier one cuts a cluster. The quotation may cross a stored LF; comparison preserves that LF exactly, so a space is not an interchangeable substitute. It cannot concatenate passages, normalize characters, rewrite punctuation, summarize, paraphrase, or add an ellipsis. It has no arbitrary maximum length. The former `title`, `heading`, and `description` properties are unknown fields and fail structural validation.
+
+Every listed member must resolve to exactly one occurrence record. An occurrence belongs to at most one hadith: no occurrence identifier may appear in the member lists of two hadith records, whether or not it is the display occurrence of either. The display occurrence must resolve uniquely and must appear in `member_occurrence_ids`; it is chosen independently of member order. Changing the display occurrence or its raw text revalidates the saved quotation. A raw-text correction elsewhere may leave it valid; a person reviews the choice if its exact match or grapheme boundaries no longer hold. Scripts may propose but never approve a selection or membership, and builds never remake either choice.
 
 Because membership references point only from hadith to occurrence, a reviewed grouping change edits hadith records alone. This record states no lifecycle policy beyond the existing permanent-address rules.
 
-The record lives at `core/hadith/<hadith_id>.json` and owns `/h/<hadith_id>/`. Verification checks the filename, member resolution, member order, exclusive membership, display membership and resolution, and extracted spans.
+The record lives at `core/hadith/<hadith_id>.json` and owns `/h/<hadith_id>/`. Verification checks the filename, member resolution, member order, exclusive membership, display membership and resolution, and the saved quotation through `hadith.text_span`.
 
-The hadith record stores no second canonical text. Rendering resolves and publishes the display occurrence's complete `raw_text`. Translation, transliteration, grading, topic tags, narrator graphs, timestamps, and composed prose remain excluded.
+The saved quotation is an editorial selection, not an independently composed transcription. Rendering uses `text` for the selected passage and resolves each member occurrence's full `raw_text` beneath it. Translation, transliteration, grading, topic tags, narrator graphs, timestamps, and composed prose remain excluded from the hadith record. Project topics live in separate saved editorial inputs outside core.
 
 ## Verification layers
 
@@ -686,7 +718,7 @@ Every authoritative rule has a stable lowercase identifier matching `^[a-z][a-z0
 
 A semantic change to a rule or its scope creates a new verification-catalog version. An implementation correction that restores the documented meaning does not. Every rule has passing and failing fixtures, and every verifier bug fix adds a regression fixture.
 
-The verification-catalog version and record schema versions are independent. The current catalog is version two; it replaced version one when hadith membership moved onto hadith records. The record schemas stay at draft version one because no core record on `main` had yet used them. The verifier emits only the current catalog version and refuses to serialize a report claiming any other.
+The verification-catalog version and record schema versions are independent. The current catalog is version three. Version two moved membership onto hadith records; version three replaces the three single-line display spans with one saved quotation that may cross LF and updates its whitespace-rule scope. The record schemas stay at draft version one because no core record on `main` had yet used them. The verifier emits only the current catalog version and refuses to serialize a report claiming any other.
 
 Each failure contains exactly four properties:
 
@@ -707,7 +739,7 @@ The machine report is:
 {
   "findings": [],
   "valid": true,
-  "verification_version": 2
+  "verification_version": 3
 }
 ```
 
@@ -739,7 +771,7 @@ Named checks resolve foreign references, enforce global uniqueness, verify hadit
 
 ### Historical integrity
 
-Named checks enforce non-reuse and permanence rules that require repository history, including the global `HADITH` sequence, redirects, tombstones, and identifiers that must survive correction.
+Named checks enforce non-reuse and permanence rules that require repository history, including the global `HADITH` and `OCCURRENCE` sequences, record preservation, identifiers that must survive correction, and immutability of used schemas. Redirect and tombstone states require explicit schema review before implementation; version one does not represent them.
 
 ### Derived reproducibility
 
@@ -747,9 +779,11 @@ Derived artifacts are built twice from the same core and compared byte for byte.
 
 Every verification rule has a stable name, an implementation, and tests. Verification passes or fails; it never warns authoritative data through and never silently changes core data.
 
-## Verification catalog version two
+## Verification catalog version three
 
-The version-two catalog contains the following authoritative rules. Relative to version one, it removes `reference.hadith_resolves` and `hadith.nonempty`, whose occurrence-side membership no longer exists; adds `reference.member_occurrence_resolves`, `hadith.member_order`, and `hadith.member_exclusive`; and redefines `hadith.display_is_member` against the hadith's own member list. A nonempty and repeat-free member list is enforced by `record.schema_valid` rather than a separate rule.
+The version-three catalog contains the following authoritative rules. Relative to version two, it replaces `hadith.extracted_spans` with `hadith.text_span`, applies `text.raw_whitespace` to both occurrence `raw_text` and hadith `text`, and limits `text.single_line` to metadata. A hadith quotation may now cross a stored LF while preserving exact matching and grapheme boundaries.
+
+The earlier version-two change relative to version one removed `reference.hadith_resolves` and `hadith.nonempty`, whose occurrence-side membership no longer exists; added `reference.member_occurrence_resolves`, `hadith.member_order`, and `hadith.member_exclusive`; and redefined `hadith.display_is_member` against the hadith's own member list. A nonempty and repeat-free member list is enforced by `record.schema_valid` rather than a separate rule.
 
 ### Repository and file rules
 
@@ -784,8 +818,8 @@ The version-two catalog contains the following authoritative rules. Relative to 
 
 | Rule identifier | Failure condition |
 |---|---|
-| `text.single_line` | A single-line or extracted-span value violates the approved Unicode whitespace rules or contains a forbidden invisible format character. |
-| `text.raw_whitespace` | Raw text contains forbidden leading, trailing, repeated, control, or layout whitespace, or a forbidden invisible format character. |
+| `text.single_line` | A single-line metadata value violates the approved Unicode whitespace rules or contains a forbidden invisible format character. |
+| `text.raw_whitespace` | Occurrence `raw_text` or hadith `text` contains forbidden leading, trailing, repeated, control, or layout whitespace, or a forbidden invisible format character. LF is allowed under the raw-text policy. |
 | `witness.isbn_checksum` | An ISBN-13 checksum is invalid. |
 | `occurrence.fingerprint_matches` | The stored fingerprint differs from SHA-256 of the canonical raw-text bytes. |
 
@@ -818,7 +852,7 @@ The version-two catalog contains the following authoritative rules. Relative to 
 | `hadith.member_order` | Member-occurrence identifiers are not in strictly ascending numeric order. |
 | `hadith.member_exclusive` | One occurrence identifier appears in the member lists of more than one hadith record; every claim is reported, including claims on an unresolved identifier. |
 | `hadith.display_is_member` | A hadith's display-occurrence identifier does not appear in its member list. |
-| `hadith.extracted_spans` | A title, heading, or description is not an exact contiguous single-line substring of displayed raw text that starts and ends on extended grapheme-cluster boundaries in at least one occurrence. |
+| `hadith.text_span` | Hadith `text` has no exact contiguous match in its display occurrence's raw text with both ends on extended grapheme-cluster boundaries. A match may cross stored LF characters, which are compared unchanged. |
 
 ### Historical rules
 
@@ -829,9 +863,9 @@ The version-two catalog contains the following authoritative rules. Relative to 
 | `history.identifier_not_reused` | A current identifier was previously used by a different historical record. |
 | `history.sequence_next` | Newly minted hadith or occurrence identifiers are not the uninterrupted range immediately after the greatest identifiers ever minted. |
 
-The verifier cannot prove that raw text matches ink on a cited page, bibliographic metadata names the correct printing, a publisher meets the governance standard, an omitted section truly does not apply, grouped occurrences are the same narration, extracted spans are the best choices, or a priority score is scholarly appropriate. Those are human judgements and receive no machine rule identifiers. Verification proves repository consistency; independent verification compares the record with the physical source witness.
+The verifier cannot prove that raw text matches ink on a cited page, bibliographic metadata names the correct printing, a publisher meets the governance standard, an omitted section truly does not apply, grouped occurrences are the same narration, the saved quotation is the best choice, or a priority score is scholarly appropriate. Those are human judgements and receive no machine rule identifiers. Verification proves repository consistency; independent verification compares the record with the physical source witness.
 
-Derived-build reproducibility receives a rule when a real builder exists. The catalog does not report an unimplemented artifact check as passed.
+Generator reproducibility requires separate build checks across rebuilds and relocated inputs. The deferred generator tests must be aligned with the final static design and rerun before claiming current reproducibility. It is not a rule in the version-three repository catalog, which does not report an artifact check as passed.
 
 ## Verifier implementation
 
@@ -880,11 +914,11 @@ Humans and AI agents may use both views: catalogs for discovery and individual c
 
 ## Implementation status
 
-The six version-one JSON Schemas, private Bun workspace root, core loader, and initial verifier package are implemented. The core loader's schema registry validates every schema against Draft 2020-12, checks each `$id` against its repository path, resolves exact local references without network access, compiles all five entity schemas, and tests valid and invalid records. The initial verifier consumes that shared structural boundary.
+The six version-one JSON Schemas, private Bun workspace root, canonical JSON package, core loader, version-three verifier, design foundations, and hand-written demo are implemented. UI work now follows the [static design workflow](tooling.md#static-design-workflow); the generator and synthetic fixtures are preserved as deferred work, without a current passing-build claim. The core loader's schema registry validates every schema against Draft 2020-12, checks each `$id` against its repository path, resolves exact local references without network access, compiles all five entity schemas, and tests valid and invalid records. The verifier consumes that shared structural boundary.
 
-The canonical JSON package implements duplicate-aware parsing, lossless large integers, deterministic formatting, canonical byte comparison, and the approved UTF-8, BOM, line-ending, final-LF, NFC, and top-level-object boundaries. The core loader implements canonical, structurally validated file and byte loading; committed schema-derived TypeScript bindings with a deterministic freshness gate; structured failure results; deep runtime immutability; and structured inspection of the same schema catalog used for loading. The verifier implements its complete protocol and version-two rule catalog, including ancestry-indexed historical checks against an explicit base commit. The repository is ready to admit the first human-reviewed core record through the complete machine-verification boundary.
+The canonical JSON package implements duplicate-aware parsing, lossless large integers, deterministic formatting, canonical byte comparison, and the approved UTF-8, BOM, line-ending, final-LF, NFC, and top-level-object boundaries. The core loader implements canonical, structurally validated file and byte loading; committed schema-derived TypeScript bindings with a deterministic freshness gate; structured failure results; deep runtime immutability; and structured inspection of the same schema catalog used for loading. The verifier implements its complete protocol and version-three rule catalog, including ancestry-indexed historical checks against an explicit base commit. The single-quotation migration passed type-checking, tests, generated-binding freshness, schema compilation, and repository verification against a temporary index. No core record was admitted by that implementation work.
 
-The first real source witness and occurrence are drafted only after these decisions produce complete version-one schemas. The draft then tests the schemas; it does not define them by accident.
+The schemas and verifier are ready for the first privately drafted source witness and occurrence. A draft tests the settled contract against a real printing; any mismatch calls for explicit schema review before admission to `core/`.
 
 ## The rule
 

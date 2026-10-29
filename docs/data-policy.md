@@ -29,7 +29,7 @@ This list is exact, not a category. U+200C ZERO WIDTH NON-JOINER and U+200D ZERO
 
 ## No removal
 
-The canonical form unifies representation only. The core never removes or alters content — not diacritics, tatweel, or punctuation. Whitespace conversion excludes page layout rather than textual content. Removing content is lossy and belongs to the application or derived layers, never the core.
+The canonical form unifies representation only. The core never removes or alters content — not diacritics, tatweel, or punctuation. Whitespace conversion excludes page layout rather than textual content. Removing content from preserved raw text is lossy and belongs to the application or derived layers, never an occurrence record. A hadith's separately reviewed `text` quotation is an exact span of its display occurrence, including any LF inside that span; it never replaces or shortens the occurrence's complete raw text.
 
 ## Storage and transfer
 
@@ -37,4 +37,4 @@ Data files are stored and transferred verbatim. Git records each file under the 
 
 ## Fingerprint
 
-Each core text has a fingerprint: the SHA-256 hash of its canonical UTF-8 bytes, written as 64 lowercase hexadecimal characters. Because the representation is canonical and SHA-256 is fixed, the same text always produces the same fingerprint — on any machine, in any year. The fingerprint changes if any character changes, and it cannot be reversed to the text; it detects alteration, it does not store the text.
+Each occurrence's raw text has a fingerprint: the SHA-256 hash of its canonical UTF-8 bytes, written as 64 lowercase hexadecimal characters. Because the representation is canonical and SHA-256 is fixed, the same text always produces the same fingerprint — on any machine, in any year. The fingerprint changes if any character changes, and it cannot be reversed to the text; it detects alteration, it does not store the text.

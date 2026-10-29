@@ -1,4 +1,4 @@
-export const VERIFICATION_VERSION = 2 as const;
+export const VERIFICATION_VERSION = 3 as const;
 
 export type VerificationExitStatus = 0 | 1 | 2;
 
