@@ -1,0 +1,46 @@
+# Runs the project's full check on every pull request and on every change
+# to main: type checking, tests, generated-type freshness, schema
+# compilation and repository verification (docs/tooling.md).
+
+name: Check
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      # The verifier needs the complete history; it rejects shallow clones.
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      # The same Bun as packageManager in package.json.
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.3.14
+
+      - run: bun install --frozen-lockfile
+
+      # The accepted base: for a pull request, where it leaves its target
+      # branch; after a merge, main as it was before.
+      - name: Choose the accepted base
+        id: base
+        env:
+          EVENT: ${{ github.event_name }}
+          TARGET: ${{ github.base_ref }}
+          BEFORE: ${{ github.event.before }}
+        run: |
+          if [ "$EVENT" = pull_request ]; then
+            echo "commit=$(git merge-base HEAD "origin/$TARGET")" >> "$GITHUB_OUTPUT"
+          else
+            echo "commit=$BEFORE" >> "$GITHUB_OUTPUT"
+          fi
+
+      - run: bun run check --base "${{ steps.base.outputs.commit }}"
