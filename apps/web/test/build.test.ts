@@ -176,7 +176,7 @@ describe("demo build", () => {
     const order = [...hadith.matchAll(/<li id="occurrence-(\d+)">/g)].map((match) => match[1]);
     expect(order).toEqual(["1", "3", "6"]);
     expect(hadith).toContain("<div><dt>دار النشر</dt><dd>ناشر تجريبي</dd></div>");
-    expect(hadith).toContain("<div><dt>الصفحة</dt><dd>١١٠–١١١</dd></div>");
+    expect(hadith).toContain("<div><dt>الصفحة</dt><dd>١١٠-١١١</dd></div>");
     expect(hadith).toContain("<div><dt>رقم الحديث</dt><dd>١٢٤٥</dd></div>");
     // A stored LF inside the text is kept as a line break.
     expect(page("h/2/index.html")).toMatch(/<h1>[^<]+<br>[^<]+<\/h1>/);
