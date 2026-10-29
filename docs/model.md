@@ -68,7 +68,7 @@ Membership is recorded once, on the hadith, as the set of its occurrence identif
 
 ## Project topics outside the core
 
-Categories («الأقسام») are the project's own topics, not divisions printed by a source author. A source section belongs to one work; a topic can gather hadith across works, and one hadith can belong to several topics. The owner reviews category membership.
+Categories («الأقسام») are the project's own topics, not divisions printed by a source author. A source section belongs to one work; a topic can gather hadith across works, and a hadith belongs to one topic at most. The owner reviews category membership.
 
 Topic definitions and memberships are saved editorial inputs outside `core/`. They reference hadith identities and contain no copied hadith text or citations. They are authoritative for the project's classification decisions, rather than generated guesses or a second preservation corpus. A membership change is a new reviewed edit; rebuilding pages does not recreate or change it.
 
