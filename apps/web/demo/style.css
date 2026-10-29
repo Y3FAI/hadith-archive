@@ -37,7 +37,6 @@
   --shadow: 0 0 0 .5px rgb(0 0 0 / .04), 0 1px 2px rgb(0 0 0 / .04);
   --shadow-hover: 0 0 0 .5px rgb(0 0 0 / .05), 0 2px 4px rgb(0 0 0 / .06);
   --shadow-pressed: 0 0 0 .5px rgb(0 0 0 / .05), inset 0 1px 2px rgb(0 0 0 / .08);
-  --shadow-focus: 0 0 0 1px rgb(0 0 0 / .14), 0 4px 16px rgb(0 0 0 / .32);
 }
 
 html {
@@ -57,7 +56,7 @@ body {
   overflow-wrap: anywhere;
   display: flex;
   flex-direction: column;
-  min-height: 100dvh;
+  min-height: 100svh;
 }
 
 a {
@@ -78,9 +77,12 @@ footer {
   padding-inline: max(clamp(1rem, .25rem + 4vw, 3rem), (100% - 52rem) / 2);
 }
 
+/* main is measured by the rules below that size cards by the room they
+   have, in rem, so they follow the reader's text size too. */
 main {
   flex-grow: 1;
   padding-block: calc(var(--space-l) - 1.125rem) var(--space-l);
+  container-type: inline-size;
 }
 
 h1 {
@@ -109,6 +111,29 @@ header {
 header > a {
   font-size: var(--text);
   line-height: var(--target);
+}
+
+/* The skip link: hidden until a keyboard reaches it, then a white chip
+   over the site's name, like a focused menu link. */
+body > a:first-child {
+  position: absolute;
+  inset-block-start: calc(var(--space-m) - .5rem);
+  inset-inline-start: max(clamp(1rem, .25rem + 4vw, 3rem), (100% - 52rem) / 2);
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--target);
+  margin-inline: -.75rem;
+  padding-inline: .75rem;
+  border-radius: var(--radius);
+}
+
+body > a:first-child:not(:focus) {
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 
 button {
@@ -222,11 +247,12 @@ dl div::before {
   text-align: center;
 }
 
-/* Hidden on screen, still read by screen readers: a book title's label,
-   and the search's label (the field's placeholder says what to do).
-   In a browser without :has(), :is() drops only that part, so the
-   search's label stays hidden there too. */
-:is(dt:has(+ dd > cite), search h1) {
+/* Hidden on screen, still read by screen readers: a label whose value
+   starts with an icon in its place (the pin before a book, the squares
+   before a hadith's categories), and the search's label (the field's
+   placeholder says what to do). In a browser without :has(), :is() drops
+   only that part, so the search's label stays hidden there too. */
+:is(dt:has(+ dd > svg), search :is(h1, h2)) {
   position: absolute;
   width: 1px;
   height: 1px;
@@ -291,6 +317,7 @@ blockquote:has(+ details) {
 
 blockquote:has(+ details)::after {
   content: "...";
+  content: "..." / "";
   position: absolute;
   inset-block-end: 0;
   inset-inline-end: calc(var(--card-padding) - .25em);
@@ -389,14 +416,19 @@ cite {
   font-style: normal;
 }
 
-cite a {
+dd a {
   border-radius: var(--radius);
 }
 
 @media (hover: hover) and (pointer: fine) {
-  cite a:hover {
+  dd a:hover {
     color: #000000;
   }
+}
+
+/* A hadith's category, a little below its citation. */
+dl + dl {
+  margin-block-start: .5rem;
 }
 
 /* The home page: a large search, then categories and books. */
@@ -422,7 +454,7 @@ search input {
   border: 0;
   border-radius: var(--radius-panel);
   background: #FFFFFF;
-  box-shadow: var(--shadow);
+  box-shadow: 0 0 0 .5px rgb(0 0 0 / .08), 0 2px 6px rgb(0 0 0 / .08);
   color: inherit;
   font: inherit;
   font-size: var(--text);
@@ -441,6 +473,24 @@ search button {
   inset-inline-end: .625rem;
   display: flex;
   margin-block: auto;
+}
+
+/* Search results: the field keeps its query, the count sits under it,
+   level with the query's first letter, and the results follow as on a
+   category page. */
+search:has(+ dl) {
+  padding-block-end: var(--space-s);
+}
+
+search + dl {
+  margin-block-end: calc(var(--space-s) * 2 - .3125rem);
+  margin-inline-start: 1.5rem;
+}
+
+/* The 404 page: the field sits under the title, like a heading's
+   content. */
+main > h1 + search {
+  padding-block-start: 0;
 }
 
 /* A heading that leads to its own page. Like the menu links, the 44px
@@ -483,6 +533,24 @@ h2 + a {
   font-size: 1rem;
 }
 
+/* With enlarged text on a narrow screen, «المزيد» moves under its heading
+   rather than squeezing the heading's words apart. */
+@container (width < 14rem) {
+  section:has(> h2 + a) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  section:has(> h2 + a) > h2 {
+    margin-block-end: 0;
+  }
+
+  h2 + a {
+    justify-self: start;
+    margin-block: 0 var(--space-s);
+    margin-inline: -.75rem 0;
+  }
+}
+
 /* Cards sit a little further apart than a heading from its content, so
    the heavy green cards and long hadith cards each read as one piece. */
 main > section > ul {
@@ -496,13 +564,26 @@ main > section > ul {
   grid-template-columns: minmax(0, 1fr);
 }
 
-@media (width >= 40em) {
+/* Each column also needs room measured in rem, so enlarged text gets
+   fewer, wider cards instead of words broken into letters. At the
+   default text size the columns are as the screen widths above say. */
+@container (width < 17rem) {
   [aria-labelledby="aqsam"] ul {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (width >= 40em) {
+  @container (width >= 35rem) {
+    [aria-labelledby="aqsam"] ul {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
   }
 
-  :is([aria-labelledby="kutub"], [aria-labelledby="abwab"]) ul {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  @container (width >= 30rem) {
+    :is([aria-labelledby="kutub"], [aria-labelledby="abwab"]) ul {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
   }
 }
 
@@ -600,8 +681,9 @@ main > ol a {
   -webkit-tap-highlight-color: transparent;
 }
 
-/* The first line shows whole; a white fade over the second leads to the
-   arrow. Laid on top, it paints faster than a mask on long lists. */
+/* The first line shows whole; a short white fade near the arrow ends the
+   second, so most of it stays clear. Laid on top, it paints faster than
+   a mask on long lists. */
 main > ol a span {
   position: relative;
   display: block;
@@ -615,7 +697,7 @@ main > ol a span::after {
   inset-inline: 0;
   inset-block-start: calc(1em * var(--leading));
   height: calc(1em * var(--leading));
-  background: linear-gradient(to right, #FFFFFF 3rem, rgb(255 255 255 / 0) 45%);
+  background: linear-gradient(to right, #FFFFFF 3rem, rgb(255 255 255 / 0) 9rem);
 }
 
 main > ol a svg {
@@ -627,13 +709,46 @@ main > ol a svg {
   color: #636366;
 }
 
+/* A long list's pages, centred a step below it: numbers in label grey,
+   the current page black on the menu's white surface. */
+main > nav ul {
+  justify-content: center;
+  align-items: center;
+  gap: .25rem;
+  margin-block-start: var(--space-m);
+  color: #636366;
+  font-size: 1rem;
+}
+
+main > nav a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--target);
+  min-height: var(--target);
+  border-radius: var(--radius);
+}
+
+main > nav a[aria-current="page"] {
+  color: #000000;
+}
+
+/* Search results: the words searched for sit on a light gold. */
+main > ol mark {
+  background: #F3EBD9;
+  border-radius: 4px;
+  color: inherit;
+}
+
+/* Under the mouse every green card turns a shade lighter; the author's
+   line lightens with it to keep its contrast (4.5:1). */
 @media (hover: hover) and (pointer: fine) {
-  main > section > ul a:hover:not(:focus-visible) {
-    box-shadow: var(--frame), 0 4px 12px rgb(0 0 0 / .2);
+  main > section > ul a:hover {
+    --fill: #365343;
   }
 
-  [aria-labelledby="aqsam"] ul a:hover {
-    --fill: #38574A;
+  [aria-labelledby="kutub"] ul a:hover span {
+    color: #CEBB93;
   }
 
   main > ol a:hover:not(:focus-visible) {
@@ -650,16 +765,40 @@ main > ol a:active {
   box-shadow: var(--shadow-pressed);
 }
 
-/* Focus keeps the green, lifted further than on white, where a dark card
-   would hide the usual shadow; the cartouche clips that shadow, so its
-   item is lifted instead, by the same amount. */
+/* On paper, where browsers leave out background colours, the cards print
+   as dark text, without the green or the gold. */
+@media print {
+  main > section > ul a {
+    background: none;
+    box-shadow: none;
+    color: #000000;
+    clip-path: none;
+  }
+
+  [aria-labelledby="aqsam"] ul a::before,
+  [aria-labelledby="aqsam"] ul a::after {
+    display: none;
+  }
+
+  [aria-labelledby="kutub"] ul span {
+    color: #636366;
+  }
+}
+
+/* Focus keeps the green. The cartouche's shape would clip the frame, so
+   its item carries the frame instead. */
 main > section > ul a:focus-visible {
   background: var(--fill);
-  box-shadow: var(--frame), 0 0 1px rgb(0 0 0 / .6), 0 4px 12px rgb(0 0 0 / .55);
+}
+
+[aria-labelledby="aqsam"] ul a:focus-visible {
+  outline: none;
 }
 
 [aria-labelledby="aqsam"] li:has(> a:focus-visible) {
-  filter: drop-shadow(0 0 1px rgb(0 0 0 / .6)) drop-shadow(0 4px 12px rgb(0 0 0 / .55));
+  outline: 2px solid #000000;
+  outline-offset: 2px;
+  border-radius: var(--radius);
 }
 
 /* A page's title is no larger than the site's name, like the home page's
@@ -734,14 +873,22 @@ footer a {
   border-radius: var(--radius);
 }
 
+/* Focus: a black frame with a small gap, the one line on the site
+   (owner, 2026-10-29), so keyboard users always see where they are. */
 :focus-visible {
-  outline: none;
-  box-shadow: var(--shadow-focus);
+  outline: 2px solid #000000;
+  outline-offset: 2px;
 }
 
 a:focus-visible,
 button:focus-visible {
   background: #FFFFFF;
+}
+
+/* The menu marks the page being read with the hover's white surface. */
+nav a[aria-current="page"] {
+  background: #FFFFFF;
+  box-shadow: var(--shadow);
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -750,6 +897,7 @@ button:focus-visible {
   search button:hover:not(:focus-visible),
   h2 > a:hover:not(:focus-visible),
   h2 + a:hover:not(:focus-visible),
+  main > nav a:hover:not(:focus-visible),
   footer a:hover:not(:focus-visible) {
     background: #FFFFFF;
     box-shadow: var(--shadow);
@@ -764,11 +912,6 @@ button:focus-visible {
 
   nav[popover]:popover-open {
     border: 1px solid CanvasText;
-  }
-
-  /* The cartouche's clip would cut off the focus outline. */
-  [aria-labelledby="aqsam"] ul a {
-    clip-path: none;
   }
 
   /* The field's shadow is removed here, so it needs an edge. */
@@ -852,7 +995,8 @@ button:focus-visible {
       -webkit-tap-highlight-color: transparent;
     }
 
-    nav[popover] ul a:active {
+    nav[popover] ul a:active,
+    nav[popover] ul a[aria-current="page"] {
       background: #F5F5F7;
       box-shadow: none;
     }
