@@ -46,6 +46,8 @@ export interface Topic {
 export interface SiteConfig {
   readonly name: string;
   readonly source_url: string;
+  /** The site's public address, such as https://y3fai.github.io/hadith-archive. */
+  readonly url: string;
 }
 
 export interface CoreRecords {
@@ -281,23 +283,40 @@ async function loadTopics(
       }
     }
   }
-  return topics.sort((left, right) => left.topic_id - right.topic_id);
+  // A hadith belongs to one topic at most.
+  topics.sort((left, right) => left.topic_id - right.topic_id);
+  const listedIn = new Map<number, number>();
+  for (const topic of topics) {
+    topic.hadith_ids.forEach((id, position) => {
+      const first = listedIn.get(id);
+      if (first === undefined) {
+        listedIn.set(id, topic.topic_id);
+      } else {
+        findings.push({
+          file: `${label}/${topic.topic_id}.json`,
+          message: `Hadith is already listed in topic ${first}`,
+          path: `/hadith_ids/${position}`,
+        });
+      }
+    });
+  }
+  return topics;
 }
 
-const SITE_KEYS = ["domain", "name", "redirect_domains", "source_url"];
+const SITE_KEYS = ["name", "source_url", "url"];
 
-function isHttpsUrl(value: unknown, originOnly: boolean): boolean {
-  if (typeof value !== "string" || !URL.canParse(value)) {
+// An https address written as the URL parser writes it, with no query,
+// fragment, credentials, or trailing slash.
+function isHttpsUrl(value: unknown): boolean {
+  if (typeof value !== "string" || !URL.canParse(value) || value.endsWith("/")) {
     return false;
   }
   const url = new URL(value);
   return url.protocol === "https:" && url.search === "" && url.hash === "" &&
     url.username === "" && url.password === "" &&
-    (originOnly ? url.origin === value : url.href === value && !value.endsWith("/"));
+    (url.href === value || url.href === `${value}/`);
 }
 
-// The site configuration may also carry deployment settings (domain,
-// redirect_domains); they are checked here but not used by the pages yet.
 async function loadSite(
   path: string,
   label: string,
@@ -329,23 +348,18 @@ async function loadSite(
       fail(`/${key}`, "Unknown site configuration property");
     }
   }
-  const { domain, name, redirect_domains: redirects, source_url: sourceUrl } = value;
+  const { name, source_url: sourceUrl, url } = value;
   if (typeof name !== "string" || !validSingleLine(name)) {
     fail("/name", "name must be nonempty single-line text");
   }
-  if (!isHttpsUrl(sourceUrl, false)) {
+  if (!isHttpsUrl(sourceUrl)) {
     fail("/source_url", "source_url must be an https URL without a trailing slash, query, or fragment");
   }
-  if ("domain" in value && !isHttpsUrl(domain, true)) {
-    fail("/domain", "domain must be an https origin");
-  }
-  if ("redirect_domains" in value && !(Array.isArray(redirects) && redirects.every(
-    (host: unknown) => typeof host === "string" && /^[a-z0-9-]+(?:\.[a-z0-9-]+)+$/.test(host),
-  ))) {
-    fail("/redirect_domains", "redirect_domains must be an array of lowercase host names");
+  if (!isHttpsUrl(url)) {
+    fail("/url", "url must be an https URL without a trailing slash, query, or fragment");
   }
   return findings.length === before
-    ? { name: name as string, source_url: sourceUrl as string }
+    ? { name: name as string, source_url: sourceUrl as string, url: url as string }
     : undefined;
 }
 

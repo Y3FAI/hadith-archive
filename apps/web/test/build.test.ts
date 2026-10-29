@@ -6,7 +6,8 @@ import { join, resolve } from "node:path";
 
 import { formatCanonicalJson } from "../../../packages/canonical-json/src/index.ts";
 import { ASSET_PATHS, ASSETS_DIRECTORY, buildSite, type BuildResult } from "../src/build.ts";
-import { REPOSITORY_ROOT } from "../src/inputs.ts";
+import { loadInputs, REPOSITORY_ROOT, type SiteInputs } from "../src/inputs.ts";
+import { pageNumbers, renderSite } from "../src/render.ts";
 
 const FIXTURE = resolve(REPOSITORY_ROOT, "apps/web/fixtures/demo");
 const scratch = await mkdtemp(join(tmpdir(), "hadith-archive-site-"));
@@ -81,10 +82,15 @@ const demoBuild = await (async () => {
 const page = (path: string) => (demoBuild.files.get(path) as Buffer).toString("utf8");
 const pages = () => [...demoBuild.files.keys()].filter((path) => path.endsWith(".html"));
 
+// The fixture site lives at https://y3fai.github.io/hadith-archive.
+const BASE = "/hadith-archive/";
+const fileOf = (href: string) => `${href.slice(BASE.length)}${href.endsWith("/") ? "index.html" : ""}`;
+
 describe("demo build", () => {
   test("builds every page and asset from the saved fixtures", () => {
     expect(demoBuild.result.kind).toBe("built");
     expect([...demoBuild.files.keys()]).toEqual([
+      "404.html",
       "about/index.html",
       ...[1, 2, 3].flatMap((book) => [
         `b/demo-book-${book}/bab-1/index.html`,
@@ -93,8 +99,10 @@ describe("demo build", () => {
       ]),
       "b/demo-book-4/index.html",
       "b/index.html",
-      ...[1, 2, 3, 4, 5, 6, 7, 8].map((topic) => `c/${topic}/index.html`),
+      ...[1, 2, 3].map((topic) => `c/${topic}/index.html`),
       "c/index.html",
+      "favicon.ico",
+      "favicon.svg",
       "font/UthmanTN_v2-0.ttf",
       "font/UthmanTN_v2-0.woff2",
       ...[1, 2, 3, 4].map((hadith) => `h/${hadith}/index.html`),
@@ -105,32 +113,37 @@ describe("demo build", () => {
     ]);
   });
 
-  test("copies the demo's CSS, script, and font bytes unchanged", async () => {
+  test("copies the demo's assets byte for byte", async () => {
     for (const path of ASSET_PATHS) {
       expect(demoBuild.files.get(path)?.equals(await readFile(resolve(ASSETS_DIRECTORY, path))))
         .toBe(true);
     }
   });
 
-  test("keeps every page Arabic, right to left, noindex, and offline", () => {
+  test("keeps every page Arabic, right to left, noindex, offline, and under the site's path", () => {
+    const hash = (path: string) =>
+      createHash("sha256").update(demoBuild.files.get(path) as Buffer).digest("hex").slice(0, 10);
     for (const path of pages()) {
       const html = page(path);
       expect(html).toStartWith("<!doctype html>\n<html lang=\"ar\" dir=\"rtl\">");
       expect(html).toContain("<meta name=\"robots\" content=\"noindex\">");
-      expect(html).toContain("<link rel=\"stylesheet\" href=\"/style.css\">");
-      expect(html).toContain("href=\"/font/UthmanTN_v2-0.woff2\"");
-      expect(html).toContain("<script src=\"/script.js\"></script>");
-      const remote = [...html.matchAll(/ (?:href|src|action)="([^"]+)"/g)]
-        .map((match) => match[1] as string)
-        .filter((url) => !url.startsWith("/"));
-      expect(remote.every((url) => url.startsWith("https://github.com/Y3FAI/hadith-archive"))).toBe(true);
+      expect(html).toContain(`<link rel="stylesheet" href="${BASE}style.css?v=${hash("style.css")}">`);
+      expect(html).toContain(`<script src="${BASE}script.js?v=${hash("script.js")}"></script>`);
+      expect(html).toContain(`<link rel="preload" href="${BASE}font/UthmanTN_v2-0.woff2"`);
+      expect(html).toContain(`<link rel="icon" href="${BASE}favicon.svg" type="image/svg+xml">`);
+      expect(html).toContain("<a href=\"#main\">تخطَّ إلى المحتوى</a>");
+      const links = [...html.matchAll(/ (?:href|src|action)="([^"]+)"/g)].map((match) => match[1] as string);
+      for (const url of links) {
+        expect(url.startsWith(BASE) || url === "#main" || url.startsWith("https://github.com/Y3FAI/hadith-archive"))
+          .toBe(true);
+      }
     }
   });
 
   test("uses only the demo's own icons", async () => {
-    const demo = (await Promise.all(["index.html", "hadith.html", "about.html"].map((file) =>
-      readFile(resolve(ASSETS_DIRECTORY, file), "utf8")
-    ))).join("");
+    const demo = (await Promise.all((await readdir(ASSETS_DIRECTORY))
+      .filter((file) => file.endsWith(".html"))
+      .map((file) => readFile(resolve(ASSETS_DIRECTORY, file), "utf8")))).join("");
     for (const path of pages()) {
       for (const [icon] of page(path).matchAll(/<svg[^>]*>.*?<\/svg>/g)) {
         expect(demo).toContain(icon);
@@ -139,58 +152,80 @@ describe("demo build", () => {
   });
 
   test("keeps the owner's about text exactly", async () => {
-    const main = (html: string) => /<main>([\s\S]*)<\/main>/.exec(html)?.[1];
+    const main = (html: string) => /<main id="main">([\s\S]*)<\/main>/.exec(html)?.[1];
     const demo = await readFile(resolve(ASSETS_DIRECTORY, "about.html"), "utf8");
     expect(main(page("about/index.html"))).toBe(main(demo) as string);
   });
 
-  test("shows the saved quotation and the members in mechanical order", async () => {
+  test("names the site in every title", () => {
+    const title = (path: string) => /<title>([^<]*)<\/title>/.exec(page(path))?.[1];
+    expect(title("index.html")).toBe("أرشيف الحديث");
+    expect(title("about/index.html")).toBe("حول أرشيف الحديث");
+    expect(title("404.html")).toBe("الصفحة غير موجودة - أرشيف الحديث");
+    expect(title("c/1/index.html")).toBe("الإيمان - أرشيف الحديث");
+    expect(title("b/demo-book-1/bab-1/index.html"))
+      .toBe("الباب التجريبي الأول - الكتاب التجريبي الأول - أرشيف الحديث");
+    expect(title("h/1/index.html")).toEndWith("الشَّاشَاتِ الصَّغِيرَةِ وَالْكَبِيرَةِ. - أرشيف الحديث");
+  });
+
+  test("shows the saved quotation, its citation, and the members in mechanical order", async () => {
     const saved = await readJson(join(FIXTURE, "core/hadith/1.json"));
     const hadith = page("h/1/index.html");
     expect(hadith).toContain(`<h1>${saved["text"]}</h1>`);
+    expect(hadith).toContain(`<meta name="description" content="${saved["text"]}">`);
     const order = [...hadith.matchAll(/<li id="occurrence-(\d+)">/g)].map((match) => match[1]);
     expect(order).toEqual(["1", "3", "6"]);
+    expect(hadith).toContain("<div><dt>دار النشر</dt><dd>ناشر تجريبي</dd></div>");
     expect(hadith).toContain("<div><dt>الصفحة</dt><dd>١١٠–١١١</dd></div>");
     expect(hadith).toContain("<div><dt>رقم الحديث</dt><dd>١٢٤٥</dd></div>");
     // A stored LF inside the text is kept as a line break.
     expect(page("h/2/index.html")).toMatch(/<h1>[^<]+<br>[^<]+<\/h1>/);
   });
 
-  test("lists topics and their hadith by identifier, with no copied membership", () => {
-    const tiles = [...page("c/index.html").matchAll(/<a href="\/c\/(\d+)\/">([^<]+)<\/a>/g)]
-      .map((match) => `${match[1]} ${match[2]}`);
-    expect(tiles).toEqual([
-      "1 الإيمان", "2 الطهارة", "3 الصلاة", "4 الزكاة",
-      "5 الصيام", "6 الحج", "7 الأذكار", "8 الأخلاق",
+  test("leads from a hadith back to its one category, on the page and as breadcrumb data", () => {
+    const hadith = page("h/1/index.html");
+    expect(hadith).toContain(`<a href="${BASE}c/1/">الإيمان</a></dd></div>`);
+    const data = JSON.parse(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/.exec(hadith)?.[1] as string);
+    expect(data["@type"]).toBe("BreadcrumbList");
+    expect(data.itemListElement.map((item: { name: string; item: string }) => `${item.name} ${item.item}`)).toEqual([
+      "الرئيسية https://y3fai.github.io/hadith-archive/",
+      "الأقسام https://y3fai.github.io/hadith-archive/c/",
+      "الإيمان https://y3fai.github.io/hadith-archive/c/1/",
     ]);
-    const listed = [...page("c/7/index.html").matchAll(/<li id="hadith-(\d+)">/g)].map((match) => match[1]);
-    expect(listed).toEqual(["1", "4"]);
   });
 
-  test("renders every occurrence, linking only grouped ones to a hadith", async () => {
-    const html = pages().map(page).join("\n");
-    for (let id = 1; id <= 9; id += 1) {
-      expect(html).toContain(`<li id="occurrence-${id}">`);
-    }
-    const section = page("b/demo-book-2/bab-1/index.html");
-    const ungrouped = section.slice(section.indexOf("<li id=\"occurrence-4\">"));
-    expect(ungrouped).not.toContain("<dt>الحديث</dt>");
-    expect(section).toContain("<div><dt>الحديث</dt><dd><a href=\"/h/1/\">١</a></dd></div>");
-    // A source without sections lists its narrations on its own page.
-    const book = page("b/demo-book-4/index.html");
-    expect(book).toContain("<li id=\"occurrence-8\">");
-    expect(book).toContain("<li id=\"occurrence-9\">");
-    expect(book).not.toContain("<dt>الجزء</dt>");
-    expect(book).not.toContain("<dt>رقم الحديث</dt>");
+  test("lists topics and their hadith by identifier, with counts", () => {
+    const tiles = [...page("c/index.html").matchAll(/<a href="\/hadith-archive\/c\/(\d+)\/">([^<]+)<\/a>/g)]
+      .map((match) => `${match[1]} ${match[2]}`);
+    expect(tiles).toEqual(["1 الإيمان", "2 الطهارة", "3 الصلاة"]);
+    expect(page("c/index.html")).toContain("<div><dt>عدد الأقسام</dt><dd>٣</dd></div>");
+    const category = page("c/1/index.html");
+    expect([...category.matchAll(/<a href="\/hadith-archive\/h\/(\d+)\/"><span>/g)].map((match) => match[1]))
+      .toEqual(["1", "2"]);
+    expect(category).toContain("<div><dt>عدد الأحاديث</dt><dd>٢</dd></div>");
+  });
+
+  test("lists a book's abwab, and each bab's hadith once", () => {
+    const book = page("b/demo-book-1/index.html");
+    expect(book).toContain("<div><dt>المؤلف</dt><dd>مؤلف تجريبي</dd></div>");
+    expect(book).toContain("<div><dt>عدد الأبواب</dt><dd>٢</dd></div>");
+    expect(book).toContain(`<li><a href="${BASE}b/demo-book-1/bab-1/">الباب التجريبي الأول</a></li>`);
+    const cards = (path: string) =>
+      [...page(path).matchAll(/<a href="\/hadith-archive\/h\/(\d+)\/"><span>/g)].map((match) => match[1]);
+    // Occurrence 4 is in no hadith, so the bab lists only hadith 1.
+    expect(cards("b/demo-book-2/bab-1/index.html")).toEqual(["1"]);
+    expect(page("b/demo-book-2/bab-1/index.html")).toContain(`<cite><a href="${BASE}b/demo-book-2/">`);
+    // A source without sections lists its hadith on its own page.
+    expect(cards("b/demo-book-4/index.html")).toEqual(["2", "4"]);
   });
 
   test("reaches every page from the home page, and every link resolves", () => {
     const reached = new Set<string>(["index.html"]);
-    const queue = ["index.html"];
+    const queue = ["index.html", "404.html"];
     while (queue.length > 0) {
       const html = page(queue.shift() as string);
-      for (const [, href] of html.matchAll(/ (?:href|action)="(\/[^"#]*)"/g)) {
-        const file = `${(href as string).slice(1)}${(href as string).endsWith("/") ? "index.html" : ""}`;
+      for (const [, href] of html.matchAll(/ (?:href|src|action)="(\/[^"#?]*)/g)) {
+        const file = fileOf(href as string);
         expect(demoBuild.files.has(file)).toBe(true);
         if (file.endsWith(".html") && !reached.has(file)) {
           reached.add(file);
@@ -198,12 +233,55 @@ describe("demo build", () => {
         }
       }
     }
-    expect([...reached].sort()).toEqual(pages().sort());
+    // Only the 404 page is reached by a missing address instead of a link.
+    expect([...reached, "404.html"].sort()).toEqual(pages().sort());
   });
 
   test("answers the search form with a page stating that search is not available", () => {
-    expect(page("index.html")).toContain("<form action=\"/search/\">");
+    expect(page("index.html")).toContain(`<form action="${BASE}search/">`);
     expect(page("search/index.html")).toContain("<p>البحث غير متاح في هذا العرض التجريبي.</p>");
+  });
+});
+
+const fixtureInputs = await loadInputs({
+  core: join(FIXTURE, "core"),
+  site: join(FIXTURE, "site.json"),
+  topics: join(FIXTURE, "topics"),
+});
+
+describe("pager", () => {
+  const inputs = (fixtureInputs as { inputs: SiteInputs }).inputs;
+  const render = (pageSize: number) => new Map(renderSite(inputs, {
+    assetVersions: { "script.js": "s", "style.css": "c" },
+    pageSize,
+  }).map((file) => [file.path, file.html]));
+
+  test("chooses the first, the last, and three around the current page", () => {
+    const shown = (current: number, last: number) =>
+      pageNumbers(current, last).map((entry) => entry ?? "...").join(" ");
+    expect(shown(1, 1)).toBe("1");
+    expect(shown(1, 2)).toBe("1 2");
+    expect(shown(1, 12)).toBe("1 2 3 ... 12");
+    expect(shown(4, 12)).toBe("1 2 3 4 5 ... 12");
+    expect(shown(6, 12)).toBe("1 ... 5 6 7 ... 12");
+    expect(shown(12, 12)).toBe("1 ... 10 11 12");
+  });
+
+  test("splits a long list into numbered pages that link to each other", () => {
+    const pages = render(1);
+    const first = pages.get("c/1/index.html") as string;
+    const second = pages.get("c/1/2/index.html") as string;
+    expect(first).toContain(`<li><a href="${BASE}c/1/" aria-current="page">١</a></li>`);
+    expect(first).toContain(`<li><a href="${BASE}c/1/2/" aria-label="الصفحة التالية">`);
+    expect(first).not.toContain("الصفحة السابقة");
+    expect(second).toContain(`<li><a href="${BASE}c/1/" aria-label="الصفحة السابقة">`);
+    expect(second).toContain("<title>الإيمان - الصفحة ٢ - أرشيف الحديث</title>");
+    // Both pages count the whole list, and each shows its own share.
+    expect(second).toContain("<div><dt>عدد الأحاديث</dt><dd>٢</dd></div>");
+    expect(second).toContain(`<a href="${BASE}h/2/"><span>`);
+    expect(second).not.toContain(`<a href="${BASE}h/1/"><span>`);
+    // A short list gets no pager.
+    expect(render(20).get("c/1/index.html")).not.toContain("<nav aria-label=\"الصفحات\">");
   });
 });
 
@@ -368,6 +446,12 @@ describe("topic input validation", () => {
     expect(findings).toContainEqual(expect.stringMatching(/^10\.json .*not a regular file/));
   });
 
+  test("refuses a hadith listed in two topics", async () => {
+    expect(await topicRefusal(async (topics) => {
+      await writeJson(join(topics, "2.json"), { hadith_ids: [2, 3], title: "الطهارة", topic_id: 2 });
+    })).toEqual(["2.json /hadith_ids/0 Hadith is already listed in topic 1"]);
+  });
+
   test("refuses a missing topics directory", async () => {
     expect(await topicRefusal((topics) => rm(topics, { recursive: true })))
       .toEqual(["topics  Input directory does not exist"]);
@@ -375,37 +459,35 @@ describe("topic input validation", () => {
 });
 
 describe("site configuration", () => {
-  test("accepts deployment settings it does not render", async () => {
+  test("links pages under the site's address", async () => {
     const root = await fixtureCopy();
     await writeFile(join(root, "site.json"), JSON.stringify({
-      domain: "https://example.org",
       name: "اسم تجريبي",
-      redirect_domains: ["example.com"],
       source_url: "https://example.org/repository",
+      url: "https://example.org",
     }));
     const out = join(await freshDirectory(), "site");
     expect((await build(root, out)).kind).toBe("built");
     const home = await readFile(join(out, "index.html"), "utf8");
     expect(home).toContain("<title>اسم تجريبي</title>");
+    expect(home).toContain("<a href=\"/c/\">");
     expect(home).toContain("<a href=\"https://example.org/repository/blob/main/LICENSE\" rel=\"nofollow\">الرخصة</a>");
-    expect(home).not.toContain("example.com");
+    expect(await readFile(join(out, "h/1/index.html"), "utf8")).toContain("\"item\": \"https://example.org/c/1/\"");
   });
 
   test("refuses unknown keys, unsafe URLs, and malformed names", async () => {
     const root = await fixtureCopy();
     await writeFile(join(root, "site.json"), JSON.stringify({
       analytics: "x",
-      domain: "https://example.org/path",
       name: "",
-      redirect_domains: ["Example.com"],
       source_url: "http://example.org/",
+      url: "https://example.org/path/",
     }));
     expect(await refusal(root)).toEqual([
       "site.json /analytics Unknown site configuration property",
-      "site.json /domain domain must be an https origin",
       "site.json /name name must be nonempty single-line text",
-      "site.json /redirect_domains redirect_domains must be an array of lowercase host names",
       "site.json /source_url source_url must be an https URL without a trailing slash, query, or fragment",
+      "site.json /url url must be an https URL without a trailing slash, query, or fragment",
     ]);
   });
 });
@@ -416,18 +498,19 @@ describe("escaping", () => {
     const markup = "<script>alert(\"x\")</script> & 'y'";
     const sourcePath = join(root, "core/sources/demo-book-2/source.json");
     await writeJson(sourcePath, { ...await readJson(sourcePath), author: markup, title: markup });
-    const path = occurrencePath(root, 2, 4);
+    // Occurrence 3 is a member of hadith 1 but not its display text.
+    const path = occurrencePath(root, 2, 3);
     const rawText = `${(await readJson(path))["raw_text"]} <b>&amp;</b>`;
     await writeJson(path, { ...await readJson(path), fingerprint: fingerprint(rawText), raw_text: rawText });
-    await writeJson(join(root, "topics/8.json"), { hadith_ids: [2, 3], title: "<i>الأخلاق</i>", topic_id: 8 });
+    await writeJson(join(root, "topics/3.json"), { hadith_ids: [4], title: "<i>الأخلاق</i>", topic_id: 3 });
     await writeFile(join(root, "site.json"), JSON.stringify({
-      name: "أرشيف \"الحديث\"", source_url: "https://example.org/a\"b",
+      name: "أرشيف \"الحديث\"", source_url: "https://example.org/a\"b", url: "https://example.org",
     }));
     const out = join(await freshDirectory(), "site");
     // A quote is not valid in a URL path, so the URL parser rejects it first.
     expect((await build(root, out)).kind).toBe("refused");
     await writeFile(join(root, "site.json"), JSON.stringify({
-      name: "أرشيف <الحديث>", source_url: "https://example.org/a&b",
+      name: "أرشيف <الحديث>", source_url: "https://example.org/a&b", url: "https://example.org",
     }));
     expect((await build(root, out)).kind).toBe("built");
     const html = (await Promise.all([...(await readTree(out)).entries()]
@@ -440,6 +523,8 @@ describe("escaping", () => {
     expect(html).toContain("&lt;script&gt;alert(&quot;x&quot;)&lt;/script&gt; &amp; &#39;y&#39;");
     expect(html).toContain("&lt;b&gt;&amp;amp;&lt;/b&gt;");
     expect(html).toContain("&lt;i&gt;الأخلاق&lt;/i&gt;");
+    // Breadcrumb data cannot close its script element.
+    expect(html).toContain("\"name\": \"\\u003ci\\u003eالأخلاق\\u003c/i\\u003e\"");
     expect(html).toContain("href=\"https://example.org/a&amp;b\"");
   });
 });
@@ -476,6 +561,6 @@ describe("command line", () => {
     await writeJson(join(root, "topics/1.json"), { hadith_ids: [1, 2], title: "الإيمان", topic_id: 1 });
     const built = await run(...options, "--out", out);
     expect(built.code).toBe(0);
-    expect(built.stdout).toBe(`Built 31 files into ${out}\n`);
+    expect(built.stdout).toBe(`Built 29 files into ${out}\n`);
   });
 });

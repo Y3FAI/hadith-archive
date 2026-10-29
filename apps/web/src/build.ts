@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import { lstat, mkdir, readdir, readFile, realpath, writeFile } from "node:fs/promises";
 import { dirname, join, resolve, sep } from "node:path";
 
@@ -8,17 +9,23 @@ import {
   type InputFinding,
   type InputPaths,
 } from "./inputs.ts";
-import { renderSite } from "./render.ts";
+import { PAGE_SIZE, renderSite } from "./render.ts";
 
 export const ASSETS_DIRECTORY = resolve(REPOSITORY_ROOT, "apps/web/demo");
 
 // Copied byte for byte; the font is never subset or changed.
 export const ASSET_PATHS = [
+  "favicon.ico",
+  "favicon.svg",
   "font/UthmanTN_v2-0.ttf",
   "font/UthmanTN_v2-0.woff2",
   "script.js",
   "style.css",
 ];
+
+// Linked with a hash of their bytes, so a changed file is never served
+// stale from a cache.
+const VERSIONED_ASSETS = ["script.js", "style.css"];
 
 export interface BuildOptions extends InputPaths {
   readonly out: string;
@@ -90,13 +97,17 @@ export async function buildSite(options: BuildOptions): Promise<BuildResult> {
   if (!loaded.ok) {
     return { findings: loaded.findings, kind: "refused" };
   }
-  const encoder = new TextEncoder();
   const files = new Map<string, Uint8Array>();
-  for (const page of renderSite(loaded.inputs)) {
-    files.set(page.path, encoder.encode(page.html));
-  }
   for (const path of ASSET_PATHS) {
     files.set(path, new Uint8Array(await readFile(resolve(ASSETS_DIRECTORY, path))));
+  }
+  const assetVersions = Object.fromEntries(VERSIONED_ASSETS.map((path) => [
+    path,
+    createHash("sha256").update(files.get(path) as Uint8Array).digest("hex").slice(0, 10),
+  ]));
+  const encoder = new TextEncoder();
+  for (const page of renderSite(loaded.inputs, { assetVersions, pageSize: PAGE_SIZE })) {
+    files.set(page.path, encoder.encode(page.html));
   }
   const paths = [...files.keys()].sort();
   for (const path of paths) {
