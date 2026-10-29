@@ -14,6 +14,7 @@ coverage/
 # Working notes and contributor briefing. The repository publishes what the
 # project concluded, not the deliberation that produced it.
 /decisions/
+/docs/dev/
 /CLAUDE.md
 /AGENTS.md
 /.claude/
