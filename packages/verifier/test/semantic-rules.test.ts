@@ -79,6 +79,17 @@ function occurrence(
   );
 }
 
+function hadith(text: string): RepositoryFileInput {
+  return jsonInput("core/hadith/1.json", {
+    display_occurrence_id: 1,
+    hadith_id: 1,
+    member_occurrence_ids: [1],
+    record_type: "hadith",
+    schema_version: 1,
+    text,
+  });
+}
+
 function textRecords(text: string, rawText = text): RepositoryFileInput[] {
   return [
     jsonInput("core/sources/example-work/source.json", {
@@ -99,25 +110,15 @@ function textRecords(text: string, rawText = text): RepositoryFileInput[] {
       source_id: "example-work",
       title: text,
     }),
-    jsonInput("core/hadith/1.json", {
-      description: text,
-      display_occurrence_id: 1,
-      hadith_id: 1,
-      heading: text,
-      member_occurrence_ids: [1],
-      record_type: "hadith",
-      schema_version: 1,
-      title: text,
-    }),
+    hadith(text),
     occurrence(rawText),
   ];
 }
 
-// Every single-line field reached by text.single_line, plus raw_text.
+// Every single-line field reached by text.single_line, plus the raw text and
+// hadith text reached by text.raw_whitespace.
 const TEXT_FIELD_KEYS = [
-  "core/hadith/1.json text.single_line:/description",
-  "core/hadith/1.json text.single_line:/heading",
-  "core/hadith/1.json text.single_line:/title",
+  "core/hadith/1.json text.raw_whitespace:/text",
   "core/sources/example-work/sections/kitab-example.json text.single_line:/title",
   "core/sources/example-work/source.json text.single_line:/author",
   "core/sources/example-work/source.json text.single_line:/title",
@@ -176,16 +177,46 @@ describe("invisible format characters", () => {
     expect(text.normalize("NFC")).toBe(text);
     expect(await verify(textRecords(text, `${text}\n${text}`))).toEqual({
       kind: "complete",
-      report: { findings: [], valid: true, verification_version: 2 },
+      report: { findings: [], valid: true, verification_version: 3 },
     });
   });
+});
+
+describe("hadith text whitespace", () => {
+  test("accepts text that keeps a stored LF", async () => {
+    expect(await verify([hadith("مثال نص\nفقرة ثانية")])).toEqual({
+      kind: "complete",
+      report: { findings: [], valid: true, verification_version: 3 },
+    });
+  });
+
+  for (const text of [
+    " مثال", "مثال ", "\nمثال", "مثال\n", "مثال  نص", "مثال\n\nنص",
+    "مثال \nنص", "مثال\n نص", "مثال\tنص", "مثال\rنص", "مثال نص",
+  ]) {
+    test(`rejects ${JSON.stringify(text)} as raw-text whitespace`, async () => {
+      expect(await verify([hadith(text)])).toEqual({
+        kind: "complete",
+        report: {
+          findings: [{
+            file: "core/hadith/1.json",
+            instance_path: "/text",
+            message: "Raw text violates preserved whitespace rules",
+            rule_id: "text.raw_whitespace",
+          }],
+          valid: false,
+          verification_version: 3,
+        },
+      });
+    });
+  }
 });
 
 describe("common semantic rules", () => {
   test("accepts valid whitespace, checksum, fingerprint, pages, and location", async () => {
     expect(await verify([witness(), occurrence("مثال نص\nفقرة ثانية")])).toEqual({
       kind: "complete",
-      report: { findings: [], valid: true, verification_version: 2 },
+      report: { findings: [], valid: true, verification_version: 3 },
     });
   });
 
@@ -259,7 +290,7 @@ describe("common semantic rules", () => {
 
     expect(await run(replacement)).toEqual({
       kind: "complete",
-      report: { findings: [], valid: true, verification_version: 2 },
+      report: { findings: [], valid: true, verification_version: 3 },
     });
     expect(await run(malformed)).toEqual({
       kind: "complete",
@@ -269,7 +300,7 @@ describe("common semantic rules", () => {
           rule_id: "json.canonical",
         })],
         valid: false,
-        verification_version: 2,
+        verification_version: 3,
       },
     });
   });
@@ -278,7 +309,7 @@ describe("common semantic rules", () => {
     const result = await verify([occurrence("مثال نص")]);
     expect(result).toEqual({
       kind: "complete",
-      report: { findings: [], valid: true, verification_version: 2 },
+      report: { findings: [], valid: true, verification_version: 3 },
     });
   });
 });

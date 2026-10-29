@@ -1,12 +1,10 @@
 {
-  "description": "مثال نص الحديث",
   "display_occurrence_id": 1,
   "hadith_id": 1,
-  "heading": "مثال نص الحديث",
   "member_occurrence_ids": [
     1
   ],
   "record_type": "hadith",
   "schema_version": 1,
-  "title": "نص الحديث"
+  "text": "مثال نص الحديث"
 }

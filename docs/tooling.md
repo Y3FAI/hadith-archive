@@ -94,7 +94,7 @@ Historical checks require the complete Git history. Before resolving the base or
 
 A failed prerequisite invalidates the repository and prevents only checks that cannot be evaluated honestly. It never becomes a false pass for dependent rules. Missing schemas, unavailable required history, internal errors, and incomplete execution cannot produce a valid report.
 
-The verifier reports findings; it does not fix them. Its machine report contains only the current verification-catalog version, validity, and sorted findings. The catalog is at version two, independent of the draft version-one record schemas, and a report claiming any other catalog version is refused rather than serialized. Terminal presentation is derived from that report. Exit status `0` means complete success, `1` means complete verification found rule failures, and `2` means verification could not complete.
+The verifier reports findings; it does not fix them. Its machine report contains only the current verification-catalog version, validity, and sorted findings. The catalog is at version three, independent of the draft version-one record schemas, and a report claiming any other catalog version is refused rather than serialized. Terminal presentation is derived from that report. Exit status `0` means complete success, `1` means complete verification found rule failures, and `2` means verification could not complete.
 
 Verification proves repository consistency under the published machine rules. It cannot prove that preserved text matches the cited physical source witness or that a human-authored grouping is scholarly correct. Those claims remain independently checkable because the core records preserve the exact witness and location needed for human review.
 
@@ -108,6 +108,34 @@ Ingestion and minting tools may use canonical formatting and structural loading 
 
 Human and AI maintainers use the same boundaries. Canonical failures are representation problems, loader failures are one-record structural problems, verifier findings are named repository-rule failures, and questions about the physical edition remain human verification problems. Keeping these categories distinct prevents a tool result from claiming more than it proves.
 
+## Saved decisions and site builds
+
+Editorial preparation and rendering are separate boundaries. A person reviews grouping, the display occurrence, its exact quotation, and project topic membership before a build. Scripts or AI may assist private preparation, but the reviewed records are saved and reused. A later change is another reviewed edit, not a side effect of rebuilding.
+
+Hadith decisions are core data. Project topics and their owner-reviewed memberships are separate editorial inputs outside `core/`, referencing hadith identities without copied text. The loader remains the supported structural boundary for core records; the site builder must also validate the saved editorial inputs and resolve all required references before rendering. Missing or invalid required decisions stop a build rather than triggering an inferred choice.
+
+The generator applies only fixed mechanical rules: ordering, labels, digit presentation, and links. It runs offline without AI, combines the saved inputs, and writes reproducible, disposable pages and exports. No hand-edited application projection duplicates preserved content. Passing a demo build neither admits its test records to `core/` nor replaces repository verification and physical-source review.
+
+## Static design workflow
+
+Current design, optimization, and quick iteration happen directly in `apps/web/demo/`, using plain HTML, CSS, and small JavaScript enhancements. No dependency install or build is needed to serve these pages:
+
+```sh
+python3 -m http.server 8000 --bind 127.0.0.1 --directory apps/web/demo
+```
+
+Open [the static demo on port 8000](http://127.0.0.1:8000/). Navigation covers home → category → hadith and home → book → bab → hadith, with category and book index pages. Category and bab pages use compact preview link cards: opening words with an ellipsis, natural wrapping, and a grey arrow beneath the text. They carry no book metadata or full narrations. Browse headings use the site-name text scale; the hadith detail page retains full text, citations, and member narrations.
+
+The static pages are design examples. Every hadith card reuses `hadith.html`, and every bab link reuses `bab.html`; these links represent neither generated records nor real topic assignments. Search is not implemented. The owner reviews the design before it is integrated into the generator; demo omissions establish no production publishing policy.
+
+## Deferred generator
+
+The partial builder in `apps/web/src/`, its tests, and synthetic fixtures in `apps/web/fixtures/demo/` are preserved for later integration. No generator build ran during this static-design pass. Interrupted rendering changes have left its tests out of step with the current cards, so earlier passing results do not establish that the present generator passes.
+
+The builder accepts explicit `--core`, `--topics`, `--site`, and `--out` inputs. Its core-shaped directory is loaded through the supported loader and non-history verifier rules; topic files follow the [saved topic-file contract](schema.md#topic-files-for-the-generated-demo). The site file supplies `name` and `source_url`, with optional deployment settings. These inputs remain separate from the hand-written mock pages and from root `core/` admission.
+
+The existing `build:demo` command regenerates ignored `artifacts/site/`; it is not part of the current design workflow. After owner approval, integration must reproduce the final static design, align the generator tests, and rerun build, reference, reproducibility, and browser checks. Provisional generator routes remain provisional, and production search remains undecided.
+
 ## Change routing
 
 | Proposed change | Primary authority and implementation boundary |
@@ -118,13 +146,15 @@ Human and AI maintainers use the same boundaries. Canonical failures are represe
 | One-record loading API, structural diagnostics, or immutable typed access | `core-loader` and this document |
 | Machine-checkable semantic, repository, relationship, or history rule | The versioned catalog in `docs/schema.md` and `verifier` |
 | Physical-source agreement or scholarly judgement | Human review and governance, never a fabricated machine rule |
-| Search, display, export, or normalization behavior | Derived or application layers, never the core toolchain authority |
+| Saved hadith grouping, display occurrence, or exact quotation | Reviewed core hadith records; checked by the core verifier |
+| Project topics and their owner-reviewed memberships | Saved editorial inputs outside core; checked before building |
+| Mechanical rendering, search, export, or normalization behavior | Derived or application layers, never a replacement for saved editorial decisions |
 
 When a proposal crosses rows, each affected contract changes explicitly. A semantic check is not hidden in a loader convenience function, a structural field is not invented only in TypeScript, and an application requirement does not redefine canonical core data.
 
 ## Implementation status
 
-`canonical-json`, `core-loader`, and the complete verifier boundary are implemented. Verification requires an explicit Git base resolved to a commit and evaluates the full published version-two catalog: repository and representation, structural schemas and records, common semantics, identifier and ordinal integrity, reference resolution, section hierarchy, HADITH member resolution, ordering, exclusivity, display membership, and display spans, used-schema immutability, record preservation, identifier non-reuse, and next-sequence minting. The repository is ready for the first human-reviewed core record; verification still cannot replace comparison with the physical source witness.
+`canonical-json`, `core-loader`, and the complete verifier boundary are implemented. Verification requires an explicit Git base resolved to a commit and evaluates the version-three catalog: repository and representation, structural schemas and records, common semantics, identifier and ordinal integrity, reference resolution, section hierarchy, HADITH member resolution, ordering, exclusivity, display membership, and the saved `text` span, used-schema immutability, record preservation, identifier non-reuse, and next-sequence minting. The single-quotation migration is implemented and validated. Verification still cannot replace comparison with the physical source witness.
 
 ## The rule
 

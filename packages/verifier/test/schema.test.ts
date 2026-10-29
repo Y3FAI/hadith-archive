@@ -152,6 +152,41 @@ describe("version-one hadith membership structure", () => {
     expect(await membershipErrors([10, 2])).toEqual([]);
   });
 
+  test("rejects the legacy title, heading, and description spans", async () => {
+    const hadith = await validFixture("hadith.json");
+    for (const field of ["description", "heading", "title"]) {
+      const result = registry.validateRecord({ ...hadith, [field]: hadith["text"] });
+      expect(result.valid).toBe(false);
+      expect(result.errors).toEqual([expect.objectContaining({
+        instancePath: "",
+        keyword: "additionalProperties",
+        params: { additionalProperty: field },
+      })]);
+    }
+    const { text: _text, ...legacy } = hadith;
+    const result = registry.validateRecord({
+      ...legacy,
+      description: "مثال نص الحديث",
+      heading: "مثال نص الحديث",
+      title: "نص الحديث",
+    });
+    expect(result.valid).toBe(false);
+    expect(result.errors).toContainEqual(expect.objectContaining({
+      keyword: "required",
+      params: { missingProperty: "text" },
+    }));
+  });
+
+  test("requires a nonempty string text that may keep an LF", async () => {
+    const hadith = await validFixture("hadith.json");
+    const errors = (text: unknown) => registry.validateRecord({ ...hadith, text }).errors
+      .map((error) => `${error.instancePath} ${error.keyword}`);
+    expect(errors("مثال نص\nالحديث")).toEqual([]);
+    expect(errors("")).toEqual(["/text minLength"]);
+    expect(errors(1)).toEqual(["/text type"]);
+    expect(errors(["مثال"])).toEqual(["/text type"]);
+  });
+
   test("rejects the legacy occurrence hadith reference", async () => {
     const occurrence = await validFixture("occurrence.json");
     expect(registry.validateRecord(occurrence).valid).toBe(true);

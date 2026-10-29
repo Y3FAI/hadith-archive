@@ -1,8 +1,9 @@
 {
   "$defs": {
     "extracted_span_text": {
-      "$ref": "#/$defs/single_line_text",
-      "description": "A single-line value that semantic verification requires to be one exact contiguous substring of the selected raw text."
+      "description": "A nonempty quotation governed by the raw-text whitespace policy that semantic verification requires to be one exact contiguous substring of the selected raw text, starting and ending on grapheme-cluster boundaries; it may cross an LF.",
+      "minLength": 1,
+      "type": "string"
     },
     "fingerprint": {
       "description": "A lowercase hexadecimal SHA-256 digest.",

@@ -89,14 +89,12 @@ function occurrence(id: number) {
 
 function hadith(id: number) {
   return input(`core/hadith/${id}.json`, {
-    description: "مثال",
     display_occurrence_id: id,
     hadith_id: id,
-    heading: "مثال",
     member_occurrence_ids: [id],
     record_type: "hadith",
     schema_version: 1,
-    title: "مثال",
+    text: "مثال",
   });
 }
 
@@ -104,7 +102,7 @@ describe("Git-history rules", () => {
   test("accepts first numeric identifiers beginning at one", async () => {
     expect(await verify([occurrence(1), hadith(1)], emptyHistory())).toEqual({
       kind: "complete",
-      report: { findings: [], valid: true, verification_version: 2 },
+      report: { findings: [], valid: true, verification_version: 3 },
     });
   });
 

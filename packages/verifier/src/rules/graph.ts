@@ -482,7 +482,8 @@ function containsGraphemeSpan(
   return false;
 }
 
-export const hadithExtractedSpans: VerificationRule<StructuralVerificationContext> = {
+// The text may cross a stored LF; raw text and text are compared unchanged.
+export const hadithTextSpan: VerificationRule<StructuralVerificationContext> = {
   evaluate: (context) => {
     const occurrences = occurrenceIndex(context);
     return entriesOf(context, "hadith").flatMap((entry) => {
@@ -492,15 +493,12 @@ export const hadithExtractedSpans: VerificationRule<StructuralVerificationContex
         return [];
       }
       const rawText = (displayed[0]?.record as OccurrenceRecord).raw_text;
-      const boundaries = graphemeBoundaries(rawText);
-      return (["description", "heading", "title"] as const).flatMap((field) =>
-        !record[field].includes("\n") && containsGraphemeSpan(rawText, boundaries, record[field])
-          ? []
-          : [finding(entry, `/${field}`, `${field} is not an exact display-occurrence span`)]
-      );
+      return containsGraphemeSpan(rawText, graphemeBoundaries(rawText), record.text)
+        ? []
+        : [finding(entry, "/text", "text is not an exact display-occurrence span")];
     });
   },
-  id: "hadith.extracted_spans",
+  id: "hadith.text_span",
   prerequisites: [],
 };
 
@@ -523,5 +521,5 @@ export const GRAPH_RULES = Object.freeze([
   hadithMemberOrder,
   hadithMemberExclusive,
   hadithDisplayIsMember,
-  hadithExtractedSpans,
+  hadithTextSpan,
 ]);

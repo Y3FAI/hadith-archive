@@ -54,7 +54,7 @@ The preserved report body of an occurrence: its source characters in canonical f
 
 ### Record
 
-The stored representation of a single occurrence: its raw text together with the information needed to identify, locate, and verify it.
+The stored representation of one entity. An occurrence record preserves raw text with the information needed to identify, locate, and verify it. Other core records describe sources, witnesses, sections, or reviewed hadith decisions; saved topic records describe editorial classification outside the core.
 
 ### Identifier
 
@@ -83,6 +83,20 @@ Verification is internal. It proves a record is consistent with itself and with 
 The check Hadith Archive cannot perform on itself: a person obtains the printed edition a record names, turns to the location it gives, and compares the page against the preserved text.
 
 This is why a witness must be identified precisely enough to order and a location precise enough to find. The project does not ask to be trusted about what a book says; it says which book, and where.
+
+## Editorial inputs and outputs
+
+### Project Topic (Category)
+
+A topic authored by the project for browsing, separate from a source author's section structure. A topic can gather many hadith, and a hadith can belong to several topics. The owner reviews membership, which is saved outside the preservation core by reference to hadith identifiers, without copied hadith text.
+
+### Saved Editorial Decision
+
+A reviewed choice kept as input for later builds: which occurrences form one hadith, which occurrence is displayed, its exact selected quotation, or topic membership. Hadith decisions belong on core hadith records; topic decisions live separately outside the core. A build reuses these decisions and never remakes them with AI.
+
+### Generated Output
+
+A reproducible projection of saved records and mechanical rules, such as HTML, indexes, or application exports. It is disposable and never becomes an independent authority for text or editorial choices.
 
 ## Properties
 

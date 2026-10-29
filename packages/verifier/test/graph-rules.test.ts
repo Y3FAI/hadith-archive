@@ -111,14 +111,12 @@ function hadith(
   overrides: Record<string, unknown> = {},
 ) {
   return input(path, {
-    description: "كامل",
     display_occurrence_id: 1,
     hadith_id: 1,
-    heading: "حديث",
     member_occurrence_ids: [1],
     record_type: "hadith",
     schema_version: 1,
-    title: "عنوان",
+    text: "حديث",
     ...overrides,
   });
 }
@@ -146,7 +144,7 @@ describe("cross-record graph rules", () => {
   test("accepts a complete consistent graph", async () => {
     expect(await verify(validGraph())).toEqual({
       kind: "complete",
-      report: { findings: [], valid: true, verification_version: 2 },
+      report: { findings: [], valid: true, verification_version: 3 },
     });
   });
 
@@ -224,22 +222,17 @@ describe("cross-record graph rules", () => {
     expect(orderIds).toContain("section.depth_first_order");
   });
 
-  test("enforces display membership and extracted spans", async () => {
+  test("enforces display membership and the text span", async () => {
     const ids = await ruleIds([
       occurrence(),
       occurrence(
         "core/sources/example/witnesses/example-edition/occurrences/2.json",
         { occurrence_id: 2, ordinal: 2 },
       ),
-      hadith(undefined, {
-        description: "غير موجود",
-        heading: "غير موجود",
-        member_occurrence_ids: [2],
-        title: "غير موجود",
-      }),
+      hadith(undefined, { member_occurrence_ids: [2], text: "غير موجود" }),
     ]);
     expect(ids).toContain("hadith.display_is_member");
-    expect(ids).toContain("hadith.extracted_spans");
+    expect(ids).toContain("hadith.text_span");
   });
 });
 
@@ -362,104 +355,91 @@ describe("hadith membership", () => {
   });
 });
 
-describe("hadith extracted spans", () => {
+describe("hadith text span", () => {
   const niyyat = "إِنَّمَا الأَعْمَالُ بِالنِّيَّاتِ";
+  const second = "وَإِنَّمَا لِكُلِّ امْرِئٍ مَا نَوَى";
 
-  async function spanPaths(
-    rawText: string,
-    spans: { description: string; heading: string; title: string },
-  ): Promise<string[]> {
-    const result = await verify([
-      source(),
-      witness(),
-      section("core/sources/example/sections/root.json", "root", 1),
-      section("core/sources/example/sections/child.json", "child", 2, "root"),
-      occurrence(undefined, { fingerprint: fingerprint(rawText), raw_text: rawText }),
-      hadith(undefined, spans),
-    ]);
-    expect(result.kind).toBe("complete");
-    return result.kind === "complete"
-      ? result.report.findings.map((finding) => `${finding.rule_id} ${finding.instance_path}`)
-      : [];
+  // Each text is checked in its own repository, so every expectation lists
+  // the texts that fail.
+  async function failingTexts(rawText: string, texts: readonly string[]): Promise<string[]> {
+    const failing: string[] = [];
+    for (const text of texts) {
+      const result = await verify([
+        source(),
+        witness(),
+        section("core/sources/example/sections/root.json", "root", 1),
+        section("core/sources/example/sections/child.json", "child", 2, "root"),
+        occurrence(undefined, { fingerprint: fingerprint(rawText), raw_text: rawText }),
+        hadith(undefined, { text }),
+      ]);
+      expect(result.kind).toBe("complete");
+      if (result.kind !== "complete") continue;
+      const spans = result.report.findings.filter((item) => item.rule_id === "hadith.text_span");
+      expect(spans.every((item) => item.instance_path === "/text")).toBe(true);
+      if (spans.length > 0) failing.push(text);
+    }
+    return failing;
   }
 
   test("accepts complete grapheme clusters, including spans inside words", async () => {
-    expect(await spanPaths(niyyat, {
-      description: niyyat,
-      heading: "الأَعْمَالُ",
-      title: "نِّيَّ",
-    })).toEqual([]);
+    expect(await failingTexts(niyyat, [niyyat, "الأَعْمَالُ", "نِّيَّ"])).toEqual([]);
   });
 
   test("rejects spans that start or end inside a grapheme cluster", async () => {
-    expect(await spanPaths(niyyat, {
+    const texts = [
       // Ends before the final kasra of بِالنِّيَّاتِ.
-      description: "إِنَّمَا الأَعْمَالُ بِالنِّيَّات",
+      "إِنَّمَا الأَعْمَالُ بِالنِّيَّات",
       // Starts with the sukun of عْ.
-      heading: "ْمَالُ",
+      "ْمَالُ",
       // The lone damma of الأَعْمَالُ.
-      title: "ُ",
-    })).toEqual([
-      "hadith.extracted_spans /description",
-      "hadith.extracted_spans /heading",
-      "hadith.extracted_spans /title",
-    ]);
+      "ُ",
+    ];
+    expect(await failingTexts(niyyat, texts)).toEqual(texts);
   });
 
   test("rejects spans that keep only some marks of a letter", async () => {
-    expect(await spanPaths(niyyat, {
+    expect(await failingTexts(niyyat, [
       // Keeps the kasra of نِّ but drops its shadda.
-      description: "بِالنِ",
+      "بِالنِ",
       // Keeps the fatha of نَّ but drops its shadda.
-      heading: "إِنَ",
-      title: "إِنَّ",
-    })).toEqual([
-      "hadith.extracted_spans /description",
-      "hadith.extracted_spans /heading",
-    ]);
+      "إِنَ",
+      "إِنَّ",
+    ])).toEqual(["بِالنِ", "إِنَ"]);
   });
 
   test("accepts a later or overlapping occurrence after one that splits a cluster", async () => {
     // نَ first occurs inside نَّ, splitting its shadda, then whole in نَوَى.
-    const rawText = `${niyyat}، وَإِنَّمَا لِكُلِّ امْرِئٍ مَا نَوَى`;
-    expect(await spanPaths(rawText, {
-      description: rawText,
-      heading: "نَ",
-      title: "نَوَى",
-    })).toEqual([]);
+    const rawText = `${niyyat}، ${second}`;
+    expect(await failingTexts(rawText, [rawText, "نَ", "نَوَى"])).toEqual([]);
 
     // بَب first matches at 0, splitting the second ب from its fatha, then
     // matches again at 2, overlapping the first match, on whole clusters.
-    expect(await spanPaths("بَبَب", {
-      description: "بَبَب",
-      heading: "بَب",
-      title: "بَب",
-    })).toEqual([]);
+    expect(await failingTexts("بَبَب", ["بَبَب", "بَب"])).toEqual([]);
   });
 
-  test("keeps exact single-line matching", async () => {
-    expect(await spanPaths(`${niyyat}\nوَإِنَّمَا لِكُلِّ امْرِئٍ مَا نَوَى`, {
-      // A stored LF is a grapheme boundary but still cannot be crossed.
-      description: "بِالنِّيَّاتِ\nوَإِنَّمَا",
+  test("accepts a span that crosses a stored LF", async () => {
+    const rawText = `${niyyat}\n${second}\nفقرة ثالثة`;
+    expect(await failingTexts(rawText, [
+      "بِالنِّيَّاتِ\nوَإِنَّمَا",
+      `${niyyat}\n${second}`,
+      rawText,
+    ])).toEqual([]);
+  });
+
+  test("keeps exact matching across an LF", async () => {
+    const texts = [
+      // The stored LF is not interchangeable with a space.
+      "بِالنِّيَّاتِ وَإِنَّمَا",
+      // Text on both sides of a skipped passage is not one span.
+      `${niyyat}\nفقرة ثالثة`,
       // Diacritics are not stripped before matching.
-      heading: "إنما الأعمال بالنيات",
-      title: "مَا نَوَى",
-    })).toEqual([
-      "hadith.extracted_spans /description",
-      "hadith.extracted_spans /heading",
-    ]);
+      "إنما الأعمال بالنيات",
+    ];
+    expect(await failingTexts(`${niyyat}\n${second}\nفقرة ثالثة`, texts)).toEqual(texts);
   });
 
   test("treats ZWJ and supplementary characters as parts of clusters", async () => {
-    const rawText = "ه‍ـ 👍🏽";
-    expect(await spanPaths(rawText, {
-      // The ZWJ extends ه, and the skin-tone modifier extends 👍.
-      description: "ه",
-      heading: "👍",
-      title: "ه‍",
-    })).toEqual([
-      "hadith.extracted_spans /description",
-      "hadith.extracted_spans /heading",
-    ]);
+    // The ZWJ extends ه, and the skin-tone modifier extends 👍.
+    expect(await failingTexts("ه‍ـ 👍🏽", ["ه", "👍", "ه‍"])).toEqual(["ه", "👍"]);
   });
 });
