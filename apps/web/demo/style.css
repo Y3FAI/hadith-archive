@@ -247,11 +247,12 @@ dl div::before {
   text-align: center;
 }
 
-/* Hidden on screen, still read by screen readers: a book title's label,
-   and the search's label (the field's placeholder says what to do).
-   In a browser without :has(), :is() drops only that part, so the
-   search's label stays hidden there too. */
-:is(dt:has(+ dd > cite), search :is(h1, h2)) {
+/* Hidden on screen, still read by screen readers: a label whose value
+   starts with an icon in its place (the pin before a book, the squares
+   before a hadith's categories), and the search's label (the field's
+   placeholder says what to do). In a browser without :has(), :is() drops
+   only that part, so the search's label stays hidden there too. */
+:is(dt:has(+ dd > svg), search :is(h1, h2)) {
   position: absolute;
   width: 1px;
   height: 1px;
