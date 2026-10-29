@@ -66,7 +66,7 @@ Each topic is a canonical JSON object in a flat `<topic_id>.json` file, using an
 }
 ```
 
-`topic_id` is a positive integer through `9007199254740991` and must equal the filename stem. `title` is a nonempty NFC single-line value under the metadata whitespace and invisible-character rules; topic titles are unique within the supplied topic set. `hadith_ids` is a nonempty set of positive safe integers in strictly ascending numeric order. Every member resolves to a hadith in the supplied core input. A hadith can appear in several topics; category membership is not stored on the hadith record.
+`topic_id` is a positive integer through `9007199254740991` and must equal the filename stem. `title` is a nonempty NFC single-line value under the metadata whitespace and invisible-character rules; topic titles are unique within the supplied topic set. `hadith_ids` is a nonempty set of positive safe integers in strictly ascending numeric order. Every member resolves to a hadith in the supplied core input. A hadith appears in one topic at most; a hadith listed in two topics refuses the build. Category membership is not stored on the hadith record.
 
 The object contains no copied quotation or citation, review-workflow metadata, or version field. Unknown or missing properties, invalid values, and unresolved references refuse the build. Topics sort by numeric identifier and their hadith by numeric hadith identifier; these are mechanical presentation orders rather than editorial ranks. The synthetic fixture memberships illustrate the format and do not claim a real scholarly classification.
 

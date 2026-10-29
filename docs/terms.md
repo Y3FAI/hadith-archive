@@ -88,7 +88,7 @@ This is why a witness must be identified precisely enough to order and a locatio
 
 ### Project Topic (Category)
 
-A topic authored by the project for browsing, separate from a source author's section structure. A topic can gather many hadith, and a hadith can belong to several topics. The owner reviews membership, which is saved outside the preservation core by reference to hadith identifiers, without copied hadith text.
+A topic authored by the project for browsing, separate from a source author's section structure. A topic can gather many hadith, and a hadith belongs to one topic at most. The owner reviews membership, which is saved outside the preservation core by reference to hadith identifiers, without copied hadith text.
 
 ### Saved Editorial Decision
 
