@@ -11,7 +11,7 @@ import Ajv2020, {
 import { RECORD_SCHEMA_CATALOG, type RecordType } from "./catalog.ts";
 
 export const SCHEMA_BASE_URL =
-  "https://haditharchive.org/schemas/";
+  "https://haditharchive.com/schemas/";
 
 export const EXPECTED_SCHEMA_PATHS = Object.freeze([
   "common/v1.schema.json",

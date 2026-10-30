@@ -236,7 +236,7 @@ describe("staged repository verification", () => {
 
   test("rejects staged unregistered schemas, even well formed, without changing indexed bytes", async () => {
     const { base, git, root, write } = await fixture();
-    const namespace = "https://haditharchive.org/schemas";
+    const namespace = "https://haditharchive.com/schemas";
     const strays = new Map<string, string>([
       // The reproduction from #42: a well-shaped version path with an invalid $id and type.
       ["schemas/source/v2.schema.json", formatCanonicalJson({

@@ -13,7 +13,7 @@ import type { StructuralVerificationContext } from "./structural-context.ts";
 
 const execFileAsync = promisify(execFile);
 const SCHEMA_BASE_URL =
-  "https://haditharchive.org/schemas/";
+  "https://haditharchive.com/schemas/";
 
 export interface HistoricalRecord {
   readonly entityKey: string;

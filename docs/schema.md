@@ -224,14 +224,14 @@ A project-specific type language is not used. It would create another specificat
 Every schema has an absolute HTTPS `$id` under the project's own domain that maps exactly to its path beneath the repository's `schemas/` directory. The namespace begins:
 
 ```text
-https://haditharchive.org/schemas/
+https://haditharchive.com/schemas/
 ```
 
 For example, the version-one source schema declares:
 
 ```json
 {
-  "$id": "https://haditharchive.org/schemas/source/v1.schema.json",
+  "$id": "https://haditharchive.com/schemas/source/v1.schema.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema"
 }
 ```
@@ -239,9 +239,9 @@ For example, the version-one source schema declares:
 The same mapping gives identifiers such as:
 
 ```text
-https://haditharchive.org/schemas/common/v1.schema.json
-https://haditharchive.org/schemas/source_witness/v1.schema.json
-https://haditharchive.org/schemas/occurrence/v1.schema.json
+https://haditharchive.com/schemas/common/v1.schema.json
+https://haditharchive.com/schemas/source_witness/v1.schema.json
+https://haditharchive.com/schemas/occurrence/v1.schema.json
 ```
 
 References always select an exact version. A local relative reference such as `../common/v1.schema.json#/$defs/source_id` resolves to the same versioned HTTPS namespace; no schema references `latest` or an unversioned target.
