@@ -1,5 +1,5 @@
 {
-  "$id": "https://haditharchive.org/schemas/source_witness/v1.schema.json",
+  "$id": "https://haditharchive.com/schemas/source_witness/v1.schema.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
   "description": "A version-one authoritative SOURCE_WITNESS record.",

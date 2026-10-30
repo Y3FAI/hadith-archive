@@ -1,5 +1,5 @@
 {
-  "$id": "https://haditharchive.org/schemas/occurrence/v1.schema.json",
+  "$id": "https://haditharchive.com/schemas/occurrence/v1.schema.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
   "description": "A version-one authoritative OCCURRENCE record.",
