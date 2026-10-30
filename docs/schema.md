@@ -182,6 +182,7 @@ workspace/                    # ignored private candidate work
 
 sources/                      # ignored private print editions
 decisions/                    # ignored private deliberation
+docs/dev/                     # ignored private developer notes
 AGENTS.md                     # ignored private contributor briefing
 
 package.json                  # private Bun workspace root
