@@ -249,10 +249,11 @@ dl div::before {
 
 /* Hidden on screen, still read by screen readers: a label whose value
    starts with an icon in its place (the pin before a book, the squares
-   before a hadith's categories), and the search's label (the field's
-   placeholder says what to do). In a browser without :has(), :is() drops
-   only that part, so the search's label stays hidden there too. */
-:is(dt:has(+ dd > svg), search :is(h1, h2)) {
+   before a hadith's categories), the search's label (the field's
+   placeholder says what to do), and the home page's title, the site's
+   name, which the header already shows. In a browser without :has(), :is()
+   drops only those parts, so the search's label stays hidden there too. */
+:is(dt:has(+ dd > svg), search :is(h1, h2), main > h1:has(+ section)) {
   position: absolute;
   width: 1px;
   height: 1px;
@@ -431,10 +432,10 @@ dl + dl {
   margin-block-start: .5rem;
 }
 
-/* The home page: a large search, then categories and books. */
-/* The field sits in the middle of its own space, half a step more than
+/* Search, kept for later (search.html): the site launches without it.
+   The field sits in the middle of its own space, half a step more than
    the usual gap between parts of the page on each side: as far below the
-   header as above the first section's heading. */
+   header as above what follows. */
 search {
   display: block;
   padding-block: calc(var(--space-l) / 2) calc(var(--space-l) / 2 + .5rem);
@@ -485,12 +486,6 @@ search:has(+ dl) {
 search + dl {
   margin-block-end: calc(var(--space-s) * 2 - .3125rem);
   margin-inline-start: 1.5rem;
-}
-
-/* The 404 page: the field sits under the title, like a heading's
-   content. */
-main > h1 + search {
-  padding-block-start: 0;
 }
 
 /* A heading that leads to its own page. Like the menu links, the 44px
@@ -549,6 +544,12 @@ h2 + a {
     margin-block: 0 var(--space-s);
     margin-inline: -.75rem 0;
   }
+}
+
+/* The home page's title is hidden, so its first section starts where
+   another page's title does, without a heading's gap above it. */
+main > h1:has(+ section) + section {
+  margin-block-start: calc(var(--text) * .3 - var(--space-l));
 }
 
 /* Cards sit a little further apart than a heading from its content, so

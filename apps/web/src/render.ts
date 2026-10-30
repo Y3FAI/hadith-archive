@@ -27,7 +27,6 @@ const ICON = {
   menu: svg("M220,128a4,4,0,0,1-4,4H40a4,4,0,0,1,0-8H216A4,4,0,0,1,220,128ZM40,68H216a4,4,0,0,0,0-8H40a4,4,0,0,0,0,8ZM216,188H40a4,4,0,0,0,0,8H216a4,4,0,0,0,0-8Z"),
   pin: svg("M232.49,84.2,171.8,23.51a12,12,0,0,0-17,0L99.45,79.07c-8.08-3-32.79-9.45-59,11.67a12,12,0,0,0-1,17.84l51.13,51.13L45.17,205.17a4,4,0,0,0,5.66,5.66l45.46-45.47,51.12,51.12A12,12,0,0,0,155.9,220c.28,0,.57,0,.85,0a12,12,0,0,0,8.73-4.74c19.83-26.36,16.51-47.18,11.71-58.57l55.3-55.49A12,12,0,0,0,232.49,84.2Zm-5.66,11.31h0L169.56,153a4,4,0,0,0-.75,4.61c10.43,20.85-1.62,42-9.73,52.83a4,4,0,0,1-6,.4L45.17,102.93a4,4,0,0,1,.33-6C58.44,86.53,70.86,83.74,80.44,83.74A43.9,43.9,0,0,1,98.6,87.38a4,4,0,0,0,4.62-.75l57.27-57.46a4,4,0,0,1,5.66,0l60.68,60.69A4,4,0,0,1,226.83,95.51Z"),
   question: svg("M136,180a8,8,0,1,1-8-8A8,8,0,0,1,136,180ZM128,76c-19.85,0-36,14.36-36,32v4a4,4,0,0,0,8,0v-4c0-13.23,12.56-24,28-24s28,10.77,28,24-12.56,24-28,24a4,4,0,0,0-4,4v8a4,4,0,0,0,8,0v-4.2c18-1.77,32-15.36,32-31.8C164,90.36,147.85,76,128,76Zm100,52A100,100,0,1,1,128,28,100.11,100.11,0,0,1,228,128Zm-8,0a92,92,0,1,0-92,92A92.1,92.1,0,0,0,220,128Z"),
-  search: svg("M226.83,221.17l-52.7-52.7a84.1,84.1,0,1,0-5.66,5.66l52.7,52.7a4,4,0,0,0,5.66-5.66ZM36,112a76,76,0,1,1,76,76A76.08,76.08,0,0,1,36,112Z"),
 };
 
 // A narration longer than this many base characters (combining marks are not
@@ -83,7 +82,6 @@ const ROUTE = {
   categories: "c/",
   hadith: (id: number) => `h/${segment(id)}/`,
   home: "",
-  search: "search/",
   section: (sourceId: string, sectionId: string) => `b/${segment(sourceId)}/${segment(sectionId)}/`,
   source: (sourceId: string) => `b/${segment(sourceId)}/`,
   topic: (id: number) => `c/${segment(id)}/`,
@@ -276,15 +274,6 @@ ${page.main}
   const hadithById = new Map(hadith.map((record) => [record.hadith_id, record]));
   const topicOf = new Map(topics.flatMap((topic) => topic.hadith_ids.map((id) => [id, topic] as const)));
 
-  const searchForm = (heading: "h1" | "h2") => `    <search>
-      <form action="${at(ROUTE.search)}">
-        <${heading}><label for="q">ابحث في الأحاديث</label></${heading}>
-        <div>
-          <input id="q" name="q" type="search" placeholder="ابحث في الأحاديث" enterkeyhint="search" autocomplete="off">
-          <button type="submit" aria-label="ابحث">${ICON.search}</button>
-        </div>
-      </form>
-    </search>`;
   const topicTiles = (items: readonly Topic[]) => `      <ul role="list">
 ${items.map((topic) =>
   `        <li><a href="${at(ROUTE.topic(topic.topic_id))}">${escapeHtml(topic.title)}</a></li>`
@@ -346,11 +335,12 @@ ${cards.map((record) =>
     }
   };
 
-  // Before any topic is reviewed, the home page shows books only.
+  // The site launches without search. Its title is the site's name, hidden
+  // on screen, and before any topic is reviewed it shows books only.
   add("index.html", {
     current: "home",
     main: [
-      searchForm("h1"),
+      `    <h1>${escapeHtml(site.name)}</h1>`,
       ...topics.length === 0 ? [] : [`    <section aria-labelledby="aqsam">
       <h2 id="aqsam"><a href="${at(ROUTE.categories)}">${ICON.grid}الأقسام</a></h2>
       <a href="${at(ROUTE.categories)}">المزيد${ICON.caretLeft}</a>
@@ -367,21 +357,11 @@ ${bookCards(sources.slice(0, HOME_BOOKS))}
 
   // GitHub Pages answers every missing address with this page.
   add("404.html", {
-    main: `    <h1>${ICON.question}الصفحة غير موجودة</h1>
-${searchForm("h2")}`,
+    main: `    <h1>${ICON.question}الصفحة غير موجودة</h1>`,
     title: titled("الصفحة غير موجودة"),
   });
 
   addRoute(ROUTE.about, { current: "about", main: ABOUT, title: `حول ${site.name}` });
-
-  // Search is not decided; the form lands here instead of failing.
-  addRoute(ROUTE.search, {
-    main: `${searchForm("h1")}
-    <div>
-      <p>البحث غير متاح في هذا العرض التجريبي.</p>
-    </div>`,
-    title: titled("البحث"),
-  });
 
   addRoute(ROUTE.categories, {
     current: "categories",

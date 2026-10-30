@@ -126,15 +126,15 @@ python3 -m http.server 8000 --bind 127.0.0.1 --directory apps/web/demo
 
 Open [the static demo on port 8000](http://127.0.0.1:8000/). Navigation covers home → category → hadith and home → book → bab → hadith, with category and book index pages. Category and bab pages use compact preview link cards: opening words with an ellipsis, natural wrapping, and a grey arrow beneath the text. They carry no book metadata or full narrations. Browse headings use the site-name text scale; the hadith detail page retains full text, citations, and member narrations.
 
-The static pages are design examples. Every hadith card reuses `hadith.html`, and every bab link reuses `bab.html`; these links represent neither generated records nor real topic assignments. Search is not implemented. The owner reviews the design before it is integrated into the generator; demo omissions establish no production publishing policy.
+The static pages are design examples. Every hadith card reuses `hadith.html`, and every bab link reuses `bab.html`; these links represent neither generated records nor real topic assignments. The generator reproduces these pages from records. The site launches without search; `search.html` keeps that design for later and is linked from nowhere. Demo omissions establish no production publishing policy.
 
-## Deferred generator
+## Generator
 
-The partial builder in `apps/web/src/`, its tests, and synthetic fixtures in `apps/web/fixtures/demo/` are preserved for later integration. No generator build ran during this static-design pass. Interrupted rendering changes have left its tests out of step with the current cards, so earlier passing results do not establish that the present generator passes.
+The builder in `apps/web/src/` writes the approved demo pages from saved records, topics, and a site file. Its tests run against synthetic fixtures in `apps/web/fixtures/demo/`.
 
-The builder accepts explicit `--core`, `--topics`, `--site`, and `--out` inputs. Its core-shaped directory is loaded through the supported loader and non-history verifier rules; topic files follow the [saved topic-file contract](schema.md#topic-files-for-the-generated-demo). The site file supplies `name` and `source_url`, with optional deployment settings. These inputs remain separate from the hand-written mock pages and from root `core/` admission.
+The builder accepts explicit `--core`, `--topics`, `--site`, and `--out` inputs. Its core-shaped directory is loaded through the supported loader and non-history verifier rules; topic files follow the [saved topic-file contract](schema.md#topic-files-for-the-generated-demo). The site file supplies `name`, `source_url`, and `url`, the public address whose path begins every link. These inputs remain separate from the hand-written mock pages and from root `core/` admission.
 
-The existing `build:demo` command regenerates ignored `artifacts/site/`; it is not part of the current design workflow. After owner approval, integration must reproduce the final static design, align the generator tests, and rerun build, reference, reproducibility, and browser checks. Provisional generator routes remain provisional, and production search remains undecided.
+The `build:demo` command regenerates ignored `artifacts/site/` from the fixtures. A change to the demo's markup or CSS is carried into the generator and its tests, then checked on a build in all three browser engines. The generator builds no search page or field until search is built.
 
 ## Change routing
 
