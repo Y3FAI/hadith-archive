@@ -108,7 +108,6 @@ describe("demo build", () => {
       ...[1, 2, 3, 4].map((hadith) => `h/${hadith}/index.html`),
       "index.html",
       "script.js",
-      "search/index.html",
       "style.css",
     ]);
   });
@@ -237,9 +236,15 @@ describe("demo build", () => {
     expect([...reached, "404.html"].sort()).toEqual(pages().sort());
   });
 
-  test("answers the search form with a page stating that search is not available", () => {
-    expect(page("index.html")).toContain(`<form action="${BASE}search/">`);
-    expect(page("search/index.html")).toContain("<p>البحث غير متاح في هذا العرض التجريبي.</p>");
+  test("launches without search, the home page titled with the site's name", () => {
+    expect(page("index.html")).toContain(`<main id="main">\n    <h1>أرشيف الحديث</h1>\n    <section aria-labelledby="aqsam">`);
+    for (const path of pages()) {
+      expect(page(path)).not.toContain("<search>");
+      // The stylesheet hides a title followed by a section: only the home page's.
+      if (path !== "index.html") {
+        expect(page(path)).not.toMatch(/<\/h1>\n\s*<section/);
+      }
+    }
   });
 });
 
@@ -575,6 +580,6 @@ describe("command line", () => {
     await writeJson(join(root, "topics/1.json"), { hadith_ids: [1, 2], title: "الإيمان", topic_id: 1 });
     const built = await run(...options, "--out", out);
     expect(built.code).toBe(0);
-    expect(built.stdout).toBe(`Built 29 files into ${out}\n`);
+    expect(built.stdout).toBe(`Built 28 files into ${out}\n`);
   });
 });
