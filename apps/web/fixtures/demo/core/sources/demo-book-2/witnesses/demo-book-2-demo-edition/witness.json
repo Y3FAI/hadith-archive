@@ -1,0 +1,16 @@
+{
+  "edition_statement": "طبعة تجريبية",
+  "isbn": "9780000000002",
+  "priority_score": 0,
+  "publication_year": 2026,
+  "publisher": "ناشر تجريبي",
+  "record_type": "source_witness",
+  "reference_scheme": {
+    "hadith_number": true,
+    "volume": true
+  },
+  "schema_version": 1,
+  "source_id": "demo-book-2",
+  "title_as_printed": "الكتاب التجريبي الثاني",
+  "witness_id": "demo-book-2-demo-edition"
+}
