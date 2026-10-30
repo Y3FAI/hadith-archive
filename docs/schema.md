@@ -45,13 +45,13 @@ Identifiers, record fields, schemas, and relationships form the durable data con
 
 ## Saved editorial inputs
 
-Grouping, the display occurrence and exact selected quotation are reviewed choices saved on hadith records before a build. Project topics and their owner-reviewed memberships are saved separately outside `core/`. Topics are the project's own classification, may overlap, and reference hadith without copying their text or citations. These saved decisions are authoritative inputs for their own scope; they are not generated artifacts.
+Grouping, the display occurrence and exact selected quotation are reviewed choices saved on hadith records before a build. Project topics and their owner-reviewed memberships are saved separately outside `core/`. Topics are the project's own classification; a hadith belongs to one at most, and topics reference hadith without copying their text or citations. These saved decisions are authoritative inputs for their own scope; they are not generated artifacts.
 
 A renderer applies fixed mechanical rules to the saved inputs and produces deterministic, disposable output. It runs offline without AI. Missing required decisions or invalid references fail the build instead of causing a new choice. Application exports are generated from these inputs, never maintained by hand as a duplicate content store.
 
 ### Topic files for the generated demo
 
-The deferred generator draft accepts a separate topic directory supplied to the builder; the current hand-written pages do not read these files. Its checked-in examples live in `apps/web/fixtures/demo/topics/`; a permanent repository location for reviewed production topics remains undecided. These are editorial input files, not core records, and the repository verifier does not read them. The builder validates them against the supplied core input before rendering.
+The generator accepts a separate topic directory supplied to the builder; the hand-written demo pages do not read these files. Its checked-in examples live in `apps/web/fixtures/demo/topics/`; a permanent repository location for reviewed production topics remains undecided. These are editorial input files, not core records, and the repository verifier does not read them. The builder validates them against the supplied core input before rendering.
 
 Each topic is a canonical JSON object in a flat `<topic_id>.json` file, using an unpadded positive decimal identifier. It has exactly three properties:
 
@@ -132,8 +132,8 @@ apps/
     demo/                     # current hand-written demo and local assets
     fixtures/
       demo/                   # saved synthetic core, topics and site configuration
-    src/                      # partial generator, deferred until design approval
-    test/                     # generator tests; alignment and fresh validation pending
+    src/                      # static site generator
+    test/                     # generator tests
 
 packages/
   canonical-json/             # deterministic JSON parsing and representation
@@ -168,6 +168,11 @@ packages/
 core/                         # authoritative public records
 schemas/                      # authoritative JSON Schemas
 docs/                         # public documentation
+config/
+  site.json                   # the public site's name, repository link and address
+.github/
+  workflows/
+    check.yml                 # the full check, then the site build and its deployment
 
 artifacts/                    # ignored reproducible output
   catalogs/
@@ -915,7 +920,7 @@ Humans and AI agents may use both views: catalogs for discovery and individual c
 
 ## Implementation status
 
-The six version-one JSON Schemas, private Bun workspace root, canonical JSON package, core loader, version-three verifier, design foundations, and hand-written demo are implemented. UI work now follows the [static design workflow](tooling.md#static-design-workflow); the generator and synthetic fixtures are preserved as deferred work, without a current passing-build claim. The core loader's schema registry validates every schema against Draft 2020-12, checks each `$id` against its repository path, resolves exact local references without network access, compiles all five entity schemas, and tests valid and invalid records. The verifier consumes that shared structural boundary.
+The six version-one JSON Schemas, private Bun workspace root, canonical JSON package, core loader, version-three verifier, design foundations, and hand-written demo are implemented. UI work follows the [static design workflow](tooling.md#static-design-workflow), and the generator builds the same pages from records; its tests run against synthetic fixtures. After the check passes on `main`, CI builds the site from `core/` and publishes it on GitHub Pages; until the first record is admitted there is nothing to build. The core loader's schema registry validates every schema against Draft 2020-12, checks each `$id` against its repository path, resolves exact local references without network access, compiles all five entity schemas, and tests valid and invalid records. The verifier consumes that shared structural boundary.
 
 The canonical JSON package implements duplicate-aware parsing, lossless large integers, deterministic formatting, canonical byte comparison, and the approved UTF-8, BOM, line-ending, final-LF, NFC, and top-level-object boundaries. The core loader implements canonical, structurally validated file and byte loading; committed schema-derived TypeScript bindings with a deterministic freshness gate; structured failure results; deep runtime immutability; and structured inspection of the same schema catalog used for loading. The verifier implements its complete protocol and version-three rule catalog, including ancestry-indexed historical checks against an explicit base commit. The single-quotation migration passed type-checking, tests, generated-binding freshness, schema compilation, and repository verification against a temporary index. No core record was admitted by that implementation work.
 

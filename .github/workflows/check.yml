@@ -1,6 +1,8 @@
 # Runs the project's full check on every pull request and on every change
 # to main: type checking, tests, generated-type freshness, schema
-# compilation and repository verification (docs/tooling.md).
+# compilation and repository verification (docs/tooling.md). Once the check
+# passes, it builds the site from the admitted records, and a change to main
+# publishes that build on GitHub Pages.
 
 name: Check
 
@@ -44,3 +46,59 @@ jobs:
           fi
 
       - run: bun run check --base "${{ steps.base.outputs.commit }}"
+
+  site:
+    needs: check
+    runs-on: ubuntu-latest
+    outputs:
+      built: ${{ steps.records.outputs.present }}
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.3.14
+
+      - run: bun install --frozen-lockfile
+
+      # The generator refuses an empty core, so there is no site to build
+      # until the first record is admitted.
+      - name: Look for admitted records
+        id: records
+        run: |
+          if [ -d core ]; then
+            echo "present=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "::notice::No records in core/ yet; there is no site to build."
+          fi
+
+      # Where reviewed topics live is still open; until then the site shows
+      # books only.
+      - name: Build the site
+        if: steps.records.outputs.present == 'true'
+        run: |
+          mkdir -p "$RUNNER_TEMP/topics"
+          bun run apps/web/src/main.ts --core core --topics "$RUNNER_TEMP/topics" --site config/site.json --out artifacts/site
+
+      - if: steps.records.outputs.present == 'true' && github.event_name == 'push'
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: artifacts/site
+
+  deploy:
+    needs: site
+    if: github.event_name == 'push' && needs.site.outputs.built == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    # One deployment at a time, each finishing before the next starts.
+    concurrency:
+      group: pages
+      cancel-in-progress: false
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v5

@@ -136,6 +136,8 @@ The builder accepts explicit `--core`, `--topics`, `--site`, and `--out` inputs.
 
 The `build:demo` command regenerates ignored `artifacts/site/` from the fixtures. A change to the demo's markup or CSS is carried into the generator and its tests, then checked on a build in all three browser engines. The generator builds no search page or field until search is built.
 
+The public site is built in CI (`.github/workflows/check.yml`): once the full check passes, the `site` job builds `core/` with `config/site.json`, and after a change to `main` the `deploy` job publishes that build on GitHub Pages at the site's `url`. Until the first record is admitted, `core/` does not exist and nothing is built or published.
+
 ## Change routing
 
 | Proposed change | Primary authority and implementation boundary |
