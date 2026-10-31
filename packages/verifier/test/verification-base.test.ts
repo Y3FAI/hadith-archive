@@ -43,7 +43,9 @@ async function fixture() {
     source_id: "example", title: "مثال",
   }));
   await write(witnessPath, formatCanonicalJson({
-    edition_statement: "الطبعة الأولى", isbn: "9780000000002", priority_score: 0,
+    edition_statement: "الطبعة الأولى",
+    file_sha256: "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    isbn: "9780000000002", priority_score: 0,
     publication_year: 2007, publisher: "مثال", record_type: "source_witness",
     reference_scheme: { hadith_number: true, volume: false }, schema_version: 1,
     source_id: "example", title_as_printed: "مثال", witness_id: "example-edition",

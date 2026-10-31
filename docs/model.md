@@ -16,7 +16,9 @@ The definition is deliberately general. A hadith-grading work is also a source, 
 
 ### Source Witness
 
-A specific published printing of a source, identified by the details that let another person obtain an interchangeable copy: title as printed, publisher, complete edition or printing statement, Gregorian publication year, and ISBN-13. Two physical copies of the same printing are one source witness; a distinguishable edition or printing is another. A printing outside those version-one bibliographic forms requires explicit schema review rather than an empty or improvised value.
+A specific published printing of a source, identified by the details that let another person obtain an interchangeable copy: title as printed, publisher, complete edition or printing statement, Gregorian publication year, and ISBN-13 or ISBN-10. Two physical copies of the same printing are one source witness; a distinguishable edition or printing is another. The edition statement, year, and ISBN are recorded when the printing states them and omitted, never improvised, when it does not.
+
+A witness also records the SHA-256 of the file its records were taken from: the publisher's PDF, or the scan of the printed copy. For a PDF edition released without an ISBN, that hash is what identifies it. A witness that names no publisher records its editor as the publisher.
 
 A witness declares its own reference scheme. A page span is universal; the scheme records whether that printing also uses volumes or printed hadith numbers. Editions disagree about how to point at a text, and without a declared scheme an absent volume cannot be distinguished from a forgotten one.
 
@@ -47,6 +49,14 @@ An occurrence also records its ordinal: its position in the printed sequence of 
 Occurrence ordinals are unique and contiguous from `1` within a source witness, so authoritative ingestion follows printed report order. An occurrence carries no reference to a hadith; grouping is recorded on hadith records, and an occurrence that no hadith lists is not yet grouped. Omitted section membership affirmatively means that no section applies, not that an applicable section remains unrecorded.
 
 An occurrence belonging to no hadith is a valid and expected state. Ingestion produces occurrences and nothing else; grouping them is separate, later work.
+
+### Collation
+
+A comparison of one occurrence with the same report as another witness of the same source prints it. The occurrence holds the full text from one witness; a collation records only where the other witness prints the report and where its text differs. Anyone holding that printing can check every difference against the page.
+
+A collation is identified by its witness and the occurrence it compares, and holds one entry per pair. It records the location of the report in its own witness, the span of the occurrence's raw text that the witness prints, and each difference within that span. A difference gives a range of the raw text, counted in Unicode code points from zero, that exact text, what the witness prints in its place (empty when it prints nothing), and whether the difference is in wording or only in spelling: vowels, letters, or punctuation. An insertion is an empty range. A collation without differences records an exact match.
+
+A collation's status is derived, never stored: it matches exactly when it has no differences, differs in wording when any difference is in wording, and otherwise differs in spelling. Which kind a difference is remains a reviewed judgement; the verifier checks only that each difference quotes the raw text exactly and changes it.
 
 ### Hadith
 
@@ -134,6 +144,8 @@ erDiagram
   SOURCE ||--o{ SECTION : "source_id"
   SECTION o|--o{ SECTION : "parent_section_id"
   SOURCE_WITNESS ||--o{ OCCURRENCE : "witness_id"
+  SOURCE_WITNESS ||--o{ COLLATION : "witness_id"
+  OCCURRENCE ||--o{ COLLATION : "occurrence_id"
   SECTION o|--o{ OCCURRENCE : "section_id"
   HADITH o|--|{ OCCURRENCE : "member_occurrence_ids"
   HADITH o|--|| OCCURRENCE : "display_occurrence_id"
@@ -150,9 +162,10 @@ erDiagram
     string source_id FK
     string title_as_printed
     string publisher
-    string edition_statement
-    int    publication_year
-    string isbn
+    string edition_statement "when printed"
+    int    publication_year "when printed"
+    string isbn "ISBN-13 or ISBN-10, when printed"
+    string file_sha256 "sha256 of the PDF or scan"
     object reference_scheme
     int    priority_score
   }
@@ -177,6 +190,15 @@ erDiagram
     int    ordinal "position in the printed sequence"
     text   raw_text "canonical UTF-8, NFC"
     string fingerprint "sha256 of raw_text"
+  }
+
+  COLLATION {
+    string witness_id PK "the collated witness"
+    int    occurrence_id PK "an occurrence of another witness"
+    object location "in the collated witness"
+    int    span_start "code points into raw_text"
+    int    span_end
+    object[] differences "start, end, text, reading, kind"
   }
 
   HADITH {
@@ -221,7 +243,11 @@ These constraints combine machine-checkable rules with human review. Verificatio
 
 **Sequence is complete within a witness.** Occurrence ordinals are unique and contiguous from `1`, so the printed order is always total and authoritative ingestion proceeds in that order.
 
-**A location does not end before it begins.** An occurrence's ending page is never earlier than its starting page.
+**A location does not end before it begins.** An occurrence's or collation's ending page is never earlier than its starting page.
+
+**A collation compares two printings of one work.** Its witness and occurrence resolve, the occurrence belongs to a different witness of the same source, and its location follows its own witness's reference scheme.
+
+**A collation quotes exactly.** Its span is a nonempty range of the occurrence's raw text. Each difference lies within the span, starts and ends on extended grapheme-cluster boundaries, quotes the raw text in that range exactly, and changes it. Differences are in order without overlap, and two insertions at one point are one difference.
 
 ## Addressing
 

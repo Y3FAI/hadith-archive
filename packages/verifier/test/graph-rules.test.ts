@@ -55,6 +55,7 @@ function witness(
 ) {
   return input(path, {
     edition_statement: "الطبعة الأولى",
+    file_sha256: "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
     isbn: "9780000000002",
     priority_score: 0,
     publication_year: 2007,
@@ -144,7 +145,7 @@ describe("cross-record graph rules", () => {
   test("accepts a complete consistent graph", async () => {
     expect(await verify(validGraph())).toEqual({
       kind: "complete",
-      report: { findings: [], valid: true, verification_version: 3 },
+      report: { findings: [], valid: true, verification_version: 4 },
     });
   });
 
@@ -441,5 +442,128 @@ describe("hadith text span", () => {
   test("treats ZWJ and supplementary characters as parts of clusters", async () => {
     // The ZWJ extends ه, and the skin-tone modifier extends 👍.
     expect(await failingTexts("ه‍ـ 👍🏽", ["ه", "👍", "ه‍"])).toEqual(["ه", "👍"]);
+  });
+});
+
+describe("collations", () => {
+  // The occurrence's raw text, "عنوان حديث كامل", has 15 code points.
+  const OTHER = "core/sources/example/witnesses/example-other/";
+
+  function otherWitness() {
+    return witness(`${OTHER}witness.json`, { witness_id: "example-other" });
+  }
+
+  function collation(overrides: Record<string, unknown> = {}, path = `${OTHER}collations/1.json`) {
+    return input(path, {
+      differences: [],
+      location: { hadith_number: 1, page_end: 12, page_start: 12 },
+      occurrence_id: 1,
+      record_type: "collation",
+      schema_version: 1,
+      span_end: 15,
+      span_start: 0,
+      witness_id: "example-other",
+      ...overrides,
+    });
+  }
+
+  function difference(start: number, end: number, text: string, reading: string) {
+    return { end, kind: "wording", reading, start, text };
+  }
+
+  async function findings(records: readonly RepositoryFileInput[]): Promise<string[]> {
+    const result = await verify([...validGraph(), otherWitness(), ...records]);
+    expect(result.kind).toBe("complete");
+    return result.kind === "complete"
+      ? result.report.findings.map((item) => `${item.rule_id} ${item.instance_path}`)
+      : [];
+  }
+
+  test("accepts an exact collation and one with ordered differences", async () => {
+    expect(await findings([collation()])).toEqual([]);
+    expect(await findings([collation({
+      differences: [
+        difference(0, 0, "", "هذا "),
+        difference(6, 10, "حديث", "الحديث"),
+        difference(10, 10, "", "،"),
+        difference(15, 15, "", "."),
+      ],
+    })])).toEqual([]);
+  });
+
+  test("requires the witness and the occurrence to resolve", async () => {
+    expect(await findings([
+      collation({ witness_id: "example-missing" }, "core/sources/example/witnesses/example-missing/collations/1.json"),
+      collation({ occurrence_id: 9 }, `${OTHER}collations/9.json`),
+    ])).toEqual([
+      "reference.witness_resolves /witness_id",
+      "reference.collated_occurrence_resolves /occurrence_id",
+    ]);
+  });
+
+  test("collates only another witness of the same source", async () => {
+    expect(await findings([
+      collation(
+        { witness_id: "example-edition" },
+        "core/sources/example/witnesses/example-edition/collations/1.json",
+      ),
+    ])).toEqual(["collation.witness_scope /witness_id"]);
+    expect(await findings([
+      source("core/sources/another/source.json", "another"),
+      witness("core/sources/another/witnesses/another-edition/witness.json", {
+        source_id: "another",
+        witness_id: "another-edition",
+      }),
+      collation(
+        { witness_id: "another-edition" },
+        "core/sources/another/witnesses/another-edition/collations/1.json",
+      ),
+    ])).toEqual(["collation.witness_scope /witness_id"]);
+  });
+
+  test("requires a nonempty span inside the raw text", async () => {
+    for (const [start, end] of [[4, 4], [5, 4], [0, 16]]) {
+      expect(await findings([collation({ span_end: end, span_start: start })]))
+        .toEqual(["collation.span /span_start"]);
+    }
+  });
+
+  test("rejects a span or difference that splits a grapheme cluster", async () => {
+    const rawText = "بِسْمِ اللَّهِ";
+    const voweled = occurrence(undefined, { fingerprint: fingerprint(rawText), raw_text: rawText });
+    const records = validGraph().map((record) =>
+      record.path.endsWith("occurrences/1.json") ? voweled : record
+    );
+    const run = async (overrides: Record<string, unknown>) => {
+      const result = await verify([...records, otherWitness(), collation(overrides)]);
+      return result.kind === "complete"
+        ? result.report.findings.map((item) => `${item.rule_id} ${item.instance_path}`)
+        : [];
+    };
+    expect(await run({ span_end: 14 })).toEqual(["hadith.text_span /text"]);
+    expect(await run({ span_end: 13 })).toContain("collation.span /span_start");
+    // The kasra under the ba is part of the ba's cluster.
+    expect(await run({ differences: [difference(1, 2, "\u0650", "")], span_end: 14 }))
+      .toContain("collation.differences /differences/0");
+    expect(await run({ differences: [difference(0, 2, "بِ", "ب")], span_end: 14 }))
+      .not.toContain("collation.differences /differences/0");
+  });
+
+  test("rejects differences that misquote, change nothing, leave the span, or overlap", async () => {
+    for (const differences of [
+      [difference(6, 10, "كامل", "تام")],
+      [difference(6, 10, "حديث", "حديث")],
+      [difference(0, 0, "", "")],
+      [difference(11, 15, "كامل", "تام"), difference(6, 10, "حديث", "الحديث")],
+      [difference(0, 10, "عنوان حديث", "عنوان"), difference(6, 10, "حديث", "الحديث")],
+      [difference(10, 10, "", "،"), difference(10, 10, "", ".")],
+    ]) {
+      expect(await findings([collation({ differences })]))
+        .toEqual([`collation.differences /differences/${differences.length - 1}`]);
+    }
+    expect(await findings([collation({
+      differences: [difference(11, 15, "كامل", "تام")],
+      span_end: 10,
+    })])).toEqual(["collation.differences /differences/0"]);
   });
 });

@@ -20,6 +20,8 @@ function fixturePath(...parts: string[]): string {
 
 function assertExhaustiveRecord(record: LoadedCoreRecord): string {
   switch (record.record_type) {
+    case "collation":
+      return record.witness_id;
     case "hadith":
       return record.text;
     case "occurrence":

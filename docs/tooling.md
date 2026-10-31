@@ -51,7 +51,7 @@ Formatting is explicit and separate from verification. The formatter rejects an 
 
 `packages/core-loader/` is the supported read-only entry point for individual authoritative records. It combines canonical byte handling with the exact versioned structural schemas.
 
-Loader initialization reads the six local schemas, verifies their declared identifiers, validates them against JSON Schema Draft 2020-12, registers their exact local references, and compiles the five entity schemas without network access. If that trusted catalog cannot be established, initialization fails because no record can be loaded safely.
+Loader initialization reads the seven local schemas, verifies their declared identifiers, validates them against JSON Schema Draft 2020-12, registers their exact local references, and compiles the six entity schemas without network access. If that trusted catalog cannot be established, initialization fails because no record can be loaded safely.
 
 For each file or byte sequence, the loader:
 
@@ -82,7 +82,7 @@ Verification runs in prerequisite order:
 6. evaluate historical permanence and minting rules against the resolved base commit;
 7. sort all safely evaluable findings and serialize one deterministic report.
 
-The candidate repository state is the Git index. Stage changes before running the verifier: it reads captured staged blob IDs rather than working-tree files, so unstaged edits, missing local files, or replaced symlink targets cannot change the bytes being verified. Core and schema entries must be regular Git files; symlinks and submodules produce `file.regular` findings and exit status `1`. Every entry at or beneath `core` must also sit at one of the five record paths; anything else, including an entry under a case-variant root such as `Core/` or `CORE/`, produces a `repository.core_paths` finding judged from the path alone. Likewise, every entry at or beneath `schemas` must be one of the six registered catalog schemas; an unregistered version or entity schema, or an entry under a case-variant root such as `Schemas/`, produces a `repository.schema_paths` finding. Case aliases are rejected, not normalized. Unresolved index conflicts make verification incomplete. Historical checks still read committed Git objects against the explicit base.
+The candidate repository state is the Git index. Stage changes before running the verifier: it reads captured staged blob IDs rather than working-tree files, so unstaged edits, missing local files, or replaced symlink targets cannot change the bytes being verified. Core and schema entries must be regular Git files; symlinks and submodules produce `file.regular` findings and exit status `1`. Every entry at or beneath `core` must also sit at one of the six record paths; anything else, including an entry under a case-variant root such as `Core/` or `CORE/`, produces a `repository.core_paths` finding judged from the path alone. Likewise, every entry at or beneath `schemas` must be one of the seven registered catalog schemas; an unregistered version or entity schema, or an entry under a case-variant root such as `Schemas/`, produces a `repository.schema_paths` finding. Case aliases are rejected, not normalized. Unresolved index conflicts make verification incomplete. Historical checks still read committed Git objects against the explicit base.
 
 Intent-to-add placeholders (`git add -N`) are excluded because they are not part of the tree Git would commit; a genuinely staged empty file is still checked. Candidate enumeration and blob reads disable local Git replacement objects so the verifier reads the original indexed bytes.
 
@@ -94,7 +94,7 @@ Historical checks require the complete Git history. Before resolving the base or
 
 A failed prerequisite invalidates the repository and prevents only checks that cannot be evaluated honestly. It never becomes a false pass for dependent rules. Missing schemas, unavailable required history, internal errors, and incomplete execution cannot produce a valid report.
 
-The verifier reports findings; it does not fix them. Its machine report contains only the current verification-catalog version, validity, and sorted findings. The catalog is at version three, independent of the draft version-one record schemas, and a report claiming any other catalog version is refused rather than serialized. Terminal presentation is derived from that report. Exit status `0` means complete success, `1` means complete verification found rule failures, and `2` means verification could not complete.
+The verifier reports findings; it does not fix them. Its machine report contains only the current verification-catalog version, validity, and sorted findings. The catalog is at version four, independent of the draft version-one record schemas, and a report claiming any other catalog version is refused rather than serialized. Terminal presentation is derived from that report. Exit status `0` means complete success, `1` means complete verification found rule failures, and `2` means verification could not complete.
 
 Verification proves repository consistency under the published machine rules. It cannot prove that preserved text matches the cited physical source witness or that a human-authored grouping is scholarly correct. Those claims remain independently checkable because the core records preserve the exact witness and location needed for human review.
 
@@ -156,7 +156,7 @@ When a proposal crosses rows, each affected contract changes explicitly. A seman
 
 ## Implementation status
 
-`canonical-json`, `core-loader`, and the complete verifier boundary are implemented. Verification requires an explicit Git base resolved to a commit and evaluates the version-three catalog: repository and representation, structural schemas and records, common semantics, identifier and ordinal integrity, reference resolution, section hierarchy, HADITH member resolution, ordering, exclusivity, display membership, and the saved `text` span, used-schema immutability, record preservation, identifier non-reuse, and next-sequence minting. The single-quotation migration is implemented and validated. Verification still cannot replace comparison with the physical source witness.
+`canonical-json`, `core-loader`, and the complete verifier boundary are implemented. Verification requires an explicit Git base resolved to a commit and evaluates the version-four catalog: repository and representation, structural schemas and records, common semantics, identifier and ordinal integrity, reference resolution, section hierarchy, HADITH member resolution, ordering, exclusivity, display membership, and the saved `text` span, COLLATION scope, span, and differences, used-schema immutability, record preservation, identifier non-reuse, and next-sequence minting. The single-quotation migration is implemented and validated. Verification still cannot replace comparison with the physical source witness.
 
 ## The rule
 

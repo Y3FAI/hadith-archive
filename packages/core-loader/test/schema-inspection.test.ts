@@ -27,7 +27,7 @@ describe("schema catalog inspection", () => {
   test("builds a registry only from the complete valid catalog", async () => {
     const inspection = inspectSchemaCatalog(await schemaDocuments());
     expect(inspection.issues).toEqual([]);
-    expect(inspection.registry?.schemaCount).toBe(6);
+    expect(inspection.registry?.schemaCount).toBe(7);
   });
 
   test("classifies identifier, meta-schema, and reference defects", async () => {

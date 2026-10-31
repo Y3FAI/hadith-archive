@@ -1,6 +1,7 @@
 import { createHash } from "node:crypto";
 
 import type {
+  CollationRecord,
   LoadedCoreRecord,
   OccurrenceRecord,
   SourceWitnessRecord,
@@ -31,12 +32,15 @@ function singleLineFields(
       ];
     case "source_witness":
       return [
-        { path: "/edition_statement", value: record.edition_statement },
+        ...(record.edition_statement === undefined
+          ? []
+          : [{ path: "/edition_statement", value: record.edition_statement }]),
         { path: "/publisher", value: record.publisher },
         { path: "/title_as_printed", value: record.title_as_printed },
       ];
     case "section":
       return [{ path: "/title", value: record.title }];
+    case "collation":
     case "hadith":
     case "occurrence":
       return [];
@@ -100,15 +104,24 @@ function validRawWhitespace(value: string): boolean {
     !hasForbiddenCharacter(value, true);
 }
 
-function validIsbn13(value: string): boolean {
-  if (!/^\d{13}$/.test(value)) {
-    return false;
+// An ISBN-13 weighs its digits 1, 3, 1, ... and sums to a multiple of 10; an
+// ISBN-10 weighs them 10 down to 1, with X as 10, and sums to a multiple of 11.
+function validIsbn(value: string): boolean {
+  if (/^\d{13}$/.test(value)) {
+    const sum = [...value].reduce(
+      (total, digit, index) => total + Number(digit) * (index % 2 === 0 ? 1 : 3),
+      0,
+    );
+    return sum % 10 === 0;
   }
-  const sum = [...value].reduce(
-    (total, digit, index) => total + Number(digit) * (index % 2 === 0 ? 1 : 3),
-    0,
-  );
-  return sum % 10 === 0;
+  if (/^\d{9}[\dX]$/.test(value)) {
+    const sum = [...value].reduce(
+      (total, digit, index) => total + (digit === "X" ? 10 : Number(digit)) * (10 - index),
+      0,
+    );
+    return sum % 11 === 0;
+  }
+  return false;
 }
 
 function witnessesById(
@@ -150,8 +163,9 @@ export const textRawWhitespace: VerificationRule<StructuralVerificationContext> 
 
 export const witnessIsbnChecksum: VerificationRule<StructuralVerificationContext> = {
   evaluate: (context) => context.validRecords.flatMap((entry) =>
-    entry.record.record_type === "source_witness" && !validIsbn13(entry.record.isbn)
-      ? [finding(entry, "/isbn", "ISBN-13 checksum is invalid")]
+    entry.record.record_type === "source_witness" && entry.record.isbn !== undefined &&
+      !validIsbn(entry.record.isbn)
+      ? [finding(entry, "/isbn", "ISBN checksum is invalid")]
       : []
   ),
   id: "witness.isbn_checksum",
@@ -174,47 +188,65 @@ export const occurrenceFingerprintMatches: VerificationRule<StructuralVerificati
   prerequisites: [],
 };
 
-export const occurrencePageOrder: VerificationRule<StructuralVerificationContext> = {
-  evaluate: (context) => context.validRecords.flatMap((entry) =>
-    entry.record.record_type === "occurrence" &&
-      entry.record.location.page_end < entry.record.location.page_start
-      ? [finding(entry, "/location/page_end", "Ending page is less than starting page")]
-      : []
-  ),
-  id: "occurrence.page_order",
-  prerequisites: [],
-};
+// An occurrence and a collation both locate a report in their own witness.
+type LocatedRecord = CollationRecord | OccurrenceRecord;
+type LocatedType = LocatedRecord["record_type"];
 
-export const occurrenceLocationMatchesScheme: VerificationRule<StructuralVerificationContext> = {
-  evaluate: (context) => {
-    const witnesses = witnessesById(context.validRecords);
-    return context.validRecords.flatMap((entry) => {
-      if (entry.record.record_type !== "occurrence") {
-        return [];
-      }
-      const matches = witnesses.get(entry.record.witness_id) ?? [];
-      if (matches.length !== 1) {
-        return [];
-      }
-      const witness = matches[0] as SourceWitnessRecord;
-      const occurrence = entry.record as OccurrenceRecord;
-      const findings: VerificationFindingInput[] = [];
-      for (const field of ["hadith_number", "volume"] as const) {
-        const present = occurrence.location[field] !== undefined;
-        if (present !== witness.reference_scheme[field]) {
-          findings.push(finding(
-            entry,
-            `/location/${field}`,
-            `Location ${field} presence does not match witness reference scheme`,
-          ));
+function pageOrderRule(
+  recordType: LocatedType,
+): VerificationRule<StructuralVerificationContext> {
+  return {
+    evaluate: (context) => context.validRecords.flatMap((entry) =>
+      entry.record.record_type === recordType &&
+        (entry.record as LocatedRecord).location.page_end <
+          (entry.record as LocatedRecord).location.page_start
+        ? [finding(entry, "/location/page_end", "Ending page is less than starting page")]
+        : []
+    ),
+    id: `${recordType}.page_order`,
+    prerequisites: [],
+  };
+}
+
+function locationMatchesSchemeRule(
+  recordType: LocatedType,
+): VerificationRule<StructuralVerificationContext> {
+  return {
+    evaluate: (context) => {
+      const witnesses = witnessesById(context.validRecords);
+      return context.validRecords.flatMap((entry) => {
+        if (entry.record.record_type !== recordType) {
+          return [];
         }
-      }
-      return findings;
-    });
-  },
-  id: "occurrence.location_matches_scheme",
-  prerequisites: [],
-};
+        const record = entry.record as LocatedRecord;
+        const matches = witnesses.get(record.witness_id) ?? [];
+        if (matches.length !== 1) {
+          return [];
+        }
+        const witness = matches[0] as SourceWitnessRecord;
+        const findings: VerificationFindingInput[] = [];
+        for (const field of ["hadith_number", "volume"] as const) {
+          const present = record.location[field] !== undefined;
+          if (present !== witness.reference_scheme[field]) {
+            findings.push(finding(
+              entry,
+              `/location/${field}`,
+              `Location ${field} presence does not match witness reference scheme`,
+            ));
+          }
+        }
+        return findings;
+      });
+    },
+    id: `${recordType}.location_matches_scheme`,
+    prerequisites: [],
+  };
+}
+
+export const occurrencePageOrder = pageOrderRule("occurrence");
+export const occurrenceLocationMatchesScheme = locationMatchesSchemeRule("occurrence");
+export const collationPageOrder = pageOrderRule("collation");
+export const collationLocationMatchesScheme = locationMatchesSchemeRule("collation");
 
 export const SEMANTIC_RULES = Object.freeze([
   textSingleLine,
@@ -223,4 +255,6 @@ export const SEMANTIC_RULES = Object.freeze([
   occurrenceFingerprintMatches,
   occurrencePageOrder,
   occurrenceLocationMatchesScheme,
+  collationPageOrder,
+  collationLocationMatchesScheme,
 ]);

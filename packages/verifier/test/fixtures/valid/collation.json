@@ -1,0 +1,22 @@
+{
+  "differences": [
+    {
+      "end": 4,
+      "kind": "spelling",
+      "reading": "مِثال",
+      "start": 0,
+      "text": "مثال"
+    }
+  ],
+  "location": {
+    "hadith_number": 1,
+    "page_end": 12,
+    "page_start": 12
+  },
+  "occurrence_id": 1,
+  "record_type": "collation",
+  "schema_version": 1,
+  "span_end": 14,
+  "span_start": 0,
+  "witness_id": "example-work-other-publisher-2010-1"
+}

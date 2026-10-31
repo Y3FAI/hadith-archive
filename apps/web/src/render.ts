@@ -462,7 +462,9 @@ ${sections.map((section) =>
     return facts([
       ["الكتاب", bookLink(source)],
       ["دار النشر", escapeHtml(witness.publisher)],
-      ["الطبعة", escapeHtml(witness.edition_statement)],
+      ...witness.edition_statement === undefined
+        ? []
+        : [["الطبعة", escapeHtml(witness.edition_statement)] as const],
       ...volume === undefined ? [] : [["الجزء", arabicDigits(volume)] as const],
       // A page range uses the font's own hyphen; the Naskh has no en dash.
       ["الصفحة", start === end ? arabicDigits(start) : `${arabicDigits(start)}-${arabicDigits(end)}`],

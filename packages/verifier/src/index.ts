@@ -55,6 +55,9 @@ export {
 } from "./rules/file.ts";
 export {
   GRAPH_RULES,
+  collationDifferences,
+  collationSpan,
+  collationWitnessScope,
   hadithDisplayIsMember,
   hadithTextSpan,
   hadithMemberExclusive,
@@ -65,6 +68,7 @@ export {
   identifierSourceUnique,
   identifierWitnessUnique,
   occurrenceOrdinalSequence,
+  referenceCollatedOccurrenceResolves,
   referenceDisplayOccurrenceResolves,
   referenceMemberOccurrenceResolves,
   referenceSectionResolves,
@@ -84,6 +88,8 @@ export {
 } from "./rules/history.ts";
 export {
   SEMANTIC_RULES,
+  collationLocationMatchesScheme,
+  collationPageOrder,
   occurrenceFingerprintMatches,
   occurrenceLocationMatchesScheme,
   occurrencePageOrder,

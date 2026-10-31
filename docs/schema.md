@@ -6,11 +6,11 @@ The schema architecture serves four actors: ingestion pipelines that produce rec
 
 ## Status
 
-The storage architecture, type system, canonical JSON representation, schema-version policy, identifier forms, common semantic types, and exact version-one fields for all five entities are settled. The six version-one JSON Schemas implement that structural contract, and verification catalog version three enforces it. The record schemas remain draft version one because no accepted core record has used them; the catalog advanced separately as membership and quotation rules changed.
+The storage architecture, type system, canonical JSON representation, schema-version policy, identifier forms, common semantic types, and exact version-one fields for all six entities are settled. The seven version-one JSON Schemas implement that structural contract, and verification catalog version four enforces it. The record schemas remain draft version one because no accepted core record has used them; the catalog advanced separately as membership, quotation, and collation rules changed.
 
-All five entity schemas and the complete verifier are implemented. Admitting a core record still requires human review against its printed source witness and successful repository verification.
+All six entity schemas and the complete verifier are implemented. Admitting a core record still requires human review against its printed source witness and successful repository verification.
 
-The single-quotation migration is implemented and validated: hadith records save one `text` quotation, which may cross LF boundaries, in place of three display spans. The schemas, generated types, and version-three verifier agree on this contract. Current UI work uses the hand-written static demo with no build step. The partial generator and outside-core topic input loader are preserved, with integration and fresh validation deferred until the owner approves the design.
+The single-quotation migration is implemented and validated: hadith records save one `text` quotation, which may cross LF boundaries, in place of three display spans. The schemas, generated types, and verifier agree on this contract. Current UI work uses the hand-written static demo with no build step. The partial generator and outside-core topic input loader are preserved, with integration and fresh validation deferred until the owner approves the design.
 
 ## Authority and consumption
 
@@ -96,10 +96,15 @@ core/
           occurrences/
             <occurrence_id>.json
 
+          collations/
+            <occurrence_id>.json
+
   hadith/
     <hadith_id>.json
 
 schemas/
+  collation/
+    v1.schema.json
   common/
     v1.schema.json
   hadith/
@@ -114,11 +119,11 @@ schemas/
     v1.schema.json
 ```
 
-The tree mirrors provenance for human and AI navigation. A source directory contains the work's sections and print witnesses. A witness directory contains the occurrences transcribed from that printing. Sections remain flat beneath their source because `parent_section_id` expresses arbitrary-depth hierarchy. Hadith remain global because they span sources and belong beneath none of them.
+The tree mirrors provenance for human and AI navigation. A source directory contains the work's sections and print witnesses. A witness directory contains the occurrences transcribed from that printing and its collations against the occurrences of other printings. Sections remain flat beneath their source because `parent_section_id` expresses arbitrary-depth hierarchy. Hadith remain global because they span sources and belong beneath none of them.
 
 Paths mirror relationships but do not define them. Every record carries its own identifier and foreign references. Verification checks that a record's physical placement agrees with its declared relationships.
 
-`core/` admits only these five record paths. Any other tracked file or entry at or beneath `core`, including placeholders, notes, backups, and images, fails verification. A top-level root spelled as any other ASCII case variant of `core`, such as `Core` or `CORE`, aliases `core/` on case-insensitive filesystems; it is rejected, never normalized, even when the rest of the path is a valid record path.
+`core/` admits only these six record paths. Any other tracked file or entry at or beneath `core`, including placeholders, notes, backups, and images, fails verification. A top-level root spelled as any other ASCII case variant of `core`, such as `Core` or `CORE`, aliases `core/` on case-insensitive filesystems; it is rejected, never normalized, even when the rest of the path is a valid record path.
 
 The private `sources/` directory is separate from `core/sources/`. The former holds excluded working copies of print editions; the latter holds public source records and never contains a PDF, scan, or page image.
 
@@ -261,7 +266,7 @@ Once a schema is referenced by core data on `main`, its identifier, bytes, and m
 
 | `$defs` key | Structural representation and meaning |
 |---|---|
-| `record_type` | String enum: `source`, `source_witness`, `section`, `occurrence`, `hadith` |
+| `record_type` | String enum: `source`, `source_witness`, `section`, `occurrence`, `collation`, `hadith` |
 | `schema_version` | Semantic alias of `positive_integer`; each version-one entity schema further requires the constant `1` |
 | `source_id` | Approved segmented ASCII slug with maximum length 64 |
 | `witness_id` | Approved segmented ASCII slug with maximum length 128 |
@@ -279,7 +284,9 @@ Once a schema is referenced by core data on `main`, its identifier, bytes, and m
 | `raw_text` | Nonempty string governed by the approved preservation and raw-whitespace rules |
 | `extracted_span_text` | Nonempty NFC quotation governed by raw-text whitespace rules, including LF, with the additional cross-record contiguous-span and grapheme-boundary rule |
 | `fingerprint` | String matching `^[0-9a-f]{64}$` |
-| `isbn13` | String matching `^97[89][0-9]{10}$` with a semantic checksum rule |
+| `isbn` | ISBN-13 or ISBN-10: a string matching `^(?:97[89][0-9]{10}|[0-9]{9}[0-9X])$` with a semantic checksum rule |
+| `code_point_offset` | Integer from `0` through `9007199254740991`: a position in a text counted in Unicode code points |
+| `difference_kind` | String enum: `wording`, `spelling` |
 | `section_kind` | String enum: `kitab`, `bab`, `fasl`, `juz`, `qism` |
 | `reference_scheme` | Closed object with required boolean `hadith_number` and `volume` properties |
 | `location` | Closed object with required `page_start` and `page_end` and optional `volume` and `hadith_number`, all using their named positive-integer types |
@@ -371,7 +378,7 @@ HadithArchiveRecord = Source | SourceWitness | Section | Occurrence | Hadith
 
 The `record_type` property supplies the discriminator. The supported TypeScript bindings are generated by the pinned `json-schema-to-typescript` tool and committed at `packages/core-loader/src/generated/records.ts`. Committing them gives tools and applications complete type information immediately after a clean checkout without making package installation or a generation step an implicit prerequisite for reading the code.
 
-The generation command produces deterministic source from the five entity schemas. A required freshness check regenerates the source in memory and compares it byte for byte with the committed file. Schema changes that alter the generated source therefore fail the freshness check until the binding is regenerated. The root `check` command runs this gate; `verify` alone does not. Other language bindings may be generated from the same schemas later. Generated files are never edited by hand, and compile-time types never replace canonical-byte and runtime structural validation.
+The generation command produces deterministic source from the six entity schemas. A required freshness check regenerates the source in memory and compares it byte for byte with the committed file. Schema changes that alter the generated source therefore fail the freshness check until the binding is regenerated. The root `check` command runs this gate; `verify` alone does not. Other language bindings may be generated from the same schemas later. Generated files are never edited by hand, and compile-time types never replace canonical-byte and runtime structural validation.
 
 ## Identifier types
 
@@ -571,11 +578,12 @@ Printing-specific facts belong to source-witness records. Version one adds no En
 
 ### Source-witness record
 
-A version-one source-witness record has exactly eleven required properties. This record is illustrative and makes no claim about a real publication:
+A version-one source-witness record has nine required properties and three optional ones. This record is illustrative and makes no claim about a real publication:
 
 ```json
 {
   "edition_statement": "الطبعة الرابعة",
+  "file_sha256": "bda982521a2ccf3844ad2377c02004c63ca08455961ba17049937e16d6018d7e",
   "isbn": "9780000000002",
   "priority_score": 0,
   "publication_year": 2007,
@@ -596,13 +604,15 @@ A version-one source-witness record has exactly eleven required properties. This
 
 `title_as_printed`, `publisher`, and `edition_statement` use `SingleLineText`. They preserve the Arabic bibliographic statements of the printing. The edition statement remains complete, such as `الطبعة الرابعة`, rather than being reduced to the number `4`.
 
-`publication_year` is the four-digit Gregorian year stated by the source witness. `isbn` is a normalized ISBN-13 containing exactly thirteen ASCII digits without spaces or hyphens. Structural validation checks its shape, and semantic verification checks its ISBN-13 checksum. Printed Arabic-Indic digits are represented by the same numeric values in ASCII; this bibliographic normalization does not apply to `raw_text`.
+`publication_year` is the four-digit Gregorian year stated by the source witness. `isbn` is the printed ISBN normalized to ASCII without spaces or hyphens: thirteen digits for an ISBN-13, or ten for an ISBN-10, whose last character may be `X`. Structural validation checks its shape, and semantic verification checks its checksum. Printed Arabic-Indic digits are represented by the same numeric values in ASCII; this bibliographic normalization does not apply to `raw_text`.
 
 The record lives at `core/sources/<source_id>/witnesses/<witness_id>/witness.json`. Verification requires both directory components to agree with the record, requires `witness_id` to begin with the exact `source_id` followed by a hyphen, and resolves the source reference. Bibliographic corrections do not automatically rename the permanent witness identifier.
 
-Every property is required. Empty strings, `null`, and unknown properties are forbidden. A public record contains no source PDF path, scan filename, download URL, acquisition note, or private working information.
+`file_sha256` is the SHA-256, in 64 lowercase hexadecimal characters, of the file the records were taken from: the publisher's PDF, or the scan of the printed copy. For a PDF edition released without an ISBN, it is what identifies the witness.
 
-A real printing without an ISBN-13 or explicit edition statement, with only a Hijri year, with multiple ISBNs, or with otherwise indistinguishable publication metadata stops ingestion for explicit schema review. Version one does not conceal such a case with an empty value, guess, or overloaded field.
+`edition_statement`, `publication_year`, and `isbn` are present when the printing states them and omitted when it does not; every other property is required. A witness that names no publisher records its editor in `publisher`. Empty strings, `null`, and unknown properties are forbidden. A public record contains no source PDF path, scan filename, download URL, acquisition note, or private working information.
+
+A real printing with only a Hijri year, with multiple ISBNs, or with otherwise indistinguishable publication metadata stops ingestion for explicit schema review. Version one does not conceal such a case with an empty value, guess, or overloaded field.
 
 ### Section record
 
@@ -680,6 +690,43 @@ The record lives at `core/sources/<source_id>/witnesses/<witness_id>/occurrences
 
 Normalized text, isnad or matn parts, narrator graphs, OCR confidence, transcription notes, timestamps, and source-file paths remain outside the occurrence record.
 
+### Collation record
+
+A version-one collation record has exactly eight required properties. This illustrative record compares occurrence `1` of one printing with another printing that vowels its first word:
+
+```json
+{
+  "differences": [
+    {
+      "end": 4,
+      "kind": "spelling",
+      "reading": "مِثال",
+      "start": 0,
+      "text": "مثال"
+    }
+  ],
+  "location": {
+    "hadith_number": 1,
+    "page_end": 12,
+    "page_start": 12
+  },
+  "occurrence_id": 1,
+  "record_type": "collation",
+  "schema_version": 1,
+  "span_end": 14,
+  "span_start": 0,
+  "witness_id": "example-work-other-publisher-2010-1"
+}
+```
+
+`record_type` is the constant `collation` and `schema_version` is the integer constant `1`. `witness_id` names the collated printing and `occurrence_id` the occurrence it is compared with, which belongs to another witness of the same source; together they identify the record, which has no identifier of its own. `location` locates the report in the collated printing and follows that printing's reference scheme.
+
+`span_start` and `span_end` give the part of the occurrence's `raw_text` that the collated printing prints, in Unicode code points from zero, end exclusive. Each difference gives a range within the span, the exact `text` of the raw text in that range, the `reading` the collated printing has in its place, and its `kind`: `wording` when a word is added, missing, or different, and `spelling` when only vowels, letters, or punctuation differ. An insertion has an empty range and empty `text`; an omission has an empty `reading`. Differences are listed in order of position. An empty list records an exact match.
+
+The collation's status is derived from its differences, never stored. The `kind` of each difference is a reviewed judgement. The collated printing's text is never stored whole; anyone holding it can check each difference against the cited page.
+
+The record lives at `core/sources/<source_id>/witnesses/<witness_id>/collations/<occurrence_id>.json`. Verification checks the path, resolves the witness and occurrence, requires the two witnesses to differ and share a source, checks the location against the collated witness's reference scheme and its page order, and checks the span and each difference against the occurrence's raw text.
+
 ### Hadith record
 
 A version-one hadith record has exactly six required properties. This illustrative record groups occurrences `2` and `10` and displays occurrence `10`:
@@ -724,7 +771,7 @@ Every authoritative rule has a stable lowercase identifier matching `^[a-z][a-z0
 
 A semantic change to a rule or its scope creates a new verification-catalog version. An implementation correction that restores the documented meaning does not. Every rule has passing and failing fixtures, and every verifier bug fix adds a regression fixture.
 
-The verification-catalog version and record schema versions are independent. The current catalog is version three. Version two moved membership onto hadith records; version three replaces the three single-line display spans with one saved quotation that may cross LF and updates its whitespace-rule scope. The record schemas stay at draft version one because no core record on `main` had yet used them. The verifier emits only the current catalog version and refuses to serialize a report claiming any other.
+The verification-catalog version and record schema versions are independent. The current catalog is version four. Version two moved membership onto hadith records; version three replaced the three single-line display spans with one saved quotation that may cross LF and updated its whitespace-rule scope; version four adds collations and the optional and ISBN-10 witness fields. The record schemas stay at draft version one because no core record on `main` had yet used them. The verifier emits only the current catalog version and refuses to serialize a report claiming any other.
 
 Each failure contains exactly four properties:
 
@@ -785,9 +832,11 @@ Derived artifacts are built twice from the same core and compared byte for byte.
 
 Every verification rule has a stable name, an implementation, and tests. Verification passes or fails; it never warns authoritative data through and never silently changes core data.
 
-## Verification catalog version three
+## Verification catalog version four
 
-The version-three catalog contains the following authoritative rules. Relative to version two, it replaces `hadith.extracted_spans` with `hadith.text_span`, applies `text.raw_whitespace` to both occurrence `raw_text` and hadith `text`, and limits `text.single_line` to metadata. A hadith quotation may now cross a stored LF while preserving exact matching and grapheme boundaries.
+The version-four catalog contains the following authoritative rules. Relative to version three, it adds the collation record path and schema; extends `reference.witness_resolves` to collations; adds `reference.collated_occurrence_resolves`, `collation.page_order`, `collation.location_matches_scheme`, `collation.witness_scope`, `collation.span`, and `collation.differences`; accepts an ISBN-10 in `witness.isbn_checksum`; and applies it and `text.single_line` only to the witness fields that are present. `repository.private_material_absent` also refuses the private developer notes in `docs/dev/`.
+
+The version-three change relative to version two replaced `hadith.extracted_spans` with `hadith.text_span`, applied `text.raw_whitespace` to both occurrence `raw_text` and hadith `text`, and limited `text.single_line` to metadata. A hadith quotation may cross a stored LF while preserving exact matching and grapheme boundaries.
 
 The earlier version-two change relative to version one removed `reference.hadith_resolves` and `hadith.nonempty`, whose occurrence-side membership no longer exists; added `reference.member_occurrence_resolves`, `hadith.member_order`, and `hadith.member_exclusive`; and redefined `hadith.display_is_member` against the hadith's own member list. A nonempty and repeat-free member list is enforced by `record.schema_valid` rather than a separate rule.
 
@@ -795,9 +844,9 @@ The earlier version-two change relative to version one removed `reference.hadith
 
 | Rule identifier | Failure condition |
 |---|---|
-| `repository.private_material_absent` | Git tracks `AGENTS.md`, `decisions/`, `sources/`, a source PDF, scan, or other prohibited private material. Ignored local files are permitted. |
-| `repository.core_paths` | An index entry at `core` or beneath `core/` does not match one of the five record paths in the core topology, using the approved identifier spellings and unpadded positive decimal filenames, or any index entry has a top-level root that is another ASCII case variant of `core`, such as `Core/` or `CORE`. Only path metadata is inspected, so scans, backups, uppercase extensions, case aliases, and other non-record files are rejected regardless of content. |
-| `repository.schema_paths` | An index entry at `schemas` or beneath `schemas/` is not one of the six registered catalog schemas (the common schema and the five entity schemas), or any index entry has a top-level root that is another ASCII case variant of `schemas`, such as `Schemas/`. Only path metadata is inspected, so an unregistered version or entity schema is rejected even when its path is well shaped and its content valid. |
+| `repository.private_material_absent` | Git tracks `AGENTS.md`, `CLAUDE.md`, `decisions/`, `docs/dev/`, `sources/`, a source PDF, scan, or other prohibited private material. Ignored local files are permitted. |
+| `repository.core_paths` | An index entry at `core` or beneath `core/` does not match one of the six record paths in the core topology, using the approved identifier spellings and unpadded positive decimal filenames, or any index entry has a top-level root that is another ASCII case variant of `core`, such as `Core/` or `CORE`. Only path metadata is inspected, so scans, backups, uppercase extensions, case aliases, and other non-record files are rejected regardless of content. |
+| `repository.schema_paths` | An index entry at `schemas` or beneath `schemas/` is not one of the seven registered catalog schemas (the common schema and the six entity schemas), or any index entry has a top-level root that is another ASCII case variant of `schemas`, such as `Schemas/`. Only path metadata is inspected, so an unregistered version or entity schema is rejected even when its path is well shaped and its content valid. |
 | `file.regular` | An index entry at or beneath `core/` or `schemas/` is not a regular Git file (mode `100644` or `100755`). Symlinks and submodules are rejected without reading their targets. |
 | `file.valid_utf8` | A tracked schema or core JSON file is not valid UTF-8. |
 | `file.no_bom` | A tracked schema or core JSON file begins with a BOM. |
@@ -812,7 +861,7 @@ The earlier version-two change relative to version one removed `reference.hadith
 
 | Rule identifier | Failure condition |
 |---|---|
-| `schema.catalog_complete` | The versioned common schema or one of the five required entity schemas is absent. |
+| `schema.catalog_complete` | The versioned common schema or one of the six required entity schemas is absent. |
 | `schema.meta_valid` | A schema does not validate against the official Draft 2020-12 meta-schema. |
 | `schema.id_matches_path` | A schema `$id` does not exactly match its repository path. |
 | `schema.references_exact` | A `$ref` is unresolved, remote, unversioned, or does not select the approved exact local version. |
@@ -826,7 +875,7 @@ The earlier version-two change relative to version one removed `reference.hadith
 |---|---|
 | `text.single_line` | A single-line metadata value violates the approved Unicode whitespace rules or contains a forbidden invisible format character. |
 | `text.raw_whitespace` | Occurrence `raw_text` or hadith `text` contains forbidden leading, trailing, repeated, control, or layout whitespace, or a forbidden invisible format character. LF is allowed under the raw-text policy. |
-| `witness.isbn_checksum` | An ISBN-13 checksum is invalid. |
+| `witness.isbn_checksum` | A present ISBN-13 or ISBN-10 checksum is invalid. |
 | `occurrence.fingerprint_matches` | The stored fingerprint differs from SHA-256 of the canonical raw-text bytes. |
 
 ### Identity and ordering rules
@@ -847,12 +896,18 @@ The earlier version-two change relative to version one removed `reference.hadith
 | Rule identifier | Failure condition |
 |---|---|
 | `reference.source_resolves` | A witness or section names a nonexistent source. |
-| `reference.witness_resolves` | An occurrence names a nonexistent source witness. |
+| `reference.witness_resolves` | An occurrence or collation names a nonexistent source witness. |
 | `reference.section_resolves` | A parent or occurrence section reference does not resolve within the applicable source. |
 | `reference.member_occurrence_resolves` | A hadith member-occurrence identifier does not resolve to exactly one occurrence. |
 | `reference.display_occurrence_resolves` | A hadith display-occurrence reference does not resolve to exactly one occurrence. |
+| `reference.collated_occurrence_resolves` | A collation's occurrence reference does not resolve to exactly one occurrence. |
 | `occurrence.location_matches_scheme` | Volume or hadith number presence disagrees with the witness reference scheme. |
 | `occurrence.page_order` | An ending page is less than its starting page. |
+| `collation.location_matches_scheme` | A collation's volume or hadith number presence disagrees with its own witness's reference scheme. |
+| `collation.page_order` | A collation's ending page is less than its starting page. |
+| `collation.witness_scope` | A collation's witness is the witness of the occurrence it compares, or belongs to another source. |
+| `collation.span` | A collation's span is empty, reversed, beyond the occurrence's raw text, or has an end inside an extended grapheme cluster. |
+| `collation.differences` | A difference leaves the span, has an end inside an extended grapheme cluster, misquotes the raw text in its range, changes nothing, or overlaps or precedes the difference before it, or two insertions share one point. |
 | `section.parent_acyclic` | A section parents itself or the parent graph contains a cycle. |
 | `section.depth_first_order` | A parent does not precede its descendants or a subtree is not contiguous in source ordinal order. |
 | `hadith.member_order` | Member-occurrence identifiers are not in strictly ascending numeric order. |
@@ -871,7 +926,7 @@ The earlier version-two change relative to version one removed `reference.hadith
 
 The verifier cannot prove that raw text matches ink on a cited page, bibliographic metadata names the correct printing, a publisher meets the governance standard, an omitted section truly does not apply, grouped occurrences are the same narration, the saved quotation is the best choice, or a priority score is scholarly appropriate. Those are human judgements and receive no machine rule identifiers. Verification proves repository consistency; independent verification compares the record with the physical source witness.
 
-Generator reproducibility requires separate build checks across rebuilds and relocated inputs. The deferred generator tests must be aligned with the final static design and rerun before claiming current reproducibility. It is not a rule in the version-three repository catalog, which does not report an artifact check as passed.
+Generator reproducibility requires separate build checks across rebuilds and relocated inputs. The deferred generator tests must be aligned with the final static design and rerun before claiming current reproducibility. It is not a rule in the version-four repository catalog, which does not report an artifact check as passed.
 
 ## Verifier implementation
 
@@ -920,9 +975,9 @@ Humans and AI agents may use both views: catalogs for discovery and individual c
 
 ## Implementation status
 
-The six version-one JSON Schemas, private Bun workspace root, canonical JSON package, core loader, version-three verifier, design foundations, and hand-written demo are implemented. UI work follows the [static design workflow](tooling.md#static-design-workflow), and the generator builds the same pages from records; its tests run against synthetic fixtures. After the check passes on `main`, CI builds the site from `core/` and publishes it on GitHub Pages; until the first record is admitted there is nothing to build. The core loader's schema registry validates every schema against Draft 2020-12, checks each `$id` against its repository path, resolves exact local references without network access, compiles all five entity schemas, and tests valid and invalid records. The verifier consumes that shared structural boundary.
+The seven version-one JSON Schemas, private Bun workspace root, canonical JSON package, core loader, version-four verifier, design foundations, and hand-written demo are implemented. UI work follows the [static design workflow](tooling.md#static-design-workflow), and the generator builds the same pages from records; its tests run against synthetic fixtures. After the check passes on `main`, CI builds the site from `core/` and publishes it on GitHub Pages; until the first record is admitted there is nothing to build. The core loader's schema registry validates every schema against Draft 2020-12, checks each `$id` against its repository path, resolves exact local references without network access, compiles all six entity schemas, and tests valid and invalid records. The verifier consumes that shared structural boundary.
 
-The canonical JSON package implements duplicate-aware parsing, lossless large integers, deterministic formatting, canonical byte comparison, and the approved UTF-8, BOM, line-ending, final-LF, NFC, and top-level-object boundaries. The core loader implements canonical, structurally validated file and byte loading; committed schema-derived TypeScript bindings with a deterministic freshness gate; structured failure results; deep runtime immutability; and structured inspection of the same schema catalog used for loading. The verifier implements its complete protocol and version-three rule catalog, including ancestry-indexed historical checks against an explicit base commit. The single-quotation migration passed type-checking, tests, generated-binding freshness, schema compilation, and repository verification against a temporary index. No core record was admitted by that implementation work.
+The canonical JSON package implements duplicate-aware parsing, lossless large integers, deterministic formatting, canonical byte comparison, and the approved UTF-8, BOM, line-ending, final-LF, NFC, and top-level-object boundaries. The core loader implements canonical, structurally validated file and byte loading; committed schema-derived TypeScript bindings with a deterministic freshness gate; structured failure results; deep runtime immutability; and structured inspection of the same schema catalog used for loading. The verifier implements its complete protocol and version-four rule catalog, including ancestry-indexed historical checks against an explicit base commit. The single-quotation migration passed type-checking, tests, generated-binding freshness, schema compilation, and repository verification against a temporary index. No core record was admitted by that implementation work.
 
 The schemas and verifier are ready for the first privately drafted source witness and occurrence. A draft tests the settled contract against a real printing; any mismatch calls for explicit schema review before admission to `core/`.
 

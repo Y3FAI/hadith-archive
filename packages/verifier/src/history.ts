@@ -76,6 +76,12 @@ export function historicalRecordFromValue(
       numericId = value["occurrence_id"];
       entityKey = `occurrence:${numericId}`;
       break;
+    case "collation":
+      if (typeof value["witness_id"] !== "string" || typeof value["occurrence_id"] !== "number") {
+        throw new Error("Invalid collation identity");
+      }
+      entityKey = `collation:${value["witness_id"]}\0${value["occurrence_id"]}`;
+      break;
     case "hadith":
       if (typeof value["hadith_id"] !== "number") throw new Error("Invalid hadith identity");
       numericId = value["hadith_id"];

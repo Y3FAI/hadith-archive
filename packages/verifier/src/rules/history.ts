@@ -71,6 +71,7 @@ function identifierPath(record: HistoricalRecord): string {
     case "section":
       return "/section_id";
     case "occurrence":
+    case "collation":
       return "/occurrence_id";
     case "hadith":
       return "/hadith_id";

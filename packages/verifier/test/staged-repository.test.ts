@@ -223,13 +223,13 @@ describe("staged repository verification", () => {
       });
       expect(await verifyRepository(repository, base)).toEqual({
         kind: "complete",
-        report: { findings: [coreFinding(aliasPath)], valid: false, verification_version: 3 },
+        report: { findings: [coreFinding(aliasPath)], valid: false, verification_version: 4 },
       });
       await git("rm", "--quiet", "-r", "--cached", root);
       await git("update-index", "--add", "--cacheinfo", `160000,${base},${root}`);
       expect(await verifyRepository(repository, base)).toEqual({
         kind: "complete",
-        report: { findings: [coreFinding(root)], valid: false, verification_version: 3 },
+        report: { findings: [coreFinding(root)], valid: false, verification_version: 4 },
       });
     });
   }
@@ -270,7 +270,7 @@ describe("staged repository verification", () => {
           rule_id: "repository.schema_paths",
         })),
         valid: false,
-        verification_version: 3,
+        verification_version: 4,
       },
     });
     expect(await indexed()).toEqual(before);
@@ -293,7 +293,7 @@ describe("staged repository verification", () => {
           rule_id: "json.canonical",
         }],
         valid: false,
-        verification_version: 3,
+        verification_version: 4,
       },
     });
     const io = { stderr: { write() {} }, stdout: { write() {} } };
@@ -415,6 +415,7 @@ describe("staged repository verification", () => {
     await write(sourcePath, sourceBytes);
     await write(`${witnessDirectory}/witness.json`, formatCanonicalJson({
       edition_statement: "الطبعة الأولى",
+      file_sha256: "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       isbn: "9780000000002",
       priority_score: 0,
       publication_year: 2007,

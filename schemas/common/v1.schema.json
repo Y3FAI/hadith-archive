@@ -1,5 +1,19 @@
 {
   "$defs": {
+    "code_point_offset": {
+      "description": "A position in a text, counted in Unicode code points from zero.",
+      "maximum": 9007199254740991,
+      "minimum": 0,
+      "type": "integer"
+    },
+    "difference_kind": {
+      "description": "wording: a word is added, missing or different; spelling: the same words, differing only in vowels, letters or punctuation.",
+      "enum": [
+        "spelling",
+        "wording"
+      ],
+      "type": "string"
+    },
     "extracted_span_text": {
       "description": "A nonempty quotation governed by the raw-text whitespace policy that semantic verification requires to be one exact contiguous substring of the selected raw text, starting and ending on grapheme-cluster boundaries; it may cross an LF.",
       "minLength": 1,
@@ -14,9 +28,9 @@
       "$ref": "#/$defs/positive_integer",
       "description": "A permanent globally unique HADITH identifier."
     },
-    "isbn13": {
-      "description": "An ISBN-13 normalized to thirteen ASCII digits; semantic verification checks its checksum.",
-      "pattern": "^97[89][0-9]{10}$",
+    "isbn": {
+      "description": "An ISBN-13, or an ISBN-10 as printed, normalized to its ASCII digits (an ISBN-10 may end in X); semantic verification checks its checksum.",
+      "pattern": "^(?:97[89][0-9]{10}|[0-9]{9}[0-9X])$",
       "type": "string"
     },
     "location": {
@@ -84,6 +98,7 @@
     "record_type": {
       "description": "The entity type represented by a core record.",
       "enum": [
+        "collation",
         "hadith",
         "occurrence",
         "section",

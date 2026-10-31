@@ -92,11 +92,38 @@ h1 {
   font-weight: 400;
 }
 
-/* The hadith text, on its card. */
-article > h1 {
+/* Under the hadith, the book (with the hadith's number) on the start side
+   and the printing (with the page) on the far side; on a narrow screen
+   the printing moves under the book. */
+article {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  column-gap: 1.25rem;
+}
+
+/* min-width: a wide table scrolls in its card rather than widening the page. */
+article > :not(dl) {
+  flex-basis: 100%;
+  min-width: 0;
+}
+
+/* The hadith text, on its card, followed by the rest of the entry as the
+   book prints it: the attribution line and anything after it. */
+article > div {
   padding: var(--card-padding);
+}
+
+article > div > h1,
+article > div > p {
   text-align: justify;
   text-wrap: pretty;
+}
+
+article > div > p {
+  margin: .75em 0 0;
+  font-size: var(--text);
+  line-height: var(--leading);
 }
 
 header {
@@ -207,7 +234,7 @@ li[id] {
 
 section > ol {
   display: grid;
-  gap: var(--space-m);
+  gap: var(--space-s);
 }
 
 /* Citations. The clip hides the dot before an item that starts a line
@@ -223,11 +250,8 @@ dl {
   line-height: 1.75rem;
 }
 
-h1 + dl {
-  margin-block-start: .5rem;
-}
-
-li > dl {
+article > div + dl,
+li > div + dl {
   margin-block-start: .5rem;
 }
 
@@ -235,6 +259,11 @@ dl div {
   position: relative;
   display: flex;
   gap: .375rem;
+}
+
+/* A label is never broken; a long value wraps beside it. */
+dt {
+  flex-shrink: 0;
 }
 
 /* A dot sits before every item. */
@@ -270,7 +299,7 @@ dd {
 }
 
 /* Cards: the white surfaces that hold reading text. */
-article > h1,
+article > div,
 li > div,
 main > div {
   background: #FFFFFF;
@@ -430,6 +459,158 @@ dd a {
 /* A hadith's category, a little below its citation. */
 dl + dl {
   margin-block-start: .5rem;
+}
+
+/* How another printing's text compares with the main source: a ring with
+   a check (identical), a dash (the same words, with vowels, spelling or
+   punctuation differing) or a cross (a word differs), each in its own
+   colour (owner, 2026-10-31). */
+[data-match="exact"] {
+  color: #1B7A43;
+}
+
+[data-match="spelling"] {
+  color: #8A6100;
+}
+
+[data-match="wording"] {
+  color: #B3261E;
+}
+
+svg[data-match] {
+  flex-shrink: 0;
+  width: 1.5rem;
+  height: 1.5rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 16;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* «طبعات أخرى»: a white card that opens to the printings, each with how
+   it compares with the text above, then the table of differences. */
+article section > details {
+  margin: 0;
+  background: #FFFFFF;
+  border-radius: var(--radius-panel);
+  box-shadow: var(--shadow);
+}
+
+article section > details > summary {
+  border-radius: var(--radius-panel);
+  background: transparent;
+}
+
+article section > details[open] > summary {
+  border-end-start-radius: 0;
+  border-end-end-radius: 0;
+}
+
+/* A wide table scrolls inside the card, never the page. */
+article section > details > div {
+  padding: .25rem 1rem 1rem;
+  overflow-x: auto;
+}
+
+article details ol {
+  display: grid;
+  gap: .5rem;
+  padding-inline: .75rem;
+}
+
+/* The ring beside a comparison, sized to the citation's text. */
+dd > svg[data-match] {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+article details table {
+  margin-block-start: var(--space-m);
+}
+
+caption {
+  padding: 0 .75rem .25rem;
+  text-align: start;
+}
+
+/* No lines: each row is a light band. One row per place where any
+   printing differs; "=" where a printing agrees with the main source.
+   Words are never split: a narrow screen scrolls the table instead. */
+table {
+  width: 100%;
+  overflow-wrap: normal;
+  border-collapse: separate;
+  border-spacing: 0 .25rem;
+  font-size: calc(var(--text) * .9);
+  line-height: 1.7;
+}
+
+th[scope="col"] {
+  padding: 0 .75rem;
+  color: #636366;
+  font-size: 1rem;
+  font-weight: 400;
+  text-align: start;
+  white-space: nowrap;
+}
+
+/* Word differences first, then the rest, each group under its name. */
+th[scope="rowgroup"] {
+  padding: .75rem .75rem 0;
+  color: #636366;
+  font-size: 1rem;
+  font-weight: 400;
+  text-align: start;
+}
+
+th[scope="col"] svg {
+  width: 1.125rem;
+  height: 1.125rem;
+  margin-inline-end: .25rem;
+  vertical-align: -.2em;
+}
+
+th[scope="row"],
+td {
+  padding: .25rem .75rem;
+  background: #F5F5F7;
+  font-weight: 400;
+  text-align: start;
+  vertical-align: top;
+}
+
+th[scope="row"] {
+  border-start-start-radius: var(--radius);
+  border-end-start-radius: var(--radius);
+}
+
+td:last-child {
+  border-start-end-radius: var(--radius);
+  border-end-end-radius: var(--radius);
+}
+
+td:not(:has(mark)) {
+  color: #636366;
+  text-align: center;
+}
+
+mark {
+  border-radius: .25rem;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+mark[data-match] {
+  color: inherit;
+}
+
+mark[data-match="spelling"] {
+  background: #FFF0BF;
+}
+
+mark[data-match="wording"] {
+  background: #FBE1DD;
 }
 
 /* Search, kept for later (search.html): the site launches without it.

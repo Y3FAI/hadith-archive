@@ -44,6 +44,7 @@ function witness(overrides: Record<string, unknown> = {}): RepositoryFileInput {
     "core/sources/example-work/witnesses/example-work-edition/witness.json",
     {
       edition_statement: "الطبعة الأولى",
+      file_sha256: "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       isbn: "9780000000002",
       priority_score: 0,
       publication_year: 2007,
@@ -177,7 +178,7 @@ describe("invisible format characters", () => {
     expect(text.normalize("NFC")).toBe(text);
     expect(await verify(textRecords(text, `${text}\n${text}`))).toEqual({
       kind: "complete",
-      report: { findings: [], valid: true, verification_version: 3 },
+      report: { findings: [], valid: true, verification_version: 4 },
     });
   });
 });
@@ -186,7 +187,7 @@ describe("hadith text whitespace", () => {
   test("accepts text that keeps a stored LF", async () => {
     expect(await verify([hadith("مثال نص\nفقرة ثانية")])).toEqual({
       kind: "complete",
-      report: { findings: [], valid: true, verification_version: 3 },
+      report: { findings: [], valid: true, verification_version: 4 },
     });
   });
 
@@ -205,7 +206,7 @@ describe("hadith text whitespace", () => {
             rule_id: "text.raw_whitespace",
           }],
           valid: false,
-          verification_version: 3,
+          verification_version: 4,
         },
       });
     });
@@ -216,7 +217,7 @@ describe("common semantic rules", () => {
   test("accepts valid whitespace, checksum, fingerprint, pages, and location", async () => {
     expect(await verify([witness(), occurrence("مثال نص\nفقرة ثانية")])).toEqual({
       kind: "complete",
-      report: { findings: [], valid: true, verification_version: 3 },
+      report: { findings: [], valid: true, verification_version: 4 },
     });
   });
 
@@ -290,7 +291,7 @@ describe("common semantic rules", () => {
 
     expect(await run(replacement)).toEqual({
       kind: "complete",
-      report: { findings: [], valid: true, verification_version: 3 },
+      report: { findings: [], valid: true, verification_version: 4 },
     });
     expect(await run(malformed)).toEqual({
       kind: "complete",
@@ -300,16 +301,80 @@ describe("common semantic rules", () => {
           rule_id: "json.canonical",
         })],
         valid: false,
-        verification_version: 3,
+        verification_version: 4,
       },
     });
+  });
+
+  test("accepts an ISBN-10 and a witness without ISBN, edition, or year", async () => {
+    // 977-342-075-2, as printed in a real witness; X stands for ten.
+    for (const isbn of ["9773420752", "080442957X"]) {
+      expect(await verify([witness({ isbn })])).toEqual({
+        kind: "complete",
+        report: { findings: [], valid: true, verification_version: 4 },
+      });
+    }
+    const bare = witness();
+    const value = JSON.parse(new TextDecoder().decode(bare.bytes)) as Record<string, unknown>;
+    delete value["edition_statement"];
+    delete value["isbn"];
+    delete value["publication_year"];
+    expect(await verify([jsonInput(bare.path, value)])).toEqual({
+      kind: "complete",
+      report: { findings: [], valid: true, verification_version: 4 },
+    });
+  });
+
+  test("rejects an ISBN-10 checksum", async () => {
+    const result = await verify([witness({ isbn: "9773420753" })]);
+    expect(result.kind).toBe("complete");
+    if (result.kind === "complete") {
+      expect(result.report.findings.map((item) => `${item.rule_id}:${item.instance_path}`))
+        .toEqual(["witness.isbn_checksum:/isbn"]);
+    }
+  });
+
+  test("checks a collation's pages and location against its own witness", async () => {
+    const collation = (location: Record<string, unknown>) => jsonInput(
+      "core/sources/example-work/witnesses/example-work-edition/collations/1.json",
+      {
+        differences: [],
+        location,
+        occurrence_id: 1,
+        record_type: "collation",
+        schema_version: 1,
+        span_end: 4,
+        span_start: 0,
+        witness_id: "example-work-edition",
+      },
+    );
+    expect(await verify([
+      witness(),
+      collation({ hadith_number: 1, page_end: 12, page_start: 12 }),
+    ])).toEqual({
+      kind: "complete",
+      report: { findings: [], valid: true, verification_version: 4 },
+    });
+    const result = await verify([
+      witness(),
+      collation({ page_end: 11, page_start: 12, volume: 1 }),
+    ]);
+    expect(result.kind).toBe("complete");
+    if (result.kind === "complete") {
+      expect(result.report.findings.map((item) => `${item.rule_id}:${item.instance_path}`))
+        .toEqual([
+          "collation.location_matches_scheme:/location/hadith_number",
+          "collation.page_order:/location/page_end",
+          "collation.location_matches_scheme:/location/volume",
+        ]);
+    }
   });
 
   test("does not invent a scheme finding for an unresolved witness", async () => {
     const result = await verify([occurrence("مثال نص")]);
     expect(result).toEqual({
       kind: "complete",
-      report: { findings: [], valid: true, verification_version: 3 },
+      report: { findings: [], valid: true, verification_version: 4 },
     });
   });
 });
