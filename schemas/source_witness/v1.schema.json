@@ -7,8 +7,12 @@
     "edition_statement": {
       "$ref": "../common/v1.schema.json#/$defs/single_line_text"
     },
+    "file_sha256": {
+      "$ref": "../common/v1.schema.json#/$defs/fingerprint",
+      "description": "The SHA-256 of the file the records were taken from: the publisher's PDF, or the scan of the printed copy."
+    },
     "isbn": {
-      "$ref": "../common/v1.schema.json#/$defs/isbn13"
+      "$ref": "../common/v1.schema.json#/$defs/isbn"
     },
     "priority_score": {
       "$ref": "../common/v1.schema.json#/$defs/priority_score"
@@ -41,10 +45,8 @@
     }
   },
   "required": [
-    "edition_statement",
-    "isbn",
+    "file_sha256",
     "priority_score",
-    "publication_year",
     "publisher",
     "record_type",
     "reference_scheme",

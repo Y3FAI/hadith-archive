@@ -133,7 +133,7 @@ describe("repository and file rules", () => {
 
     expect(await runVerification(snapshot, REPOSITORY_FILE_RULES)).toEqual({
       kind: "complete",
-      report: { findings: [], valid: true, verification_version: 3 },
+      report: { findings: [], valid: true, verification_version: 4 },
     });
   });
 
@@ -141,6 +141,8 @@ describe("repository and file rules", () => {
     const snapshot = createRepositorySnapshot([
       { bytes: bytes("private"), path: "AGENTS.md" },
       { bytes: bytes("private"), path: "decisions/notes.md" },
+      { bytes: bytes("private"), path: "docs/dev/todo.md" },
+      { bytes: bytes("public"), path: "docs/model.md" },
       { bytes: bytes("private"), path: "sources/book.txt" },
       { bytes: bytes("private"), path: "accidental/book.pdf" },
     ]);
@@ -152,6 +154,7 @@ describe("repository and file rules", () => {
         "AGENTS.md",
         "accidental/book.pdf",
         "decisions/notes.md",
+        "docs/dev/todo.md",
         "sources/book.txt",
       ]);
       expect(result.report.findings.every(

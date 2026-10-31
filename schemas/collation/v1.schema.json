@@ -1,0 +1,77 @@
+{
+  "$id": "https://haditharchive.com/schemas/collation/v1.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "A version-one authoritative COLLATION record: how one SOURCE_WITNESS prints a report preserved as an OCCURRENCE of another witness, stored as its location and its differences, never its text.",
+  "properties": {
+    "differences": {
+      "description": "Every place in the compared span where the collated witness differs, in ascending order of position.",
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "end": {
+            "$ref": "../common/v1.schema.json#/$defs/code_point_offset"
+          },
+          "kind": {
+            "$ref": "../common/v1.schema.json#/$defs/difference_kind"
+          },
+          "reading": {
+            "description": "What the collated witness prints in place of text; empty where it prints nothing.",
+            "type": "string"
+          },
+          "start": {
+            "$ref": "../common/v1.schema.json#/$defs/code_point_offset"
+          },
+          "text": {
+            "description": "The OCCURRENCE's raw text from start to end; empty where the collated witness adds words.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "end",
+          "kind",
+          "reading",
+          "start",
+          "text"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "location": {
+      "$ref": "../common/v1.schema.json#/$defs/location"
+    },
+    "occurrence_id": {
+      "$ref": "../common/v1.schema.json#/$defs/occurrence_id"
+    },
+    "record_type": {
+      "$ref": "../common/v1.schema.json#/$defs/record_type",
+      "const": "collation"
+    },
+    "schema_version": {
+      "$ref": "../common/v1.schema.json#/$defs/schema_version",
+      "const": 1
+    },
+    "span_end": {
+      "$ref": "../common/v1.schema.json#/$defs/code_point_offset"
+    },
+    "span_start": {
+      "$ref": "../common/v1.schema.json#/$defs/code_point_offset"
+    },
+    "witness_id": {
+      "$ref": "../common/v1.schema.json#/$defs/witness_id"
+    }
+  },
+  "required": [
+    "differences",
+    "location",
+    "occurrence_id",
+    "record_type",
+    "schema_version",
+    "span_end",
+    "span_start",
+    "witness_id"
+  ],
+  "title": "Hadith Archive COLLATION record version one",
+  "type": "object"
+}

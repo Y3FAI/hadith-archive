@@ -72,7 +72,8 @@ function isRecordPath(path: string): boolean {
     return segments[5] === "witness.json";
   }
   const occurrenceId = jsonStem(segments[6]);
-  return segments.length === 7 && segments[5] === "occurrences" &&
+  return segments.length === 7 &&
+    (segments[5] === "occurrences" || segments[5] === "collations") &&
     occurrenceId !== undefined && isPositiveDecimal(occurrenceId);
 }
 
@@ -128,9 +129,10 @@ function containsNonNfc(value: CanonicalJsonValue): boolean {
   );
 }
 
+// The developer notes in docs/dev/ stay private; the rest of docs/ is public.
 function hasPrivatePath(path: string): boolean {
   const firstSegment = path.split("/", 1)[0] ?? "";
-  if (PRIVATE_PATHS.has(firstSegment)) {
+  if (PRIVATE_PATHS.has(firstSegment) || path === "docs/dev" || path.startsWith("docs/dev/")) {
     return true;
   }
   const dot = path.lastIndexOf(".");

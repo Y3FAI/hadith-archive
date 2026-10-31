@@ -49,7 +49,7 @@ describe("schema and record rules", () => {
 
     expect(result).toEqual({
       kind: "complete",
-      report: { findings: [], valid: true, verification_version: 3 },
+      report: { findings: [], valid: true, verification_version: 4 },
     });
   });
 
@@ -141,6 +141,7 @@ describe("schema and record rules", () => {
       "core/sources/example/witnesses/example-edition/witness.json",
       {
         edition_statement: "الطبعة الأولى",
+        file_sha256: "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
         isbn: "9780000000002",
         priority_score: 0,
         publication_year: 2007,

@@ -6,6 +6,7 @@ export {
 } from "./catalog.ts";
 export type { DeepReadonly } from "./deep-readonly.ts";
 export type {
+  CollationRecord,
   HadithRecord,
   Location,
   OccurrenceRecord,

@@ -1,5 +1,11 @@
 export const RECORD_SCHEMA_CATALOG = [
   {
+    recordType: "collation",
+    relativePath: "collation/v1.schema.json",
+    schemaVersion: 1,
+    typeName: "CollationRecord",
+  },
+  {
     recordType: "hadith",
     relativePath: "hadith/v1.schema.json",
     schemaVersion: 1,

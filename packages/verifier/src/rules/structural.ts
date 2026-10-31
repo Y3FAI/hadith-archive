@@ -37,7 +37,8 @@ function expectedRecordPath(
       return `core/sources/${record.source_id}/witnesses/${record.witness_id}/witness.json`;
     case "section":
       return `core/sources/${record.source_id}/sections/${record.section_id}.json`;
-    case "occurrence": {
+    case "occurrence":
+    case "collation": {
       const witnesses = context.validRecords.filter((entry) =>
         entry.record.record_type === "source_witness" &&
         entry.record.witness_id === record.witness_id
@@ -46,7 +47,8 @@ function expectedRecordPath(
           witnesses[0]?.record.record_type === "source_witness"
         ? witnesses[0].record.source_id
         : actualPath.split("/")[2] ?? "";
-      return `core/sources/${sourceSegment}/witnesses/${record.witness_id}/occurrences/${record.occurrence_id}.json`;
+      const folder = record.record_type === "occurrence" ? "occurrences" : "collations";
+      return `core/sources/${sourceSegment}/witnesses/${record.witness_id}/${folder}/${record.occurrence_id}.json`;
     }
     case "hadith":
       return `core/hadith/${record.hadith_id}.json`;

@@ -28,9 +28,9 @@ A specific, citable printing of a source that text is actually preserved from: a
 
 Physical copies that belong to the same printing are one source witness, because another person need not obtain the particular object used during ingestion; an interchangeable copy of that printing presents the same text and locations. A distinguishable edition or printing is another witness.
 
-A witness is identified by whatever lets another person obtain an interchangeable copy: the title as printed, the publisher, the edition or printing, the year of publication, and the ISBN. A source name alone is not a source witness, and neither is an edition described too loosely to be ordered.
+A witness is identified by whatever lets another person obtain an interchangeable copy: the title as printed, the publisher, the edition or printing, the year of publication, and the ISBN when it has one. A source name alone is not a source witness, and neither is an edition described too loosely to be ordered.
 
-Hadith Archive preserves text only from print editions in circulation. Manuscripts, scans, and unpublished digital files are not witnesses.
+Hadith Archive preserves text from print editions in circulation and from PDF editions their authors or publishers release. A PDF edition with no ISBN is identified by the SHA-256 of its file; when it names no publisher, its editor stands as the publisher. Every witness records the SHA-256 of the file its records were taken from, the PDF or the scan of the printed copy. Manuscripts and unpublished files are not witnesses.
 
 ## Occurrences
 
@@ -39,6 +39,10 @@ Hadith Archive preserves text only from print editions in circulation. Manuscrip
 A single appearance of a Hadith text at a specific location within a source witness. It is the core unit Hadith Archive preserves.
 
 The same text appearing in another witness, or at another location in the same witness, is a separate occurrence.
+
+### Collation
+
+A comparison of one occurrence with the same report in another witness of the same source. It records where that witness prints the report and every place its text differs, with the words it prints there, without storing that witness's whole text. A difference is in wording when a word is added, missing, or different, and in spelling when only vowels, letters, or punctuation differ. A collation with no differences means the two printings match exactly.
 
 ### Location
 

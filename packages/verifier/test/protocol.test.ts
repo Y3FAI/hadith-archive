@@ -120,7 +120,7 @@ describe("verification protocol", () => {
     }
   ],
   "valid": false,
-  "verification_version": 3
+  "verification_version": 4
 }
 `);
   });
@@ -130,13 +130,13 @@ describe("verification protocol", () => {
       serializeVerificationReport({
         findings: [],
         valid: false,
-        verification_version: 3,
+        verification_version: 4,
       })
     ).toThrow("validity is inconsistent");
   });
 
   test("refuses a report from a superseded catalog", () => {
-    expect(VERIFICATION_VERSION).toBe(3);
+    expect(VERIFICATION_VERSION).toBe(4);
     for (const version of [1, 2]) {
       expect(() =>
         serializeVerificationReport({

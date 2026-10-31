@@ -1,4 +1,5 @@
 import type {
+  CollationRecord,
   HadithRecord,
   OccurrenceRecord,
   SectionRecord,
@@ -194,11 +195,13 @@ export const referenceWitnessResolves: VerificationRule<StructuralVerificationCo
     const witnesses = indexBy(entriesOf(context, "source_witness"), (entry) =>
       (entry.record as SourceWitnessRecord).witness_id
     );
-    return entriesOf(context, "occurrence").flatMap((entry) =>
-      witnesses.get((entry.record as OccurrenceRecord).witness_id)?.length === 1
-        ? []
-        : [finding(entry, "/witness_id", "Referenced witness does not resolve uniquely")]
-    );
+    return [...entriesOf(context, "occurrence"), ...entriesOf(context, "collation")]
+      .flatMap((entry) =>
+        witnesses.get((entry.record as CollationRecord | OccurrenceRecord).witness_id)
+            ?.length === 1
+          ? []
+          : [finding(entry, "/witness_id", "Referenced witness does not resolve uniquely")]
+      );
   },
   id: "reference.witness_resolves",
   prerequisites: [],
@@ -278,6 +281,19 @@ export const referenceDisplayOccurrenceResolves: VerificationRule<StructuralVeri
     );
   },
   id: "reference.display_occurrence_resolves",
+  prerequisites: [],
+};
+
+export const referenceCollatedOccurrenceResolves: VerificationRule<StructuralVerificationContext> = {
+  evaluate: (context) => {
+    const occurrences = occurrenceIndex(context);
+    return entriesOf(context, "collation").flatMap((entry) =>
+      occurrences.get(String((entry.record as CollationRecord).occurrence_id))?.length === 1
+        ? []
+        : [finding(entry, "/occurrence_id", "Collated occurrence does not resolve uniquely")]
+    );
+  },
+  id: "reference.collated_occurrence_resolves",
   prerequisites: [],
 };
 
@@ -502,6 +518,107 @@ export const hadithTextSpan: VerificationRule<StructuralVerificationContext> = {
   prerequisites: [],
 };
 
+// The occurrence a collation compares against, when it and both witnesses
+// resolve uniquely; unresolved references are reported by the reference rules.
+function collatedPairs(context: StructuralVerificationContext) {
+  const occurrences = occurrenceIndex(context);
+  const witnesses = indexBy(entriesOf(context, "source_witness"), (entry) =>
+    (entry.record as SourceWitnessRecord).witness_id
+  );
+  const unique = (id: string) => {
+    const group = witnesses.get(id) ?? [];
+    return group.length === 1 ? group[0]?.record as SourceWitnessRecord : undefined;
+  };
+  return entriesOf(context, "collation").flatMap((entry) => {
+    const record = entry.record as CollationRecord;
+    const group = occurrences.get(String(record.occurrence_id)) ?? [];
+    if (group.length !== 1) {
+      return [];
+    }
+    const occurrence = group[0]?.record as OccurrenceRecord;
+    return [{
+      collatedWitness: unique(record.witness_id),
+      entry,
+      occurrence,
+      occurrenceWitness: unique(occurrence.witness_id),
+      record,
+    }];
+  });
+}
+
+export const collationWitnessScope: VerificationRule<StructuralVerificationContext> = {
+  evaluate: (context) => collatedPairs(context).flatMap((pair) => {
+    if (pair.record.witness_id === pair.occurrence.witness_id) {
+      return [finding(pair.entry, "/witness_id", "A witness cannot be collated with its own occurrence")];
+    }
+    if (pair.collatedWitness === undefined || pair.occurrenceWitness === undefined) {
+      return [];
+    }
+    return pair.collatedWitness.source_id === pair.occurrenceWitness.source_id
+      ? []
+      : [finding(pair.entry, "/witness_id", "Collated witness belongs to another source")];
+  }),
+  id: "collation.witness_scope",
+  prerequisites: [],
+};
+
+// Collation offsets count code points, so any tool can check them; the
+// boundaries are those of extended grapheme clusters, in code points.
+function codePointGraphemeBoundaries(text: string): ReadonlySet<number> {
+  const boundaries = new Set<number>();
+  let codePoints = 0;
+  for (const { segment } of graphemes.segment(text)) {
+    boundaries.add(codePoints);
+    codePoints += [...segment].length;
+  }
+  boundaries.add(codePoints);
+  return boundaries;
+}
+
+export const collationSpan: VerificationRule<StructuralVerificationContext> = {
+  evaluate: (context) => collatedPairs(context).flatMap((pair) => {
+    const boundaries = codePointGraphemeBoundaries(pair.occurrence.raw_text);
+    const { span_end: end, span_start: start } = pair.record;
+    return start < end && boundaries.has(start) && boundaries.has(end)
+      ? []
+      : [finding(
+          pair.entry,
+          "/span_start",
+          "Span is not a nonempty range of the occurrence's raw text on grapheme boundaries",
+        )];
+  }),
+  id: "collation.span",
+  prerequisites: [],
+};
+
+// Each difference lies in the span on grapheme boundaries, quotes the raw
+// text exactly, changes it, and follows the one before without overlap; two
+// insertions at one point are one difference.
+export const collationDifferences: VerificationRule<StructuralVerificationContext> = {
+  evaluate: (context) => collatedPairs(context).flatMap((pair) => {
+    const codePoints = [...pair.occurrence.raw_text];
+    const boundaries = codePointGraphemeBoundaries(pair.occurrence.raw_text);
+    const { differences, span_end: spanEnd, span_start: spanStart } = pair.record;
+    return differences.flatMap((difference, index) => {
+      const previous = differences[index - 1];
+      const valid =
+        spanStart <= difference.start && difference.start <= difference.end &&
+        difference.end <= spanEnd &&
+        boundaries.has(difference.start) && boundaries.has(difference.end) &&
+        codePoints.slice(difference.start, difference.end).join("") === difference.text &&
+        difference.text !== difference.reading &&
+        (previous === undefined ||
+          (previous.end <= difference.start &&
+            !(previous.start === difference.start && previous.end === difference.end)));
+      return valid
+        ? []
+        : [finding(pair.entry, `/differences/${index}`, "Difference is not a valid change to the raw text")];
+    });
+  }),
+  id: "collation.differences",
+  prerequisites: [],
+};
+
 export const GRAPH_RULES = Object.freeze([
   identifierSourceUnique,
   identifierWitnessUnique,
@@ -516,10 +633,14 @@ export const GRAPH_RULES = Object.freeze([
   referenceSectionResolves,
   referenceMemberOccurrenceResolves,
   referenceDisplayOccurrenceResolves,
+  referenceCollatedOccurrenceResolves,
   sectionParentAcyclic,
   sectionDepthFirstOrder,
   hadithMemberOrder,
   hadithMemberExclusive,
   hadithDisplayIsMember,
   hadithTextSpan,
+  collationWitnessScope,
+  collationSpan,
+  collationDifferences,
 ]);

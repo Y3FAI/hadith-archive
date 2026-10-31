@@ -26,13 +26,13 @@ async function readJsonFiles(directory: string): Promise<unknown[]> {
 }
 
 describe("version-one schema catalog", () => {
-  test("loads and compiles all six schemas offline", () => {
-    expect(registry.schemaCount).toBe(6);
+  test("loads and compiles all seven schemas offline", () => {
+    expect(registry.schemaCount).toBe(7);
   });
 
   test("accepts one valid fixture for every entity", async () => {
     const fixtures = await readJsonFiles(resolve(fixtureRoot, "valid"));
-    expect(fixtures).toHaveLength(5);
+    expect(fixtures).toHaveLength(6);
 
     for (const fixture of fixtures) {
       const result = registry.validateRecord(fixture);

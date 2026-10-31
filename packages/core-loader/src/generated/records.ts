@@ -4,6 +4,83 @@
  */
 
 /**
+ * A version-one authoritative COLLATION record: how one SOURCE_WITNESS prints a report preserved as an OCCURRENCE of another witness, stored as its location and its differences, never its text.
+ */
+export interface CollationRecord {
+  /**
+   * Every place in the compared span where the collated witness differs, in ascending order of position.
+   */
+  differences: {
+    /**
+     * A position in a text, counted in Unicode code points from zero.
+     */
+    end: number;
+    /**
+     * wording: a word is added, missing or different; spelling: the same words, differing only in vowels, letters or punctuation.
+     */
+    kind: "spelling" | "wording";
+    /**
+     * What the collated witness prints in place of text; empty where it prints nothing.
+     */
+    reading: string;
+    /**
+     * A position in a text, counted in Unicode code points from zero.
+     */
+    start: number;
+    /**
+     * The OCCURRENCE's raw text from start to end; empty where the collated witness adds words.
+     */
+    text: string;
+  }[];
+  location: Location;
+  /**
+   * A permanent globally unique OCCURRENCE identifier.
+   */
+  occurrence_id: number;
+  /**
+   * The entity type represented by a core record.
+   */
+  record_type: "collation";
+  /**
+   * The explicit schema version selected by a core record.
+   */
+  schema_version: 1;
+  /**
+   * A position in a text, counted in Unicode code points from zero.
+   */
+  span_end: number;
+  /**
+   * A position in a text, counted in Unicode code points from zero.
+   */
+  span_start: number;
+  /**
+   * A permanent globally unique descriptive ASCII slug for a SOURCE_WITNESS.
+   */
+  witness_id: string;
+}
+/**
+ * The physical location of an OCCURRENCE within its SOURCE_WITNESS.
+ */
+export interface Location {
+  /**
+   * A positive hadith number assigned by a printed SOURCE_WITNESS.
+   */
+  hadith_number?: number;
+  /**
+   * A positive printed page number.
+   */
+  page_end: number;
+  /**
+   * A positive printed page number.
+   */
+  page_start: number;
+  /**
+   * A positive printed volume number.
+   */
+  volume?: number;
+}
+
+/**
  * A version-one authoritative HADITH record.
  */
 export interface HadithRecord {
@@ -170,11 +247,15 @@ export interface SourceWitnessRecord {
   /**
    * Nonempty NFC metadata text governed by the single-line whitespace policy.
    */
-  edition_statement: string;
+  edition_statement?: string;
   /**
-   * An ISBN-13 normalized to thirteen ASCII digits; semantic verification checks its checksum.
+   * The SHA-256 of the file the records were taken from: the publisher's PDF, or the scan of the printed copy.
    */
-  isbn: string;
+  file_sha256: string;
+  /**
+   * An ISBN-13, or an ISBN-10 as printed, normalized to its ASCII digits (an ISBN-10 may end in X); semantic verification checks its checksum.
+   */
+  isbn?: string;
   /**
    * A relative ordering value whose differences and ratios carry no meaning.
    */
@@ -182,7 +263,7 @@ export interface SourceWitnessRecord {
   /**
    * A four-digit Gregorian publication year stated by a SOURCE_WITNESS.
    */
-  publication_year: number;
+  publication_year?: number;
   /**
    * Nonempty NFC metadata text governed by the single-line whitespace policy.
    */
@@ -218,6 +299,7 @@ export interface ReferenceScheme {
 }
 
 export type HadithArchiveRecord =
+  | CollationRecord
   | HadithRecord
   | OccurrenceRecord
   | SectionRecord

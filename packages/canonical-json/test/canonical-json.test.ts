@@ -102,7 +102,7 @@ describe("canonical JSON bytes", () => {
       )
     ).flat().sort();
 
-    expect(schemaPaths).toHaveLength(6);
+    expect(schemaPaths).toHaveLength(7);
     for (const schemaPath of schemaPaths) {
       const bytes = await readFile(schemaPath);
       expect(() => parseCanonicalJsonBytes(bytes)).not.toThrow();
