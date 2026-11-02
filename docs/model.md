@@ -190,6 +190,7 @@ erDiagram
     int    ordinal "position in the printed sequence"
     text   raw_text "canonical UTF-8, NFC"
     string fingerprint "sha256 of raw_text"
+    json   prophet_words "optional code-point ranges of raw_text"
   }
 
   COLLATION {

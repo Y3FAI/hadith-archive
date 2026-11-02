@@ -1,0 +1,24 @@
+{
+  "fingerprint": "1a0ff8fb1764fbacc53739d8e989d0c6d9e10f2a632c9f7d9b305498a5531eaf",
+  "location": {
+    "hadith_number": 16,
+    "page_end": 108,
+    "page_start": 108
+  },
+  "occurrence_id": 16,
+  "ordinal": 16,
+  "prophet_words": [
+    {
+      "end": 111,
+      "start": 99
+    },
+    {
+      "end": 152,
+      "start": 140
+    }
+  ],
+  "raw_text": "عَنْ أَبِي هُرَيْرَةَ رَضِيَ اللَّهُ عَنْهُ: «أَنَّ رَجُلاً قَالَ لِلنَّبِيِّ ﷺ: أَوْصِنِي، قَالَ: لَا تَغْضَبْ، فَرَدَّدَ مِرَاراً، قَالَ: لَا تَغْضَبْ»\nرَوَاهُ البُخَارِيُّ.",
+  "record_type": "occurrence",
+  "schema_version": 1,
+  "witness_id": "nawawi-40-al-qasim-sharh"
+}

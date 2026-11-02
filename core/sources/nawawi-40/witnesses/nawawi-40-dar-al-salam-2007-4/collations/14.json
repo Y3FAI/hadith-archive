@@ -1,0 +1,148 @@
+{
+  "differences": [
+    {
+      "end": 4,
+      "kind": "spelling",
+      "reading": "عَنْ",
+      "start": 0,
+      "text": "عَنِ"
+    },
+    {
+      "end": 10,
+      "kind": "spelling",
+      "reading": "ابنِ",
+      "start": 5,
+      "text": "ابْنِ"
+    },
+    {
+      "end": 20,
+      "kind": "spelling",
+      "reading": "مسعودٍ",
+      "start": 11,
+      "text": "مَسْعُودٍ"
+    },
+    {
+      "end": 21,
+      "kind": "spelling",
+      "reading": "– ",
+      "start": 21,
+      "text": ""
+    },
+    {
+      "end": 27,
+      "kind": "spelling",
+      "reading": "رَضِي",
+      "start": 21,
+      "text": "رَضِيَ"
+    },
+    {
+      "end": 36,
+      "kind": "wording",
+      "reading": "تعالى ",
+      "start": 36,
+      "text": ""
+    },
+    {
+      "end": 42,
+      "kind": "spelling",
+      "reading": "عنه",
+      "start": 36,
+      "text": "عَنْهُ"
+    },
+    {
+      "end": 43,
+      "kind": "spelling",
+      "reading": "– ",
+      "start": 43,
+      "text": ""
+    },
+    {
+      "end": 48,
+      "kind": "spelling",
+      "reading": "قال",
+      "start": 43,
+      "text": "قَالَ"
+    },
+    {
+      "end": 55,
+      "kind": "spelling",
+      "reading": "قال",
+      "start": 50,
+      "text": "قَالَ"
+    },
+    {
+      "end": 63,
+      "kind": "spelling",
+      "reading": "رسولُ",
+      "start": 56,
+      "text": "رَسُولُ"
+    },
+    {
+      "end": 78,
+      "kind": "spelling",
+      "reading": "لا",
+      "start": 75,
+      "text": "لَا"
+    },
+    {
+      "end": 115,
+      "kind": "spelling",
+      "reading": "إلَّا",
+      "start": 109,
+      "text": "إِلَّا"
+    },
+    {
+      "end": 125,
+      "kind": "spelling",
+      "reading": "بإحْدَى",
+      "start": 116,
+      "text": "بِإِحْدَى"
+    },
+    {
+      "end": 168,
+      "kind": "spelling",
+      "reading": "والنَّفْسُ",
+      "start": 157,
+      "text": "وَالنَّفْسُ"
+    },
+    {
+      "end": 180,
+      "kind": "spelling",
+      "reading": "بالنَّفْسِ",
+      "start": 169,
+      "text": "بِالنَّفْسِ"
+    },
+    {
+      "end": 194,
+      "kind": "spelling",
+      "reading": "والتَّارِكُ",
+      "start": 182,
+      "text": "وَالتَّارِكُ"
+    },
+    {
+      "end": 204,
+      "kind": "spelling",
+      "reading": "لدِينهِ",
+      "start": 195,
+      "text": "لِدِينِهِ"
+    },
+    {
+      "end": 231,
+      "kind": "spelling",
+      "reading": " » .",
+      "start": 230,
+      "text": "»"
+    }
+  ],
+  "location": {
+    "hadith_number": 14,
+    "page_end": 12,
+    "page_start": 12
+  },
+  "occurrence_id": 14,
+  "record_type": "collation",
+  "schema_version": 1,
+  "span_end": 231,
+  "span_start": 0,
+  "witness_id": "nawawi-40-dar-al-salam-2007-4"
+}

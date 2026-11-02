@@ -1,0 +1,169 @@
+{
+  "differences": [
+    {
+      "end": 43,
+      "kind": "spelling",
+      "reading": "﵁",
+      "start": 22,
+      "text": "رَضِيَ اللَّهُ عَنْهُ"
+    },
+    {
+      "end": 49,
+      "kind": "spelling",
+      "reading": "قالَ",
+      "start": 44,
+      "text": "قَالَ"
+    },
+    {
+      "end": 56,
+      "kind": "spelling",
+      "reading": "قالَ",
+      "start": 51,
+      "text": "قَالَ"
+    },
+    {
+      "end": 99,
+      "kind": "spelling",
+      "reading": "تَعالَى",
+      "start": 91,
+      "text": "تَعَالَى"
+    },
+    {
+      "end": 105,
+      "kind": "spelling",
+      "reading": "قالَ",
+      "start": 100,
+      "text": "قَالَ"
+    },
+    {
+      "end": 138,
+      "kind": "spelling",
+      "reading": "فقَدْ",
+      "start": 132,
+      "text": "فَقَدْ"
+    },
+    {
+      "end": 166,
+      "kind": "spelling",
+      "reading": "وما",
+      "start": 161,
+      "text": "وَمَا"
+    },
+    {
+      "end": 224,
+      "kind": "spelling",
+      "reading": "مِمّا",
+      "start": 218,
+      "text": "مِمَّا"
+    },
+    {
+      "end": 247,
+      "kind": "spelling",
+      "reading": "، ",
+      "start": 245,
+      "text": ".\n"
+    },
+    {
+      "end": 252,
+      "kind": "spelling",
+      "reading": "وما",
+      "start": 247,
+      "text": "وَمَا"
+    },
+    {
+      "end": 260,
+      "kind": "spelling",
+      "reading": "يَزالُ",
+      "start": 253,
+      "text": "يَزَالُ"
+    },
+    {
+      "end": 303,
+      "kind": "spelling",
+      "reading": "بِالنَّوافِلِ",
+      "start": 289,
+      "text": "بِالنَّوَافِلِ"
+    },
+    {
+      "end": 329,
+      "kind": "spelling",
+      "reading": "فإِذا",
+      "start": 322,
+      "text": "فَإِذَا"
+    },
+    {
+      "end": 343,
+      "kind": "spelling",
+      "reading": "",
+      "start": 342,
+      "text": "؛"
+    },
+    {
+      "end": 393,
+      "kind": "spelling",
+      "reading": "وبَصَرَهُ",
+      "start": 383,
+      "text": "وَبَصَرَهُ"
+    },
+    {
+      "end": 425,
+      "kind": "spelling",
+      "reading": "ويَدَهُ",
+      "start": 417,
+      "text": "وَيَدَهُ"
+    },
+    {
+      "end": 448,
+      "kind": "spelling",
+      "reading": "بِها",
+      "start": 443,
+      "text": "بِهَا"
+    },
+    {
+      "end": 482,
+      "kind": "spelling",
+      "reading": "بِها",
+      "start": 477,
+      "text": "بِهَا"
+    },
+    {
+      "end": 492,
+      "kind": "wording",
+      "reading": "وإِنْ",
+      "start": 484,
+      "text": "وَلَئِنْ"
+    },
+    {
+      "end": 528,
+      "kind": "spelling",
+      "reading": "ولَئِنِ",
+      "start": 520,
+      "text": "وَلَئِنِ"
+    },
+    {
+      "end": 542,
+      "kind": "spelling",
+      "reading": "اسْتَعاذَنِي",
+      "start": 529,
+      "text": "اسْتَعَاذَنِي"
+    },
+    {
+      "end": 558,
+      "kind": "spelling",
+      "reading": ".",
+      "start": 558,
+      "text": ""
+    }
+  ],
+  "location": {
+    "hadith_number": 38,
+    "page_end": 128,
+    "page_start": 128
+  },
+  "occurrence_id": 38,
+  "record_type": "collation",
+  "schema_version": 1,
+  "span_end": 558,
+  "span_start": 0,
+  "witness_id": "nawawi-40-dar-al-ghawthani-2010-1"
+}

@@ -1,0 +1,176 @@
+{
+  "differences": [
+    {
+      "end": 27,
+      "kind": "spelling",
+      "reading": "",
+      "start": 25,
+      "text": "- "
+    },
+    {
+      "end": 39,
+      "kind": "spelling",
+      "reading": "عَبدِ",
+      "start": 33,
+      "text": "عَبْدِ"
+    },
+    {
+      "end": 47,
+      "kind": "spelling",
+      "reading": "اللَّه",
+      "start": 40,
+      "text": "اللَّهِ"
+    },
+    {
+      "end": 48,
+      "kind": "spelling",
+      "reading": "",
+      "start": 47,
+      "text": "،"
+    },
+    {
+      "end": 58,
+      "kind": "spelling",
+      "reading": "عائِشَةَ",
+      "start": 49,
+      "text": "عَائِشَةَ"
+    },
+    {
+      "end": 60,
+      "kind": "spelling",
+      "reading": "–",
+      "start": 59,
+      "text": "-"
+    },
+    {
+      "end": 67,
+      "kind": "spelling",
+      "reading": "رضي",
+      "start": 61,
+      "text": "رَضِيَ"
+    },
+    {
+      "end": 75,
+      "kind": "spelling",
+      "reading": "اللَّه",
+      "start": 68,
+      "text": "اللَّهُ"
+    },
+    {
+      "end": 76,
+      "kind": "wording",
+      "reading": "تعالى ",
+      "start": 76,
+      "text": ""
+    },
+    {
+      "end": 83,
+      "kind": "spelling",
+      "reading": "عنها",
+      "start": 76,
+      "text": "عَنْهَا"
+    },
+    {
+      "end": 84,
+      "kind": "spelling",
+      "reading": "– ",
+      "start": 84,
+      "text": ""
+    },
+    {
+      "end": 91,
+      "kind": "spelling",
+      "reading": "قالَتْ",
+      "start": 84,
+      "text": "قَالَتْ"
+    },
+    {
+      "end": 98,
+      "kind": "spelling",
+      "reading": "قال",
+      "start": 93,
+      "text": "قَالَ"
+    },
+    {
+      "end": 106,
+      "kind": "spelling",
+      "reading": "رسول",
+      "start": 99,
+      "text": "رَسُولُ"
+    },
+    {
+      "end": 114,
+      "kind": "spelling",
+      "reading": "اللَّه",
+      "start": 107,
+      "text": "اللَّهِ"
+    },
+    {
+      "end": 136,
+      "kind": "spelling",
+      "reading": "في",
+      "start": 133,
+      "text": "فِي"
+    },
+    {
+      "end": 146,
+      "kind": "spelling",
+      "reading": "أَمْرِنا",
+      "start": 137,
+      "text": "أَمْرِنَا"
+    },
+    {
+      "end": 152,
+      "kind": "spelling",
+      "reading": "هذا",
+      "start": 147,
+      "text": "هَذَا"
+    },
+    {
+      "end": 156,
+      "kind": "spelling",
+      "reading": "ما",
+      "start": 153,
+      "text": "مَا"
+    },
+    {
+      "end": 163,
+      "kind": "spelling",
+      "reading": "لَيسَ",
+      "start": 157,
+      "text": "لَيْسَ"
+    },
+    {
+      "end": 170,
+      "kind": "spelling",
+      "reading": "منه",
+      "start": 164,
+      "text": "مِنْهُ"
+    },
+    {
+      "end": 171,
+      "kind": "spelling",
+      "reading": "",
+      "start": 170,
+      "text": "؛"
+    },
+    {
+      "end": 185,
+      "kind": "spelling",
+      "reading": " » .",
+      "start": 184,
+      "text": "»"
+    }
+  ],
+  "location": {
+    "hadith_number": 5,
+    "page_end": 7,
+    "page_start": 7
+  },
+  "occurrence_id": 5,
+  "record_type": "collation",
+  "schema_version": 1,
+  "span_end": 185,
+  "span_start": 0,
+  "witness_id": "nawawi-40-dar-al-salam-2007-4"
+}

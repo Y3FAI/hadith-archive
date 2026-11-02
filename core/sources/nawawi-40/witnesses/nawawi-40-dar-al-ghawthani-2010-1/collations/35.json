@@ -1,0 +1,260 @@
+{
+  "differences": [
+    {
+      "end": 43,
+      "kind": "spelling",
+      "reading": "﵁",
+      "start": 22,
+      "text": "رَضِيَ اللَّهُ عَنْهُ"
+    },
+    {
+      "end": 49,
+      "kind": "spelling",
+      "reading": "قالَ",
+      "start": 44,
+      "text": "قَالَ"
+    },
+    {
+      "end": 56,
+      "kind": "spelling",
+      "reading": "قالَ",
+      "start": 51,
+      "text": "قَالَ"
+    },
+    {
+      "end": 71,
+      "kind": "spelling",
+      "reading": "اللَّهِ",
+      "start": 65,
+      "text": "اللَّه"
+    },
+    {
+      "end": 79,
+      "kind": "spelling",
+      "reading": "لا",
+      "start": 76,
+      "text": "لَا"
+    },
+    {
+      "end": 91,
+      "kind": "spelling",
+      "reading": "تَحاسَدُوا",
+      "start": 80,
+      "text": "تَحَاسَدُوا"
+    },
+    {
+      "end": 98,
+      "kind": "spelling",
+      "reading": "ولا",
+      "start": 93,
+      "text": "وَلَا"
+    },
+    {
+      "end": 110,
+      "kind": "spelling",
+      "reading": "تَناجَشُوا",
+      "start": 99,
+      "text": "تَنَاجَشُوا"
+    },
+    {
+      "end": 117,
+      "kind": "spelling",
+      "reading": "ولا",
+      "start": 112,
+      "text": "وَلَا"
+    },
+    {
+      "end": 129,
+      "kind": "spelling",
+      "reading": "تَباغَضُوا",
+      "start": 118,
+      "text": "تَبَاغَضُوا"
+    },
+    {
+      "end": 136,
+      "kind": "spelling",
+      "reading": "ولا",
+      "start": 131,
+      "text": "وَلَا"
+    },
+    {
+      "end": 148,
+      "kind": "spelling",
+      "reading": "تَدابَرُوا",
+      "start": 137,
+      "text": "تَدَابَرُوا"
+    },
+    {
+      "end": 155,
+      "kind": "spelling",
+      "reading": "ولا",
+      "start": 150,
+      "text": "وَلَا"
+    },
+    {
+      "end": 204,
+      "kind": "spelling",
+      "reading": "وكُونُوا",
+      "start": 195,
+      "text": "وَكُونُوا"
+    },
+    {
+      "end": 212,
+      "kind": "spelling",
+      "reading": "عِبادَ",
+      "start": 205,
+      "text": "عِبَادَ"
+    },
+    {
+      "end": 231,
+      "kind": "spelling",
+      "reading": "إِخْواناً",
+      "start": 221,
+      "text": "إِخْوَاناً"
+    },
+    {
+      "end": 232,
+      "kind": "spelling",
+      "reading": "؛",
+      "start": 231,
+      "text": "،"
+    },
+    {
+      "end": 265,
+      "kind": "spelling",
+      "reading": "لا",
+      "start": 262,
+      "text": "لَا"
+    },
+    {
+      "end": 283,
+      "kind": "spelling",
+      "reading": "ولا",
+      "start": 278,
+      "text": "وَلَا"
+    },
+    {
+      "end": 301,
+      "kind": "spelling",
+      "reading": "ولا",
+      "start": 296,
+      "text": "وَلَا"
+    },
+    {
+      "end": 302,
+      "kind": "wording",
+      "reading": "يَكْذِبُهُ، ولا ",
+      "start": 302,
+      "text": ""
+    },
+    {
+      "end": 313,
+      "kind": "spelling",
+      "reading": "؛",
+      "start": 312,
+      "text": "،"
+    },
+    {
+      "end": 332,
+      "kind": "spelling",
+      "reading": "هَهُنا",
+      "start": 325,
+      "text": "هَهُنَا"
+    },
+    {
+      "end": 344,
+      "kind": "spelling",
+      "reading": "ويُشِيرُ",
+      "start": 335,
+      "text": "وَيُشِيرُ"
+    },
+    {
+      "end": 367,
+      "kind": "spelling",
+      "reading": "ثَلاثَ",
+      "start": 360,
+      "text": "ثَلَاثَ"
+    },
+    {
+      "end": 376,
+      "kind": "spelling",
+      "reading": "مَرّاتٍ",
+      "start": 368,
+      "text": "مَرَّاتٍ"
+    },
+    {
+      "end": 379,
+      "kind": "spelling",
+      "reading": "",
+      "start": 378,
+      "text": "،"
+    },
+    {
+      "end": 432,
+      "kind": "spelling",
+      "reading": "أَخاهُ",
+      "start": 425,
+      "text": "أَخَاهُ"
+    },
+    {
+      "end": 478,
+      "kind": "spelling",
+      "reading": "المسْلِمِ",
+      "start": 468,
+      "text": "المُسْلِمِ"
+    },
+    {
+      "end": 486,
+      "kind": "spelling",
+      "reading": "حَرامٌ",
+      "start": 479,
+      "text": "حَرَامٌ"
+    },
+    {
+      "end": 495,
+      "kind": "spelling",
+      "reading": "",
+      "start": 494,
+      "text": "،"
+    },
+    {
+      "end": 505,
+      "kind": "spelling",
+      "reading": "ومالُهُ",
+      "start": 496,
+      "text": "وَمَالُهُ"
+    },
+    {
+      "end": 506,
+      "kind": "spelling",
+      "reading": "",
+      "start": 505,
+      "text": "،"
+    },
+    {
+      "end": 517,
+      "kind": "spelling",
+      "reading": "وعِرْضُهُ",
+      "start": 507,
+      "text": "وَعِرْضُهُ"
+    },
+    {
+      "end": 518,
+      "kind": "spelling",
+      "reading": ".",
+      "start": 518,
+      "text": ""
+    }
+  ],
+  "location": {
+    "hadith_number": 35,
+    "page_end": 118,
+    "page_start": 118
+  },
+  "occurrence_id": 35,
+  "record_type": "collation",
+  "schema_version": 1,
+  "span_end": 518,
+  "span_start": 0,
+  "witness_id": "nawawi-40-dar-al-ghawthani-2010-1"
+}

@@ -1,0 +1,20 @@
+{
+  "fingerprint": "d56b024e19805d285ace094e44d4ffdda317ce2fc70786fc575ddecb4fad92df",
+  "location": {
+    "hadith_number": 14,
+    "page_end": 95,
+    "page_start": 95
+  },
+  "occurrence_id": 14,
+  "ordinal": 14,
+  "prophet_words": [
+    {
+      "end": 230,
+      "start": 75
+    }
+  ],
+  "raw_text": "عَنِ ابْنِ مَسْعُودٍ رَضِيَ اللَّهُ عَنْهُ قَالَ: قَالَ رَسُولُ اللَّه ﷺ: «لَا يَحِلُّ دَمُ امْرِئٍ مُسْلِمٍ إِلَّا بِإِحْدَى ثَلَاثٍ: الثَّيِّبُ الزَّانِي، وَالنَّفْسُ بِالنَّفْسِ، وَالتَّارِكُ لِدِينِهِ المُفَارِقُ لِلْجَمَاعَةِ»\nرَوَاهُ البُخَارِيُّ، وَمُسْلِمٌ.",
+  "record_type": "occurrence",
+  "schema_version": 1,
+  "witness_id": "nawawi-40-al-qasim-sharh"
+}

@@ -1,0 +1,162 @@
+{
+  "differences": [
+    {
+      "end": 4,
+      "kind": "spelling",
+      "reading": "عن",
+      "start": 0,
+      "text": "عَنْ"
+    },
+    {
+      "end": 10,
+      "kind": "spelling",
+      "reading": "أَبي",
+      "start": 5,
+      "text": "أَبِي"
+    },
+    {
+      "end": 17,
+      "kind": "spelling",
+      "reading": "",
+      "start": 16,
+      "text": "،"
+    },
+    {
+      "end": 31,
+      "kind": "spelling",
+      "reading": "بنِ",
+      "start": 27,
+      "text": "بْنِ"
+    },
+    {
+      "end": 50,
+      "kind": "spelling",
+      "reading": "وأَبي",
+      "start": 43,
+      "text": "وَأَبِي"
+    },
+    {
+      "end": 69,
+      "kind": "spelling",
+      "reading": "الرَّحمنِ",
+      "start": 58,
+      "text": "الرَّحْمَنِ"
+    },
+    {
+      "end": 70,
+      "kind": "spelling",
+      "reading": "",
+      "start": 69,
+      "text": "،"
+    },
+    {
+      "end": 83,
+      "kind": "spelling",
+      "reading": "بنِ",
+      "start": 79,
+      "text": "بْنِ"
+    },
+    {
+      "end": 91,
+      "kind": "spelling",
+      "reading": "– ",
+      "start": 91,
+      "text": ""
+    },
+    {
+      "end": 97,
+      "kind": "spelling",
+      "reading": "رَضِي",
+      "start": 91,
+      "text": "رَضِيَ"
+    },
+    {
+      "end": 106,
+      "kind": "wording",
+      "reading": "تعالى ",
+      "start": 106,
+      "text": ""
+    },
+    {
+      "end": 115,
+      "kind": "spelling",
+      "reading": "عنهُما",
+      "start": 106,
+      "text": "عَنْهُمَا"
+    },
+    {
+      "end": 116,
+      "kind": "spelling",
+      "reading": "– ",
+      "start": 116,
+      "text": ""
+    },
+    {
+      "end": 120,
+      "kind": "spelling",
+      "reading": "عن",
+      "start": 116,
+      "text": "عَنْ"
+    },
+    {
+      "end": 128,
+      "kind": "spelling",
+      "reading": "رسول",
+      "start": 121,
+      "text": "رَسُولِ"
+    },
+    {
+      "end": 136,
+      "kind": "spelling",
+      "reading": "اللَّه",
+      "start": 129,
+      "text": "اللَّهِ"
+    },
+    {
+      "end": 144,
+      "kind": "spelling",
+      "reading": "قال",
+      "start": 139,
+      "text": "قَالَ"
+    },
+    {
+      "end": 160,
+      "kind": "spelling",
+      "reading": "اللَّهَ",
+      "start": 154,
+      "text": "اللَّه"
+    },
+    {
+      "end": 170,
+      "kind": "spelling",
+      "reading": "حَيثُمَا",
+      "start": 161,
+      "text": "حَيْثُمَا"
+    },
+    {
+      "end": 189,
+      "kind": "spelling",
+      "reading": "وَأَتْبعِ",
+      "start": 179,
+      "text": "وَأَتْبِعِ"
+    },
+    {
+      "end": 234,
+      "kind": "spelling",
+      "reading": "وخالِقِ",
+      "start": 225,
+      "text": "وَخَالِقِ"
+    }
+  ],
+  "location": {
+    "hadith_number": 18,
+    "page_end": 14,
+    "page_start": 13
+  },
+  "occurrence_id": 18,
+  "record_type": "collation",
+  "schema_version": 1,
+  "span_end": 260,
+  "span_start": 0,
+  "witness_id": "nawawi-40-dar-al-salam-2007-4"
+}

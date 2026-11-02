@@ -1,0 +1,24 @@
+{
+  "fingerprint": "af0a896799323584b8c85789a090c6f8caaa1bacf03b5f0482d4a681bf477862",
+  "location": {
+    "hadith_number": 7,
+    "page_end": 71,
+    "page_start": 71
+  },
+  "occurrence_id": 7,
+  "ordinal": 7,
+  "prophet_words": [
+    {
+      "end": 124,
+      "start": 103
+    },
+    {
+      "end": 232,
+      "start": 150
+    }
+  ],
+  "raw_text": "عَنْ أَبِي رُقَيَّةَ، تَمِيمِ بْنِ أَوْسٍ الدَّارِيِّ رَضِيَ اللَّهُ عَنْهُ أَنَّ النَّبِيَّ ﷺ قَالَ: «الدِّينُ النَّصِيحَةُ، قُلْنَا: لِمَنْ؟ قَالَ: لِلَّهِ، وَلِكِتَابِهِ، وَلِرَسُولِهِ، وَلِأَئِمَّةِ المُسْلِمِينَ، وَعَامَّتِهِمْ»\nرَوَاهُ مُسْلِمٌ.",
+  "record_type": "occurrence",
+  "schema_version": 1,
+  "witness_id": "nawawi-40-al-qasim-sharh"
+}

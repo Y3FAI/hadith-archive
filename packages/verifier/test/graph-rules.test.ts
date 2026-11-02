@@ -145,7 +145,7 @@ describe("cross-record graph rules", () => {
   test("accepts a complete consistent graph", async () => {
     expect(await verify(validGraph())).toEqual({
       kind: "complete",
-      report: { findings: [], valid: true, verification_version: 4 },
+      report: { findings: [], valid: true, verification_version: 5 },
     });
   });
 

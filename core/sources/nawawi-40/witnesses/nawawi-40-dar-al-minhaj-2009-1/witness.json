@@ -1,0 +1,17 @@
+{
+  "edition_statement": "الطبعة الأولى",
+  "file_sha256": "34cd22ac11bbf7b8058c20c5ad5a13dc531ab27d049faad66ec706da00999388",
+  "isbn": "9789953498218",
+  "priority_score": 0,
+  "publication_year": 2009,
+  "publisher": "دار المنهاج",
+  "record_type": "source_witness",
+  "reference_scheme": {
+    "hadith_number": true,
+    "volume": false
+  },
+  "schema_version": 1,
+  "source_id": "nawawi-40",
+  "title_as_printed": "الأربعون النووية",
+  "witness_id": "nawawi-40-dar-al-minhaj-2009-1"
+}

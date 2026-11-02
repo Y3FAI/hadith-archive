@@ -1,0 +1,17 @@
+{
+  "edition_statement": "الطبعة الرابعة",
+  "file_sha256": "69a3387080e8bfd9b74b29e9921334b40c3357a9379aea2600c0e6aaa4978e00",
+  "isbn": "9773420752",
+  "priority_score": 0,
+  "publication_year": 2007,
+  "publisher": "دار السلام للطباعة والنشر والتوزيع والترجمة",
+  "record_type": "source_witness",
+  "reference_scheme": {
+    "hadith_number": true,
+    "volume": false
+  },
+  "schema_version": 1,
+  "source_id": "nawawi-40",
+  "title_as_printed": "كتاب الأربعين النووية",
+  "witness_id": "nawawi-40-dar-al-salam-2007-4"
+}

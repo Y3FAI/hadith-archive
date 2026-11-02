@@ -1,0 +1,204 @@
+{
+  "differences": [
+    {
+      "end": 36,
+      "kind": "spelling",
+      "reading": "",
+      "start": 34,
+      "text": "- "
+    },
+    {
+      "end": 50,
+      "kind": "spelling",
+      "reading": "بنِ",
+      "start": 46,
+      "text": "بْنِ"
+    },
+    {
+      "end": 58,
+      "kind": "spelling",
+      "reading": "ناشِرٍ",
+      "start": 51,
+      "text": "نَاشِرٍ"
+    },
+    {
+      "end": 59,
+      "kind": "spelling",
+      "reading": "",
+      "start": 58,
+      "text": "-"
+    },
+    {
+      "end": 81,
+      "kind": "spelling",
+      "reading": "﵁",
+      "start": 60,
+      "text": "رَضِيَ اللَّهُ عَنْهُ"
+    },
+    {
+      "end": 81,
+      "kind": "spelling",
+      "reading": "،",
+      "start": 81,
+      "text": ""
+    },
+    {
+      "end": 101,
+      "kind": "spelling",
+      "reading": "اللَّهِ",
+      "start": 95,
+      "text": "اللَّه"
+    },
+    {
+      "end": 109,
+      "kind": "spelling",
+      "reading": "قالَ",
+      "start": 104,
+      "text": "قَالَ"
+    },
+    {
+      "end": 124,
+      "kind": "spelling",
+      "reading": "اللَّهَ",
+      "start": 118,
+      "text": "اللَّه"
+    },
+    {
+      "end": 125,
+      "kind": "wording",
+      "reading": "تَعالَى ",
+      "start": 125,
+      "text": ""
+    },
+    {
+      "end": 147,
+      "kind": "spelling",
+      "reading": "فلا",
+      "start": 142,
+      "text": "فَلَا"
+    },
+    {
+      "end": 161,
+      "kind": "spelling",
+      "reading": "تُضَيِّعُوها",
+      "start": 148,
+      "text": "تُضَيِّعُوهَا"
+    },
+    {
+      "end": 170,
+      "kind": "spelling",
+      "reading": "وحَدَّ",
+      "start": 163,
+      "text": "وَحَدَّ"
+    },
+    {
+      "end": 185,
+      "kind": "spelling",
+      "reading": "فلا",
+      "start": 180,
+      "text": "فَلَا"
+    },
+    {
+      "end": 198,
+      "kind": "spelling",
+      "reading": "تَعْتَدُوها",
+      "start": 186,
+      "text": "تَعْتَدُوهَا"
+    },
+    {
+      "end": 209,
+      "kind": "spelling",
+      "reading": "وحَرَّمَ",
+      "start": 200,
+      "text": "وَحَرَّمَ"
+    },
+    {
+      "end": 219,
+      "kind": "spelling",
+      "reading": "أَشْياءَ",
+      "start": 210,
+      "text": "أَشْيَاءَ"
+    },
+    {
+      "end": 225,
+      "kind": "spelling",
+      "reading": "فلا",
+      "start": 220,
+      "text": "فَلَا"
+    },
+    {
+      "end": 240,
+      "kind": "spelling",
+      "reading": "تَنْتَهِكُوها",
+      "start": 226,
+      "text": "تَنْتَهِكُوهَا"
+    },
+    {
+      "end": 250,
+      "kind": "spelling",
+      "reading": "وسَكَتَ",
+      "start": 242,
+      "text": "وَسَكَتَ"
+    },
+    {
+      "end": 265,
+      "kind": "spelling",
+      "reading": "أَشْياءَ",
+      "start": 256,
+      "text": "أَشْيَاءَ"
+    },
+    {
+      "end": 267,
+      "kind": "spelling",
+      "reading": "،",
+      "start": 265,
+      "text": " -"
+    },
+    {
+      "end": 300,
+      "kind": "spelling",
+      "reading": "نِسْيانٍ",
+      "start": 291,
+      "text": "نِسْيَانٍ"
+    },
+    {
+      "end": 302,
+      "kind": "spelling",
+      "reading": "،",
+      "start": 300,
+      "text": " -"
+    },
+    {
+      "end": 308,
+      "kind": "spelling",
+      "reading": "فلا",
+      "start": 303,
+      "text": "فَلَا"
+    },
+    {
+      "end": 327,
+      "kind": "spelling",
+      "reading": "عَنْها",
+      "start": 320,
+      "text": "عَنْهَا"
+    },
+    {
+      "end": 328,
+      "kind": "spelling",
+      "reading": ".",
+      "start": 328,
+      "text": ""
+    }
+  ],
+  "location": {
+    "hadith_number": 30,
+    "page_end": 106,
+    "page_start": 106
+  },
+  "occurrence_id": 30,
+  "record_type": "collation",
+  "schema_version": 1,
+  "span_end": 328,
+  "span_start": 0,
+  "witness_id": "nawawi-40-dar-al-ghawthani-2010-1"
+}

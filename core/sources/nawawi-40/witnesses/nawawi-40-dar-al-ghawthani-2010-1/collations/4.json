@@ -1,0 +1,351 @@
+{
+  "differences": [
+    {
+      "end": 29,
+      "kind": "spelling",
+      "reading": "الرَّحْمٰنِ",
+      "start": 18,
+      "text": "الرَّحْمَنِ"
+    },
+    {
+      "end": 30,
+      "kind": "spelling",
+      "reading": "",
+      "start": 29,
+      "text": "،"
+    },
+    {
+      "end": 50,
+      "kind": "spelling",
+      "reading": "بنِ",
+      "start": 46,
+      "text": "بْنِ"
+    },
+    {
+      "end": 81,
+      "kind": "spelling",
+      "reading": "﵁",
+      "start": 61,
+      "text": "رَضِيَ اللَّهُ عَنهُ"
+    },
+    {
+      "end": 87,
+      "kind": "spelling",
+      "reading": "قالَ",
+      "start": 82,
+      "text": "قَالَ"
+    },
+    {
+      "end": 99,
+      "kind": "spelling",
+      "reading": "حدَّثَنا",
+      "start": 89,
+      "text": "حَدَّثَنَا"
+    },
+    {
+      "end": 120,
+      "kind": "spelling",
+      "reading": "",
+      "start": 118,
+      "text": "- "
+    },
+    {
+      "end": 126,
+      "kind": "spelling",
+      "reading": "وهُوَ",
+      "start": 120,
+      "text": "وَهُوَ"
+    },
+    {
+      "end": 137,
+      "kind": "spelling",
+      "reading": "الصّادِقُ",
+      "start": 127,
+      "text": "الصَّادِقُ"
+    },
+    {
+      "end": 151,
+      "kind": "spelling",
+      "reading": "",
+      "start": 149,
+      "text": " -"
+    },
+    {
+      "end": 192,
+      "kind": "spelling",
+      "reading": "في",
+      "start": 189,
+      "text": "فِي"
+    },
+    {
+      "end": 305,
+      "kind": "spelling",
+      "reading": "، ",
+      "start": 303,
+      "text": ".\n"
+    },
+    {
+      "end": 376,
+      "kind": "spelling",
+      "reading": "ويُؤْمَرُ",
+      "start": 366,
+      "text": "وَيُؤْمَرُ"
+    },
+    {
+      "end": 397,
+      "kind": "spelling",
+      "reading": "كَلِماتٍ",
+      "start": 388,
+      "text": "كَلِمَاتٍ"
+    },
+    {
+      "end": 428,
+      "kind": "spelling",
+      "reading": "وأَجَلِهِ",
+      "start": 418,
+      "text": "وَأَجَلِهِ"
+    },
+    {
+      "end": 440,
+      "kind": "spelling",
+      "reading": "وعَمَلِهِ",
+      "start": 430,
+      "text": "وَعَمَلِهِ"
+    },
+    {
+      "end": 451,
+      "kind": "spelling",
+      "reading": "وشَقيٌّ",
+      "start": 442,
+      "text": "وَشَقِيٌّ"
+    },
+    {
+      "end": 477,
+      "kind": "spelling",
+      "reading": "فوَالَّذِي",
+      "start": 466,
+      "text": "فَوَالَّذِي"
+    },
+    {
+      "end": 481,
+      "kind": "spelling",
+      "reading": "لا",
+      "start": 478,
+      "text": "لَا"
+    },
+    {
+      "end": 488,
+      "kind": "spelling",
+      "reading": "إِلٰهَ",
+      "start": 482,
+      "text": "إِلَهَ"
+    },
+    {
+      "end": 498,
+      "kind": "spelling",
+      "reading": "",
+      "start": 497,
+      "text": "!"
+    },
+    {
+      "end": 552,
+      "kind": "spelling",
+      "reading": "الجَنّةِ",
+      "start": 543,
+      "text": "الجَنَّةِ"
+    },
+    {
+      "end": 553,
+      "kind": "spelling",
+      "reading": "",
+      "start": 552,
+      "text": "،"
+    },
+    {
+      "end": 564,
+      "kind": "spelling",
+      "reading": "ما",
+      "start": 561,
+      "text": "مَا"
+    },
+    {
+      "end": 572,
+      "kind": "spelling",
+      "reading": "يَكُونَُ",
+      "start": 565,
+      "text": "يَكُونُ"
+    },
+    {
+      "end": 593,
+      "kind": "spelling",
+      "reading": "وبَيْنَها",
+      "start": 582,
+      "text": "وَبَيْنَهَا"
+    },
+    {
+      "end": 600,
+      "kind": "spelling",
+      "reading": "إِلّا",
+      "start": 594,
+      "text": "إِلَّا"
+    },
+    {
+      "end": 608,
+      "kind": "spelling",
+      "reading": "ذِراعٌ",
+      "start": 601,
+      "text": "ذِرَاعٌ"
+    },
+    {
+      "end": 620,
+      "kind": "spelling",
+      "reading": "فيَسْبِقُ",
+      "start": 610,
+      "text": "فَيَسْبِقُ"
+    },
+    {
+      "end": 639,
+      "kind": "spelling",
+      "reading": "الكِتابُ",
+      "start": 630,
+      "text": "الكِتَابُ"
+    },
+    {
+      "end": 640,
+      "kind": "spelling",
+      "reading": "",
+      "start": 639,
+      "text": "،"
+    },
+    {
+      "end": 651,
+      "kind": "spelling",
+      "reading": "فيَعْمَلُ",
+      "start": 641,
+      "text": "فَيَعْمَلُ"
+    },
+    {
+      "end": 690,
+      "kind": "spelling",
+      "reading": "فيَدْخُلُها",
+      "start": 677,
+      "text": "فَيَدْخُلُهَا"
+    },
+    {
+      "end": 692,
+      "kind": "spelling",
+      "reading": "؛ ",
+      "start": 690,
+      "text": ".\n"
+    },
+    {
+      "end": 699,
+      "kind": "spelling",
+      "reading": "وإِنَّ",
+      "start": 692,
+      "text": "وَإِنَّ"
+    },
+    {
+      "end": 746,
+      "kind": "spelling",
+      "reading": "النّارِ",
+      "start": 738,
+      "text": "النَّارِ"
+    },
+    {
+      "end": 747,
+      "kind": "spelling",
+      "reading": "",
+      "start": 746,
+      "text": "،"
+    },
+    {
+      "end": 758,
+      "kind": "spelling",
+      "reading": "ما",
+      "start": 755,
+      "text": "مَا"
+    },
+    {
+      "end": 766,
+      "kind": "spelling",
+      "reading": "يَكُونَُ",
+      "start": 759,
+      "text": "يَكُونُ"
+    },
+    {
+      "end": 787,
+      "kind": "spelling",
+      "reading": "وبَيْنَها",
+      "start": 776,
+      "text": "وَبَيْنَهَا"
+    },
+    {
+      "end": 794,
+      "kind": "spelling",
+      "reading": "إِلّا",
+      "start": 788,
+      "text": "إِلَّا"
+    },
+    {
+      "end": 802,
+      "kind": "spelling",
+      "reading": "ذِراعٌ",
+      "start": 795,
+      "text": "ذِرَاعٌ"
+    },
+    {
+      "end": 814,
+      "kind": "spelling",
+      "reading": "فيَسْبِقُ",
+      "start": 804,
+      "text": "فَيَسْبِقُ"
+    },
+    {
+      "end": 833,
+      "kind": "spelling",
+      "reading": "الكِتابُ",
+      "start": 824,
+      "text": "الكِتَابُ"
+    },
+    {
+      "end": 845,
+      "kind": "spelling",
+      "reading": "فيَعْمَلُ",
+      "start": 835,
+      "text": "فَيَعْمَلُ"
+    },
+    {
+      "end": 871,
+      "kind": "spelling",
+      "reading": "الجَنّةِ",
+      "start": 862,
+      "text": "الجَنَّةِ"
+    },
+    {
+      "end": 885,
+      "kind": "spelling",
+      "reading": "فيَدْخُلُها",
+      "start": 872,
+      "text": "فَيَدْخُلُهَا"
+    },
+    {
+      "end": 886,
+      "kind": "spelling",
+      "reading": ".",
+      "start": 886,
+      "text": ""
+    }
+  ],
+  "location": {
+    "hadith_number": 4,
+    "page_end": 30,
+    "page_start": 29
+  },
+  "occurrence_id": 4,
+  "record_type": "collation",
+  "schema_version": 1,
+  "span_end": 886,
+  "span_start": 0,
+  "witness_id": "nawawi-40-dar-al-ghawthani-2010-1"
+}

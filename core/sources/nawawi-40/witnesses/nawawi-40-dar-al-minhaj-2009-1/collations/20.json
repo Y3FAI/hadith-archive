@@ -1,0 +1,99 @@
+{
+  "differences": [
+    {
+      "end": 21,
+      "kind": "spelling",
+      "reading": "",
+      "start": 20,
+      "text": "،"
+    },
+    {
+      "end": 58,
+      "kind": "spelling",
+      "reading": "ٱلأَنْصَارِيِّ",
+      "start": 44,
+      "text": "الأَنْصَارِيِّ"
+    },
+    {
+      "end": 70,
+      "kind": "spelling",
+      "reading": "ٱلْبَدْرِيِّ",
+      "start": 59,
+      "text": "البَدْرِيِّ"
+    },
+    {
+      "end": 85,
+      "kind": "spelling",
+      "reading": "ٱللَّهُ",
+      "start": 78,
+      "text": "اللَّهُ"
+    },
+    {
+      "end": 121,
+      "kind": "spelling",
+      "reading": "ٱللَّهِ",
+      "start": 114,
+      "text": "اللَّهِ"
+    },
+    {
+      "end": 123,
+      "kind": "spelling",
+      "reading": "صَلَّى ٱللَّهُ عَلَيْهِ وَسَلَّمَ",
+      "start": 122,
+      "text": "ﷺ"
+    },
+    {
+      "end": 156,
+      "kind": "spelling",
+      "reading": "ٱلنَّاسُ",
+      "start": 148,
+      "text": "النَّاسُ"
+    },
+    {
+      "end": 182,
+      "kind": "spelling",
+      "reading": "ٱلنُّبُوَّةِ",
+      "start": 170,
+      "text": "النُّبُوَّةِ"
+    },
+    {
+      "end": 191,
+      "kind": "spelling",
+      "reading": "ٱلأُولَىٰ",
+      "start": 183,
+      "text": "الأُولَى"
+    },
+    {
+      "end": 214,
+      "kind": "spelling",
+      "reading": "..",
+      "start": 214,
+      "text": ""
+    },
+    {
+      "end": 224,
+      "kind": "spelling",
+      "reading": "فَٱصْنَعْ",
+      "start": 215,
+      "text": "فَاصْنَعْ"
+    },
+    {
+      "end": 236,
+      "kind": "spelling",
+      "reading": " » .",
+      "start": 235,
+      "text": "»"
+    }
+  ],
+  "location": {
+    "hadith_number": 20,
+    "page_end": 73,
+    "page_start": 73
+  },
+  "occurrence_id": 20,
+  "record_type": "collation",
+  "schema_version": 1,
+  "span_end": 236,
+  "span_start": 0,
+  "witness_id": "nawawi-40-dar-al-minhaj-2009-1"
+}

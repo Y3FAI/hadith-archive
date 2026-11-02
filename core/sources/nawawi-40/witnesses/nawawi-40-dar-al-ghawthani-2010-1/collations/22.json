@@ -1,0 +1,183 @@
+{
+  "differences": [
+    {
+      "end": 26,
+      "kind": "spelling",
+      "reading": "",
+      "start": 25,
+      "text": "،"
+    },
+    {
+      "end": 34,
+      "kind": "spelling",
+      "reading": "جابِرِ",
+      "start": 27,
+      "text": "جَابِرِ"
+    },
+    {
+      "end": 39,
+      "kind": "spelling",
+      "reading": "بنِ",
+      "start": 35,
+      "text": "بْنِ"
+    },
+    {
+      "end": 53,
+      "kind": "spelling",
+      "reading": "اللَّهِ",
+      "start": 47,
+      "text": "اللَّه"
+    },
+    {
+      "end": 68,
+      "kind": "spelling",
+      "reading": "الأَنْصارِيِّ",
+      "start": 54,
+      "text": "الأَنْصَارِيِّ"
+    },
+    {
+      "end": 93,
+      "kind": "spelling",
+      "reading": "﵄",
+      "start": 69,
+      "text": "رَضِيَ اللَّهُ عَنْهُمَا"
+    },
+    {
+      "end": 96,
+      "kind": "spelling",
+      "reading": "",
+      "start": 95,
+      "text": "«"
+    },
+    {
+      "end": 101,
+      "kind": "spelling",
+      "reading": "أَنّ",
+      "start": 96,
+      "text": "أَنَّ"
+    },
+    {
+      "end": 131,
+      "kind": "spelling",
+      "reading": "اللَّهِ",
+      "start": 125,
+      "text": "اللَّه"
+    },
+    {
+      "end": 141,
+      "kind": "spelling",
+      "reading": "فقالَ",
+      "start": 134,
+      "text": "فَقَالَ"
+    },
+    {
+      "end": 159,
+      "kind": "spelling",
+      "reading": "إِذا",
+      "start": 154,
+      "text": "إِذَا"
+    },
+    {
+      "end": 184,
+      "kind": "spelling",
+      "reading": "المَكْتُوباتِ",
+      "start": 170,
+      "text": "المَكْتُوبَاتِ"
+    },
+    {
+      "end": 194,
+      "kind": "spelling",
+      "reading": "وصُمْتُ",
+      "start": 186,
+      "text": "وَصُمْتُ"
+    },
+    {
+      "end": 204,
+      "kind": "spelling",
+      "reading": "رَمَضانَ",
+      "start": 195,
+      "text": "رَمَضَانَ"
+    },
+    {
+      "end": 218,
+      "kind": "spelling",
+      "reading": "وأَحْلَلْتُ",
+      "start": 206,
+      "text": "وَأَحْلَلْتُ"
+    },
+    {
+      "end": 228,
+      "kind": "spelling",
+      "reading": "الحَلالَ",
+      "start": 219,
+      "text": "الحَلَالَ"
+    },
+    {
+      "end": 241,
+      "kind": "spelling",
+      "reading": "وحَرَّمْتُ",
+      "start": 230,
+      "text": "وَحَرَّمْتُ"
+    },
+    {
+      "end": 251,
+      "kind": "spelling",
+      "reading": "الحَرامَ",
+      "start": 242,
+      "text": "الحَرَامَ"
+    },
+    {
+      "end": 259,
+      "kind": "spelling",
+      "reading": "ولَمْ",
+      "start": 253,
+      "text": "وَلَمْ"
+    },
+    {
+      "end": 288,
+      "kind": "spelling",
+      "reading": "،",
+      "start": 287,
+      "text": "؛"
+    },
+    {
+      "end": 309,
+      "kind": "spelling",
+      "reading": "الجَنّةَ",
+      "start": 300,
+      "text": "الجَنَّةَ"
+    },
+    {
+      "end": 316,
+      "kind": "spelling",
+      "reading": "قالَ",
+      "start": 311,
+      "text": "قَالَ"
+    },
+    {
+      "end": 318,
+      "kind": "spelling",
+      "reading": "«",
+      "start": 318,
+      "text": ""
+    },
+    {
+      "end": 325,
+      "kind": "spelling",
+      "reading": ".",
+      "start": 325,
+      "text": ""
+    }
+  ],
+  "location": {
+    "hadith_number": 22,
+    "page_end": 78,
+    "page_start": 78
+  },
+  "occurrence_id": 22,
+  "record_type": "collation",
+  "schema_version": 1,
+  "span_end": 325,
+  "span_start": 0,
+  "witness_id": "nawawi-40-dar-al-ghawthani-2010-1"
+}

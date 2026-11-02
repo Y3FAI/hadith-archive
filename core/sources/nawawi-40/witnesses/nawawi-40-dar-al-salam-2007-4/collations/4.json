@@ -1,0 +1,477 @@
+{
+  "differences": [
+    {
+      "end": 4,
+      "kind": "spelling",
+      "reading": "عن",
+      "start": 0,
+      "text": "عَنْ"
+    },
+    {
+      "end": 10,
+      "kind": "spelling",
+      "reading": "أَبي",
+      "start": 5,
+      "text": "أَبِي"
+    },
+    {
+      "end": 17,
+      "kind": "spelling",
+      "reading": "عَبدِ",
+      "start": 11,
+      "text": "عَبْدِ"
+    },
+    {
+      "end": 29,
+      "kind": "spelling",
+      "reading": "الرَّحمنِ",
+      "start": 18,
+      "text": "الرَّحْمَنِ"
+    },
+    {
+      "end": 30,
+      "kind": "spelling",
+      "reading": "",
+      "start": 29,
+      "text": "،"
+    },
+    {
+      "end": 37,
+      "kind": "spelling",
+      "reading": "عبدِ",
+      "start": 31,
+      "text": "عَبْدِ"
+    },
+    {
+      "end": 45,
+      "kind": "spelling",
+      "reading": "اللَّه",
+      "start": 38,
+      "text": "اللَّهِ"
+    },
+    {
+      "end": 50,
+      "kind": "spelling",
+      "reading": "بنِ",
+      "start": 46,
+      "text": "بْنِ"
+    },
+    {
+      "end": 60,
+      "kind": "spelling",
+      "reading": "مسعودٍ",
+      "start": 51,
+      "text": "مَسْعُودٍ"
+    },
+    {
+      "end": 61,
+      "kind": "spelling",
+      "reading": "– ",
+      "start": 61,
+      "text": ""
+    },
+    {
+      "end": 67,
+      "kind": "spelling",
+      "reading": "رضي",
+      "start": 61,
+      "text": "رَضِيَ"
+    },
+    {
+      "end": 75,
+      "kind": "spelling",
+      "reading": "اللَّه",
+      "start": 68,
+      "text": "اللَّهُ"
+    },
+    {
+      "end": 76,
+      "kind": "wording",
+      "reading": "تعالى ",
+      "start": 76,
+      "text": ""
+    },
+    {
+      "end": 81,
+      "kind": "spelling",
+      "reading": "عنه",
+      "start": 76,
+      "text": "عَنهُ"
+    },
+    {
+      "end": 82,
+      "kind": "spelling",
+      "reading": "– ",
+      "start": 82,
+      "text": ""
+    },
+    {
+      "end": 87,
+      "kind": "spelling",
+      "reading": "قال",
+      "start": 82,
+      "text": "قَالَ"
+    },
+    {
+      "end": 99,
+      "kind": "spelling",
+      "reading": "حدَّثَنَا",
+      "start": 89,
+      "text": "حَدَّثَنَا"
+    },
+    {
+      "end": 107,
+      "kind": "spelling",
+      "reading": "رسول",
+      "start": 100,
+      "text": "رَسُولُ"
+    },
+    {
+      "end": 115,
+      "kind": "spelling",
+      "reading": "اللَّه",
+      "start": 108,
+      "text": "اللَّهِ"
+    },
+    {
+      "end": 120,
+      "kind": "spelling",
+      "reading": "",
+      "start": 118,
+      "text": "- "
+    },
+    {
+      "end": 126,
+      "kind": "spelling",
+      "reading": "وهُوَ",
+      "start": 120,
+      "text": "وَهُوَ"
+    },
+    {
+      "end": 149,
+      "kind": "spelling",
+      "reading": "المَصْدُوق",
+      "start": 138,
+      "text": "المَصْدُوقُ"
+    },
+    {
+      "end": 154,
+      "kind": "spelling",
+      "reading": ": « ",
+      "start": 150,
+      "text": "-: «"
+    },
+    {
+      "end": 159,
+      "kind": "spelling",
+      "reading": "إنَّ",
+      "start": 154,
+      "text": "إِنَّ"
+    },
+    {
+      "end": 192,
+      "kind": "spelling",
+      "reading": "في",
+      "start": 189,
+      "text": "فِي"
+    },
+    {
+      "end": 227,
+      "kind": "spelling",
+      "reading": "يومًا",
+      "start": 220,
+      "text": "يَوْماً"
+    },
+    {
+      "end": 227,
+      "kind": "wording",
+      "reading": " نُطْفَةً ",
+      "start": 227,
+      "text": ""
+    },
+    {
+      "end": 280,
+      "kind": "spelling",
+      "reading": "يَكُون",
+      "start": 273,
+      "text": "يَكُونُ"
+    },
+    {
+      "end": 303,
+      "kind": "spelling",
+      "reading": "ذلك",
+      "start": 297,
+      "text": "ذَلِكَ"
+    },
+    {
+      "end": 305,
+      "kind": "spelling",
+      "reading": " ، ",
+      "start": 303,
+      "text": ".\n"
+    },
+    {
+      "end": 328,
+      "kind": "spelling",
+      "reading": "إليه",
+      "start": 320,
+      "text": "إِلَيْهِ"
+    },
+    {
+      "end": 338,
+      "kind": "spelling",
+      "reading": "",
+      "start": 337,
+      "text": "،"
+    },
+    {
+      "end": 355,
+      "kind": "spelling",
+      "reading": "فيه",
+      "start": 350,
+      "text": "فِيهِ"
+    },
+    {
+      "end": 376,
+      "kind": "spelling",
+      "reading": "ويُؤمَرُ",
+      "start": 366,
+      "text": "وَيُؤْمَرُ"
+    },
+    {
+      "end": 387,
+      "kind": "spelling",
+      "reading": "بأَرْبَعِ",
+      "start": 377,
+      "text": "بِأَرْبَعِ"
+    },
+    {
+      "end": 428,
+      "kind": "spelling",
+      "reading": "وأَجَلِهِ",
+      "start": 418,
+      "text": "وَأَجَلِهِ"
+    },
+    {
+      "end": 440,
+      "kind": "spelling",
+      "reading": "وعَمَلِهِ",
+      "start": 430,
+      "text": "وَعَمَلِهِ"
+    },
+    {
+      "end": 451,
+      "kind": "spelling",
+      "reading": "وشَقِيٌّ",
+      "start": 442,
+      "text": "وَشَقِيٌّ"
+    },
+    {
+      "end": 456,
+      "kind": "spelling",
+      "reading": "أَو",
+      "start": 452,
+      "text": "أَوْ"
+    },
+    {
+      "end": 477,
+      "kind": "wording",
+      "reading": "فَوَاللَّهِ الَّذي",
+      "start": 466,
+      "text": "فَوَالَّذِي"
+    },
+    {
+      "end": 481,
+      "kind": "spelling",
+      "reading": "لا",
+      "start": 478,
+      "text": "لَا"
+    },
+    {
+      "end": 488,
+      "kind": "spelling",
+      "reading": "إلهَ",
+      "start": 482,
+      "text": "إِلَهَ"
+    },
+    {
+      "end": 497,
+      "kind": "spelling",
+      "reading": "غَيرُهُ",
+      "start": 489,
+      "text": "غَيْرُهُ"
+    },
+    {
+      "end": 498,
+      "kind": "spelling",
+      "reading": "",
+      "start": 497,
+      "text": "!"
+    },
+    {
+      "end": 552,
+      "kind": "spelling",
+      "reading": "الجنةِ",
+      "start": 543,
+      "text": "الجَنَّةِ"
+    },
+    {
+      "end": 560,
+      "kind": "spelling",
+      "reading": "حتى",
+      "start": 554,
+      "text": "حَتَّى"
+    },
+    {
+      "end": 564,
+      "kind": "spelling",
+      "reading": "ما",
+      "start": 561,
+      "text": "مَا"
+    },
+    {
+      "end": 572,
+      "kind": "spelling",
+      "reading": "يَكُونَ",
+      "start": 565,
+      "text": "يَكُونُ"
+    },
+    {
+      "end": 581,
+      "kind": "spelling",
+      "reading": "بَينَهُ",
+      "start": 573,
+      "text": "بَيْنَهُ"
+    },
+    {
+      "end": 593,
+      "kind": "spelling",
+      "reading": "وبَينَهَا",
+      "start": 582,
+      "text": "وَبَيْنَهَا"
+    },
+    {
+      "end": 600,
+      "kind": "spelling",
+      "reading": "إلا",
+      "start": 594,
+      "text": "إِلَّا"
+    },
+    {
+      "end": 608,
+      "kind": "spelling",
+      "reading": "ذِراعٌ",
+      "start": 601,
+      "text": "ذِرَاعٌ"
+    },
+    {
+      "end": 629,
+      "kind": "spelling",
+      "reading": "عليه",
+      "start": 621,
+      "text": "عَلَيْهِ"
+    },
+    {
+      "end": 639,
+      "kind": "spelling",
+      "reading": "الكتَابُ",
+      "start": 630,
+      "text": "الكِتَابُ"
+    },
+    {
+      "end": 690,
+      "kind": "spelling",
+      "reading": "فَيَدْخُلُها",
+      "start": 677,
+      "text": "فَيَدْخُلُهَا"
+    },
+    {
+      "end": 699,
+      "kind": "spelling",
+      "reading": "وإنَّ",
+      "start": 692,
+      "text": "وَإِنَّ"
+    },
+    {
+      "end": 754,
+      "kind": "spelling",
+      "reading": "حتى",
+      "start": 748,
+      "text": "حَتَّى"
+    },
+    {
+      "end": 758,
+      "kind": "spelling",
+      "reading": "ما",
+      "start": 755,
+      "text": "مَا"
+    },
+    {
+      "end": 766,
+      "kind": "spelling",
+      "reading": "يَكُونَ",
+      "start": 759,
+      "text": "يَكُونُ"
+    },
+    {
+      "end": 775,
+      "kind": "spelling",
+      "reading": "بَينَهُ",
+      "start": 767,
+      "text": "بَيْنَهُ"
+    },
+    {
+      "end": 787,
+      "kind": "spelling",
+      "reading": "وبَينَهَا",
+      "start": 776,
+      "text": "وَبَيْنَهَا"
+    },
+    {
+      "end": 794,
+      "kind": "spelling",
+      "reading": "إلَّا",
+      "start": 788,
+      "text": "إِلَّا"
+    },
+    {
+      "end": 823,
+      "kind": "spelling",
+      "reading": "عليه",
+      "start": 815,
+      "text": "عَلَيْهِ"
+    },
+    {
+      "end": 833,
+      "kind": "spelling",
+      "reading": "الْكِتَابُ",
+      "start": 824,
+      "text": "الكِتَابُ"
+    },
+    {
+      "end": 871,
+      "kind": "spelling",
+      "reading": "الجنةِ",
+      "start": 862,
+      "text": "الجَنَّةِ"
+    },
+    {
+      "end": 886,
+      "kind": "spelling",
+      "reading": " » .",
+      "start": 885,
+      "text": "»"
+    }
+  ],
+  "location": {
+    "hadith_number": 4,
+    "page_end": 6,
+    "page_start": 6
+  },
+  "occurrence_id": 4,
+  "record_type": "collation",
+  "schema_version": 1,
+  "span_end": 886,
+  "span_start": 0,
+  "witness_id": "nawawi-40-dar-al-salam-2007-4"
+}

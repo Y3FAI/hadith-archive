@@ -178,7 +178,7 @@ describe("invisible format characters", () => {
     expect(text.normalize("NFC")).toBe(text);
     expect(await verify(textRecords(text, `${text}\n${text}`))).toEqual({
       kind: "complete",
-      report: { findings: [], valid: true, verification_version: 4 },
+      report: { findings: [], valid: true, verification_version: 5 },
     });
   });
 });
@@ -187,7 +187,7 @@ describe("hadith text whitespace", () => {
   test("accepts text that keeps a stored LF", async () => {
     expect(await verify([hadith("مثال نص\nفقرة ثانية")])).toEqual({
       kind: "complete",
-      report: { findings: [], valid: true, verification_version: 4 },
+      report: { findings: [], valid: true, verification_version: 5 },
     });
   });
 
@@ -206,7 +206,7 @@ describe("hadith text whitespace", () => {
             rule_id: "text.raw_whitespace",
           }],
           valid: false,
-          verification_version: 4,
+          verification_version: 5,
         },
       });
     });
@@ -217,7 +217,7 @@ describe("common semantic rules", () => {
   test("accepts valid whitespace, checksum, fingerprint, pages, and location", async () => {
     expect(await verify([witness(), occurrence("مثال نص\nفقرة ثانية")])).toEqual({
       kind: "complete",
-      report: { findings: [], valid: true, verification_version: 4 },
+      report: { findings: [], valid: true, verification_version: 5 },
     });
   });
 
@@ -270,6 +270,32 @@ describe("common semantic rules", () => {
     }
   });
 
+  test("accepts the Prophet's words as ranges of the raw text, and rejects any other range", async () => {
+    // Letters carry marks, so a range can end inside a grapheme; offsets
+    // count code points.
+    const rawText = "قَالَ: نَعَمْ، قَالَ: لَا";
+    const words = (prophetWords: unknown) => verify([occurrence(rawText, { prophet_words: prophetWords })]);
+    expect(await words([{ end: 13, start: 7 }, { end: 25, start: 22 }])).toEqual({
+      kind: "complete",
+      report: { findings: [], valid: true, verification_version: 5 },
+    });
+    for (const prophetWords of [
+      [{ end: 7, start: 7 }],
+      [{ end: 12, start: 7 }],
+      [{ end: 14, start: 6 }],
+      [{ end: 26, start: 21 }],
+      [{ end: 25, start: 22 }, { end: 13, start: 7 }],
+      [{ end: 13, start: 7 }, { end: 14, start: 13 }],
+    ]) {
+      const result = await words(prophetWords);
+      expect(result.kind).toBe("complete");
+      if (result.kind === "complete") {
+        expect(result.report.findings.map((item) => `${item.rule_id}:${item.instance_path}`))
+          .toEqual([`occurrence.prophet_words:/prophet_words/${prophetWords.length - 1}`]);
+      }
+    }
+  });
+
   test("rejects an unpaired surrogate whose fingerprint collides with U+FFFD", async () => {
     const replacement = occurrence("قال � رسول الله");
     const malformed = {
@@ -291,7 +317,7 @@ describe("common semantic rules", () => {
 
     expect(await run(replacement)).toEqual({
       kind: "complete",
-      report: { findings: [], valid: true, verification_version: 4 },
+      report: { findings: [], valid: true, verification_version: 5 },
     });
     expect(await run(malformed)).toEqual({
       kind: "complete",
@@ -301,7 +327,7 @@ describe("common semantic rules", () => {
           rule_id: "json.canonical",
         })],
         valid: false,
-        verification_version: 4,
+        verification_version: 5,
       },
     });
   });
@@ -311,7 +337,7 @@ describe("common semantic rules", () => {
     for (const isbn of ["9773420752", "080442957X"]) {
       expect(await verify([witness({ isbn })])).toEqual({
         kind: "complete",
-        report: { findings: [], valid: true, verification_version: 4 },
+        report: { findings: [], valid: true, verification_version: 5 },
       });
     }
     const bare = witness();
@@ -321,7 +347,7 @@ describe("common semantic rules", () => {
     delete value["publication_year"];
     expect(await verify([jsonInput(bare.path, value)])).toEqual({
       kind: "complete",
-      report: { findings: [], valid: true, verification_version: 4 },
+      report: { findings: [], valid: true, verification_version: 5 },
     });
   });
 
@@ -353,7 +379,7 @@ describe("common semantic rules", () => {
       collation({ hadith_number: 1, page_end: 12, page_start: 12 }),
     ])).toEqual({
       kind: "complete",
-      report: { findings: [], valid: true, verification_version: 4 },
+      report: { findings: [], valid: true, verification_version: 5 },
     });
     const result = await verify([
       witness(),
@@ -374,7 +400,7 @@ describe("common semantic rules", () => {
     const result = await verify([occurrence("مثال نص")]);
     expect(result).toEqual({
       kind: "complete",
-      report: { findings: [], valid: true, verification_version: 4 },
+      report: { findings: [], valid: true, verification_version: 5 },
     });
   });
 });

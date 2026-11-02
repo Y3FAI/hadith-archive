@@ -1,0 +1,92 @@
+{
+  "differences": [
+    {
+      "end": 24,
+      "kind": "spelling",
+      "reading": "ٱلْمُؤْمِنِينَ",
+      "start": 11,
+      "text": "المُؤْمِنِينَ"
+    },
+    {
+      "end": 27,
+      "kind": "spelling",
+      "reading": "",
+      "start": 25,
+      "text": "- "
+    },
+    {
+      "end": 47,
+      "kind": "spelling",
+      "reading": "ٱللَّهِ",
+      "start": 40,
+      "text": "اللَّهِ"
+    },
+    {
+      "end": 48,
+      "kind": "spelling",
+      "reading": "",
+      "start": 47,
+      "text": "،"
+    },
+    {
+      "end": 61,
+      "kind": "spelling",
+      "reading": "",
+      "start": 59,
+      "text": "- "
+    },
+    {
+      "end": 75,
+      "kind": "spelling",
+      "reading": "ٱللَّهُ",
+      "start": 68,
+      "text": "اللَّهُ"
+    },
+    {
+      "end": 114,
+      "kind": "spelling",
+      "reading": "ٱللَّهِ",
+      "start": 107,
+      "text": "اللَّهِ"
+    },
+    {
+      "end": 116,
+      "kind": "spelling",
+      "reading": "صَلَّى ٱللَّهُ عَلَيْهِ وَسَلَّمَ",
+      "start": 115,
+      "text": "ﷺ"
+    },
+    {
+      "end": 152,
+      "kind": "spelling",
+      "reading": "هَٰذَا",
+      "start": 147,
+      "text": "هَذَا"
+    },
+    {
+      "end": 171,
+      "kind": "spelling",
+      "reading": "..",
+      "start": 170,
+      "text": "؛"
+    },
+    {
+      "end": 185,
+      "kind": "spelling",
+      "reading": " » .",
+      "start": 184,
+      "text": "»"
+    }
+  ],
+  "location": {
+    "hadith_number": 5,
+    "page_end": 55,
+    "page_start": 55
+  },
+  "occurrence_id": 5,
+  "record_type": "collation",
+  "schema_version": 1,
+  "span_end": 185,
+  "span_start": 0,
+  "witness_id": "nawawi-40-dar-al-minhaj-2009-1"
+}

@@ -1,0 +1,92 @@
+{
+  "differences": [
+    {
+      "end": 52,
+      "kind": "spelling",
+      "reading": "﵁",
+      "start": 31,
+      "text": "رَضِيَ اللَّهُ عَنْهُ"
+    },
+    {
+      "end": 58,
+      "kind": "spelling",
+      "reading": "قالَ",
+      "start": 53,
+      "text": "قَالَ"
+    },
+    {
+      "end": 83,
+      "kind": "spelling",
+      "reading": "اللَّهِ",
+      "start": 77,
+      "text": "اللَّه"
+    },
+    {
+      "end": 141,
+      "kind": "spelling",
+      "reading": "فلْيُغَيِّرْهُ",
+      "start": 126,
+      "text": "فَلْيُغَيِّرْهُ"
+    },
+    {
+      "end": 158,
+      "kind": "spelling",
+      "reading": "فإِنْ",
+      "start": 152,
+      "text": "فَإِنْ"
+    },
+    {
+      "end": 188,
+      "kind": "spelling",
+      "reading": "فبِلِسانِهِ",
+      "start": 175,
+      "text": "فَبِلِسَانِهِ"
+    },
+    {
+      "end": 196,
+      "kind": "spelling",
+      "reading": "فإِنْ",
+      "start": 190,
+      "text": "فَإِنْ"
+    },
+    {
+      "end": 225,
+      "kind": "spelling",
+      "reading": "فبِقَلْبِهِ",
+      "start": 213,
+      "text": "فَبِقَلْبِهِ"
+    },
+    {
+      "end": 235,
+      "kind": "spelling",
+      "reading": "وذَلِكَ",
+      "start": 227,
+      "text": "وَذَلِكَ"
+    },
+    {
+      "end": 255,
+      "kind": "spelling",
+      "reading": "الإِيمانِ",
+      "start": 245,
+      "text": "الإِيمَانِ"
+    },
+    {
+      "end": 256,
+      "kind": "spelling",
+      "reading": ".",
+      "start": 256,
+      "text": ""
+    }
+  ],
+  "location": {
+    "hadith_number": 34,
+    "page_end": 116,
+    "page_start": 116
+  },
+  "occurrence_id": 34,
+  "record_type": "collation",
+  "schema_version": 1,
+  "span_end": 256,
+  "span_start": 0,
+  "witness_id": "nawawi-40-dar-al-ghawthani-2010-1"
+}

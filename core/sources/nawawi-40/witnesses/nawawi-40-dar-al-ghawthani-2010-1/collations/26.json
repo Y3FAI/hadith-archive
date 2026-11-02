@@ -1,0 +1,155 @@
+{
+  "differences": [
+    {
+      "end": 43,
+      "kind": "spelling",
+      "reading": "﵁",
+      "start": 22,
+      "text": "رَضِيَ اللَّهُ عَنْهُ"
+    },
+    {
+      "end": 49,
+      "kind": "spelling",
+      "reading": "قالَ",
+      "start": 44,
+      "text": "قَالَ"
+    },
+    {
+      "end": 56,
+      "kind": "spelling",
+      "reading": "قالَ",
+      "start": 51,
+      "text": "قَالَ"
+    },
+    {
+      "end": 90,
+      "kind": "spelling",
+      "reading": "سُلامَى",
+      "start": 82,
+      "text": "سُلَامَى"
+    },
+    {
+      "end": 104,
+      "kind": "spelling",
+      "reading": "النّاسِ",
+      "start": 96,
+      "text": "النَّاسِ"
+    },
+    {
+      "end": 191,
+      "kind": "spelling",
+      "reading": "الِاثْنَيْنِ",
+      "start": 179,
+      "text": "الاِثْنَيْنِ"
+    },
+    {
+      "end": 211,
+      "kind": "spelling",
+      "reading": "وتُعِينُ",
+      "start": 202,
+      "text": "وَتُعِينُ"
+    },
+    {
+      "end": 225,
+      "kind": "spelling",
+      "reading": "في",
+      "start": 222,
+      "text": "فِي"
+    },
+    {
+      "end": 236,
+      "kind": "spelling",
+      "reading": "دابَّتِهِ",
+      "start": 226,
+      "text": "دَابَّتِهِ"
+    },
+    {
+      "end": 249,
+      "kind": "spelling",
+      "reading": "فتَحْمِلُهُ",
+      "start": 237,
+      "text": "فَتَحْمِلُهُ"
+    },
+    {
+      "end": 259,
+      "kind": "spelling",
+      "reading": "عَلَيْها",
+      "start": 250,
+      "text": "عَلَيْهَا"
+    },
+    {
+      "end": 260,
+      "kind": "spelling",
+      "reading": "",
+      "start": 259,
+      "text": "،"
+    },
+    {
+      "end": 289,
+      "kind": "spelling",
+      "reading": "عَلَيْها",
+      "start": 280,
+      "text": "عَلَيْهَا"
+    },
+    {
+      "end": 299,
+      "kind": "spelling",
+      "reading": "مَتاعَهُ",
+      "start": 290,
+      "text": "مَتَاعَهُ"
+    },
+    {
+      "end": 322,
+      "kind": "spelling",
+      "reading": "والكَلِمَةُ",
+      "start": 310,
+      "text": "وَالكَلِمَةُ"
+    },
+    {
+      "end": 353,
+      "kind": "wording",
+      "reading": "وبِكُلِّ",
+      "start": 346,
+      "text": "وَكُلُّ"
+    },
+    {
+      "end": 373,
+      "kind": "spelling",
+      "reading": "تَمْشِيها",
+      "start": 363,
+      "text": "تَمْشِيهَا"
+    },
+    {
+      "end": 390,
+      "kind": "spelling",
+      "reading": "الصَّلاةِ",
+      "start": 380,
+      "text": "الصَّلَاةِ"
+    },
+    {
+      "end": 410,
+      "kind": "spelling",
+      "reading": "وتُمِيطُ",
+      "start": 401,
+      "text": "وَتُمِيطُ"
+    },
+    {
+      "end": 444,
+      "kind": "spelling",
+      "reading": ".",
+      "start": 444,
+      "text": ""
+    }
+  ],
+  "location": {
+    "hadith_number": 26,
+    "page_end": 93,
+    "page_start": 93
+  },
+  "occurrence_id": 26,
+  "record_type": "collation",
+  "schema_version": 1,
+  "span_end": 444,
+  "span_start": 0,
+  "witness_id": "nawawi-40-dar-al-ghawthani-2010-1"
+}

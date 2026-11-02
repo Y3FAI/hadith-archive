@@ -92,26 +92,13 @@ h1 {
   font-weight: 400;
 }
 
-/* Under the hadith, the book (with the hadith's number) on the start side
-   and the printing (with the page) on the far side; on a narrow screen
-   the printing moves under the book. */
-article {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  column-gap: 1.25rem;
-}
-
-/* min-width: a wide table scrolls in its card rather than widening the page. */
-article > :not(dl) {
-  flex-basis: 100%;
-  min-width: 0;
-}
-
 /* The hadith text, on its card, followed by the rest of the entry as the
-   book prints it: the attribution line and anything after it. */
-article > div {
+   book prints it: the attribution line and anything after it, small and
+   grey on a faint band at the card's foot. */
+article > div > h1 {
   padding: var(--card-padding);
+  font-size: var(--text);
+  line-height: 2;
 }
 
 article > div > h1,
@@ -120,10 +107,37 @@ article > div > p {
   text-wrap: pretty;
 }
 
+/* Each stored line of the hadith a paragraph, half a line apart. */
+article > div > h1 > span {
+  display: block;
+}
+
+article > div > h1 > span + span {
+  margin-block-start: .5em;
+}
+
+/* The Prophet's words in a clear blue (5:1 on white, 4.7:1 on the band),
+   apart from black for colour-blind readers too. */
+.prophet {
+  color: #0075B9;
+}
+
 article > div > p {
-  margin: .75em 0 0;
-  font-size: var(--text);
-  line-height: var(--leading);
+  margin: 0;
+  padding: .5rem var(--card-padding) 0;
+  background: #FAFAFB;
+  color: #636366;
+  font-size: 1rem;
+  line-height: 1.75rem;
+}
+
+article > div > h1 + p {
+  padding-block-start: .75rem;
+}
+
+article > div > p:last-child {
+  padding-block-end: .75rem;
+  border-radius: 0 0 var(--radius-panel) var(--radius-panel);
 }
 
 header {
@@ -250,7 +264,6 @@ dl {
   line-height: 1.75rem;
 }
 
-article > div + dl,
 li > div + dl {
   margin-block-start: .5rem;
 }
@@ -456,7 +469,7 @@ dd a {
   }
 }
 
-/* A hadith's category, a little below its citation. */
+/* A second line of facts, a little below the first. */
 dl + dl {
   margin-block-start: .5rem;
 }
@@ -488,8 +501,9 @@ svg[data-match] {
   stroke-linejoin: round;
 }
 
-/* «طبعات أخرى»: a white card that opens to the printings, each with how
-   it compares with the text above, then the table of differences. */
+/* «المصدر» and «تفاصيل الطبعات»: white cards that open, one to the book
+   and printing of the text above, one to the other printings, each with
+   how it compares with that text, then the table of differences. */
 article section > details {
   margin: 0;
   background: #FFFFFF;
@@ -519,6 +533,10 @@ article details ol {
   padding-inline: .75rem;
 }
 
+article details > div > dl {
+  margin-inline: .75rem;
+}
+
 /* The ring beside a comparison, sized to the citation's text. */
 dd > svg[data-match] {
   width: 1.25rem;
@@ -546,13 +564,14 @@ table {
   line-height: 1.7;
 }
 
+/* A long name wraps; the names sit together just above the rows. */
 th[scope="col"] {
   padding: 0 .75rem;
   color: #636366;
   font-size: 1rem;
   font-weight: 400;
   text-align: start;
-  white-space: nowrap;
+  vertical-align: bottom;
 }
 
 /* Word differences first, then the rest, each group under its name. */
@@ -611,6 +630,11 @@ mark[data-match="spelling"] {
 
 mark[data-match="wording"] {
   background: #FBE1DD;
+}
+
+/* Where a printing drops text, a small band of the colour marks the place. */
+mark:empty {
+  padding-inline: .2em;
 }
 
 /* Search, kept for later (search.html): the site launches without it.
@@ -741,8 +765,9 @@ main > section > ul {
   gap: calc(var(--space-s) + .25rem);
 }
 
-/* A book's sections («abwab») use the same cards as the books. */
-:is([aria-labelledby="kutub"], [aria-labelledby="abwab"]) ul {
+/* A book's sections («abwab») and printings («tabaat») use the same cards
+   as the books. */
+:is([aria-labelledby="kutub"], [aria-labelledby="abwab"], [aria-labelledby="tabaat"]) ul {
   grid-template-columns: minmax(0, 1fr);
 }
 
@@ -763,7 +788,7 @@ main > section > ul {
   }
 
   @container (width >= 30rem) {
-    :is([aria-labelledby="kutub"], [aria-labelledby="abwab"]) ul {
+    :is([aria-labelledby="kutub"], [aria-labelledby="abwab"], [aria-labelledby="tabaat"]) ul {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
   }
@@ -824,7 +849,7 @@ main > section > ul a {
 
 /* Inside the frame, the text keeps about as much room above and below as
    at its sides; the card's height follows its text. */
-:is([aria-labelledby="kutub"], [aria-labelledby="abwab"]) ul a {
+:is([aria-labelledby="kutub"], [aria-labelledby="abwab"], [aria-labelledby="tabaat"]) ul a {
   flex-direction: column;
   justify-content: center;
   padding: 1.25rem 1.5rem 1.375rem;
@@ -834,7 +859,7 @@ main > section > ul a {
   text-wrap: balance;
 }
 
-[aria-labelledby="kutub"] ul span {
+:is([aria-labelledby="kutub"], [aria-labelledby="tabaat"]) ul span {
   margin-block-start: .25rem;
   color: #C9B488;
   font-size: 1rem;
@@ -929,7 +954,7 @@ main > ol mark {
     --fill: #365343;
   }
 
-  [aria-labelledby="kutub"] ul a:hover span {
+  :is([aria-labelledby="kutub"], [aria-labelledby="tabaat"]) ul a:hover span {
     color: #CEBB93;
   }
 
@@ -962,7 +987,7 @@ main > ol a:active {
     display: none;
   }
 
-  [aria-labelledby="kutub"] ul span {
+  :is([aria-labelledby="kutub"], [aria-labelledby="tabaat"]) ul span {
     color: #636366;
   }
 }
@@ -1026,6 +1051,47 @@ main > div > p + p {
   margin-block-start: .75em;
 }
 
+/* A line with the contact address is not justified: on a narrow screen
+   the address takes a line of its own, which would stretch the words
+   before it. */
+main > div > p:has(a[href^="mailto:"]) {
+  text-align: start;
+}
+
+/* A printing's page: its details in one card, each label grey above its
+   value; with room, labels and values side by side in two columns. */
+main > div > dl {
+  display: grid;
+  gap: .75rem;
+  clip-path: none;
+  color: #000000;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+main > div > dl div {
+  display: block;
+}
+
+@container (width >= 30rem) {
+  main > div > dl {
+    grid-template-columns: fit-content(50%) minmax(0, 1fr);
+    gap: .5rem 1.5rem;
+  }
+
+  main > div > dl div {
+    display: contents;
+  }
+}
+
+main > div > dl div::before {
+  content: none;
+}
+
+main > div > dl dt {
+  color: #636366;
+}
+
 footer {
   padding-block: .75rem;
   background: #E8E8ED;
@@ -1033,11 +1099,12 @@ footer {
   line-height: 1.75rem;
 }
 
+/* Wrapped rows touch: each link's target is already a full row high. */
 footer ul {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 2rem;
+  gap: 0 2rem;
 }
 
 footer a {

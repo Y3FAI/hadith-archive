@@ -102,7 +102,7 @@ describe("Git-history rules", () => {
   test("accepts first numeric identifiers beginning at one", async () => {
     expect(await verify([occurrence(1), hadith(1)], emptyHistory())).toEqual({
       kind: "complete",
-      report: { findings: [], valid: true, verification_version: 4 },
+      report: { findings: [], valid: true, verification_version: 5 },
     });
   });
 

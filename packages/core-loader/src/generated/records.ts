@@ -130,6 +130,33 @@ export interface OccurrenceRecord {
    */
   ordinal: number;
   /**
+   * Where the Prophet's words are, as al-Qasim's commentary prints them in colour and as reviewed: code-point ranges of raw_text in ascending order, each starting and ending on a character that is not whitespace.
+   *
+   * @minItems 1
+   */
+  prophet_words?: [
+    {
+      /**
+       * A position in a text, counted in Unicode code points from zero.
+       */
+      end: number;
+      /**
+       * A position in a text, counted in Unicode code points from zero.
+       */
+      start: number;
+    },
+    ...{
+      /**
+       * A position in a text, counted in Unicode code points from zero.
+       */
+      end: number;
+      /**
+       * A position in a text, counted in Unicode code points from zero.
+       */
+      start: number;
+    }[]
+  ];
+  /**
    * The nonempty preserved report body governed by the canonical text and whitespace policy.
    */
   raw_text: string;

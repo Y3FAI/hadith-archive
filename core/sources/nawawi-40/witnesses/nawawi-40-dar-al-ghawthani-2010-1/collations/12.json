@@ -1,0 +1,92 @@
+{
+  "differences": [
+    {
+      "end": 4,
+      "kind": "spelling",
+      "reading": "عن",
+      "start": 0,
+      "text": "عَنْ"
+    },
+    {
+      "end": 10,
+      "kind": "spelling",
+      "reading": "أبي",
+      "start": 5,
+      "text": "أَبِي"
+    },
+    {
+      "end": 43,
+      "kind": "spelling",
+      "reading": "﵁",
+      "start": 22,
+      "text": "رَضِيَ اللَّهُ عَنْهُ"
+    },
+    {
+      "end": 49,
+      "kind": "spelling",
+      "reading": "قالَ",
+      "start": 44,
+      "text": "قَالَ"
+    },
+    {
+      "end": 56,
+      "kind": "spelling",
+      "reading": "قالَ",
+      "start": 51,
+      "text": "قَالَ"
+    },
+    {
+      "end": 64,
+      "kind": "spelling",
+      "reading": "رسُولُ",
+      "start": 57,
+      "text": "رَسُولُ"
+    },
+    {
+      "end": 97,
+      "kind": "spelling",
+      "reading": "إِسْلامِ",
+      "start": 88,
+      "text": "إِسْلَامِ"
+    },
+    {
+      "end": 107,
+      "kind": "spelling",
+      "reading": "",
+      "start": 106,
+      "text": ":"
+    },
+    {
+      "end": 120,
+      "kind": "spelling",
+      "reading": "ما",
+      "start": 117,
+      "text": "مَا"
+    },
+    {
+      "end": 124,
+      "kind": "spelling",
+      "reading": "لا",
+      "start": 121,
+      "text": "لَا"
+    },
+    {
+      "end": 135,
+      "kind": "spelling",
+      "reading": ".",
+      "start": 135,
+      "text": ""
+    }
+  ],
+  "location": {
+    "hadith_number": 12,
+    "page_end": 51,
+    "page_start": 51
+  },
+  "occurrence_id": 12,
+  "record_type": "collation",
+  "schema_version": 1,
+  "span_end": 135,
+  "span_start": 0,
+  "witness_id": "nawawi-40-dar-al-ghawthani-2010-1"
+}

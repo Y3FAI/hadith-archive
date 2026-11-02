@@ -7,7 +7,7 @@ import { join, resolve } from "node:path";
 import { formatCanonicalJson } from "../../../packages/canonical-json/src/index.ts";
 import { ASSET_PATHS, ASSETS_DIRECTORY, buildSite, type BuildResult } from "../src/build.ts";
 import { loadInputs, REPOSITORY_ROOT, type SiteInputs } from "../src/inputs.ts";
-import { pageNumbers, renderSite } from "../src/render.ts";
+import { comparisonRows, isbnDigits, pageNumbers, renderSite } from "../src/render.ts";
 
 const FIXTURE = resolve(REPOSITORY_ROOT, "apps/web/fixtures/demo");
 const scratch = await mkdtemp(join(tmpdir(), "hadith-archive-site-"));
@@ -107,6 +107,10 @@ describe("demo build", () => {
       "font/UthmanTN_v2-0.woff2",
       ...[1, 2, 3, 4].map((hadith) => `h/${hadith}/index.html`),
       "index.html",
+      "license/index.html",
+      ...[1, 2, 3, 4].map((book) => `p/demo-book-${book}-demo-edition/index.html`),
+      "privacy/index.html",
+      "repository/index.html",
       "script.js",
       "style.css",
     ]);
@@ -126,6 +130,9 @@ describe("demo build", () => {
       const html = page(path);
       expect(html).toStartWith("<!doctype html>\n<html lang=\"ar\" dir=\"rtl\">");
       expect(html).toContain("<meta name=\"robots\" content=\"noindex\">");
+      // Every page but the 404 names its own whole address.
+      const canonical = `https://y3fai.github.io/hadith-archive/${path.replace(/index\.html$/, "")}`;
+      expect(html.includes(`<link rel="canonical" href="${canonical}">`)).toBe(path !== "404.html");
       expect(html).toContain(`<link rel="stylesheet" href="${BASE}style.css?v=${hash("style.css")}">`);
       expect(html).toContain(`<script src="${BASE}script.js?v=${hash("script.js")}"></script>`);
       expect(html).toContain(`<link rel="preload" href="${BASE}font/UthmanTN_v2-0.woff2"`);
@@ -133,7 +140,8 @@ describe("demo build", () => {
       expect(html).toContain("<a href=\"#main\">تخطَّ إلى المحتوى</a>");
       const links = [...html.matchAll(/ (?:href|src|action)="([^"]+)"/g)].map((match) => match[1] as string);
       for (const url of links) {
-        expect(url.startsWith(BASE) || url === "#main" || url.startsWith("https://github.com/Y3FAI/hadith-archive"))
+        expect(url.startsWith(BASE) || url === "#main" || url.startsWith("https://github.com/Y3FAI/hadith-archive") ||
+          url.startsWith("https://y3fai.github.io/hadith-archive/") || url === "mailto:admin@haditharchive.com")
           .toBe(true);
       }
     }
@@ -156,6 +164,33 @@ describe("demo build", () => {
     expect(main(page("about/index.html"))).toBe(main(demo) as string);
   });
 
+  test("shows the licence, privacy and repository pages as the demo does, linked from every footer", async () => {
+    const main = (html: string) => /<main id="main">([\s\S]*)<\/main>/.exec(html)?.[1];
+    for (const name of ["license", "privacy", "repository"]) {
+      const demo = await readFile(resolve(ASSETS_DIRECTORY, `${name}.html`), "utf8");
+      expect(main(page(`${name}/index.html`))).toBe(main(demo) as string);
+    }
+    // The licence page holds every Arabic paragraph of LICENSE, word for word.
+    const arabic = (await readFile(resolve(REPOSITORY_ROOT, "LICENSE"), "utf8"))
+      .split("Hadith Archive Licence")[0] as string;
+    for (const paragraph of arabic.trim().split("\n\n").slice(1)) {
+      expect(page("license/index.html")).toContain(`<p>${paragraph}</p>`);
+    }
+    for (const path of pages()) {
+      const footer = /<footer>([\s\S]*)<\/footer>/.exec(page(path))?.[1] as string;
+      expect([...footer.matchAll(/<a href="([^"]+)"[^>]*>([^<]+)<\/a>/g)].map((match) => `${match[2]} ${match[1]}`))
+        .toEqual([
+          `حول ${BASE}about/`,
+          `الرخصة ${BASE}license/`,
+          `الخصوصية ${BASE}privacy/`,
+          `المستودع ${BASE}repository/`,
+        ]);
+    }
+    expect(page("license/index.html")).toContain(`<a href="${BASE}license/" aria-current="page">الرخصة</a>`);
+    expect(page("repository/index.html"))
+      .toContain("<div><dt>الرابط</dt><dd><a href=\"https://github.com/Y3FAI/hadith-archive\" rel=\"nofollow\">فتح المستودع</a></dd></div>");
+  });
+
   test("names the site in every title", () => {
     const title = (path: string) => /<title>([^<]*)<\/title>/.exec(page(path))?.[1];
     expect(title("index.html")).toBe("أرشيف الحديث");
@@ -167,30 +202,69 @@ describe("demo build", () => {
     expect(title("h/1/index.html")).toEndWith("الشَّاشَاتِ الصَّغِيرَةِ وَالْكَبِيرَةِ. - أرشيف الحديث");
   });
 
-  test("shows the saved quotation, its citation, and the members in mechanical order", async () => {
+  test("shows the saved quotation on its narration's card, its source, and the other members", async () => {
     const saved = await readJson(join(FIXTURE, "core/hadith/1.json"));
+    const display = await readJson(occurrencePath(FIXTURE, 1, 1));
     const hadith = page("h/1/index.html");
-    expect(hadith).toContain(`<h1>${saved["text"]}</h1>`);
+    // The text lies inside its narration, so the whole narration follows it.
+    expect(hadith).toContain(`<div>\n        <h1><span>${saved["text"]}</span></h1>\n        <p>${display["raw_text"]}</p>\n      </div>`);
     expect(hadith).toContain(`<meta name="description" content="${saved["text"]}">`);
+    // Under the card, «المصدر» opens to the book and the printing in full.
+    const source = hadith.slice(hadith.indexOf("<section aria-labelledby=\"masdar\">"), hadith.indexOf("</section>"));
+    expect(source).toContain("المصدر</h2>\n        <details>\n          <summary><span>عرض المصدر</span><span>إخفاء المصدر</span>");
+    expect([...source.matchAll(/<div><dt>([^<]+)<\/dt><dd>(.*?)<\/dd><\/div>/g)].map((match) => `${match[1]} ${match[2]}`))
+      .toEqual([
+        `الكتاب <cite><a href="${BASE}b/demo-book-1/">الكتاب التجريبي الأول</a></cite>`,
+        "المؤلف مؤلف تجريبي",
+        "رقم الحديث ٣",
+        `طبعة <a href="${BASE}p/demo-book-1-demo-edition/">ناشر تجريبي</a>`,
+        "سنة الطبع ٢٠٢٦",
+        "الجزء ١",
+        "الصفحة ١٢",
+      ]);
+    expect(hadith.indexOf("</div>\n      <section aria-labelledby=\"masdar\">")).toBeGreaterThan(0);
+    expect(hadith).not.toContain("تفاصيل الطبعات");
+    expect(hadith).toContain("مصادر أخرى</h2>");
     const order = [...hadith.matchAll(/<li id="occurrence-(\d+)">/g)].map((match) => match[1]);
-    expect(order).toEqual(["1", "3", "6"]);
-    expect(hadith).toContain("<div><dt>دار النشر</dt><dd>ناشر تجريبي</dd></div>");
+    expect(order).toEqual(["3", "6"]);
     expect(hadith).toContain("<div><dt>الصفحة</dt><dd>١١٠-١١١</dd></div>");
     expect(hadith).toContain("<div><dt>رقم الحديث</dt><dd>١٢٤٥</dd></div>");
-    // A stored LF inside the text is kept as a line break.
-    expect(page("h/2/index.html")).toMatch(/<h1>[^<]+<br>[^<]+<\/h1>/);
+    // Each stored line of the text is a paragraph of its own.
+    expect(page("h/2/index.html")).toMatch(/<h1><span>[^<]+<\/span>\n<span>[^<]+<\/span><\/h1>/);
   });
 
-  test("leads from a hadith back to its one category, on the page and as breadcrumb data", () => {
+  test("follows a saved text that opens its narration with only the rest", async () => {
+    const root = await fixtureCopy();
+    const saved = String((await readJson(join(root, "core/hadith/1.json")))["text"]);
+    const path = occurrencePath(root, 1, 1);
+    const rawText = `${saved}\nسَطْرٌ تَجْرِيبِيٌّ بَعْدَ النَّصِّ.`;
+    await writeJson(path, { ...await readJson(path), fingerprint: fingerprint(rawText), raw_text: rawText });
+    const out = join(await freshDirectory(), "site");
+    expect((await build(root, out)).kind).toBe("built");
+    expect(await readFile(join(out, "h/1/index.html"), "utf8"))
+      .toContain(`<h1><span>${saved}</span></h1>\n        <p>سَطْرٌ تَجْرِيبِيٌّ بَعْدَ النَّصِّ.</p>\n      </div>`);
+  });
+
+  test("sets the Prophet's words apart where the printing marks them, in the text and in its narration", async () => {
+    const root = await fixtureCopy();
+    const saved = String((await readJson(join(root, "core/hadith/1.json")))["text"]);
+    const path = occurrencePath(root, 1, 1);
+    const record = await readJson(path);
+    const raw = String(record["raw_text"]);
+    const words = "نَصٌّ تَجْرِيبِيٌّ";
+    const start = [...raw.slice(0, raw.indexOf(words))].length;
+    await writeJson(path, { ...record, prophet_words: [{ end: start + [...words].length, start }] });
+    const out = join(await freshDirectory(), "site");
+    expect((await build(root, out)).kind).toBe("built");
+    const hadith = await readFile(join(out, "h/1/index.html"), "utf8");
+    const marked = (text: string) => text.replace(words, `<span class="prophet">${words}</span>`);
+    expect(hadith).toContain(`<h1><span>${marked(saved)}</span></h1>\n        <p>${marked(raw)}</p>`);
+  });
+
+  test("keeps a hadith's page to its text and sources, without its category", () => {
     const hadith = page("h/1/index.html");
-    expect(hadith).toContain(`<a href="${BASE}c/1/">الإيمان</a></dd></div>`);
-    const data = JSON.parse(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/.exec(hadith)?.[1] as string);
-    expect(data["@type"]).toBe("BreadcrumbList");
-    expect(data.itemListElement.map((item: { name: string; item: string }) => `${item.name} ${item.item}`)).toEqual([
-      "الرئيسية https://y3fai.github.io/hadith-archive/",
-      "الأقسام https://y3fai.github.io/hadith-archive/c/",
-      "الإيمان https://y3fai.github.io/hadith-archive/c/1/",
-    ]);
+    expect(hadith).not.toContain(`href="${BASE}c/1/"`);
+    expect(hadith).not.toContain("application/ld+json");
   });
 
   test("lists topics and their hadith by identifier, with counts", () => {
@@ -208,14 +282,41 @@ describe("demo build", () => {
     const book = page("b/demo-book-1/index.html");
     expect(book).toContain("<div><dt>المؤلف</dt><dd>مؤلف تجريبي</dd></div>");
     expect(book).toContain("<div><dt>عدد الأبواب</dt><dd>٢</dd></div>");
+    expect(book).toContain("<div><dt>عدد الطبعات</dt><dd>١</dd></div>");
+    expect(book).toContain(`<li><a href="${BASE}p/demo-book-1-demo-edition/">ناشر تجريبي <span>٢٠٢٦</span></a></li>`);
     expect(book).toContain(`<li><a href="${BASE}b/demo-book-1/bab-1/">الباب التجريبي الأول</a></li>`);
     const cards = (path: string) =>
       [...page(path).matchAll(/<a href="\/hadith-archive\/h\/(\d+)\/"><span>/g)].map((match) => match[1]);
     // Occurrence 4 is in no hadith, so the bab lists only hadith 1.
     expect(cards("b/demo-book-2/bab-1/index.html")).toEqual(["1"]);
     expect(page("b/demo-book-2/bab-1/index.html")).toContain(`<cite><a href="${BASE}b/demo-book-2/">`);
-    // A source without sections lists its hadith on its own page.
+    // A source without sections lists its hadith on its own page, under a
+    // heading of their own after the printings.
     expect(cards("b/demo-book-4/index.html")).toEqual(["2", "4"]);
+    expect(page("b/demo-book-4/index.html")).toMatch(/<\/section>\n    <h2>.*<\/svg>الأحاديث<\/h2>\n    <ol role="list">/);
+  });
+
+  test("gives each printing a page of what it says of itself and its text", () => {
+    const printing = page("p/demo-book-1-demo-edition/index.html");
+    expect(/<title>([^<]*)<\/title>/.exec(printing)?.[1]).toBe("طبعة ناشر تجريبي - الكتاب التجريبي الأول - أرشيف الحديث");
+    expect(printing).toMatch(/<h1><svg[^>]*>.*<\/svg>طبعة ناشر تجريبي<\/h1>/);
+    expect(printing).toContain(`<cite><a href="${BASE}b/demo-book-1/">الكتاب التجريبي الأول</a></cite>`);
+    expect([...printing.matchAll(/<div><dt>([^<]+)<\/dt><dd>([^<]+)<\/dd><\/div>/g)].map((match) => `${match[1]} ${match[2]}`))
+      .toEqual([
+        "المؤلف مؤلف تجريبي",
+        "العنوان كما طُبع الكتاب التجريبي الأول",
+        "الطبعة طبعة تجريبية",
+        "سنة الطبع ٢٠٢٦",
+        "ردمك ٩٧٨٠٠٠٠٠٠٠٠٠٢",
+        "عدد الأحاديث ٢",
+        "النص المعروض في الموقع",
+      ]);
+  });
+
+  test("shows an ISBN in Arabic-Indic digits, an ISBN-10 ending in X as its ISBN-13", () => {
+    expect(isbnDigits("9789953498218")).toBe("٩٧٨٩٩٥٣٤٩٨٢١٨");
+    expect(isbnDigits("0773420752")).toBe("٠٧٧٣٤٢٠٧٥٢");
+    expect(isbnDigits("080442957X")).toBe("٩٧٨٠٨٠٤٤٢٩٥٧٣");
   });
 
   test("reaches every page from the home page, and every link resolves", () => {
@@ -259,7 +360,7 @@ describe("pager", () => {
   const render = (pageSize: number) => new Map(renderSite(inputs, {
     assetVersions: { "script.js": "s", "style.css": "c" },
     pageSize,
-  }).map((file) => [file.path, file.html]));
+  }).map((file) => [file.path, file.text]));
 
   test("chooses the first, the last, and three around the current page", () => {
     const shown = (current: number, last: number) =>
@@ -296,11 +397,110 @@ describe("a site before any topic is reviewed", () => {
     const pages = new Map(renderSite({ ...inputs, topics: [] }, {
       assetVersions: { "script.js": "s", "style.css": "c" },
       pageSize: 20,
-    }).map((file) => [file.path, file.html]));
+    }).map((file) => [file.path, file.text]));
     expect(pages.get("index.html")).not.toContain("aria-labelledby=\"aqsam\"");
     expect(pages.get("index.html")).toContain("aria-labelledby=\"kutub\"");
     expect(pages.get("h/1/index.html")).not.toContain("<dt>القسم</dt>");
     expect(pages.get("h/1/index.html")).not.toContain("application/ld+json");
+  });
+});
+
+describe("other printings", () => {
+  // Test words only: «first, second, third, fourth, fifth».
+  const raw = "أَوَّلُ ثَانٍ، ثَالِثٌ - رَابِعٌ خَامِسٌ";
+  const difference = (text: string, reading: string, kind: "spelling" | "wording", from = text) => {
+    const start = raw.indexOf(from);
+    return { end: start + text.length, kind, reading, start, text };
+  };
+  const collation = (differences: unknown[]) => ({
+    differences, location: { page_end: 1, page_start: 1 }, occurrence_id: 1, record_type: "collation",
+    schema_version: 1, span_end: [...raw].length, span_start: 0, witness_id: "test",
+  }) as never;
+
+  test("widens each difference to the words it touches, and shares a row where they overlap", () => {
+    const rows = comparisonRows(raw, [
+      collation([
+        difference("ثَانٍ", "ثان", "spelling"),
+        difference("،", "", "spelling"),
+        difference("-", "–", "spelling"),
+      ]),
+      collation([
+        difference("- ", "", "spelling"),
+        difference("", "زَائِدٌ ", "wording", "خَامِسٌ"),
+      ]),
+    ]);
+    expect(rows).toEqual([
+      {
+        cells: ["<mark data-match=\"spelling\">ثان</mark><mark data-match=\"spelling\"></mark>", "="],
+        text: "ثَانٍ،",
+        wording: false,
+      },
+      // A dash between spaces touches no word, so it takes in one on each side.
+      {
+        cells: [
+          "ثَالِثٌ <mark data-match=\"spelling\">–</mark> رَابِعٌ",
+          "ثَالِثٌ <mark data-match=\"spelling\"></mark>رَابِعٌ",
+        ],
+        text: "ثَالِثٌ - رَابِعٌ",
+        wording: false,
+      },
+      { cells: ["=", "<mark data-match=\"wording\">زَائِدٌ </mark>خَامِسٌ"], text: "خَامِسٌ", wording: true },
+    ]);
+  });
+
+  test("lists each printing with how it compares, then the differences, word differences first", async () => {
+    const root = await fixtureCopy();
+    const display = String((await readJson(occurrencePath(root, 1, 1)))["raw_text"]);
+    const witnesses = join(root, "core/sources/demo-book-1/witnesses");
+    const at = (text: string, reading: string, kind: string) => {
+      const start = display.indexOf(text);
+      return { end: start + text.length, kind, reading, start, text };
+    };
+    for (const [name, publisher, differences, year] of [
+      ["second", "ناشر تجريبي ثان", [at("الْأَوَّلُ", "الأول", "spelling"), at("الثَّالِثِ", "الرَّابِعِ", "wording")], { publication_year: 2026 }],
+      ["third", "ناشر تجريبي ثالث", [], {}],
+    ] as const) {
+      const witnessId = `demo-book-1-${name}-edition`;
+      await mkdir(join(witnesses, witnessId, "collations"), { recursive: true });
+      await writeJson(join(witnesses, witnessId, "witness.json"), {
+        ...year, file_sha256: fingerprint(witnessId), priority_score: 0, publisher, record_type: "source_witness",
+        reference_scheme: { hadith_number: false, volume: false }, schema_version: 1,
+        source_id: "demo-book-1", title_as_printed: "الكتاب التجريبي الأول", witness_id: witnessId,
+      });
+      await writeJson(join(witnesses, witnessId, "collations/1.json"), {
+        differences, location: { page_end: 7, page_start: 7 }, occurrence_id: 1, record_type: "collation",
+        schema_version: 1, span_end: [...display].length, span_start: 0, witness_id: witnessId,
+      });
+    }
+    const out = join(await freshDirectory(), "site");
+    expect((await build(root, out)).kind).toBe("built");
+    const hadith = await readFile(join(out, "h/1/index.html"), "utf8");
+    expect(hadith).toContain("تفاصيل الطبعات</h2>");
+    const printings = [...hadith.slice(hadith.indexOf("تفاصيل الطبعات")).matchAll(/<dt>طبعة<\/dt><dd><a href="[^"]+">([^<]+)<\/a><\/dd>[\s\S]*?<dd data-match="(\w+)">.*?<\/svg>([^<]+)<\/dd>/g)]
+      .map((match) => `${match[1]} ${match[2]} ${match[3]}`);
+    expect(printings).toEqual([
+      "ناشر تجريبي ثان wording يختلف في الألفاظ",
+      "ناشر تجريبي ثالث exact مطابق",
+    ]);
+    // A printing's year stands beside its name, where the record gives one.
+    expect(hadith).toContain(`<div><dt>طبعة</dt><dd><a href="${BASE}p/demo-book-1-second-edition/">ناشر تجريبي ثان</a></dd></div>\n                  <div><dt>سنة الطبع</dt><dd>٢٠٢٦</dd></div>`);
+    expect(hadith.slice(hadith.indexOf("تفاصيل الطبعات")).match(/سنة الطبع/g)).toHaveLength(1);
+    expect(hadith).toContain("<caption>مقارنة الفروقات</caption>");
+    expect([...hadith.matchAll(/<th scope="col">(?:<svg.*?<\/svg>)?([^<]+)<\/th>/g)].map((match) => match[1]))
+      .toEqual(["ناشر تجريبي", "ناشر تجريبي ثان", "ناشر تجريبي ثالث"]);
+    const wording = hadith.indexOf("<tr><th colspan=\"3\" scope=\"rowgroup\">الفروق في الألفاظ</th></tr>");
+    const spelling = hadith.indexOf("<tr><th colspan=\"3\" scope=\"rowgroup\">الفروق في التشكيل والإملاء والترقيم</th></tr>");
+    expect(wording).toBeGreaterThan(0);
+    expect(spelling).toBeGreaterThan(wording);
+    expect(hadith).toContain("<tr><th scope=\"row\">الثَّالِثِ،</th><td><mark data-match=\"wording\">الرَّابِعِ</mark>،</td><td>=</td></tr>");
+    expect(hadith).toContain("<tr><th scope=\"row\">الْأَوَّلُ،</th><td><mark data-match=\"spelling\">الأول</mark>،</td><td>=</td></tr>");
+    // Each printing's page counts its hadith by how they compare.
+    const counts = async (name: string) =>
+      [...(await readFile(join(out, `p/demo-book-1-${name}-edition/index.html`), "utf8"))
+        .matchAll(/<div><dt>([^<]+)<\/dt><dd>([^<]+)<\/dd><\/div>/g)]
+        .slice(-2).map((match) => `${match[1]} ${match[2]}`);
+    expect(await counts("second")).toEqual(["عدد الأحاديث ١", "تختلف في الألفاظ ١"]);
+    expect(await counts("third")).toEqual(["عدد الأحاديث ١", "تطابق النص المعروض ١"]);
   });
 });
 
@@ -478,6 +678,31 @@ describe("topic input validation", () => {
 });
 
 describe("site configuration", () => {
+  test("lets search engines index an indexable site, with a sitemap, and robots.txt at a host's root", async () => {
+    for (const [url, robots] of [["https://example.org", true], ["https://example.org/archive", false]] as const) {
+      const root = await fixtureCopy();
+      await writeFile(join(root, "site.json"), JSON.stringify({
+        indexable: true, name: "اسم تجريبي", source_url: "https://example.org/repository", url,
+      }));
+      const out = join(await freshDirectory(), "site");
+      expect((await build(root, out)).kind).toBe("built");
+      const files = await readTree(out);
+      const html = [...files.keys()].filter((path) => path.endsWith(".html"));
+      for (const path of html) {
+        expect((files.get(path) as Buffer).toString("utf8").includes("noindex")).toBe(path === "404.html");
+      }
+      const sitemap = (files.get("sitemap.xml") as Buffer).toString("utf8");
+      expect(sitemap).toStartWith("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n");
+      expect([...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]).sort())
+        .toEqual(html.filter((path) => path !== "404.html").map((path) => `${url}/${path.replace(/index\.html$/, "")}`).sort());
+      expect(files.get("robots.txt")?.toString("utf8"))
+        .toBe(robots ? "User-agent: *\nAllow: /\n\nSitemap: https://example.org/sitemap.xml\n" : undefined);
+    }
+    // The demo site is not indexable: no sitemap, no robots.txt.
+    expect(demoBuild.files.has("sitemap.xml")).toBe(false);
+    expect(demoBuild.files.has("robots.txt")).toBe(false);
+  });
+
   test("links pages under the site's address", async () => {
     const root = await fixtureCopy();
     await writeFile(join(root, "site.json"), JSON.stringify({
@@ -490,20 +715,22 @@ describe("site configuration", () => {
     const home = await readFile(join(out, "index.html"), "utf8");
     expect(home).toContain("<title>اسم تجريبي</title>");
     expect(home).toContain("<a href=\"/c/\">");
-    expect(home).toContain("<a href=\"https://example.org/repository/blob/main/LICENSE\" rel=\"nofollow\">الرخصة</a>");
-    expect(await readFile(join(out, "h/1/index.html"), "utf8")).toContain("\"item\": \"https://example.org/c/1/\"");
+    expect(home).toContain("<a href=\"/repository/\">المستودع</a>");
+    expect(home).toContain("<a href=\"/license/\">الرخصة</a>");
   });
 
-  test("refuses unknown keys, unsafe URLs, and malformed names", async () => {
+  test("refuses unknown keys, unsafe URLs, malformed names, and a non-boolean indexable", async () => {
     const root = await fixtureCopy();
     await writeFile(join(root, "site.json"), JSON.stringify({
       analytics: "x",
+      indexable: "yes",
       name: "",
       source_url: "http://example.org/",
       url: "https://example.org/path/",
     }));
     expect(await refusal(root)).toEqual([
       "site.json /analytics Unknown site configuration property",
+      "site.json /indexable indexable must be true or false",
       "site.json /name name must be nonempty single-line text",
       "site.json /source_url source_url must be an https URL without a trailing slash, query, or fragment",
       "site.json /url url must be an https URL without a trailing slash, query, or fragment",
@@ -542,8 +769,6 @@ describe("escaping", () => {
     expect(html).toContain("&lt;script&gt;alert(&quot;x&quot;)&lt;/script&gt; &amp; &#39;y&#39;");
     expect(html).toContain("&lt;b&gt;&amp;amp;&lt;/b&gt;");
     expect(html).toContain("&lt;i&gt;الأخلاق&lt;/i&gt;");
-    // Breadcrumb data cannot close its script element.
-    expect(html).toContain("\"name\": \"\\u003ci\\u003eالأخلاق\\u003c/i\\u003e\"");
     expect(html).toContain("href=\"https://example.org/a&amp;b\"");
   });
 });
@@ -580,6 +805,6 @@ describe("command line", () => {
     await writeJson(join(root, "topics/1.json"), { hadith_ids: [1, 2], title: "الإيمان", topic_id: 1 });
     const built = await run(...options, "--out", out);
     expect(built.code).toBe(0);
-    expect(built.stdout).toBe(`Built 28 files into ${out}\n`);
+    expect(built.stdout).toBe(`Built 35 files into ${out}\n`);
   });
 });

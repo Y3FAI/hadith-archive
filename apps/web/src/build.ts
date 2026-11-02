@@ -107,7 +107,7 @@ export async function buildSite(options: BuildOptions): Promise<BuildResult> {
   ]));
   const encoder = new TextEncoder();
   for (const page of renderSite(loaded.inputs, { assetVersions, pageSize: PAGE_SIZE })) {
-    files.set(page.path, encoder.encode(page.html));
+    files.set(page.path, encoder.encode(page.text));
   }
   const paths = [...files.keys()].sort();
   for (const path of paths) {

@@ -1,0 +1,99 @@
+{
+  "differences": [
+    {
+      "end": 47,
+      "kind": "spelling",
+      "reading": "",
+      "start": 46,
+      "text": "،"
+    },
+    {
+      "end": 76,
+      "kind": "spelling",
+      "reading": "ٱللَّهِ",
+      "start": 70,
+      "text": "اللَّه"
+    },
+    {
+      "end": 77,
+      "kind": "wording",
+      "reading": "ٱلثَّقَفِيِّ ",
+      "start": 77,
+      "text": ""
+    },
+    {
+      "end": 91,
+      "kind": "spelling",
+      "reading": "ٱللَّهُ",
+      "start": 84,
+      "text": "اللَّهُ"
+    },
+    {
+      "end": 107,
+      "kind": "spelling",
+      "reading": " : ",
+      "start": 104,
+      "text": ": «"
+    },
+    {
+      "end": 134,
+      "kind": "spelling",
+      "reading": "ٱللَّهِ",
+      "start": 127,
+      "text": "اللَّهِ"
+    },
+    {
+      "end": 135,
+      "kind": "spelling",
+      "reading": " ؛",
+      "start": 134,
+      "text": "!"
+    },
+    {
+      "end": 160,
+      "kind": "spelling",
+      "reading": "ٱلإِسْلَامِ",
+      "start": 149,
+      "text": "الإِسْلَامِ"
+    },
+    {
+      "end": 213,
+      "kind": "spelling",
+      "reading": " : «",
+      "start": 212,
+      "text": ":"
+    },
+    {
+      "end": 237,
+      "kind": "spelling",
+      "reading": "بِٱللَّهِ",
+      "start": 228,
+      "text": "بِاللَّهِ"
+    },
+    {
+      "end": 254,
+      "kind": "spelling",
+      "reading": "ٱسْتَقِمْ",
+      "start": 245,
+      "text": "اسْتَقِمْ"
+    },
+    {
+      "end": 255,
+      "kind": "spelling",
+      "reading": " » .",
+      "start": 254,
+      "text": "»"
+    }
+  ],
+  "location": {
+    "hadith_number": 21,
+    "page_end": 74,
+    "page_start": 74
+  },
+  "occurrence_id": 21,
+  "record_type": "collation",
+  "schema_version": 1,
+  "span_end": 255,
+  "span_start": 0,
+  "witness_id": "nawawi-40-dar-al-minhaj-2009-1"
+}
