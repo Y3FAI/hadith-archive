@@ -293,10 +293,11 @@ dl div::before {
 /* Hidden on screen, still read by screen readers: a label whose value
    starts with an icon in its place (the pin before a book, the squares
    before a hadith's categories), the search's label (the field's
-   placeholder says what to do), and the home page's title, the site's
-   name, which the header already shows. In a browser without :has(), :is()
-   drops only those parts, so the search's label stays hidden there too. */
-:is(dt:has(+ dd > svg), search :is(h1, h2), main > h1:has(+ section)) {
+   placeholder says what to do), the home page's title, the site's
+   name, which the header already shows, and the word behind a comparison's
+   «=». In a browser without :has(), :is() drops only those parts, so the
+   search's label and the word stay hidden there too. */
+:is(dt:has(+ dd > svg), search :is(h1, h2), main > h1:has(+ section), td > [aria-hidden="true"] + span) {
   position: absolute;
   width: 1px;
   height: 1px;
