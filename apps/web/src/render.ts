@@ -7,6 +7,8 @@ import type {
   SourceWitnessRecord,
 } from "../../../packages/core-loader/src/index.ts";
 
+import { createHash } from "node:crypto";
+
 import type { SiteInputs, Topic } from "./inputs.ts";
 
 // Phosphor thin icons, exactly as in the handwritten demo; caretRight is its
@@ -72,6 +74,9 @@ export const PAGE_SIZE = 20;
 // The home page shows a few categories and books; «المزيد» leads to all.
 const HOME_TOPICS = 8;
 const HOME_BOOKS = 4;
+// A cell whose printing matches the text: «=» on screen, a word for screen
+// readers, which would otherwise say "equals".
+const SAME = `<span aria-hidden="true">=</span><span>مطابق</span>`;
 
 /** One generated text file, by its forward-slash path inside the output directory. */
 export interface PageFile {
@@ -271,6 +276,17 @@ function facts(items: readonly (readonly [string, string])[], indent = "    "): 
   ).join("\n")}\n${indent}</dl>`;
 }
 
+// A page's description for search results: its heading, then what the page
+// shows under it, as plain text.
+function summary(heading: string, items: readonly string[]): string {
+  return items.length === 0 ? heading : `${heading}: ${items.join("، ")}`;
+}
+
+const asText = ([label, value]: readonly [string, string]) => `${label} ${value}`;
+
+// A written page's description: its first paragraph, which each one has.
+const lead = (main: string) => (/<p>([^<]*)<\/p>/.exec(main) as RegExpExecArray)[1] as string;
+
 // A printing's details: its title as printed, edition, year, ISBN, and the
 // SHA-256 of the file it was taken from, left to right.
 function printingFacts(witness: SourceWitnessRecord): (readonly [string, string])[] {
@@ -317,6 +333,8 @@ interface PageContent {
   readonly route?: string;
   readonly current?: Current;
   readonly description?: string;
+  /** What a shared link shows under its title, if not the description. */
+  readonly share?: string;
 }
 
 interface Index {
@@ -417,6 +435,13 @@ export function renderSite(inputs: SiteInputs, options: RenderOptions): readonly
   const name = escapeHtml(site.name);
   const sourceUrl = escapeHtml(site.source_url);
 
+  // Prerender a page when its link is hovered. The security policy allows
+  // the site's own files, and this one inline script by its hash.
+  const speculation = `{"prerender":[{"where":{"href_matches":"${at(ROUTE.home)}*"},"eagerness":"moderate"}]}`;
+  const policy = `default-src 'self'; script-src 'self' 'sha256-${
+    createHash("sha256").update(speculation).digest("base64")
+  }'; object-src 'none'; base-uri 'none'; form-action 'self'`;
+
   const layout = (page: PageContent): string => {
     const here = (current: Current) => page.current === current ? " aria-current=\"page\"" : "";
     const description = page.description === undefined
@@ -427,18 +452,32 @@ export function renderSite(inputs: SiteInputs, options: RenderOptions): readonly
     const canonical = page.route === undefined
       ? ""
       : `\n  <link rel="canonical" href="${escapeHtml(absolute(page.route))}">`;
+    // A shared link: its title and description in WhatsApp, Telegram and X,
+    // and the site's image in X's card alone, which otherwise shows an
+    // empty icon (WhatsApp and Telegram read only og:image).
+    const shared = page.share ?? page.description;
+    const sharing = page.route === undefined ? "" : `
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="${name}">
+  <meta property="og:title" content="${escapeHtml(page.title)}">${shared === undefined ? "" : `
+  <meta property="og:description" content="${escapeHtml(shared)}">`}
+  <meta property="og:url" content="${escapeHtml(absolute(page.route))}">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="${escapeHtml(absolute("share.png"))}">
+  <meta name="twitter:image:alt" content="${name}">`;
     return `<!doctype html>
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="${policy}">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="text-scale" content="scale">${robots}${description}
-  <title>${escapeHtml(page.title)}</title>${canonical}
+  <title>${escapeHtml(page.title)}</title>${canonical}${sharing}
   <link rel="preload" href="${at("font/UthmanTN_v2-0.woff2")}" as="font" type="font/woff2" crossorigin>
   <link rel="icon" href="${at("favicon.ico")}" sizes="32x32">
   <link rel="icon" href="${at("favicon.svg")}" type="image/svg+xml">
   <link rel="stylesheet" href="${asset("style.css")}">
-  <script type="speculationrules">{"prerender":[{"where":{"href_matches":"${at(ROUTE.home)}*"},"eagerness":"moderate"}]}</script>
+  <script type="speculationrules">${speculation}</script>
 </head>
 <body>
   <a href="#main">تخطَّ إلى المحتوى</a>
@@ -527,6 +566,7 @@ ${items.join("\n")}
     top: readonly string[],
     before: readonly string[],
     listed: readonly HadithRecord[],
+    description: string,
   ) => {
     const last = Math.max(1, Math.ceil(listed.length / options.pageSize));
     for (let page = 1; page <= last; page += 1) {
@@ -545,6 +585,7 @@ ${cards.map((record) =>
           ...last === 1 ? [] : [pager(route, page, last)],
         ].join("\n"),
         title: page === 1 ? titled(...title) : titled(title[0] as string, `الصفحة ${arabicDigits(page)}`, ...title.slice(1)),
+        description: page === 1 ? description : `${description}، الصفحة ${arabicDigits(page)}`,
       });
     }
   };
@@ -567,6 +608,10 @@ ${bookCards(sources.slice(0, HOME_BOOKS))}
     </section>`,
     ].join("\n"),
     title: site.name,
+    description: [
+      ...topics.length === 0 ? [] : [summary("الأقسام", topics.slice(0, HOME_TOPICS).map((topic) => topic.title))],
+      summary("الكتب", sources.slice(0, HOME_BOOKS).map((source) => source.title)),
+    ].join(". "),
   });
 
   // GitHub Pages answers every missing address with this page.
@@ -575,14 +620,12 @@ ${bookCards(sources.slice(0, HOME_BOOKS))}
     title: titled("الصفحة غير موجودة"),
   });
 
-  addRoute(ROUTE.about, { current: "about", main: ABOUT, title: `حول ${site.name}` });
-  addRoute(ROUTE.license, { current: "license", main: LICENSE, title: titled("الرخصة") });
-  addRoute(ROUTE.privacy, { current: "privacy", main: PRIVACY, title: titled("الخصوصية") });
+  addRoute(ROUTE.about, { current: "about", description: lead(ABOUT), main: ABOUT, title: `حول ${site.name}` });
+  addRoute(ROUTE.license, { current: "license", description: lead(LICENSE), main: LICENSE, title: titled("الرخصة") });
+  addRoute(ROUTE.privacy, { current: "privacy", description: lead(PRIVACY), main: PRIVACY, title: titled("الخصوصية") });
   // The repository page: what it holds and what anyone can do with it,
   // with its address in the facts under the title.
-  addRoute(ROUTE.repository, {
-    current: "repository",
-    main: `    <h1>${ICON.info}المستودع</h1>
+  const repository = `    <h1>${ICON.info}المستودع</h1>
 ${facts([["الرابط", `<a href="${sourceUrl}" rel="nofollow">فتح المستودع</a>`]])}
     <div>
       <p>المستودع يحفظ أرشيف الحديث كله: بياناته وشيفراته ووثائقه، ومنه يُبنى هذا الموقع.</p>
@@ -590,7 +633,11 @@ ${facts([["الرابط", `<a href="${sourceUrl}" rel="nofollow">فتح المس
       <p>ويُسجَّل فيه كل تغيير بتاريخه ووقته، فيُعرف متى أضيف كل نص وما تغيّر فيه.</p>
       <p>ولكل تغيير بصمة رقمية موقَّعة، فلا يتغير شيء دون أن يظهر.</p>
       <p>وبذلك يبقى الأرشيف محفوظًا ويمكن التحقق منه.</p>
-    </div>`,
+    </div>`;
+  addRoute(ROUTE.repository, {
+    current: "repository",
+    description: lead(repository),
+    main: repository,
     title: titled("المستودع"),
   });
 
@@ -602,13 +649,15 @@ ${facts([["عدد الأقسام", arabicDigits(topics.length)]])}
 ${topicTiles(topics)}
     </section>`,
     title: titled("الأقسام"),
+    description: summary("الأقسام", topics.map((topic) => topic.title)),
   });
 
   for (const topic of topics) {
+    const count = ["عدد الأحاديث", arabicDigits(topic.hadith_ids.length)] as const;
     addList(ROUTE.topic(topic.topic_id), [topic.title], undefined, [
       `    <h1>${ICON.grid}${escapeHtml(topic.title)}</h1>`,
-      facts([["عدد الأحاديث", arabicDigits(topic.hadith_ids.length)]]),
-    ], [], topic.hadith_ids.map((id) => hadithById.get(id) as HadithRecord));
+      facts([count]),
+    ], [], topic.hadith_ids.map((id) => hadithById.get(id) as HadithRecord), summary(topic.title, [asText(count)]));
   }
 
   addRoute(ROUTE.books, {
@@ -619,6 +668,7 @@ ${facts([["عدد الكتب", arabicDigits(sources.length)]])}
 ${bookCards(sources)}
     </section>`,
     title: titled("الكتب"),
+    description: `الكتب: ${sources.map((source) => `${source.title}، ${source.author}`).join("؛ ")}`,
   });
 
   // Each hadith once, where the first of its occurrences comes.
@@ -674,16 +724,17 @@ ${witnesses.map((witness) =>
     ];
 
     const topSections = childrenOf(undefined);
+    const bookCounts = [
+      ...counted("عدد الأبواب", topSections.length),
+      ...counted("عدد الأحاديث", hadithOf(occurrences).length),
+      ...counted("عدد الطبعات", witnesses.length),
+    ];
     addList(ROUTE.source(source.source_id), [source.title], undefined, [
       `    <h1 id="abwab">${ICON.books}${escapeHtml(source.title)}</h1>`,
-      facts([
-        ["المؤلف", escapeHtml(source.author)],
-        ...counted("عدد الأبواب", topSections.length),
-        ...counted("عدد الأحاديث", hadithOf(occurrences).length),
-        ...counted("عدد الطبعات", witnesses.length),
-      ]),
+      facts([["المؤلف", escapeHtml(source.author)], ...bookCounts]),
     ], [...sectionList(source.source_id, topSections), ...printingList(witnesses)],
-    hadithOf(occurrences.filter((occurrence) => occurrence.section_id === undefined)));
+    hadithOf(occurrences.filter((occurrence) => occurrence.section_id === undefined)),
+    summary(source.title, [`المؤلف ${source.author}`, ...bookCounts.map(asText)]));
 
     // Each printing's page: under its book, one card of what the printing
     // says of itself, then its text: the one shown here, or how many of its
@@ -707,20 +758,28 @@ ${facts([["الكتاب", bookLink(source)], ["المؤلف", escapeHtml(source.
 ${facts([...printingFacts(witness), ...text], "      ")}
     </div>`,
         title: titled(`طبعة ${witness.publisher}`, source.title),
+        description: summary(`طبعة ${witness.publisher}`, [
+          `الكتاب ${source.title}`,
+          `المؤلف ${source.author}`,
+          ...witness.edition_statement === undefined ? [] : [witness.edition_statement],
+          ...witness.publication_year === undefined ? [] : [`سنة الطبع ${arabicDigits(witness.publication_year)}`],
+          ...witness.isbn === undefined ? [] : [`ردمك ${isbnDigits(witness.isbn)}`],
+        ]),
       });
     }
 
     for (const section of sections) {
       const children = childrenOf(section.section_id);
+      const sectionCounts = [
+        ...counted("عدد الأبواب", children.length),
+        ...counted("عدد الأحاديث", hadithOf(within(section.section_id)).length),
+      ];
       addList(ROUTE.section(source.source_id, section.section_id), [section.title, source.title], undefined, [
         `    <h1${children.length === 0 ? "" : " id=\"abwab\""}>${ICON.bookmark}${escapeHtml(section.title)}</h1>`,
-        facts([
-          ["الكتاب", bookLink(source)],
-          ...counted("عدد الأبواب", children.length),
-          ...counted("عدد الأحاديث", hadithOf(within(section.section_id)).length),
-        ]),
+        facts([["الكتاب", bookLink(source)], ...sectionCounts]),
       ], sectionList(source.source_id, children),
-      hadithOf(occurrences.filter((occurrence) => occurrence.section_id === section.section_id)));
+      hadithOf(occurrences.filter((occurrence) => occurrence.section_id === section.section_id)),
+      summary(section.title, [`الكتاب ${source.title}`, ...sectionCounts.map(asText)]));
     }
   }
 
@@ -822,7 +881,7 @@ ${facts([
       return listed.length === 0 ? [] : [`              <tbody>
                 <tr><th colspan="${collations.length + 1}" scope="rowgroup">${title}</th></tr>
 ${listed.map((row) =>
-  `                <tr><th scope="row">${row.text}</th>${row.cells.map((cell) => `<td>${cell}</td>`).join("")}</tr>`
+  `                <tr><th scope="row">${row.text}</th>${row.cells.map((cell) => `<td>${cell === "=" ? SAME : cell}</td>`).join("")}</tr>`
 ).join("\n")}
               </tbody>`];
     };
@@ -866,8 +925,20 @@ ${items.join("\n")}
     const words = display.prophet_words ?? [];
     const textFrom = [...raw.slice(0, raw.indexOf(record.text))].length;
     const restFrom = rest === raw ? 0 : [...record.text].length + 1;
+    // A shared hadith shows where its text is printed: the book, the
+    // hadith's number, the printing, and the volume and page.
+    const witness = index.witness.get(display.witness_id) as SourceWitnessRecord;
+    const { hadith_number: number, volume } = display.location;
+    const share = [
+      (index.source.get(witness.source_id) as SourceRecord).title,
+      ...number === undefined ? [] : [`الحديث ${arabicDigits(number)}`],
+      `طبعة ${witness.publisher}`,
+      ...volume === undefined ? [] : [`الجزء ${arabicDigits(volume)}`],
+      `الصفحة ${pageSpan(display.location)}`,
+    ].join("، ");
     addRoute(ROUTE.hadith(record.hadith_id), {
       description: plain,
+      share,
       main: [
         "    <article>",
         "      <div>",

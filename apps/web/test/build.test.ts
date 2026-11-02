@@ -112,6 +112,7 @@ describe("demo build", () => {
       "privacy/index.html",
       "repository/index.html",
       "script.js",
+      "share.png",
       "style.css",
     ]);
   });
@@ -130,6 +131,11 @@ describe("demo build", () => {
       const html = page(path);
       expect(html).toStartWith("<!doctype html>\n<html lang=\"ar\" dir=\"rtl\">");
       expect(html).toContain("<meta name=\"robots\" content=\"noindex\">");
+      // The policy admits the speculation rules by their hash.
+      const rules = `{"prerender":[{"where":{"href_matches":"${BASE}*"},"eagerness":"moderate"}]}`;
+      const digest = createHash("sha256").update(rules).digest("base64");
+      expect(html).toContain(`<script type="speculationrules">${rules}</script>`);
+      expect(html).toContain(`<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-${digest}'; object-src 'none'; base-uri 'none'; form-action 'self'">`);
       // Every page but the 404 names its own whole address.
       const canonical = `https://y3fai.github.io/hadith-archive/${path.replace(/index\.html$/, "")}`;
       expect(html.includes(`<link rel="canonical" href="${canonical}">`)).toBe(path !== "404.html");
@@ -202,6 +208,43 @@ describe("demo build", () => {
     // A hadith's title is cut to whole words, as much as a search result shows.
     expect(title("h/1/index.html"))
       .toBe("عَنِ الرَّاوِي التَّجْرِيبِيِّ قَالَ: هَذَا نَصٌّ تَجْرِيبِيٌّ يُوضَعُ فِي مَكَانِ... - أرشيف الحديث");
+  });
+
+  test("describes every page but the 404 from what it shows", () => {
+    const description = (path: string) => /<meta name="description" content="([^"]*)">/.exec(page(path))?.[1];
+    for (const path of pages()) {
+      expect(description(path) === undefined).toBe(path === "404.html");
+    }
+    expect(description("index.html")).toBe(
+      "الأقسام: الإيمان، الطهارة، الصلاة. الكتب: الكتاب التجريبي الأول، الكتاب التجريبي الثاني، الكتاب التجريبي الثالث، الكتاب التجريبي الرابع",
+    );
+    expect(description("c/1/index.html")).toBe("الإيمان: عدد الأحاديث ٢");
+    expect(description("b/demo-book-1/index.html"))
+      .toBe("الكتاب التجريبي الأول: المؤلف مؤلف تجريبي، عدد الأبواب ٢، عدد الأحاديث ٢، عدد الطبعات ١");
+    expect(description("b/demo-book-1/bab-1/index.html")).toBe("الباب التجريبي الأول: الكتاب الكتاب التجريبي الأول، عدد الأحاديث ١");
+    expect(description("p/demo-book-1-demo-edition/index.html")).toBe(
+      "طبعة ناشر تجريبي: الكتاب الكتاب التجريبي الأول، المؤلف مؤلف تجريبي، طبعة تجريبية، سنة الطبع ٢٠٢٦، ردمك ٩٧٨٠٠٠٠٠٠٠٠٠٢",
+    );
+    // A written page is described by its first paragraph.
+    expect(description("license/index.html")).toBe("يجوز نسخ العمل وتعديله ونشره وتوزيعه وبيعه دون إذن.");
+  });
+
+  test("shares a hadith with its source, and gives X alone the site's image", () => {
+    expect(page("h/1/index.html")).toContain(`<link rel="canonical" href="https://y3fai.github.io/hadith-archive/h/1/">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="أرشيف الحديث">
+  <meta property="og:title" content="عَنِ الرَّاوِي التَّجْرِيبِيِّ قَالَ: هَذَا نَصٌّ تَجْرِيبِيٌّ يُوضَعُ فِي مَكَانِ... - أرشيف الحديث">
+  <meta property="og:description" content="الكتاب التجريبي الأول، الحديث ٣، طبعة ناشر تجريبي، الجزء ١، الصفحة ١٢">
+  <meta property="og:url" content="https://y3fai.github.io/hadith-archive/h/1/">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://y3fai.github.io/hadith-archive/share.png">
+  <meta name="twitter:image:alt" content="أرشيف الحديث">`);
+    // Other pages share their description; the 404 page shares nothing.
+    expect(page("c/1/index.html")).toContain("<meta property=\"og:description\" content=\"الإيمان: عدد الأحاديث ٢\">");
+    expect(page("404.html")).not.toContain("og:");
+    for (const path of pages()) {
+      expect(page(path)).not.toContain("og:image");
+    }
   });
 
   test("shows the saved quotation on its narration's card, its source, and the other members", async () => {
@@ -392,6 +435,7 @@ describe("pager", () => {
     expect(first).not.toContain("الصفحة السابقة");
     expect(second).toContain(`<li><a href="${BASE}c/1/" aria-label="الصفحة السابقة">`);
     expect(second).toContain("<title>الإيمان - الصفحة ٢ - أرشيف الحديث</title>");
+    expect(second).toContain("<meta name=\"description\" content=\"الإيمان: عدد الأحاديث ٢، الصفحة ٢\">");
     // Both pages count the whole list, and each shows its own share.
     expect(second).toContain("<div><dt>عدد الأحاديث</dt><dd>٢</dd></div>");
     expect(second).toContain(`<a href="${BASE}h/2/"><span>`);
@@ -502,8 +546,8 @@ describe("other printings", () => {
     const spelling = hadith.indexOf("<tr><th colspan=\"3\" scope=\"rowgroup\">الفروق في التشكيل والإملاء والترقيم</th></tr>");
     expect(wording).toBeGreaterThan(0);
     expect(spelling).toBeGreaterThan(wording);
-    expect(hadith).toContain("<tr><th scope=\"row\">الثَّالِثِ،</th><td><mark data-match=\"wording\">الرَّابِعِ</mark>،</td><td>=</td></tr>");
-    expect(hadith).toContain("<tr><th scope=\"row\">الْأَوَّلُ،</th><td><mark data-match=\"spelling\">الأول</mark>،</td><td>=</td></tr>");
+    expect(hadith).toContain("<tr><th scope=\"row\">الثَّالِثِ،</th><td><mark data-match=\"wording\">الرَّابِعِ</mark>،</td><td><span aria-hidden=\"true\">=</span><span>مطابق</span></td></tr>");
+    expect(hadith).toContain("<tr><th scope=\"row\">الْأَوَّلُ،</th><td><mark data-match=\"spelling\">الأول</mark>،</td><td><span aria-hidden=\"true\">=</span><span>مطابق</span></td></tr>");
     // Each printing's page counts its hadith by how they compare.
     const counts = async (name: string) =>
       [...(await readFile(join(out, `p/demo-book-1-${name}-edition/index.html`), "utf8"))
@@ -815,6 +859,6 @@ describe("command line", () => {
     await writeJson(join(root, "topics/1.json"), { hadith_ids: [1, 2], title: "الإيمان", topic_id: 1 });
     const built = await run(...options, "--out", out);
     expect(built.code).toBe(0);
-    expect(built.stdout).toBe(`Built 35 files into ${out}\n`);
+    expect(built.stdout).toBe(`Built 36 files into ${out}\n`);
   });
 });

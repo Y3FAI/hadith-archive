@@ -20,6 +20,7 @@ export const ASSET_PATHS = [
   "font/UthmanTN_v2-0.ttf",
   "font/UthmanTN_v2-0.woff2",
   "script.js",
+  "share.png",
   "style.css",
 ];
 
