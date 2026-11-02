@@ -1,0 +1,267 @@
+{
+  "differences": [
+    {
+      "end": 25,
+      "kind": "spelling",
+      "reading": "ٱللَّهِ",
+      "start": 18,
+      "text": "اللَّهِ"
+    },
+    {
+      "end": 26,
+      "kind": "spelling",
+      "reading": "",
+      "start": 25,
+      "text": "،"
+    },
+    {
+      "end": 39,
+      "kind": "spelling",
+      "reading": "ٱلنُّعْمَانِ",
+      "start": 27,
+      "text": "النُّعْمَانِ"
+    },
+    {
+      "end": 67,
+      "kind": "spelling",
+      "reading": "ٱللَّهُ",
+      "start": 60,
+      "text": "اللَّهُ"
+    },
+    {
+      "end": 109,
+      "kind": "spelling",
+      "reading": "ٱللَّهِ",
+      "start": 102,
+      "text": "اللَّهِ"
+    },
+    {
+      "end": 111,
+      "kind": "spelling",
+      "reading": "صَلَّى ٱللَّهُ عَلَيْهِ وَسَلَّمَ",
+      "start": 110,
+      "text": "ﷺ"
+    },
+    {
+      "end": 137,
+      "kind": "spelling",
+      "reading": "ٱلْحَلَالَ",
+      "start": 128,
+      "text": "الحَلَالَ"
+    },
+    {
+      "end": 164,
+      "kind": "spelling",
+      "reading": "ٱلْحَرَامَ",
+      "start": 155,
+      "text": "الحَرَامَ"
+    },
+    {
+      "end": 202,
+      "kind": "spelling",
+      "reading": "، ",
+      "start": 202,
+      "text": ""
+    },
+    {
+      "end": 241,
+      "kind": "spelling",
+      "reading": "ٱلنَّاسِ",
+      "start": 233,
+      "text": "النَّاسِ"
+    },
+    {
+      "end": 243,
+      "kind": "spelling",
+      "reading": " ، ",
+      "start": 241,
+      "text": ".\n"
+    },
+    {
+      "end": 257,
+      "kind": "spelling",
+      "reading": "ٱتَّقَى",
+      "start": 250,
+      "text": "اتَّقَى"
+    },
+    {
+      "end": 270,
+      "kind": "spelling",
+      "reading": "ٱلشُّبُهَاتِ",
+      "start": 258,
+      "text": "الشُّبُهَاتِ"
+    },
+    {
+      "end": 270,
+      "kind": "spelling",
+      "reading": "..",
+      "start": 270,
+      "text": ""
+    },
+    {
+      "end": 282,
+      "kind": "spelling",
+      "reading": "ٱسْتَبْرَأَ",
+      "start": 271,
+      "text": "اسْتَبْرَأَ"
+    },
+    {
+      "end": 305,
+      "kind": "spelling",
+      "reading": " ، ",
+      "start": 303,
+      "text": ".\n"
+    },
+    {
+      "end": 335,
+      "kind": "spelling",
+      "reading": "ٱلشُّبُهَاتِ",
+      "start": 323,
+      "text": "الشُّبُهَاتِ"
+    },
+    {
+      "end": 335,
+      "kind": "spelling",
+      "reading": "..",
+      "start": 335,
+      "text": ""
+    },
+    {
+      "end": 356,
+      "kind": "spelling",
+      "reading": "ٱلْحَرَامِ",
+      "start": 347,
+      "text": "الحَرَامِ"
+    },
+    {
+      "end": 369,
+      "kind": "spelling",
+      "reading": "كَٱلرَّاعِي",
+      "start": 358,
+      "text": "كَالرَّاعِي"
+    },
+    {
+      "end": 377,
+      "kind": "spelling",
+      "reading": "يَرْعَىٰ",
+      "start": 370,
+      "text": "يَرْعَى"
+    },
+    {
+      "end": 392,
+      "kind": "spelling",
+      "reading": "ٱلْحِمَىٰ",
+      "start": 385,
+      "text": "الحِمَى"
+    },
+    {
+      "end": 393,
+      "kind": "spelling",
+      "reading": "، ",
+      "start": 393,
+      "text": ""
+    },
+    {
+      "end": 422,
+      "kind": "spelling",
+      "reading": " ، ",
+      "start": 420,
+      "text": ".\n"
+    },
+    {
+      "end": 456,
+      "kind": "spelling",
+      "reading": "حِمَىً",
+      "start": 451,
+      "text": "حِمىً"
+    },
+    {
+      "end": 485,
+      "kind": "spelling",
+      "reading": "ٱللَّهِ",
+      "start": 478,
+      "text": "اللَّهِ"
+    },
+    {
+      "end": 486,
+      "kind": "wording",
+      "reading": "تَعَالَىٰ ",
+      "start": 486,
+      "text": ""
+    },
+    {
+      "end": 499,
+      "kind": "spelling",
+      "reading": " ، ",
+      "start": 497,
+      "text": ".\n"
+    },
+    {
+      "end": 525,
+      "kind": "spelling",
+      "reading": "ٱلْجَسَدِ",
+      "start": 517,
+      "text": "الجَسَدِ"
+    },
+    {
+      "end": 550,
+      "kind": "spelling",
+      "reading": "..",
+      "start": 550,
+      "text": ""
+    },
+    {
+      "end": 566,
+      "kind": "spelling",
+      "reading": "ٱلْجَسَدُ",
+      "start": 558,
+      "text": "الجَسَدُ"
+    },
+    {
+      "end": 592,
+      "kind": "spelling",
+      "reading": "..",
+      "start": 592,
+      "text": ""
+    },
+    {
+      "end": 608,
+      "kind": "spelling",
+      "reading": "ٱلْجَسَدُ",
+      "start": 600,
+      "text": "الجَسَدُ"
+    },
+    {
+      "end": 617,
+      "kind": "spelling",
+      "reading": " ،",
+      "start": 616,
+      "text": "؛"
+    },
+    {
+      "end": 639,
+      "kind": "spelling",
+      "reading": "ٱلْقَلْبُ",
+      "start": 631,
+      "text": "القَلْبُ"
+    },
+    {
+      "end": 640,
+      "kind": "spelling",
+      "reading": " » .",
+      "start": 639,
+      "text": "»"
+    }
+  ],
+  "location": {
+    "hadith_number": 6,
+    "page_end": 57,
+    "page_start": 56
+  },
+  "occurrence_id": 6,
+  "record_type": "collation",
+  "schema_version": 1,
+  "span_end": 640,
+  "span_start": 0,
+  "witness_id": "nawawi-40-dar-al-minhaj-2009-1"
+}

@@ -1,0 +1,106 @@
+{
+  "differences": [
+    {
+      "end": 21,
+      "kind": "spelling",
+      "reading": "",
+      "start": 20,
+      "text": "،"
+    },
+    {
+      "end": 53,
+      "kind": "spelling",
+      "reading": "ٱلدَّارِيِّ",
+      "start": 42,
+      "text": "الدَّارِيِّ"
+    },
+    {
+      "end": 68,
+      "kind": "spelling",
+      "reading": "ٱللَّهُ",
+      "start": 61,
+      "text": "اللَّهُ"
+    },
+    {
+      "end": 76,
+      "kind": "spelling",
+      "reading": ": ",
+      "start": 76,
+      "text": ""
+    },
+    {
+      "end": 92,
+      "kind": "spelling",
+      "reading": "ٱلنَّبِيَّ",
+      "start": 82,
+      "text": "النَّبِيَّ"
+    },
+    {
+      "end": 94,
+      "kind": "spelling",
+      "reading": "صَلَّى ٱللَّهُ عَلَيْهِ وَسَلَّمَ",
+      "start": 93,
+      "text": "ﷺ"
+    },
+    {
+      "end": 111,
+      "kind": "spelling",
+      "reading": "ٱلدِّينُ",
+      "start": 103,
+      "text": "الدِّينُ"
+    },
+    {
+      "end": 124,
+      "kind": "spelling",
+      "reading": "ٱلنَّصِيحَةُ",
+      "start": 112,
+      "text": "النَّصِيحَةُ"
+    },
+    {
+      "end": 125,
+      "kind": "spelling",
+      "reading": " »",
+      "start": 124,
+      "text": "،"
+    },
+    {
+      "end": 149,
+      "kind": "spelling",
+      "reading": " : «",
+      "start": 148,
+      "text": ":"
+    },
+    {
+      "end": 216,
+      "kind": "spelling",
+      "reading": "ٱلْمُسْلِمِينَ",
+      "start": 203,
+      "text": "المُسْلِمِينَ"
+    },
+    {
+      "end": 217,
+      "kind": "spelling",
+      "reading": "",
+      "start": 216,
+      "text": "،"
+    },
+    {
+      "end": 233,
+      "kind": "spelling",
+      "reading": " » .",
+      "start": 232,
+      "text": "»"
+    }
+  ],
+  "location": {
+    "hadith_number": 7,
+    "page_end": 58,
+    "page_start": 58
+  },
+  "occurrence_id": 7,
+  "record_type": "collation",
+  "schema_version": 1,
+  "span_end": 233,
+  "span_start": 0,
+  "witness_id": "nawawi-40-dar-al-minhaj-2009-1"
+}

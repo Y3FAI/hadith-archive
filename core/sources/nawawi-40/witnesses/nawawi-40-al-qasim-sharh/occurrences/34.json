@@ -1,0 +1,20 @@
+{
+  "fingerprint": "fd0b0a90a5cf60ef124a9a6fd21bd307abd9ee977253661f558ea2c6d9483c65",
+  "location": {
+    "hadith_number": 34,
+    "page_end": 197,
+    "page_start": 197
+  },
+  "occurrence_id": 34,
+  "ordinal": 34,
+  "prophet_words": [
+    {
+      "end": 255,
+      "start": 96
+    }
+  ],
+  "raw_text": "عَنْ أَبِي سَعِيدٍ الخُدْرِيِّ رَضِيَ اللَّهُ عَنْهُ قَالَ: سَمِعْتُ رَسُولَ اللَّه ﷺ يَقُولُ: «مَنْ رَأَى مِنْكُمْ مُنْكَراً فَلْيُغَيِّرْهُ بِيَدِهِ، فَإِنْ لَمْ يَسْتَطِعْ فَبِلِسَانِهِ، فَإِنْ لَمْ يَسْتَطِعْ فَبِقَلْبِهِ، وَذَلِكَ أَضْعَفُ الإِيمَانِ»\nرَوَاهُ مُسْلِمٌ.",
+  "record_type": "occurrence",
+  "schema_version": 1,
+  "witness_id": "nawawi-40-al-qasim-sharh"
+}

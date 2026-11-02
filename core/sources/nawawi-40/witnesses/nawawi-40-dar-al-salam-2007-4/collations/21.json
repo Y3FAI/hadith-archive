@@ -1,0 +1,225 @@
+{
+  "differences": [
+    {
+      "end": 10,
+      "kind": "spelling",
+      "reading": "أَبي",
+      "start": 5,
+      "text": "أَبِي"
+    },
+    {
+      "end": 20,
+      "kind": "spelling",
+      "reading": "–",
+      "start": 19,
+      "text": "-"
+    },
+    {
+      "end": 28,
+      "kind": "spelling",
+      "reading": "وقِيلَ",
+      "start": 21,
+      "text": "وَقِيلَ"
+    },
+    {
+      "end": 35,
+      "kind": "spelling",
+      "reading": "أَبي",
+      "start": 30,
+      "text": "أَبِي"
+    },
+    {
+      "end": 47,
+      "kind": "spelling",
+      "reading": "–",
+      "start": 45,
+      "text": "-،"
+    },
+    {
+      "end": 62,
+      "kind": "spelling",
+      "reading": "بنِ",
+      "start": 58,
+      "text": "بْنِ"
+    },
+    {
+      "end": 76,
+      "kind": "spelling",
+      "reading": "اللَّهِ",
+      "start": 70,
+      "text": "اللَّه"
+    },
+    {
+      "end": 77,
+      "kind": "spelling",
+      "reading": "– ",
+      "start": 77,
+      "text": ""
+    },
+    {
+      "end": 83,
+      "kind": "spelling",
+      "reading": "رَضِي",
+      "start": 77,
+      "text": "رَضِيَ"
+    },
+    {
+      "end": 92,
+      "kind": "wording",
+      "reading": "تعالى ",
+      "start": 92,
+      "text": ""
+    },
+    {
+      "end": 98,
+      "kind": "spelling",
+      "reading": "عنهُ",
+      "start": 92,
+      "text": "عَنْهُ"
+    },
+    {
+      "end": 99,
+      "kind": "spelling",
+      "reading": "– ",
+      "start": 99,
+      "text": ""
+    },
+    {
+      "end": 104,
+      "kind": "spelling",
+      "reading": "قال",
+      "start": 99,
+      "text": "قَالَ"
+    },
+    {
+      "end": 107,
+      "kind": "spelling",
+      "reading": " : ",
+      "start": 104,
+      "text": ": «"
+    },
+    {
+      "end": 118,
+      "kind": "spelling",
+      "reading": "يا",
+      "start": 115,
+      "text": "يَا"
+    },
+    {
+      "end": 126,
+      "kind": "spelling",
+      "reading": "رَسولَ",
+      "start": 119,
+      "text": "رَسُولَ"
+    },
+    {
+      "end": 135,
+      "kind": "spelling",
+      "reading": " ،",
+      "start": 134,
+      "text": "!"
+    },
+    {
+      "end": 148,
+      "kind": "spelling",
+      "reading": "في",
+      "start": 145,
+      "text": "فِي"
+    },
+    {
+      "end": 160,
+      "kind": "spelling",
+      "reading": "الإسْلَامِ",
+      "start": 149,
+      "text": "الإِسْلَامِ"
+    },
+    {
+      "end": 168,
+      "kind": "spelling",
+      "reading": "قَولًا",
+      "start": 161,
+      "text": "قَوْلاً"
+    },
+    {
+      "end": 172,
+      "kind": "spelling",
+      "reading": "لا",
+      "start": 169,
+      "text": "لَا"
+    },
+    {
+      "end": 188,
+      "kind": "spelling",
+      "reading": "عنه",
+      "start": 182,
+      "text": "عَنْهُ"
+    },
+    {
+      "end": 196,
+      "kind": "spelling",
+      "reading": "أَحَدًا",
+      "start": 189,
+      "text": "أَحَداً"
+    },
+    {
+      "end": 205,
+      "kind": "spelling",
+      "reading": "غَيركَ",
+      "start": 197,
+      "text": "غَيْرَكَ"
+    },
+    {
+      "end": 206,
+      "kind": "spelling",
+      "reading": " .",
+      "start": 205,
+      "text": "،"
+    },
+    {
+      "end": 212,
+      "kind": "spelling",
+      "reading": "قالَ",
+      "start": 207,
+      "text": "قَالَ"
+    },
+    {
+      "end": 213,
+      "kind": "spelling",
+      "reading": " : «",
+      "start": 212,
+      "text": ":"
+    },
+    {
+      "end": 218,
+      "kind": "spelling",
+      "reading": "قُل",
+      "start": 214,
+      "text": "قُلْ"
+    },
+    {
+      "end": 237,
+      "kind": "spelling",
+      "reading": "باللَّهِ",
+      "start": 228,
+      "text": "بِاللَّهِ"
+    },
+    {
+      "end": 255,
+      "kind": "spelling",
+      "reading": " » .",
+      "start": 254,
+      "text": "»"
+    }
+  ],
+  "location": {
+    "hadith_number": 21,
+    "page_end": 16,
+    "page_start": 16
+  },
+  "occurrence_id": 21,
+  "record_type": "collation",
+  "schema_version": 1,
+  "span_end": 255,
+  "span_start": 0,
+  "witness_id": "nawawi-40-dar-al-salam-2007-4"
+}

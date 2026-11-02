@@ -1,0 +1,14 @@
+{
+  "file_sha256": "7bb79a91f1a8144195c027b6a7818819c60cb20ad9a00caec2344bed2760ba5a",
+  "priority_score": 1,
+  "publisher": "عبد المحسن بن محمد القاسم",
+  "record_type": "source_witness",
+  "reference_scheme": {
+    "hadith_number": true,
+    "volume": false
+  },
+  "schema_version": 1,
+  "source_id": "nawawi-40",
+  "title_as_printed": "شرح الأربعين النووية مع زيادة ابن رجب الحنبلي",
+  "witness_id": "nawawi-40-al-qasim-sharh"
+}

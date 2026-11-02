@@ -1,0 +1,148 @@
+{
+  "differences": [
+    {
+      "end": 21,
+      "kind": "spelling",
+      "reading": "هُرَيْرةَ",
+      "start": 11,
+      "text": "هُرَيْرَةَ"
+    },
+    {
+      "end": 22,
+      "kind": "spelling",
+      "reading": "",
+      "start": 21,
+      "text": "،"
+    },
+    {
+      "end": 41,
+      "kind": "spelling",
+      "reading": "الرَّحْمٰنِ",
+      "start": 30,
+      "text": "الرَّحْمَنِ"
+    },
+    {
+      "end": 46,
+      "kind": "spelling",
+      "reading": "بنِ",
+      "start": 42,
+      "text": "بْنِ"
+    },
+    {
+      "end": 75,
+      "kind": "spelling",
+      "reading": "﵁",
+      "start": 54,
+      "text": "رَضِيَ اللَّهُ عَنْهُ"
+    },
+    {
+      "end": 81,
+      "kind": "spelling",
+      "reading": "قالَ",
+      "start": 76,
+      "text": "قَالَ"
+    },
+    {
+      "end": 106,
+      "kind": "spelling",
+      "reading": "اللَّهِ",
+      "start": 100,
+      "text": "اللَّه"
+    },
+    {
+      "end": 122,
+      "kind": "spelling",
+      "reading": "ما",
+      "start": 119,
+      "text": "مَا"
+    },
+    {
+      "end": 157,
+      "kind": "spelling",
+      "reading": "فاجْتَنِبُوهُ",
+      "start": 143,
+      "text": "فَاجْتَنِبُوهُ"
+    },
+    {
+      "end": 164,
+      "kind": "spelling",
+      "reading": "وما",
+      "start": 159,
+      "text": "وَمَا"
+    },
+    {
+      "end": 194,
+      "kind": "wording",
+      "reading": "فائْتُوا",
+      "start": 183,
+      "text": "فَافْعَلُوا"
+    },
+    {
+      "end": 205,
+      "kind": "spelling",
+      "reading": "ما",
+      "start": 202,
+      "text": "مَا"
+    },
+    {
+      "end": 231,
+      "kind": "spelling",
+      "reading": "فإِنَّما",
+      "start": 221,
+      "text": "فَإِنَّمَا"
+    },
+    {
+      "end": 255,
+      "kind": "spelling",
+      "reading": "منْ",
+      "start": 251,
+      "text": "مِنْ"
+    },
+    {
+      "end": 289,
+      "kind": "spelling",
+      "reading": "مَسائِلِهِمْ",
+      "start": 276,
+      "text": "مَسَائِلِهِمْ"
+    },
+    {
+      "end": 290,
+      "kind": "spelling",
+      "reading": "",
+      "start": 289,
+      "text": "،"
+    },
+    {
+      "end": 307,
+      "kind": "spelling",
+      "reading": "واخْتِلافُهُمْ",
+      "start": 291,
+      "text": "وَاخْتِلَافُهُمْ"
+    },
+    {
+      "end": 329,
+      "kind": "spelling",
+      "reading": "أَنْبِيائِهِمْ",
+      "start": 314,
+      "text": "أَنْبِيَائِهِمْ"
+    },
+    {
+      "end": 330,
+      "kind": "spelling",
+      "reading": ".",
+      "start": 330,
+      "text": ""
+    }
+  ],
+  "location": {
+    "hadith_number": 9,
+    "page_end": 43,
+    "page_start": 43
+  },
+  "occurrence_id": 9,
+  "record_type": "collation",
+  "schema_version": 1,
+  "span_end": 330,
+  "span_start": 0,
+  "witness_id": "nawawi-40-dar-al-ghawthani-2010-1"
+}

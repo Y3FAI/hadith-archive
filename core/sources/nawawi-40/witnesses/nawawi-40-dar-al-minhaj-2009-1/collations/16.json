@@ -1,0 +1,71 @@
+{
+  "differences": [
+    {
+      "end": 36,
+      "kind": "spelling",
+      "reading": "ٱللَّهُ",
+      "start": 29,
+      "text": "اللَّهُ"
+    },
+    {
+      "end": 46,
+      "kind": "spelling",
+      "reading": " : ",
+      "start": 43,
+      "text": ": «"
+    },
+    {
+      "end": 79,
+      "kind": "spelling",
+      "reading": "صَلَّى ٱللَّهُ عَلَيْهِ وَسَلَّمَ",
+      "start": 78,
+      "text": "ﷺ"
+    },
+    {
+      "end": 91,
+      "kind": "spelling",
+      "reading": " ؛",
+      "start": 90,
+      "text": "،"
+    },
+    {
+      "end": 98,
+      "kind": "spelling",
+      "reading": " : «",
+      "start": 97,
+      "text": ":"
+    },
+    {
+      "end": 112,
+      "kind": "spelling",
+      "reading": " »",
+      "start": 111,
+      "text": "،"
+    },
+    {
+      "end": 139,
+      "kind": "spelling",
+      "reading": " : «",
+      "start": 138,
+      "text": ":"
+    },
+    {
+      "end": 153,
+      "kind": "spelling",
+      "reading": " » .",
+      "start": 152,
+      "text": "»"
+    }
+  ],
+  "location": {
+    "hadith_number": 16,
+    "page_end": 68,
+    "page_start": 68
+  },
+  "occurrence_id": 16,
+  "record_type": "collation",
+  "schema_version": 1,
+  "span_end": 153,
+  "span_start": 0,
+  "witness_id": "nawawi-40-dar-al-minhaj-2009-1"
+}

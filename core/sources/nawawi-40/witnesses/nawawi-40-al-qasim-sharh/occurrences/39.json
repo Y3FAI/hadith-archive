@@ -1,0 +1,20 @@
+{
+  "fingerprint": "91e3249be3def3ba14fef275e021521cb5f23cf7dbca91e7b71d10c68cb01c33",
+  "location": {
+    "hadith_number": 39,
+    "page_end": 237,
+    "page_start": 237
+  },
+  "occurrence_id": 39,
+  "ordinal": 39,
+  "prophet_words": [
+    {
+      "end": 172,
+      "start": 77
+    }
+  ],
+  "raw_text": "عَنِ ابْنِ عَبَّاسٍ رَضِيَ اللَّهُ عَنْهُمَا أَنَّ رَسُولَ اللَّهِ ﷺ قَالَ: «إِنَّ اللَّهَ تَجَاوَزَ لِي عَنْ أُمَّتِي الخَطَأَ وَالنِّسْيَانَ، وَمَا اسْتُكْرِهُوا عَلَيْهِ»\nحَدِيثٌ حَسَنٌ، رَوَاهُ ابْنُ مَاجَهْ، وَالبَيْهَقِيُّ، وَغَيْرُهُمَا.",
+  "record_type": "occurrence",
+  "schema_version": 1,
+  "witness_id": "nawawi-40-al-qasim-sharh"
+}

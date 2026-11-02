@@ -1,0 +1,92 @@
+{
+  "differences": [
+    {
+      "end": 4,
+      "kind": "spelling",
+      "reading": "عنِ",
+      "start": 0,
+      "text": "عَنِ"
+    },
+    {
+      "end": 19,
+      "kind": "spelling",
+      "reading": "عَبّاسٍ",
+      "start": 11,
+      "text": "عَبَّاسٍ"
+    },
+    {
+      "end": 44,
+      "kind": "spelling",
+      "reading": "﵄",
+      "start": 20,
+      "text": "رَضِيَ اللَّهُ عَنْهُمَا"
+    },
+    {
+      "end": 44,
+      "kind": "spelling",
+      "reading": "،",
+      "start": 44,
+      "text": ""
+    },
+    {
+      "end": 74,
+      "kind": "spelling",
+      "reading": "قال",
+      "start": 69,
+      "text": "قَالَ"
+    },
+    {
+      "end": 100,
+      "kind": "spelling",
+      "reading": "تَجاوَزَ",
+      "start": 91,
+      "text": "تَجَاوَزَ"
+    },
+    {
+      "end": 118,
+      "kind": "spelling",
+      "reading": ":",
+      "start": 118,
+      "text": ""
+    },
+    {
+      "end": 127,
+      "kind": "spelling",
+      "reading": "،",
+      "start": 127,
+      "text": ""
+    },
+    {
+      "end": 142,
+      "kind": "spelling",
+      "reading": "والنِّسْيانَ",
+      "start": 128,
+      "text": "وَالنِّسْيَانَ"
+    },
+    {
+      "end": 149,
+      "kind": "spelling",
+      "reading": "وما",
+      "start": 144,
+      "text": "وَمَا"
+    },
+    {
+      "end": 173,
+      "kind": "spelling",
+      "reading": ".",
+      "start": 173,
+      "text": ""
+    }
+  ],
+  "location": {
+    "hadith_number": 39,
+    "page_end": 131,
+    "page_start": 131
+  },
+  "occurrence_id": 39,
+  "record_type": "collation",
+  "schema_version": 1,
+  "span_end": 173,
+  "span_start": 0,
+  "witness_id": "nawawi-40-dar-al-ghawthani-2010-1"
+}

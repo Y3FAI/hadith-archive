@@ -1,0 +1,169 @@
+{
+  "differences": [
+    {
+      "end": 21,
+      "kind": "spelling",
+      "reading": "العَبّاسِ",
+      "start": 11,
+      "text": "العَبَّاسِ"
+    },
+    {
+      "end": 22,
+      "kind": "spelling",
+      "reading": "",
+      "start": 21,
+      "text": "،"
+    },
+    {
+      "end": 34,
+      "kind": "spelling",
+      "reading": "بنِ",
+      "start": 30,
+      "text": "بْنِ"
+    },
+    {
+      "end": 55,
+      "kind": "spelling",
+      "reading": "السّاعِدِيِّ",
+      "start": 42,
+      "text": "السَّاعِدِيِّ"
+    },
+    {
+      "end": 77,
+      "kind": "spelling",
+      "reading": "﵁",
+      "start": 56,
+      "text": "رَضِيَ اللَّهُ عَنْهُ"
+    },
+    {
+      "end": 83,
+      "kind": "spelling",
+      "reading": "قالَ",
+      "start": 78,
+      "text": "قَالَ"
+    },
+    {
+      "end": 86,
+      "kind": "spelling",
+      "reading": "",
+      "start": 85,
+      "text": "«"
+    },
+    {
+      "end": 91,
+      "kind": "spelling",
+      "reading": "جاءَ",
+      "start": 86,
+      "text": "جَاءَ"
+    },
+    {
+      "end": 125,
+      "kind": "spelling",
+      "reading": "فقالَ",
+      "start": 118,
+      "text": "فَقَالَ"
+    },
+    {
+      "end": 130,
+      "kind": "spelling",
+      "reading": "يا",
+      "start": 127,
+      "text": "يَا"
+    },
+    {
+      "end": 147,
+      "kind": "spelling",
+      "reading": "،",
+      "start": 146,
+      "text": "!"
+    },
+    {
+      "end": 175,
+      "kind": "spelling",
+      "reading": "إِذا",
+      "start": 170,
+      "text": "إِذَا"
+    },
+    {
+      "end": 206,
+      "kind": "spelling",
+      "reading": "",
+      "start": 205,
+      "text": "،"
+    },
+    {
+      "end": 219,
+      "kind": "spelling",
+      "reading": "وأَحَبَّنِي",
+      "start": 207,
+      "text": "وَأَحَبَّنِي"
+    },
+    {
+      "end": 239,
+      "kind": "wording",
+      "reading": ". قالَ: «",
+      "start": 228,
+      "text": "، فَقَالَ: "
+    },
+    {
+      "end": 250,
+      "kind": "spelling",
+      "reading": "في",
+      "start": 247,
+      "text": "فِي"
+    },
+    {
+      "end": 261,
+      "kind": "spelling",
+      "reading": "الدُّنْيا",
+      "start": 251,
+      "text": "الدُّنْيَا"
+    },
+    {
+      "end": 290,
+      "kind": "spelling",
+      "reading": "وازْهَدْ",
+      "start": 281,
+      "text": "وَازْهَدْ"
+    },
+    {
+      "end": 297,
+      "kind": "spelling",
+      "reading": "فيما",
+      "start": 291,
+      "text": "فِيمَا"
+    },
+    {
+      "end": 313,
+      "kind": "spelling",
+      "reading": "النّاسِ",
+      "start": 305,
+      "text": "النَّاسِ"
+    },
+    {
+      "end": 332,
+      "kind": "spelling",
+      "reading": "النّاسُ",
+      "start": 324,
+      "text": "النَّاسُ"
+    },
+    {
+      "end": 333,
+      "kind": "spelling",
+      "reading": ".",
+      "start": 333,
+      "text": ""
+    }
+  ],
+  "location": {
+    "hadith_number": 31,
+    "page_end": 109,
+    "page_start": 109
+  },
+  "occurrence_id": 31,
+  "record_type": "collation",
+  "schema_version": 1,
+  "span_end": 333,
+  "span_start": 0,
+  "witness_id": "nawawi-40-dar-al-ghawthani-2010-1"
+}

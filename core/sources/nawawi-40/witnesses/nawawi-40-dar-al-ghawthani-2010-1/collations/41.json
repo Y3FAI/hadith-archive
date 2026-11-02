@@ -1,0 +1,99 @@
+{
+  "differences": [
+    {
+      "end": 21,
+      "kind": "spelling",
+      "reading": "",
+      "start": 20,
+      "text": "،"
+    },
+    {
+      "end": 35,
+      "kind": "spelling",
+      "reading": "اللَّهِ",
+      "start": 29,
+      "text": "اللَّه"
+    },
+    {
+      "end": 40,
+      "kind": "spelling",
+      "reading": "بنِ",
+      "start": 36,
+      "text": "بْنِ"
+    },
+    {
+      "end": 53,
+      "kind": "spelling",
+      "reading": "بنِ",
+      "start": 49,
+      "text": "بْنِ"
+    },
+    {
+      "end": 62,
+      "kind": "spelling",
+      "reading": "العاصِي",
+      "start": 54,
+      "text": "العَاصِي"
+    },
+    {
+      "end": 87,
+      "kind": "spelling",
+      "reading": "﵄",
+      "start": 63,
+      "text": "رَضِيَ اللَّهُ عَنْهُمَا"
+    },
+    {
+      "end": 93,
+      "kind": "spelling",
+      "reading": "قالَ",
+      "start": 88,
+      "text": "قَالَ"
+    },
+    {
+      "end": 100,
+      "kind": "spelling",
+      "reading": "قالَ",
+      "start": 95,
+      "text": "قَالَ"
+    },
+    {
+      "end": 124,
+      "kind": "spelling",
+      "reading": "لا",
+      "start": 121,
+      "text": "لَا"
+    },
+    {
+      "end": 167,
+      "kind": "spelling",
+      "reading": "هَواهُ",
+      "start": 160,
+      "text": "هَوَاهُ"
+    },
+    {
+      "end": 175,
+      "kind": "spelling",
+      "reading": "تَبَعًا",
+      "start": 168,
+      "text": "تَبَعاً"
+    },
+    {
+      "end": 194,
+      "kind": "spelling",
+      "reading": ".",
+      "start": 194,
+      "text": ""
+    }
+  ],
+  "location": {
+    "hadith_number": 41,
+    "page_end": 135,
+    "page_start": 135
+  },
+  "occurrence_id": 41,
+  "record_type": "collation",
+  "schema_version": 1,
+  "span_end": 194,
+  "span_start": 0,
+  "witness_id": "nawawi-40-dar-al-ghawthani-2010-1"
+}

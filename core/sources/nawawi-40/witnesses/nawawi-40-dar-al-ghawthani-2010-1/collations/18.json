@@ -1,0 +1,141 @@
+{
+  "differences": [
+    {
+      "end": 17,
+      "kind": "spelling",
+      "reading": "",
+      "start": 16,
+      "text": "،"
+    },
+    {
+      "end": 26,
+      "kind": "spelling",
+      "reading": "جُنْدَُبِ",
+      "start": 18,
+      "text": "جُنْدُبِ"
+    },
+    {
+      "end": 31,
+      "kind": "spelling",
+      "reading": "بنِ",
+      "start": 27,
+      "text": "بْنِ"
+    },
+    {
+      "end": 41,
+      "kind": "spelling",
+      "reading": "جُنادَةَ",
+      "start": 32,
+      "text": "جُنَادَةَ"
+    },
+    {
+      "end": 50,
+      "kind": "spelling",
+      "reading": "وأَبِي",
+      "start": 43,
+      "text": "وَأَبِي"
+    },
+    {
+      "end": 70,
+      "kind": "spelling",
+      "reading": "",
+      "start": 69,
+      "text": "،"
+    },
+    {
+      "end": 78,
+      "kind": "spelling",
+      "reading": "مُعاذِ",
+      "start": 71,
+      "text": "مُعَاذِ"
+    },
+    {
+      "end": 83,
+      "kind": "spelling",
+      "reading": "بنِ",
+      "start": 79,
+      "text": "بْنِ"
+    },
+    {
+      "end": 115,
+      "kind": "spelling",
+      "reading": "﵄",
+      "start": 91,
+      "text": "رَضِيَ اللَّهُ عَنْهُمَا"
+    },
+    {
+      "end": 115,
+      "kind": "spelling",
+      "reading": "،",
+      "start": 115,
+      "text": ""
+    },
+    {
+      "end": 144,
+      "kind": "spelling",
+      "reading": "قالَ",
+      "start": 139,
+      "text": "قَالَ"
+    },
+    {
+      "end": 160,
+      "kind": "spelling",
+      "reading": "اللَّهَ",
+      "start": 154,
+      "text": "اللَّه"
+    },
+    {
+      "end": 170,
+      "kind": "spelling",
+      "reading": "حَيْثُما",
+      "start": 161,
+      "text": "حَيْثُمَا"
+    },
+    {
+      "end": 189,
+      "kind": "spelling",
+      "reading": "وأَتْبِعِ",
+      "start": 179,
+      "text": "وَأَتْبِعِ"
+    },
+    {
+      "end": 223,
+      "kind": "spelling",
+      "reading": "تَمْحُها",
+      "start": 214,
+      "text": "تَمْحُهَا"
+    },
+    {
+      "end": 234,
+      "kind": "spelling",
+      "reading": "وخالِقِ",
+      "start": 225,
+      "text": "وَخَالِقِ"
+    },
+    {
+      "end": 243,
+      "kind": "spelling",
+      "reading": "النّاسَ",
+      "start": 235,
+      "text": "النَّاسَ"
+    },
+    {
+      "end": 260,
+      "kind": "spelling",
+      "reading": ".",
+      "start": 260,
+      "text": ""
+    }
+  ],
+  "location": {
+    "hadith_number": 18,
+    "page_end": 64,
+    "page_start": 64
+  },
+  "occurrence_id": 18,
+  "record_type": "collation",
+  "schema_version": 1,
+  "span_end": 260,
+  "span_start": 0,
+  "witness_id": "nawawi-40-dar-al-ghawthani-2010-1"
+}

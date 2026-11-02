@@ -8,6 +8,7 @@ import type {
 } from "@hadith-archive/core-loader";
 
 import type { VerificationFindingInput, VerificationRule } from "../protocol.ts";
+import { codePointGraphemeBoundaries } from "./graph.ts";
 import type {
   StructuralVerificationContext,
   ValidCoreRecord,
@@ -188,6 +189,34 @@ export const occurrenceFingerprintMatches: VerificationRule<StructuralVerificati
   prerequisites: [],
 };
 
+// Each range of the Prophet's words lies in the raw text on grapheme
+// boundaries, is nonempty, starts and ends on a character that is not
+// whitespace, and comes after the one before with a gap between them.
+export const occurrenceProphetWords: VerificationRule<StructuralVerificationContext> = {
+  evaluate: (context) => context.validRecords.flatMap((entry) => {
+    if (entry.record.record_type !== "occurrence" || entry.record.prophet_words === undefined) {
+      return [];
+    }
+    const codePoints = [...entry.record.raw_text];
+    const boundaries = codePointGraphemeBoundaries(entry.record.raw_text);
+    const words = entry.record.prophet_words;
+    const space = (at: number) => /\p{White_Space}/u.test(codePoints[at] ?? " ");
+    return words.flatMap((range, index) => {
+      const previous = words[index - 1];
+      const valid =
+        range.start < range.end &&
+        boundaries.has(range.start) && boundaries.has(range.end) &&
+        !space(range.start) && !space(range.end - 1) &&
+        (previous === undefined || previous.end < range.start);
+      return valid
+        ? []
+        : [finding(entry, `/prophet_words/${index}`, "Prophet's words are not a valid range of the raw text")];
+    });
+  }),
+  id: "occurrence.prophet_words",
+  prerequisites: [],
+};
+
 // An occurrence and a collation both locate a report in their own witness.
 type LocatedRecord = CollationRecord | OccurrenceRecord;
 type LocatedType = LocatedRecord["record_type"];
@@ -253,6 +282,7 @@ export const SEMANTIC_RULES = Object.freeze([
   textRawWhitespace,
   witnessIsbnChecksum,
   occurrenceFingerprintMatches,
+  occurrenceProphetWords,
   occurrencePageOrder,
   occurrenceLocationMatchesScheme,
   collationPageOrder,

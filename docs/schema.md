@@ -6,7 +6,7 @@ The schema architecture serves four actors: ingestion pipelines that produce rec
 
 ## Status
 
-The storage architecture, type system, canonical JSON representation, schema-version policy, identifier forms, common semantic types, and exact version-one fields for all six entities are settled. The seven version-one JSON Schemas implement that structural contract, and verification catalog version four enforces it. The record schemas remain draft version one because no accepted core record has used them; the catalog advanced separately as membership, quotation, and collation rules changed.
+The storage architecture, type system, canonical JSON representation, schema-version policy, identifier forms, common semantic types, and exact version-one fields for all six entities are settled. The seven version-one JSON Schemas implement that structural contract, and verification catalog version five enforces it. The record schemas remain draft version one because no accepted core record has used them; the catalog advanced separately as membership, quotation, collation, and Prophet's-words rules changed.
 
 All six entity schemas and the complete verifier are implemented. Admitting a core record still requires human review against its printed source witness and successful repository verification.
 
@@ -174,7 +174,7 @@ core/                         # authoritative public records
 schemas/                      # authoritative JSON Schemas
 docs/                         # public documentation
 config/
-  site.json                   # the public site's name, repository link and address
+  site.json                   # the public site's name, repository link, address, and whether it may be indexed
 .github/
   workflows/
     check.yml                 # the full check, then the site build and its deployment
@@ -680,6 +680,8 @@ The example fingerprint is the SHA-256 of the example `raw_text`. The required f
 
 `fingerprint` is exactly 64 lowercase hexadecimal characters. Semantic verification recomputes it from the canonical UTF-8 bytes of `raw_text`, including meaningful spaces and LF characters.
 
+The optional `prophet_words` marks where the Prophet's words are in `raw_text`, as the printing sets them apart (al-Qasim's commentary prints them in colour) and as reviewed. It is a nonempty list of closed `{start, end}` objects in Unicode code points from zero, end exclusive, in ascending order with a gap between ranges. Each range is nonempty, ends on extended grapheme-cluster boundaries, and starts and ends on a character that is not whitespace; `occurrence.prophet_words` checks this.
+
 `ordinal` is a positive integer unique within the source witness. Witness occurrence ordinals are contiguous from `1` in printed report order, independent of pages and printed hadith numbers. Authoritative ingestion therefore proceeds in printed order. Correcting an ordinal never changes the occurrence identifier.
 
 `section_id` is the only optional property. A present `section_id` resolves within the witness's source. Its omission affirmatively means that no section applies; an occurrence cannot enter the core if an applicable source section has merely not been modeled. The absent state does not use `null`, an empty string, or a placeholder.
@@ -771,7 +773,7 @@ Every authoritative rule has a stable lowercase identifier matching `^[a-z][a-z0
 
 A semantic change to a rule or its scope creates a new verification-catalog version. An implementation correction that restores the documented meaning does not. Every rule has passing and failing fixtures, and every verifier bug fix adds a regression fixture.
 
-The verification-catalog version and record schema versions are independent. The current catalog is version four. Version two moved membership onto hadith records; version three replaced the three single-line display spans with one saved quotation that may cross LF and updated its whitespace-rule scope; version four adds collations and the optional and ISBN-10 witness fields. The record schemas stay at draft version one because no core record on `main` had yet used them. The verifier emits only the current catalog version and refuses to serialize a report claiming any other.
+The verification-catalog version and record schema versions are independent. The current catalog is version five. Version two moved membership onto hadith records; version three replaced the three single-line display spans with one saved quotation that may cross LF and updated its whitespace-rule scope; version four adds collations and the optional and ISBN-10 witness fields; version five adds the optional occurrence `prophet_words`. The record schemas stay at draft version one because no core record on `main` had yet used them. The verifier emits only the current catalog version and refuses to serialize a report claiming any other.
 
 Each failure contains exactly four properties:
 
@@ -792,7 +794,7 @@ The machine report is:
 {
   "findings": [],
   "valid": true,
-  "verification_version": 3
+  "verification_version": 5
 }
 ```
 
@@ -832,9 +834,11 @@ Derived artifacts are built twice from the same core and compared byte for byte.
 
 Every verification rule has a stable name, an implementation, and tests. Verification passes or fails; it never warns authoritative data through and never silently changes core data.
 
-## Verification catalog version four
+## Verification catalog version five
 
-The version-four catalog contains the following authoritative rules. Relative to version three, it adds the collation record path and schema; extends `reference.witness_resolves` to collations; adds `reference.collated_occurrence_resolves`, `collation.page_order`, `collation.location_matches_scheme`, `collation.witness_scope`, `collation.span`, and `collation.differences`; accepts an ISBN-10 in `witness.isbn_checksum`; and applies it and `text.single_line` only to the witness fields that are present. `repository.private_material_absent` also refuses the private developer notes in `docs/dev/`.
+The version-five catalog contains the following authoritative rules. Relative to version four, it adds the optional occurrence field `prophet_words` to the occurrence schema and the rule `occurrence.prophet_words`.
+
+The version-four change relative to version three added the collation record path and schema; extends `reference.witness_resolves` to collations; adds `reference.collated_occurrence_resolves`, `collation.page_order`, `collation.location_matches_scheme`, `collation.witness_scope`, `collation.span`, and `collation.differences`; accepts an ISBN-10 in `witness.isbn_checksum`; and applies it and `text.single_line` only to the witness fields that are present. `repository.private_material_absent` also refuses the private developer notes in `docs/dev/`.
 
 The version-three change relative to version two replaced `hadith.extracted_spans` with `hadith.text_span`, applied `text.raw_whitespace` to both occurrence `raw_text` and hadith `text`, and limited `text.single_line` to metadata. A hadith quotation may cross a stored LF while preserving exact matching and grapheme boundaries.
 
@@ -877,6 +881,7 @@ The earlier version-two change relative to version one removed `reference.hadith
 | `text.raw_whitespace` | Occurrence `raw_text` or hadith `text` contains forbidden leading, trailing, repeated, control, or layout whitespace, or a forbidden invisible format character. LF is allowed under the raw-text policy. |
 | `witness.isbn_checksum` | A present ISBN-13 or ISBN-10 checksum is invalid. |
 | `occurrence.fingerprint_matches` | The stored fingerprint differs from SHA-256 of the canonical raw-text bytes. |
+| `occurrence.prophet_words` | A range of the Prophet's words is empty, reaches beyond the raw text, has an end inside an extended grapheme cluster, starts or ends on whitespace, or does not come after the range before it with a gap between them. |
 
 ### Identity and ordering rules
 

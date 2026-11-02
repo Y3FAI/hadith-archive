@@ -16,6 +16,27 @@
     "ordinal": {
       "$ref": "../common/v1.schema.json#/$defs/ordinal"
     },
+    "prophet_words": {
+      "description": "Where the Prophet's words are, as al-Qasim's commentary prints them in colour and as reviewed: code-point ranges of raw_text in ascending order, each starting and ending on a character that is not whitespace.",
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "end": {
+            "$ref": "../common/v1.schema.json#/$defs/code_point_offset"
+          },
+          "start": {
+            "$ref": "../common/v1.schema.json#/$defs/code_point_offset"
+          }
+        },
+        "required": [
+          "end",
+          "start"
+        ],
+        "type": "object"
+      },
+      "minItems": 1,
+      "type": "array"
+    },
     "raw_text": {
       "$ref": "../common/v1.schema.json#/$defs/raw_text"
     },

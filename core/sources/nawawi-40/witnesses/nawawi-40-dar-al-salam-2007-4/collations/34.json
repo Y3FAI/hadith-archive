@@ -1,0 +1,162 @@
+{
+  "differences": [
+    {
+      "end": 10,
+      "kind": "spelling",
+      "reading": "أَبي",
+      "start": 5,
+      "text": "أَبِي"
+    },
+    {
+      "end": 31,
+      "kind": "spelling",
+      "reading": "– ",
+      "start": 31,
+      "text": ""
+    },
+    {
+      "end": 37,
+      "kind": "spelling",
+      "reading": "رَضِي",
+      "start": 31,
+      "text": "رَضِيَ"
+    },
+    {
+      "end": 46,
+      "kind": "wording",
+      "reading": "تعالى ",
+      "start": 46,
+      "text": ""
+    },
+    {
+      "end": 52,
+      "kind": "spelling",
+      "reading": "عنهُ",
+      "start": 46,
+      "text": "عَنْهُ"
+    },
+    {
+      "end": 53,
+      "kind": "spelling",
+      "reading": "– ",
+      "start": 53,
+      "text": ""
+    },
+    {
+      "end": 58,
+      "kind": "spelling",
+      "reading": "قالَ",
+      "start": 53,
+      "text": "قَالَ"
+    },
+    {
+      "end": 76,
+      "kind": "spelling",
+      "reading": "رسول",
+      "start": 69,
+      "text": "رَسُولَ"
+    },
+    {
+      "end": 86,
+      "kind": "spelling",
+      "reading": ": ",
+      "start": 86,
+      "text": ""
+    },
+    {
+      "end": 93,
+      "kind": "spelling",
+      "reading": "يقول",
+      "start": 86,
+      "text": "يَقُولُ"
+    },
+    {
+      "end": 106,
+      "kind": "spelling",
+      "reading": "رَأى",
+      "start": 101,
+      "text": "رَأَى"
+    },
+    {
+      "end": 125,
+      "kind": "spelling",
+      "reading": "مُنْكَرًا",
+      "start": 116,
+      "text": "مُنْكَراً"
+    },
+    {
+      "end": 141,
+      "kind": "spelling",
+      "reading": "فَلْيُغَيرهُ",
+      "start": 126,
+      "text": "فَلْيُغَيِّرْهُ"
+    },
+    {
+      "end": 158,
+      "kind": "spelling",
+      "reading": "فَإنْ",
+      "start": 152,
+      "text": "فَإِنْ"
+    },
+    {
+      "end": 163,
+      "kind": "spelling",
+      "reading": "لمْ",
+      "start": 159,
+      "text": "لَمْ"
+    },
+    {
+      "end": 196,
+      "kind": "spelling",
+      "reading": "فِإنْ",
+      "start": 190,
+      "text": "فَإِنْ"
+    },
+    {
+      "end": 225,
+      "kind": "spelling",
+      "reading": "فَبقَلْبِهِ",
+      "start": 213,
+      "text": "فَبِقَلْبِهِ"
+    },
+    {
+      "end": 226,
+      "kind": "spelling",
+      "reading": "",
+      "start": 225,
+      "text": "،"
+    },
+    {
+      "end": 235,
+      "kind": "spelling",
+      "reading": "وذلك",
+      "start": 227,
+      "text": "وَذَلِكَ"
+    },
+    {
+      "end": 255,
+      "kind": "spelling",
+      "reading": "الإيمَانِ",
+      "start": 245,
+      "text": "الإِيمَانِ"
+    },
+    {
+      "end": 256,
+      "kind": "spelling",
+      "reading": " » .",
+      "start": 255,
+      "text": "»"
+    }
+  ],
+  "location": {
+    "hadith_number": 34,
+    "page_end": 26,
+    "page_start": 25
+  },
+  "occurrence_id": 34,
+  "record_type": "collation",
+  "schema_version": 1,
+  "span_end": 256,
+  "span_start": 0,
+  "witness_id": "nawawi-40-dar-al-salam-2007-4"
+}

@@ -1,0 +1,288 @@
+{
+  "differences": [
+    {
+      "end": 19,
+      "kind": "spelling",
+      "reading": "عَبّاسٍ",
+      "start": 11,
+      "text": "عَبَّاسٍ"
+    },
+    {
+      "end": 44,
+      "kind": "spelling",
+      "reading": "﵄",
+      "start": 20,
+      "text": "رَضِيَ اللَّهُ عَنْهُمَا"
+    },
+    {
+      "end": 44,
+      "kind": "spelling",
+      "reading": "،",
+      "start": 44,
+      "text": ""
+    },
+    {
+      "end": 70,
+      "kind": "spelling",
+      "reading": "",
+      "start": 68,
+      "text": "- "
+    },
+    {
+      "end": 76,
+      "kind": "spelling",
+      "reading": "فِيما",
+      "start": 70,
+      "text": "فِيمَا"
+    },
+    {
+      "end": 107,
+      "kind": "spelling",
+      "reading": "تَبارَكَ",
+      "start": 98,
+      "text": "تَبَارَكَ"
+    },
+    {
+      "end": 118,
+      "kind": "spelling",
+      "reading": "وتَعالَى",
+      "start": 108,
+      "text": "وَتَعَالَى"
+    },
+    {
+      "end": 121,
+      "kind": "spelling",
+      "reading": "",
+      "start": 119,
+      "text": "- "
+    },
+    {
+      "end": 126,
+      "kind": "spelling",
+      "reading": "قالَ",
+      "start": 121,
+      "text": "قَالَ"
+    },
+    {
+      "end": 161,
+      "kind": "spelling",
+      "reading": "الحَسَناتِ",
+      "start": 150,
+      "text": "الحَسَنَاتِ"
+    },
+    {
+      "end": 177,
+      "kind": "spelling",
+      "reading": "والسَّيِّئاتِ",
+      "start": 162,
+      "text": "وَالسَّيِّئَاتِ"
+    },
+    {
+      "end": 178,
+      "kind": "spelling",
+      "reading": "",
+      "start": 177,
+      "text": "،"
+    },
+    {
+      "end": 207,
+      "kind": "spelling",
+      "reading": "فمَنْ",
+      "start": 201,
+      "text": "فَمَنْ"
+    },
+    {
+      "end": 231,
+      "kind": "spelling",
+      "reading": "فلَمْ",
+      "start": 225,
+      "text": "فَلَمْ"
+    },
+    {
+      "end": 244,
+      "kind": "spelling",
+      "reading": "",
+      "start": 243,
+      "text": "؛"
+    },
+    {
+      "end": 254,
+      "kind": "spelling",
+      "reading": "كَتَبَها",
+      "start": 245,
+      "text": "كَتَبَهَا"
+    },
+    {
+      "end": 290,
+      "kind": "spelling",
+      "reading": "كامِلَةً",
+      "start": 281,
+      "text": "كَامِلَةً"
+    },
+    {
+      "end": 298,
+      "kind": "spelling",
+      "reading": "وإِنْ",
+      "start": 292,
+      "text": "وَإِنْ"
+    },
+    {
+      "end": 310,
+      "kind": "spelling",
+      "reading": "بِها",
+      "start": 305,
+      "text": "بِهَا"
+    },
+    {
+      "end": 322,
+      "kind": "spelling",
+      "reading": "فعَمِلَها",
+      "start": 311,
+      "text": "فَعَمِلَهَا"
+    },
+    {
+      "end": 323,
+      "kind": "spelling",
+      "reading": "",
+      "start": 322,
+      "text": "؛"
+    },
+    {
+      "end": 333,
+      "kind": "spelling",
+      "reading": "كَتَبَها",
+      "start": 324,
+      "text": "كَتَبَهَا"
+    },
+    {
+      "end": 367,
+      "kind": "spelling",
+      "reading": "حَسَناتٍ",
+      "start": 358,
+      "text": "حَسَنَاتٍ"
+    },
+    {
+      "end": 410,
+      "kind": "spelling",
+      "reading": "أَضْعافٍ",
+      "start": 401,
+      "text": "أَضْعَافٍ"
+    },
+    {
+      "end": 422,
+      "kind": "spelling",
+      "reading": "؛ ",
+      "start": 420,
+      "text": ".\n"
+    },
+    {
+      "end": 428,
+      "kind": "spelling",
+      "reading": "وإِنْ",
+      "start": 422,
+      "text": "وَإِنْ"
+    },
+    {
+      "end": 446,
+      "kind": "spelling",
+      "reading": "بسَيِّئَةٍ",
+      "start": 435,
+      "text": "بِسَيِّئَةٍ"
+    },
+    {
+      "end": 453,
+      "kind": "spelling",
+      "reading": "فلَمْ",
+      "start": 447,
+      "text": "فَلَمْ"
+    },
+    {
+      "end": 465,
+      "kind": "spelling",
+      "reading": "يَعْمَلْها",
+      "start": 454,
+      "text": "يَعْمَلْهَا"
+    },
+    {
+      "end": 466,
+      "kind": "spelling",
+      "reading": "",
+      "start": 465,
+      "text": "؛"
+    },
+    {
+      "end": 476,
+      "kind": "spelling",
+      "reading": "كَتَبَها",
+      "start": 467,
+      "text": "كَتَبَهَا"
+    },
+    {
+      "end": 512,
+      "kind": "spelling",
+      "reading": "كامِلَةً",
+      "start": 503,
+      "text": "كَامِلَةً"
+    },
+    {
+      "end": 520,
+      "kind": "spelling",
+      "reading": "وإِنْ",
+      "start": 514,
+      "text": "وَإِنْ"
+    },
+    {
+      "end": 532,
+      "kind": "spelling",
+      "reading": "بِها",
+      "start": 527,
+      "text": "بِهَا"
+    },
+    {
+      "end": 544,
+      "kind": "spelling",
+      "reading": "فعَمِلَها",
+      "start": 533,
+      "text": "فَعَمِلَهَا"
+    },
+    {
+      "end": 545,
+      "kind": "spelling",
+      "reading": "",
+      "start": 544,
+      "text": "؛"
+    },
+    {
+      "end": 555,
+      "kind": "spelling",
+      "reading": "كَتَبَها",
+      "start": 546,
+      "text": "كَتَبَهَا"
+    },
+    {
+      "end": 583,
+      "kind": "spelling",
+      "reading": "واحِدَةً",
+      "start": 574,
+      "text": "وَاحِدَةً"
+    },
+    {
+      "end": 584,
+      "kind": "spelling",
+      "reading": ".",
+      "start": 584,
+      "text": ""
+    }
+  ],
+  "location": {
+    "hadith_number": 37,
+    "page_end": 125,
+    "page_start": 125
+  },
+  "occurrence_id": 37,
+  "record_type": "collation",
+  "schema_version": 1,
+  "span_end": 584,
+  "span_start": 0,
+  "witness_id": "nawawi-40-dar-al-ghawthani-2010-1"
+}

@@ -1,0 +1,190 @@
+{
+  "differences": [
+    {
+      "end": 31,
+      "kind": "spelling",
+      "reading": "ٱللَّهُ",
+      "start": 24,
+      "text": "اللَّهُ"
+    },
+    {
+      "end": 41,
+      "kind": "spelling",
+      "reading": "",
+      "start": 39,
+      "text": "- "
+    },
+    {
+      "end": 53,
+      "kind": "spelling",
+      "reading": ": ",
+      "start": 49,
+      "text": "-: «"
+    },
+    {
+      "end": 96,
+      "kind": "spelling",
+      "reading": "ٱللَّهِ",
+      "start": 89,
+      "text": "اللَّهِ"
+    },
+    {
+      "end": 98,
+      "kind": "spelling",
+      "reading": "صَلَّى ٱللَّهُ عَلَيْهِ وَسَلَّمَ",
+      "start": 97,
+      "text": "ﷺ"
+    },
+    {
+      "end": 120,
+      "kind": "wording",
+      "reading": "",
+      "start": 118,
+      "text": " ﷺ"
+    },
+    {
+      "end": 141,
+      "kind": "spelling",
+      "reading": "ٱللَّهِ",
+      "start": 134,
+      "text": "اللَّهِ"
+    },
+    {
+      "end": 142,
+      "kind": "spelling",
+      "reading": "؛",
+      "start": 141,
+      "text": "!"
+    },
+    {
+      "end": 167,
+      "kind": "spelling",
+      "reading": "ٱلدُّثُورِ",
+      "start": 157,
+      "text": "الدُّثُورِ"
+    },
+    {
+      "end": 179,
+      "kind": "spelling",
+      "reading": "بِٱلأُجُورِ",
+      "start": 168,
+      "text": "بِالأُجُورِ"
+    },
+    {
+      "end": 284,
+      "kind": "spelling",
+      "reading": " : «",
+      "start": 283,
+      "text": ":"
+    },
+    {
+      "end": 314,
+      "kind": "spelling",
+      "reading": "ٱللَّهُ",
+      "start": 308,
+      "text": "اللَّه"
+    },
+    {
+      "end": 406,
+      "kind": "spelling",
+      "reading": "صَدَقَةًٌ",
+      "start": 398,
+      "text": "صَدَقَةً"
+    },
+    {
+      "end": 436,
+      "kind": "spelling",
+      "reading": "صَدَقَةًٌ",
+      "start": 428,
+      "text": "صَدَقَةً"
+    },
+    {
+      "end": 466,
+      "kind": "spelling",
+      "reading": "صَدَقَةًٌ",
+      "start": 458,
+      "text": "صَدَقَةً"
+    },
+    {
+      "end": 490,
+      "kind": "spelling",
+      "reading": "بِٱلْمَعْرُوفِ",
+      "start": 477,
+      "text": "بِالمَعْرُوفِ"
+    },
+    {
+      "end": 568,
+      "kind": "spelling",
+      "reading": " » .\n",
+      "start": 566,
+      "text": "، "
+    },
+    {
+      "end": 596,
+      "kind": "spelling",
+      "reading": "ٱللَّهِ",
+      "start": 589,
+      "text": "اللَّهِ"
+    },
+    {
+      "end": 597,
+      "kind": "spelling",
+      "reading": " ؛",
+      "start": 596,
+      "text": "!"
+    },
+    {
+      "end": 629,
+      "kind": "spelling",
+      "reading": "",
+      "start": 628,
+      "text": "،"
+    },
+    {
+      "end": 667,
+      "kind": "spelling",
+      "reading": " : «",
+      "start": 666,
+      "text": ":"
+    },
+    {
+      "end": 708,
+      "kind": "spelling",
+      "reading": "، ",
+      "start": 708,
+      "text": ""
+    },
+    {
+      "end": 732,
+      "kind": "spelling",
+      "reading": " ؟!",
+      "start": 731,
+      "text": "؟"
+    },
+    {
+      "end": 773,
+      "kind": "spelling",
+      "reading": "ٱلْحَلَالِ",
+      "start": 764,
+      "text": "الحَلَالِ"
+    },
+    {
+      "end": 793,
+      "kind": "spelling",
+      "reading": " » .",
+      "start": 792,
+      "text": "»"
+    }
+  ],
+  "location": {
+    "hadith_number": 25,
+    "page_end": 84,
+    "page_start": 83
+  },
+  "occurrence_id": 25,
+  "record_type": "collation",
+  "schema_version": 1,
+  "span_end": 793,
+  "span_start": 0,
+  "witness_id": "nawawi-40-dar-al-minhaj-2009-1"
+}

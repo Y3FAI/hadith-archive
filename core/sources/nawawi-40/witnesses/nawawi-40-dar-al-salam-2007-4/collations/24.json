@@ -1,0 +1,953 @@
+{
+  "differences": [
+    {
+      "end": 4,
+      "kind": "spelling",
+      "reading": "عن",
+      "start": 0,
+      "text": "عَنْ"
+    },
+    {
+      "end": 10,
+      "kind": "spelling",
+      "reading": "أَبي",
+      "start": 5,
+      "text": "أَبِي"
+    },
+    {
+      "end": 16,
+      "kind": "spelling",
+      "reading": "ذرٍّ",
+      "start": 11,
+      "text": "ذَرٍّ"
+    },
+    {
+      "end": 17,
+      "kind": "wording",
+      "reading": "الغِفارِيِّ – ",
+      "start": 17,
+      "text": ""
+    },
+    {
+      "end": 23,
+      "kind": "spelling",
+      "reading": "رَضِي",
+      "start": 17,
+      "text": "رَضِيَ"
+    },
+    {
+      "end": 32,
+      "kind": "wording",
+      "reading": "تعالى ",
+      "start": 32,
+      "text": ""
+    },
+    {
+      "end": 38,
+      "kind": "spelling",
+      "reading": "عنهُ",
+      "start": 32,
+      "text": "عَنْهُ"
+    },
+    {
+      "end": 39,
+      "kind": "spelling",
+      "reading": "– ",
+      "start": 39,
+      "text": ""
+    },
+    {
+      "end": 43,
+      "kind": "spelling",
+      "reading": "عنِ",
+      "start": 39,
+      "text": "عَنِ"
+    },
+    {
+      "end": 54,
+      "kind": "spelling",
+      "reading": "النبيَّ",
+      "start": 44,
+      "text": "النَّبِيِّ"
+    },
+    {
+      "end": 63,
+      "kind": "spelling",
+      "reading": "فيما",
+      "start": 57,
+      "text": "فِيمَا"
+    },
+    {
+      "end": 69,
+      "kind": "wording",
+      "reading": "يرْويه",
+      "start": 64,
+      "text": "رَوَى"
+    },
+    {
+      "end": 74,
+      "kind": "spelling",
+      "reading": "عَنْ",
+      "start": 70,
+      "text": "عَنِ"
+    },
+    {
+      "end": 82,
+      "kind": "wording",
+      "reading": "رَبِّهِ",
+      "start": 75,
+      "text": "اللَّهِ"
+    },
+    {
+      "end": 96,
+      "kind": "spelling",
+      "reading": "﷿",
+      "start": 83,
+      "text": "عَزَّ وَجَلَّ"
+    },
+    {
+      "end": 110,
+      "kind": "spelling",
+      "reading": "قال",
+      "start": 105,
+      "text": "قَالَ"
+    },
+    {
+      "end": 116,
+      "kind": "spelling",
+      "reading": "يا",
+      "start": 113,
+      "text": "يَا"
+    },
+    {
+      "end": 126,
+      "kind": "spelling",
+      "reading": " ،",
+      "start": 125,
+      "text": "!"
+    },
+    {
+      "end": 133,
+      "kind": "spelling",
+      "reading": "إنِّي",
+      "start": 127,
+      "text": "إِنِّي"
+    },
+    {
+      "end": 159,
+      "kind": "spelling",
+      "reading": "على",
+      "start": 154,
+      "text": "عَلَى"
+    },
+    {
+      "end": 181,
+      "kind": "spelling",
+      "reading": "وجَعَلْتُهُ",
+      "start": 169,
+      "text": "وَجَعَلْتُهُ"
+    },
+    {
+      "end": 192,
+      "kind": "spelling",
+      "reading": "بَينَكُمْ",
+      "start": 182,
+      "text": "بَيْنَكُمْ"
+    },
+    {
+      "end": 203,
+      "kind": "spelling",
+      "reading": "مُحَرَّمًا",
+      "start": 193,
+      "text": "مُحَرَّماً"
+    },
+    {
+      "end": 204,
+      "kind": "spelling",
+      "reading": "، ",
+      "start": 204,
+      "text": ""
+    },
+    {
+      "end": 209,
+      "kind": "spelling",
+      "reading": "فلا",
+      "start": 204,
+      "text": "فَلَا"
+    },
+    {
+      "end": 221,
+      "kind": "spelling",
+      "reading": "تَظَالمُوا",
+      "start": 210,
+      "text": "تَظَالَمُوا"
+    },
+    {
+      "end": 222,
+      "kind": "spelling",
+      "reading": " .",
+      "start": 221,
+      "text": "،"
+    },
+    {
+      "end": 226,
+      "kind": "spelling",
+      "reading": "يا",
+      "start": 223,
+      "text": "يَا"
+    },
+    {
+      "end": 235,
+      "kind": "spelling",
+      "reading": "عِبادِي",
+      "start": 227,
+      "text": "عِبَادِي"
+    },
+    {
+      "end": 236,
+      "kind": "spelling",
+      "reading": " ،",
+      "start": 235,
+      "text": "!"
+    },
+    {
+      "end": 253,
+      "kind": "spelling",
+      "reading": "ضالٌّ",
+      "start": 247,
+      "text": "ضَالٌّ"
+    },
+    {
+      "end": 260,
+      "kind": "spelling",
+      "reading": "إلا",
+      "start": 254,
+      "text": "إِلَّا"
+    },
+    {
+      "end": 276,
+      "kind": "spelling",
+      "reading": "هَدَيتُهُ",
+      "start": 266,
+      "text": "هَدَيْتُهُ"
+    },
+    {
+      "end": 277,
+      "kind": "spelling",
+      "reading": "",
+      "start": 276,
+      "text": "،"
+    },
+    {
+      "end": 293,
+      "kind": "spelling",
+      "reading": "فاسْتَهْدُونِي",
+      "start": 278,
+      "text": "فَاسْتَهْدُونِي"
+    },
+    {
+      "end": 305,
+      "kind": "spelling",
+      "reading": " .",
+      "start": 304,
+      "text": "،"
+    },
+    {
+      "end": 309,
+      "kind": "spelling",
+      "reading": "يا",
+      "start": 306,
+      "text": "يَا"
+    },
+    {
+      "end": 318,
+      "kind": "spelling",
+      "reading": "عبادِي",
+      "start": 310,
+      "text": "عِبَادِي"
+    },
+    {
+      "end": 319,
+      "kind": "spelling",
+      "reading": " ،",
+      "start": 318,
+      "text": "!"
+    },
+    {
+      "end": 337,
+      "kind": "spelling",
+      "reading": "جائعٌ",
+      "start": 330,
+      "text": "جَائِعٌ"
+    },
+    {
+      "end": 344,
+      "kind": "spelling",
+      "reading": "إلَّا",
+      "start": 338,
+      "text": "إِلَّا"
+    },
+    {
+      "end": 381,
+      "kind": "spelling",
+      "reading": "فاسْتَطْعِمُونِي",
+      "start": 364,
+      "text": "فَاسْتَطْعِمُونِي"
+    },
+    {
+      "end": 409,
+      "kind": "spelling",
+      "reading": " . ياعِبادي ،",
+      "start": 394,
+      "text": "، يَا عِبَادِي!"
+    },
+    {
+      "end": 425,
+      "kind": "spelling",
+      "reading": "عارٍ",
+      "start": 420,
+      "text": "عَارٍ"
+    },
+    {
+      "end": 432,
+      "kind": "spelling",
+      "reading": "إلا",
+      "start": 426,
+      "text": "إِلَّا"
+    },
+    {
+      "end": 448,
+      "kind": "spelling",
+      "reading": "كَسَوتُهُ",
+      "start": 438,
+      "text": "كَسَوْتُهُ"
+    },
+    {
+      "end": 464,
+      "kind": "spelling",
+      "reading": "فاسْتكْسونِي",
+      "start": 450,
+      "text": "فَاسْتكْسُونِي"
+    },
+    {
+      "end": 476,
+      "kind": "spelling",
+      "reading": " .",
+      "start": 475,
+      "text": "،"
+    },
+    {
+      "end": 480,
+      "kind": "spelling",
+      "reading": "يا",
+      "start": 477,
+      "text": "يَا"
+    },
+    {
+      "end": 490,
+      "kind": "spelling",
+      "reading": " ،",
+      "start": 489,
+      "text": "!"
+    },
+    {
+      "end": 500,
+      "kind": "spelling",
+      "reading": "إنَّكُمْ",
+      "start": 491,
+      "text": "إِنَّكُمْ"
+    },
+    {
+      "end": 524,
+      "kind": "spelling",
+      "reading": "بالليلِ",
+      "start": 513,
+      "text": "بِاللَّيْلِ"
+    },
+    {
+      "end": 537,
+      "kind": "spelling",
+      "reading": "والنَّهارِ",
+      "start": 525,
+      "text": "وَالنَّهَارِ"
+    },
+    {
+      "end": 546,
+      "kind": "spelling",
+      "reading": "وأَنا",
+      "start": 539,
+      "text": "وَأَنَا"
+    },
+    {
+      "end": 575,
+      "kind": "spelling",
+      "reading": "جَمِيعًا",
+      "start": 567,
+      "text": "جَمِيعاً"
+    },
+    {
+      "end": 594,
+      "kind": "spelling",
+      "reading": "فاسْتَغْفِرُوني",
+      "start": 577,
+      "text": "فَاسْتَغْفِرُونِي"
+    },
+    {
+      "end": 610,
+      "kind": "spelling",
+      "reading": "لكُم",
+      "start": 604,
+      "text": "لَكُمْ"
+    },
+    {
+      "end": 611,
+      "kind": "spelling",
+      "reading": " .",
+      "start": 610,
+      "text": "،"
+    },
+    {
+      "end": 615,
+      "kind": "spelling",
+      "reading": "يا",
+      "start": 612,
+      "text": "يَا"
+    },
+    {
+      "end": 625,
+      "kind": "spelling",
+      "reading": " ،",
+      "start": 624,
+      "text": "!"
+    },
+    {
+      "end": 635,
+      "kind": "spelling",
+      "reading": "إنَّكُمْ",
+      "start": 626,
+      "text": "إِنَّكُمْ"
+    },
+    {
+      "end": 640,
+      "kind": "spelling",
+      "reading": "لنْ",
+      "start": 636,
+      "text": "لَنْ"
+    },
+    {
+      "end": 658,
+      "kind": "spelling",
+      "reading": "ضُرِّي",
+      "start": 652,
+      "text": "ضَرِّي"
+    },
+    {
+      "end": 680,
+      "kind": "spelling",
+      "reading": "ولنْ",
+      "start": 674,
+      "text": "وَلَنْ"
+    },
+    {
+      "end": 691,
+      "kind": "spelling",
+      "reading": "تبلُغُوا",
+      "start": 681,
+      "text": "تَبْلُغُوا"
+    },
+    {
+      "end": 699,
+      "kind": "spelling",
+      "reading": "نفْعِي",
+      "start": 692,
+      "text": "نَفْعِي"
+    },
+    {
+      "end": 714,
+      "kind": "spelling",
+      "reading": "فَتْنفَعُونِي",
+      "start": 700,
+      "text": "فَتَنْفَعُونِي"
+    },
+    {
+      "end": 715,
+      "kind": "spelling",
+      "reading": " .",
+      "start": 714,
+      "text": "،"
+    },
+    {
+      "end": 719,
+      "kind": "spelling",
+      "reading": "يا",
+      "start": 716,
+      "text": "يَا"
+    },
+    {
+      "end": 729,
+      "kind": "spelling",
+      "reading": " ،",
+      "start": 728,
+      "text": "!"
+    },
+    {
+      "end": 734,
+      "kind": "spelling",
+      "reading": "لو",
+      "start": 730,
+      "text": "لَوْ"
+    },
+    {
+      "end": 752,
+      "kind": "spelling",
+      "reading": "أَوَّلكُم",
+      "start": 741,
+      "text": "أَوَّلَكُمْ"
+    },
+    {
+      "end": 764,
+      "kind": "spelling",
+      "reading": "وآخِرَكُمْ",
+      "start": 753,
+      "text": "وَآخِرَكُمْ"
+    },
+    {
+      "end": 765,
+      "kind": "spelling",
+      "reading": "",
+      "start": 764,
+      "text": "،"
+    },
+    {
+      "end": 778,
+      "kind": "spelling",
+      "reading": "وإنْسَكُمْ",
+      "start": 766,
+      "text": "وَإِنْسَكُمْ"
+    },
+    {
+      "end": 790,
+      "kind": "spelling",
+      "reading": "وجنَّكُمْ",
+      "start": 779,
+      "text": "وَجِنَّكُمْ"
+    },
+    {
+      "end": 798,
+      "kind": "spelling",
+      "reading": "كانُوا",
+      "start": 791,
+      "text": "كَانُوا"
+    },
+    {
+      "end": 804,
+      "kind": "spelling",
+      "reading": "على",
+      "start": 799,
+      "text": "عَلَى"
+    },
+    {
+      "end": 834,
+      "kind": "spelling",
+      "reading": "واحِدٍ",
+      "start": 827,
+      "text": "وَاحِدٍ"
+    },
+    {
+      "end": 844,
+      "kind": "spelling",
+      "reading": "",
+      "start": 843,
+      "text": "؛"
+    },
+    {
+      "end": 881,
+      "kind": "spelling",
+      "reading": "شَيئًا",
+      "start": 874,
+      "text": "شَيْئاً"
+    },
+    {
+      "end": 882,
+      "kind": "spelling",
+      "reading": " .",
+      "start": 881,
+      "text": "،"
+    },
+    {
+      "end": 896,
+      "kind": "spelling",
+      "reading": "",
+      "start": 895,
+      "text": "!"
+    },
+    {
+      "end": 901,
+      "kind": "spelling",
+      "reading": "لَو",
+      "start": 897,
+      "text": "لَوْ"
+    },
+    {
+      "end": 919,
+      "kind": "spelling",
+      "reading": "أَوَّلكُم",
+      "start": 908,
+      "text": "أَوَّلَكُمْ"
+    },
+    {
+      "end": 931,
+      "kind": "spelling",
+      "reading": "وآخِرَكُمْ",
+      "start": 920,
+      "text": "وَآخِرَكُمْ"
+    },
+    {
+      "end": 932,
+      "kind": "spelling",
+      "reading": "",
+      "start": 931,
+      "text": "،"
+    },
+    {
+      "end": 945,
+      "kind": "spelling",
+      "reading": "وَإنْسَكُمْ",
+      "start": 933,
+      "text": "وَإِنْسَكُمْ"
+    },
+    {
+      "end": 957,
+      "kind": "spelling",
+      "reading": "وَجِنَّكُم",
+      "start": 946,
+      "text": "وَجِنَّكُمْ"
+    },
+    {
+      "end": 980,
+      "kind": "spelling",
+      "reading": "أفْجَر",
+      "start": 972,
+      "text": "أَفْجَرِ"
+    },
+    {
+      "end": 1003,
+      "kind": "wording",
+      "reading": " مِنْكُم",
+      "start": 1002,
+      "text": "،"
+    },
+    {
+      "end": 1042,
+      "kind": "spelling",
+      "reading": "شَيئًا",
+      "start": 1035,
+      "text": "شَيْئاً"
+    },
+    {
+      "end": 1043,
+      "kind": "spelling",
+      "reading": " .",
+      "start": 1042,
+      "text": "،"
+    },
+    {
+      "end": 1047,
+      "kind": "spelling",
+      "reading": "يا",
+      "start": 1044,
+      "text": "يَا"
+    },
+    {
+      "end": 1057,
+      "kind": "spelling",
+      "reading": " ،",
+      "start": 1056,
+      "text": "!"
+    },
+    {
+      "end": 1062,
+      "kind": "spelling",
+      "reading": "لَو",
+      "start": 1058,
+      "text": "لَوْ"
+    },
+    {
+      "end": 1080,
+      "kind": "spelling",
+      "reading": "أَوَّلكُمْ",
+      "start": 1069,
+      "text": "أَوَّلَكُمْ"
+    },
+    {
+      "end": 1092,
+      "kind": "spelling",
+      "reading": "وآخِرَكُمْ",
+      "start": 1081,
+      "text": "وَآخِرَكُمْ"
+    },
+    {
+      "end": 1093,
+      "kind": "spelling",
+      "reading": "",
+      "start": 1092,
+      "text": "،"
+    },
+    {
+      "end": 1106,
+      "kind": "spelling",
+      "reading": "وإنْسَكُمْ",
+      "start": 1094,
+      "text": "وَإِنْسَكُمْ"
+    },
+    {
+      "end": 1118,
+      "kind": "spelling",
+      "reading": "وجِنَّكُمْ",
+      "start": 1107,
+      "text": "وَجِنَّكُمْ"
+    },
+    {
+      "end": 1126,
+      "kind": "spelling",
+      "reading": "قامُوا",
+      "start": 1119,
+      "text": "قَامُوا"
+    },
+    {
+      "end": 1130,
+      "kind": "spelling",
+      "reading": "في",
+      "start": 1127,
+      "text": "فِي"
+    },
+    {
+      "end": 1146,
+      "kind": "spelling",
+      "reading": "واحِدٍ",
+      "start": 1139,
+      "text": "وَاحِدٍ"
+    },
+    {
+      "end": 1174,
+      "kind": "spelling",
+      "reading": "فأَعْطَيتُ",
+      "start": 1162,
+      "text": "فَأَعْطَيْتُ"
+    },
+    {
+      "end": 1180,
+      "kind": "spelling",
+      "reading": "كلَّ",
+      "start": 1175,
+      "text": "كُلَّ"
+    },
+    {
+      "end": 1190,
+      "kind": "wording",
+      "reading": "واحِدٍ",
+      "start": 1181,
+      "text": "إِنْسَانٍ"
+    },
+    {
+      "end": 1204,
+      "kind": "spelling",
+      "reading": " ،",
+      "start": 1203,
+      "text": "؛"
+    },
+    {
+      "end": 1208,
+      "kind": "spelling",
+      "reading": "ما",
+      "start": 1205,
+      "text": "مَا"
+    },
+    {
+      "end": 1222,
+      "kind": "spelling",
+      "reading": "ذلك",
+      "start": 1216,
+      "text": "ذَلِكَ"
+    },
+    {
+      "end": 1244,
+      "kind": "spelling",
+      "reading": "إلا",
+      "start": 1238,
+      "text": "إِلَّا"
+    },
+    {
+      "end": 1250,
+      "kind": "spelling",
+      "reading": "كما",
+      "start": 1245,
+      "text": "كَمَا"
+    },
+    {
+      "end": 1259,
+      "kind": "spelling",
+      "reading": "ينْقُصُ",
+      "start": 1251,
+      "text": "يَنْقُصُ"
+    },
+    {
+      "end": 1270,
+      "kind": "spelling",
+      "reading": "المِخْيَط",
+      "start": 1260,
+      "text": "المِخْيَطُ"
+    },
+    {
+      "end": 1276,
+      "kind": "spelling",
+      "reading": "إذا",
+      "start": 1271,
+      "text": "إِذَا"
+    },
+    {
+      "end": 1295,
+      "kind": "spelling",
+      "reading": " .",
+      "start": 1294,
+      "text": "،"
+    },
+    {
+      "end": 1299,
+      "kind": "spelling",
+      "reading": "يا",
+      "start": 1296,
+      "text": "يَا"
+    },
+    {
+      "end": 1309,
+      "kind": "spelling",
+      "reading": "",
+      "start": 1308,
+      "text": "!"
+    },
+    {
+      "end": 1318,
+      "kind": "spelling",
+      "reading": "إنَّمَا",
+      "start": 1310,
+      "text": "إِنَّمَا"
+    },
+    {
+      "end": 1337,
+      "kind": "spelling",
+      "reading": "أَعْمَالكُمْ",
+      "start": 1324,
+      "text": "أَعْمَالُكُمْ"
+    },
+    {
+      "end": 1348,
+      "kind": "spelling",
+      "reading": "أُحْصِيها",
+      "start": 1338,
+      "text": "أُحْصِيهَا"
+    },
+    {
+      "end": 1355,
+      "kind": "spelling",
+      "reading": "لكُمْ",
+      "start": 1349,
+      "text": "لَكُمْ"
+    },
+    {
+      "end": 1385,
+      "kind": "spelling",
+      "reading": "إيَّاهَا",
+      "start": 1376,
+      "text": "إِيَّاهَا"
+    },
+    {
+      "end": 1408,
+      "kind": "spelling",
+      "reading": "خيرًا",
+      "start": 1401,
+      "text": "خَيْراً"
+    },
+    {
+      "end": 1409,
+      "kind": "spelling",
+      "reading": "",
+      "start": 1408,
+      "text": "؛"
+    },
+    {
+      "end": 1430,
+      "kind": "spelling",
+      "reading": "اللَّه",
+      "start": 1423,
+      "text": "اللَّهَ"
+    },
+    {
+      "end": 1438,
+      "kind": "spelling",
+      "reading": "ومَنْ",
+      "start": 1432,
+      "text": "وَمَنْ"
+    },
+    {
+      "end": 1452,
+      "kind": "spelling",
+      "reading": "غيرَ",
+      "start": 1446,
+      "text": "غَيْرَ"
+    },
+    {
+      "end": 1459,
+      "kind": "spelling",
+      "reading": "ذلك",
+      "start": 1453,
+      "text": "ذَلِكَ"
+    },
+    {
+      "end": 1460,
+      "kind": "spelling",
+      "reading": "",
+      "start": 1459,
+      "text": "؛"
+    },
+    {
+      "end": 1466,
+      "kind": "spelling",
+      "reading": "فَلا",
+      "start": 1461,
+      "text": "فَلَا"
+    },
+    {
+      "end": 1477,
+      "kind": "spelling",
+      "reading": "يَلومَنَّ",
+      "start": 1467,
+      "text": "يَلُومَنَّ"
+    },
+    {
+      "end": 1484,
+      "kind": "spelling",
+      "reading": "إلا",
+      "start": 1478,
+      "text": "إِلَّا"
+    },
+    {
+      "end": 1494,
+      "kind": "spelling",
+      "reading": " » .",
+      "start": 1493,
+      "text": "»"
+    }
+  ],
+  "location": {
+    "hadith_number": 24,
+    "page_end": 18,
+    "page_start": 17
+  },
+  "occurrence_id": 24,
+  "record_type": "collation",
+  "schema_version": 1,
+  "span_end": 1494,
+  "span_start": 0,
+  "witness_id": "nawawi-40-dar-al-salam-2007-4"
+}

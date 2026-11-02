@@ -223,13 +223,13 @@ describe("staged repository verification", () => {
       });
       expect(await verifyRepository(repository, base)).toEqual({
         kind: "complete",
-        report: { findings: [coreFinding(aliasPath)], valid: false, verification_version: 4 },
+        report: { findings: [coreFinding(aliasPath)], valid: false, verification_version: 5 },
       });
       await git("rm", "--quiet", "-r", "--cached", root);
       await git("update-index", "--add", "--cacheinfo", `160000,${base},${root}`);
       expect(await verifyRepository(repository, base)).toEqual({
         kind: "complete",
-        report: { findings: [coreFinding(root)], valid: false, verification_version: 4 },
+        report: { findings: [coreFinding(root)], valid: false, verification_version: 5 },
       });
     });
   }
@@ -270,7 +270,7 @@ describe("staged repository verification", () => {
           rule_id: "repository.schema_paths",
         })),
         valid: false,
-        verification_version: 4,
+        verification_version: 5,
       },
     });
     expect(await indexed()).toEqual(before);
@@ -293,7 +293,7 @@ describe("staged repository verification", () => {
           rule_id: "json.canonical",
         }],
         valid: false,
-        verification_version: 4,
+        verification_version: 5,
       },
     });
     const io = { stderr: { write() {} }, stdout: { write() {} } };

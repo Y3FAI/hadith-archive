@@ -1,0 +1,57 @@
+{
+  "differences": [
+    {
+      "end": 36,
+      "kind": "spelling",
+      "reading": "ٱللَّهُ",
+      "start": 29,
+      "text": "اللَّهُ"
+    },
+    {
+      "end": 71,
+      "kind": "spelling",
+      "reading": "ٱللَّهِ",
+      "start": 65,
+      "text": "اللَّه"
+    },
+    {
+      "end": 73,
+      "kind": "spelling",
+      "reading": "صَلَّى ٱللَّهُ عَلَيْهِ وَسَلَّمَ",
+      "start": 72,
+      "text": "ﷺ"
+    },
+    {
+      "end": 106,
+      "kind": "spelling",
+      "reading": "ٱلْمَرْءِ",
+      "start": 98,
+      "text": "المَرْءِ"
+    },
+    {
+      "end": 107,
+      "kind": "spelling",
+      "reading": "",
+      "start": 106,
+      "text": ":"
+    },
+    {
+      "end": 135,
+      "kind": "spelling",
+      "reading": " » .",
+      "start": 134,
+      "text": "»"
+    }
+  ],
+  "location": {
+    "hadith_number": 12,
+    "page_end": 64,
+    "page_start": 64
+  },
+  "occurrence_id": 12,
+  "record_type": "collation",
+  "schema_version": 1,
+  "span_end": 135,
+  "span_start": 0,
+  "witness_id": "nawawi-40-dar-al-minhaj-2009-1"
+}

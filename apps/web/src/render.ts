@@ -1,4 +1,5 @@
 import type {
+  CollationRecord,
   HadithRecord,
   OccurrenceRecord,
   SectionRecord,
@@ -29,6 +30,28 @@ const ICON = {
   question: svg("M136,180a8,8,0,1,1-8-8A8,8,0,0,1,136,180ZM128,76c-19.85,0-36,14.36-36,32v4a4,4,0,0,0,8,0v-4c0-13.23,12.56-24,28-24s28,10.77,28,24-12.56,24-28,24a4,4,0,0,0-4,4v8a4,4,0,0,0,8,0v-4.2c18-1.77,32-15.36,32-31.8C164,90.36,147.85,76,128,76Zm100,52A100,100,0,1,1,128,28,100.11,100.11,0,0,1,228,128Zm-8,0a92,92,0,1,0-92,92A92.1,92.1,0,0,0,220,128Z"),
 };
 
+// How another printing compares with the text above, as a collation's
+// derived status: a ring with a check, a dash or a cross, coloured by the
+// stylesheet.
+type Match = "exact" | "spelling" | "wording";
+const MATCH: Readonly<Record<Match, { readonly label: string; readonly path: string }>> = {
+  exact: { label: "مطابق", path: "M86 132l28 28 56-56" },
+  spelling: { label: "يختلف في التشكيل والإملاء والترقيم", path: "M88 128h80" },
+  wording: { label: "يختلف في الألفاظ", path: "M100 100l56 56M156 100l-56 56" },
+};
+// The same, counting a printing's hadith on its own page.
+const COMPARED: Readonly<Record<Match, string>> = {
+  exact: "تطابق النص المعروض",
+  spelling: "تختلف في التشكيل والإملاء والترقيم",
+  wording: "تختلف في الألفاظ",
+};
+const ring = (match: Match) =>
+  `<svg viewBox="0 0 256 256" aria-hidden="true" focusable="false" data-match="${match}"><circle cx="128" cy="128" r="96"/><path d="${MATCH[match].path}"/></svg>`;
+const matchOf = (collation: CollationRecord): Match =>
+  collation.differences.length === 0
+    ? "exact"
+    : collation.differences.some((difference) => difference.kind === "wording") ? "wording" : "spelling";
+
 // A narration longer than this many base characters (combining marks are not
 // counted) opens with «المزيد»: about four lines at the widest layout.
 export const FOLD_BASE_CHARACTERS = 400;
@@ -45,10 +68,10 @@ export const PAGE_SIZE = 20;
 const HOME_TOPICS = 8;
 const HOME_BOOKS = 4;
 
-/** One generated file, by its forward-slash path inside the output directory. */
+/** One generated text file, by its forward-slash path inside the output directory. */
 export interface PageFile {
   readonly path: string;
-  readonly html: string;
+  readonly text: string;
 }
 
 export interface RenderOptions {
@@ -72,6 +95,77 @@ function compareText(left: string, right: string): number {
   return left < right ? -1 : left > right ? 1 : 0;
 }
 
+const SPACE = /\s/u;
+const BARE = /^[\s\p{P}]*$/u;
+
+interface ComparisonRow {
+  /** Per collation, its own text for the stretch with its differences marked, or "=". */
+  readonly cells: readonly string[];
+  readonly text: string;
+  readonly wording: boolean;
+}
+
+/**
+ * The table of differences under a hadith: one row per stretch of the raw
+ * text where any printing differs, widened to the words it touches, or to
+ * the word on each side where it touches none, so its place shows.
+ * Overlapping stretches share a row. Rows follow the raw text; offsets
+ * count code points.
+ */
+export function comparisonRows(raw: string, collations: readonly CollationRecord[]): readonly ComparisonRow[] {
+  const characters = [...raw];
+  const html = (start: number, end: number) =>
+    escapeHtml(characters.slice(start, end).join("")).replaceAll("\n", "<br>");
+  const space = (index: number) => SPACE.test(characters[index] as string);
+  const stretches = collations.flatMap((collation, column) => collation.differences.map((difference) => {
+    const { span_end: last, span_start: first } = collation;
+    let { end, start } = difference;
+    const words = () => {
+      while (start > first && !space(start - 1)) start -= 1;
+      while (end < last && !space(end)) end += 1;
+    };
+    words();
+    if (BARE.test(characters.slice(start, end).join(""))) {
+      while (start > first && space(start - 1)) start -= 1;
+      while (end < last && space(end)) end += 1;
+      words();
+    }
+    return { column, difference, end, start };
+  })).sort((left, right) => left.start - right.start || left.end - right.end);
+  const groups: { end: number; members: typeof stretches; start: number }[] = [];
+  for (const stretch of stretches) {
+    const last = groups.at(-1);
+    if (last !== undefined && stretch.start < last.end) {
+      last.end = Math.max(last.end, stretch.end);
+      last.members.push(stretch);
+    } else {
+      groups.push({ end: stretch.end, members: [stretch], start: stretch.start });
+    }
+  }
+  return groups.map((group) => ({
+    cells: collations.map((_, column) => {
+      const differences = group.members
+        .filter((member) => member.column === column)
+        .map((member) => member.difference)
+        .sort((left, right) => left.start - right.start || left.end - right.end);
+      if (differences.length === 0) {
+        return "=";
+      }
+      let at = group.start;
+      let cell = "";
+      for (const difference of differences) {
+        cell += `${html(at, difference.start)}<mark data-match="${difference.kind}">${
+          escapeHtml(difference.reading).replaceAll("\n", "<br>")
+        }</mark>`;
+        at = difference.end;
+      }
+      return cell + html(at, group.end);
+    }),
+    text: html(group.start, group.end),
+    wording: group.members.some((member) => member.difference.kind === "wording"),
+  }));
+}
+
 // Every page lives at a route relative to the site's address, ending in a
 // slash; its file is the route's index.html. Section identifiers start with
 // a letter, so a page number after a route never meets one.
@@ -82,15 +176,47 @@ const ROUTE = {
   categories: "c/",
   hadith: (id: number) => `h/${segment(id)}/`,
   home: "",
+  license: "license/",
+  printing: (witnessId: string) => `p/${segment(witnessId)}/`,
+  privacy: "privacy/",
+  repository: "repository/",
   section: (sourceId: string, sectionId: string) => `b/${segment(sourceId)}/${segment(sectionId)}/`,
   source: (sourceId: string) => `b/${segment(sourceId)}/`,
   topic: (id: number) => `c/${segment(id)}/`,
 };
 const pageRoute = (route: string, page: number) => page === 1 ? route : `${route}${page}/`;
 
-// Every LF in preserved text separates paragraphs.
-const paragraphs = (text: string, indent: string) =>
-  text.split("\n").map((part) => `${indent}<p>${escapeHtml(part)}</p>`).join("\n");
+type ProphetWords = readonly NonNullable<OccurrenceRecord["prophet_words"]>[number][];
+
+// A stretch of raw text that begins at code point `from`, escaped, with the
+// Prophet's words, where the printing marks them, set apart.
+function marked(text: string, from: number, words: ProphetWords): string {
+  const points = [...text];
+  let html = "";
+  let at = 0;
+  for (const { end, start } of words) {
+    const first = Math.max(start - from, at);
+    const last = Math.min(end - from, points.length);
+    if (first >= last) continue;
+    html += `${escapeHtml(points.slice(at, first).join(""))}<span class="prophet">${escapeHtml(points.slice(first, last).join(""))}</span>`;
+    at = last;
+  }
+  return html + escapeHtml(points.slice(at).join(""));
+}
+
+// Every LF in preserved text separates paragraphs: <p>s, or the <span>s of
+// a heading. `from` is where the text begins in its raw text.
+function lines(text: string, from: number, words: ProphetWords, open: string, close: string): string[] {
+  let at = from;
+  return text.split("\n").map((line) => {
+    const html = `${open}${marked(line, at, words)}${close}`;
+    at += [...line].length + 1;
+    return html;
+  });
+}
+
+const paragraphs = (text: string, indent: string, from = 0, words: ProphetWords = []) =>
+  lines(text, from, words, `${indent}<p>`, "</p>").join("\n");
 
 const baseLength = (text: string) => [...text].filter((character) => !/\p{M}/u.test(character)).length;
 
@@ -106,19 +232,23 @@ function preview(text: string): string {
   return words.slice(0, kept).join(" ");
 }
 
+// An ISBN in Arabic-Indic digits. An ISBN-10 whose check digit is X is
+// shown as its ISBN-13, which has no letter.
+export function isbnDigits(isbn: string): string {
+  let shown = isbn;
+  if (isbn.endsWith("X")) {
+    const twelve = `978${isbn.slice(0, 9)}`;
+    const sum = [...twelve].reduce((total, digit, at) => total + Number(digit) * (at % 2 === 0 ? 1 : 3), 0);
+    shown = `${twelve}${(10 - sum % 10) % 10}`;
+  }
+  return shown.replace(/[0-9]/g, (digit) => String.fromCharCode(0x0660 + Number(digit)));
+}
+
 // Labelled values under a heading, such as a count or a book's author.
 function facts(items: readonly (readonly [string, string])[], indent = "    "): string {
   return `${indent}<dl>\n${items.map(([label, value]) =>
     `${indent}  <div><dt>${label}</dt><dd>${value}</dd></div>`
   ).join("\n")}\n${indent}</dl>`;
-}
-
-// JSON inside a script element: "<" is escaped so no value can close it.
-function structuredData(value: unknown): string {
-  const json = JSON.stringify(value, null, 2).replace(/[<>&]/g, (character) =>
-    `\\u${character.charCodeAt(0).toString(16).padStart(4, "0")}`
-  );
-  return `\n  <script type="application/ld+json">\n${json.split("\n").map((line) => `  ${line}`).join("\n")}\n  </script>`;
 }
 
 /**
@@ -145,17 +275,19 @@ export function pageNumbers(current: number, last: number): readonly (number | u
   return entries;
 }
 
-type Current = "about" | "books" | "categories" | "home" | undefined;
+type Current = "about" | "books" | "categories" | "home" | "license" | "privacy" | "repository" | undefined;
 
 interface PageContent {
   readonly title: string;
   readonly main: string;
+  /** The page's own route, for its canonical address; the 404 page has none. */
+  readonly route?: string;
   readonly current?: Current;
   readonly description?: string;
-  readonly head?: string | undefined;
 }
 
 interface Index {
+  readonly collations: ReadonlyMap<number, readonly CollationRecord[]>;
   readonly hadithByMember: ReadonlyMap<number, HadithRecord>;
   readonly occurrence: ReadonlyMap<number, OccurrenceRecord>;
   readonly source: ReadonlyMap<string, SourceRecord>;
@@ -169,7 +301,12 @@ function buildIndex(core: SiteInputs["core"]): Index {
       hadithByMember.set(member, record);
     }
   }
+  const collations = new Map<number, CollationRecord[]>();
+  for (const record of core.collations) {
+    collations.set(record.occurrence_id, [...collations.get(record.occurrence_id) ?? [], record]);
+  }
   return {
+    collations,
     hadithByMember,
     occurrence: new Map(core.occurrences.map((record) => [record.occurrence_id, record])),
     source: new Map(core.sources.map((record) => [record.source_id, record])),
@@ -177,16 +314,19 @@ function buildIndex(core: SiteInputs["core"]): Index {
   };
 }
 
-// Narrations follow witness priority, highest first, then witness and
-// printed order.
+// Witnesses by priority, highest first, then identifier; narrations and
+// printings follow their witness, then printed order.
+function compareWitnesses(index: Index) {
+  return (left: string, right: string): number =>
+    (index.witness.get(right) as SourceWitnessRecord).priority_score -
+      (index.witness.get(left) as SourceWitnessRecord).priority_score ||
+    compareText(left, right);
+}
+
 function compareOccurrences(index: Index) {
-  return (left: OccurrenceRecord, right: OccurrenceRecord): number => {
-    const leftWitness = index.witness.get(left.witness_id) as SourceWitnessRecord;
-    const rightWitness = index.witness.get(right.witness_id) as SourceWitnessRecord;
-    return rightWitness.priority_score - leftWitness.priority_score ||
-      compareText(left.witness_id, right.witness_id) ||
-      left.ordinal - right.ordinal;
-  };
+  const byWitness = compareWitnesses(index);
+  return (left: OccurrenceRecord, right: OccurrenceRecord): number =>
+    byWitness(left.witness_id, right.witness_id) || left.ordinal - right.ordinal;
 }
 
 const ABOUT = `    <h1>${ICON.info}حول أرشيف الحديث</h1>
@@ -196,13 +336,47 @@ const ABOUT = `    <h1>${ICON.info}حول أرشيف الحديث</h1>
       <p>يجمع الأرشيف الأحاديث من كتب الحديث المشهورة مثل صحيح البخاري ومسلم، ويحفظ نصوصها كما طُبعت، مع ذكر الكتاب ودار النشر والطبعة ورقم الصفحة، حتى يسهل على القارئ الرجوع إلى المصدر والتثبت من النص.</p>
       <p>أرشيف الحديث مشروع مفتوح المصدر، تُتاح شيفراته وبياناته للجميع، ويمكن الاطلاع عليها والتحقق منها وتنزيلها وإعادة استخدامها كاملة من خلال المستودع.</p>
       <p>نرجو أن يكون الأرشيف حلقة وصل بين ما يقرأه الناس من أحاديث على الإنترنت ومصادرها في كتب السنة. نسأل الله أن يتقبله منا، وأن ينفع به، وأن يجعله خالصًا لوجهه الكريم.</p>
+    </div>
+    <h2>المنهجية</h2>
+    <div>
+      <p>ننقل الأحاديث كاملة دون تعديل، ونربط بينها وننظمها، حتى أقسامها مأخوذة من الكتب نفسها.</p>
+    </div>`;
+
+// The licence page, which is also the copyright page: a summary, the rights
+// of others, and how to reach us, then the Arabic text of the repository's
+// LICENSE, word for word, below its title.
+const LICENSE = `    <h1>${ICON.info}الرخصة</h1>
+    <div>
+      <p>يجوز نسخ العمل وتعديله ونشره وتوزيعه وبيعه دون إذن.</p>
+      <p>بشرط إرفاق الرخصة، وألا يُستخدم فيما لا يرضي الله تعالى.</p>
+      <p>دون ضمان أو مسؤولية.</p>
+      <p>ننقل نصوص الأحاديث كما طُبعت، ونذكر مصدر كل نص، وتبقى حقوق الطبعات لناشريها.</p>
+      <p>الخط من مجمع الملك فهد لطباعة المصحف الشريف، والأيقونات من فوسفور، ولكل منهما رخصته.</p>
+      <p>لأي ملاحظة راسلنا على <a href="mailto:admin@haditharchive.com" dir="ltr">admin@haditharchive.com</a></p>
+    </div>
+    <h2>نص الرخصة</h2>
+    <div>
+      <p>حقوق النشر © ٢٠٢٦، المساهمون في أرشيف الحديث.</p>
+      <p>هذا العمل متاح للجميع مجانًا، ويجوز نسخه وتعديله ونشره وتوزيعه وبيعه دون الحاجة إلى إذن مسبق، على ألا يُستخدم فيما لا يرضي الله تعالى؛ فنحن لا نأذن بذلك، ونتبرأ إلى الله من ذلك.</p>
+      <p>تسري هذه الرخصة على ما أنشأه المساهمون في أرشيف الحديث من شيفرات ووثائق وبيانات، بما في ذلك اختيار البيانات وتنظيمها ومعرّفاتها.</p>
+      <p>وتبقى حقوق المواد التي استعنا بها من أعمال الآخرين، كالخطوط والأيقونات، لأصحابها، وتخضع كل مادة لرخصتها الخاصة، المبينة في ملف CREDITS.md.</p>
+      <p>يجب إرفاق هذه الرخصة عند نسخ العمل أو أي جزء جوهري منه.</p>
+      <p>يُقدَّم هذا العمل بحالته الراهنة، دون أي ضمان من أي نوع، ولا يتحمل المساهمون فيه مسؤولية أي أضرار أو مطالبات أو تبعات تنشأ عنه أو عن استخدامه.</p>
+    </div>`;
+
+const PRIVACY = `    <h1>${ICON.info}الخصوصية</h1>
+    <div>
+      <p>لا يجمع الموقع بيانات عن زواره: لا حسابات ولا ملفات تعريف ارتباط ولا أدوات تحليل ولا إعلانات.</p>
+      <p>الموقع مستضاف على صفحات المستودع، التي قد تحفظ عناوين الزوار للأمان.</p>
+      <p>لأي سؤال راسلنا على <a href="mailto:admin@haditharchive.com" dir="ltr">admin@haditharchive.com</a></p>
     </div>`;
 
 /** Renders every page; the order of the result is the order of `path`. */
 export function renderSite(inputs: SiteInputs, options: RenderOptions): readonly PageFile[] {
   const { core, site, topics } = inputs;
   // Links are root-absolute under the site's path, so the font preload and
-  // the 404 page work at any depth; structured data needs whole addresses.
+  // the 404 page work at any depth; canonical addresses and the sitemap need
+  // whole addresses.
   const base = new URL(site.url).pathname.replace(/\/$/, "");
   const at = (route: string) => `${base}/${route}`;
   const absolute = (route: string) => `${site.url}/${route}`;
@@ -215,18 +389,22 @@ export function renderSite(inputs: SiteInputs, options: RenderOptions): readonly
     const description = page.description === undefined
       ? ""
       : `\n  <meta name="description" content="${escapeHtml(page.description)}">`;
+    // Search engines index the site only when it says so, and never the 404 page.
+    const robots = site.indexable && page.route !== undefined ? "" : "\n  <meta name=\"robots\" content=\"noindex\">";
+    const canonical = page.route === undefined
+      ? ""
+      : `\n  <link rel="canonical" href="${escapeHtml(absolute(page.route))}">`;
     return `<!doctype html>
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="text-scale" content="scale">
-  <meta name="robots" content="noindex">${description}
-  <title>${escapeHtml(page.title)}</title>
+  <meta name="text-scale" content="scale">${robots}${description}
+  <title>${escapeHtml(page.title)}</title>${canonical}
   <link rel="preload" href="${at("font/UthmanTN_v2-0.woff2")}" as="font" type="font/woff2" crossorigin>
   <link rel="icon" href="${at("favicon.ico")}" sizes="32x32">
   <link rel="icon" href="${at("favicon.svg")}" type="image/svg+xml">
-  <link rel="stylesheet" href="${asset("style.css")}">${page.head ?? ""}
+  <link rel="stylesheet" href="${asset("style.css")}">
 </head>
 <body>
   <a href="#main">تخطَّ إلى المحتوى</a>
@@ -252,8 +430,9 @@ ${page.main}
   <footer>
     <ul role="list">
       <li><a href="${at(ROUTE.about)}"${here("about")}>حول</a></li>
-      <li><a href="${sourceUrl}" rel="nofollow">المستودع</a></li>
-      <li><a href="${sourceUrl}/blob/main/LICENSE" rel="nofollow">الرخصة</a></li>
+      <li><a href="${at(ROUTE.license)}"${here("license")}>الرخصة</a></li>
+      <li><a href="${at(ROUTE.privacy)}"${here("privacy")}>الخصوصية</a></li>
+      <li><a href="${at(ROUTE.repository)}"${here("repository")}>المستودع</a></li>
     </ul>
   </footer>
   <script src="${asset("script.js")}"></script>
@@ -263,8 +442,8 @@ ${page.main}
   };
 
   const pages: PageFile[] = [];
-  const add = (path: string, page: PageContent) => pages.push({ html: layout(page), path });
-  const addRoute = (route: string, page: PageContent) => add(`${route}index.html`, page);
+  const add = (path: string, page: PageContent) => pages.push({ path, text: layout(page) });
+  const addRoute = (route: string, page: PageContent) => add(`${route}index.html`, { ...page, route });
   const titled = (...parts: string[]) => [...parts, site.name].join(" - ");
 
   const index = buildIndex(core);
@@ -272,7 +451,6 @@ ${page.main}
   const sources = [...core.sources].sort((left, right) => compareText(left.source_id, right.source_id));
   const hadith = [...core.hadith].sort((left, right) => left.hadith_id - right.hadith_id);
   const hadithById = new Map(hadith.map((record) => [record.hadith_id, record]));
-  const topicOf = new Map(topics.flatMap((topic) => topic.hadith_ids.map((id) => [id, topic] as const)));
 
   const topicTiles = (items: readonly Topic[]) => `      <ul role="list">
 ${items.map((topic) =>
@@ -306,7 +484,8 @@ ${items.join("\n")}
 
   // A browse page: its heading and facts, then each hadith once as a card of
   // its opening words leading to its own page, split into numbered pages.
-  // Anything listed before the hadith (a book's abwab) shows on the first.
+  // Anything listed before the hadith (a book's abwab and printings) shows
+  // on the first, and the hadith then take a heading of their own.
   const addList = (
     route: string,
     title: readonly string[],
@@ -323,6 +502,7 @@ ${items.join("\n")}
         main: [
           ...top,
           ...page === 1 ? before : [],
+          ...page === 1 && before.length > 0 && cards.length > 0 ? [`    <h2>${ICON.logo}الأحاديث</h2>`] : [],
           ...cards.length === 0 ? [] : [`    <ol role="list">
 ${cards.map((record) =>
   `      <li><a href="${at(ROUTE.hadith(record.hadith_id))}"><span>${escapeHtml(preview(record.text))}</span>${ICON.arrow}</a></li>`
@@ -337,7 +517,7 @@ ${cards.map((record) =>
 
   // The site launches without search. Its title is the site's name, hidden
   // on screen, and before any topic is reviewed it shows books only.
-  add("index.html", {
+  addRoute(ROUTE.home, {
     current: "home",
     main: [
       `    <h1>${escapeHtml(site.name)}</h1>`,
@@ -362,6 +542,23 @@ ${bookCards(sources.slice(0, HOME_BOOKS))}
   });
 
   addRoute(ROUTE.about, { current: "about", main: ABOUT, title: `حول ${site.name}` });
+  addRoute(ROUTE.license, { current: "license", main: LICENSE, title: titled("الرخصة") });
+  addRoute(ROUTE.privacy, { current: "privacy", main: PRIVACY, title: titled("الخصوصية") });
+  // The repository page: what it holds and what anyone can do with it,
+  // with its address in the facts under the title.
+  addRoute(ROUTE.repository, {
+    current: "repository",
+    main: `    <h1>${ICON.info}المستودع</h1>
+${facts([["الرابط", `<a href="${sourceUrl}" rel="nofollow">فتح المستودع</a>`]])}
+    <div>
+      <p>المستودع يحفظ أرشيف الحديث كله: بياناته وشيفراته ووثائقه، ومنه يُبنى هذا الموقع.</p>
+      <p>يمكن لأي أحد الاطلاع على بياناته وتنزيلها كاملة دون حساب.</p>
+      <p>ويُسجَّل فيه كل تغيير بتاريخه ووقته، فيُعرف متى أضيف كل نص وما تغيّر فيه.</p>
+      <p>ولكل تغيير بصمة رقمية موقَّعة، فلا يتغير شيء دون أن يظهر.</p>
+      <p>وبذلك يبقى الأرشيف محفوظًا ويمكن التحقق منه.</p>
+    </div>`,
+    title: titled("المستودع"),
+  });
 
   addRoute(ROUTE.categories, {
     current: "categories",
@@ -405,6 +602,19 @@ ${sections.map((section) =>
     </section>`];
   const counted = (label: string, count: number) =>
     count === 0 ? [] : [[label, arabicDigits(count)] as const];
+  const printingList = (witnesses: readonly SourceWitnessRecord[]) => witnesses.length === 0
+    ? []
+    : [`    <section aria-labelledby="tabaat">
+      <h2 id="tabaat">${ICON.books}الطبعات</h2>
+      <ul role="list">
+${witnesses.map((witness) =>
+  `        <li><a href="${at(ROUTE.printing(witness.witness_id))}">${escapeHtml(witness.publisher)}${
+    witness.publication_year === undefined ? "" : ` <span>${arabicDigits(witness.publication_year)}</span>`
+  }</a></li>`
+).join("\n")}
+      </ul>
+    </section>`];
+  const byWitness = compareWitnesses(index);
 
   for (const source of sources) {
     const sections = core.sections
@@ -415,11 +625,10 @@ ${sections.map((section) =>
     // The book and its sections are presented as one witness printed them:
     // the highest priority, ties settled on the witness identifier. Nothing
     // falls back to another witness where the presenting one has no record.
-    const presenting = core.witnesses
+    const witnesses = core.witnesses
       .filter((witness) => witness.source_id === source.source_id)
-      .sort((left, right) =>
-        right.priority_score - left.priority_score || compareText(left.witness_id, right.witness_id)
-      )[0];
+      .sort((left, right) => byWitness(left.witness_id, right.witness_id));
+    const presenting = witnesses[0];
     const occurrences = presenting === undefined
       ? []
       : core.occurrences
@@ -437,9 +646,42 @@ ${sections.map((section) =>
         ["المؤلف", escapeHtml(source.author)],
         ...counted("عدد الأبواب", topSections.length),
         ...counted("عدد الأحاديث", hadithOf(occurrences).length),
+        ...counted("عدد الطبعات", witnesses.length),
       ]),
-    ], sectionList(source.source_id, topSections),
+    ], [...sectionList(source.source_id, topSections), ...printingList(witnesses)],
     hadithOf(occurrences.filter((occurrence) => occurrence.section_id === undefined)));
+
+    // Each printing's page: under its book, one card of what the printing
+    // says of itself, then its text: the one shown here, or how many of its
+    // hadith match that one.
+    for (const witness of witnesses) {
+      const compared = core.collations.filter((collation) => collation.witness_id === witness.witness_id);
+      const text = witness === presenting
+        ? [...counted("عدد الأحاديث", hadithOf(occurrences).length), ["النص", "المعروض في الموقع"] as const]
+        : [
+          ...counted("عدد الأحاديث", new Set(compared.flatMap((collation) =>
+            index.hadithByMember.get(collation.occurrence_id) ?? []
+          )).size),
+          ...(["exact", "spelling", "wording"] as const).flatMap((match) =>
+            counted(COMPARED[match], compared.filter((collation) => matchOf(collation) === match).length)
+          ),
+        ];
+      const { edition_statement: edition, isbn, publication_year: year } = witness;
+      addRoute(ROUTE.printing(witness.witness_id), {
+        main: `    <h1>${ICON.books}طبعة ${escapeHtml(witness.publisher)}</h1>
+${facts([["الكتاب", bookLink(source)], ["المؤلف", escapeHtml(source.author)]])}
+    <div>
+${facts([
+  ["العنوان كما طُبع", escapeHtml(witness.title_as_printed)],
+  ...edition === undefined ? [] : [["الطبعة", escapeHtml(edition)] as const],
+  ...year === undefined ? [] : [["سنة الطبع", arabicDigits(year)] as const],
+  ...isbn === undefined ? [] : [["ردمك", isbnDigits(isbn)] as const],
+  ...text,
+], "      ")}
+    </div>`,
+        title: titled(`طبعة ${witness.publisher}`, source.title),
+      });
+    }
 
     for (const section of sections) {
       const children = childrenOf(section.section_id);
@@ -455,21 +697,25 @@ ${sections.map((section) =>
     }
   }
 
+  // A page range uses the font's own hyphen; the Naskh has no en dash.
+  const pageSpan = ({ page_end: end, page_start: start }: OccurrenceRecord["location"]) =>
+    start === end ? arabicDigits(start) : `${arabicDigits(start)}-${arabicDigits(end)}`;
+
+  // Two lines under a text: the book, with the hadith's number, and the
+  // printing, by its publisher, with the volume and page.
   const citation = (occurrence: OccurrenceRecord, indent: string) => {
     const witness = index.witness.get(occurrence.witness_id) as SourceWitnessRecord;
     const source = index.source.get(witness.source_id) as SourceRecord;
-    const { hadith_number: number, page_end: end, page_start: start, volume } = occurrence.location;
-    return facts([
-      ["الكتاب", bookLink(source)],
-      ["دار النشر", escapeHtml(witness.publisher)],
-      ...witness.edition_statement === undefined
-        ? []
-        : [["الطبعة", escapeHtml(witness.edition_statement)] as const],
-      ...volume === undefined ? [] : [["الجزء", arabicDigits(volume)] as const],
-      // A page range uses the font's own hyphen; the Naskh has no en dash.
-      ["الصفحة", start === end ? arabicDigits(start) : `${arabicDigits(start)}-${arabicDigits(end)}`],
+    const { hadith_number: number, volume } = occurrence.location;
+    return `${facts([
+      ["الكتاب", `${ICON.pin}كتاب <cite><a href="${at(ROUTE.source(source.source_id))}">${escapeHtml(source.title)}</a></cite>`],
       ...number === undefined ? [] : [["رقم الحديث", arabicDigits(number)] as const],
-    ], indent);
+    ], indent)}
+${facts([
+      ["طبعة", `<a href="${at(ROUTE.printing(witness.witness_id))}">${escapeHtml(witness.publisher)}</a>`],
+      ...volume === undefined ? [] : [["الجزء", arabicDigits(volume)] as const],
+      ["الصفحة", pageSpan(occurrence.location)],
+    ], indent)}`;
   };
 
   // One narration: the printed text, folded when long, then its citation.
@@ -480,61 +726,160 @@ ${sections.map((section) =>
     return `${indent}<li id="occurrence-${occurrence.occurrence_id}">
 ${indent}  <div>
 ${indent}    <blockquote>
-${paragraphs(occurrence.raw_text, `${indent}      `)}
+${paragraphs(occurrence.raw_text, `${indent}      `, 0, occurrence.prophet_words)}
 ${indent}    </blockquote>${fold}
 ${indent}  </div>
 ${citation(occurrence, `${indent}  `)}
 ${indent}</li>`;
   };
 
+  // «المصدر»: the displayed narration's book and printing, in a card that
+  // opens like «تفاصيل الطبعات» below it.
+  const sourceDetails = (occurrence: OccurrenceRecord) => {
+    const witness = index.witness.get(occurrence.witness_id) as SourceWitnessRecord;
+    const book = index.source.get(witness.source_id) as SourceRecord;
+    const { hadith_number: number, volume } = occurrence.location;
+    const year = witness.publication_year;
+    return [`      <section aria-labelledby="masdar">
+        <h2 id="masdar">${ICON.pin}المصدر</h2>
+        <details>
+          <summary><span>عرض المصدر</span><span>إخفاء المصدر</span>${ICON.caret}</summary>
+          <div>
+${facts([
+  ["الكتاب", `<cite><a href="${at(ROUTE.source(book.source_id))}">${escapeHtml(book.title)}</a></cite>`],
+  ["المؤلف", escapeHtml(book.author)],
+  ...number === undefined ? [] : [["رقم الحديث", arabicDigits(number)] as const],
+], "            ")}
+${facts([
+  ["طبعة", `<a href="${at(ROUTE.printing(witness.witness_id))}">${escapeHtml(witness.publisher)}</a>`],
+  ...year === undefined ? [] : [["سنة الطبع", arabicDigits(year)] as const],
+  ...volume === undefined ? [] : [["الجزء", arabicDigits(volume)] as const],
+  ["الصفحة", pageSpan(occurrence.location)],
+], "            ")}
+          </div>
+        </details>
+      </section>`];
+  };
+
+  // «تفاصيل الطبعات»: the other printings of the displayed narration, each with
+  // its year and how it compares with the text above, then the table of differences,
+  // word differences first.
+  const printings = (occurrence: OccurrenceRecord) => {
+    const collations = [...index.collations.get(occurrence.occurrence_id) ?? []]
+      .sort((left, right) => byWitness(left.witness_id, right.witness_id));
+    if (collations.length === 0) {
+      return [];
+    }
+    const publisher = (witnessId: string) =>
+      escapeHtml((index.witness.get(witnessId) as SourceWitnessRecord).publisher);
+    const printingLink = (witnessId: string) =>
+      `<a href="${at(ROUTE.printing(witnessId))}">${publisher(witnessId)}</a>`;
+    const items = collations.map((collation) => {
+      const match = matchOf(collation);
+      const { volume } = collation.location;
+      const year = (index.witness.get(collation.witness_id) as SourceWitnessRecord).publication_year;
+      return `              <li>
+                <dl>
+                  <div><dt>طبعة</dt><dd>${printingLink(collation.witness_id)}</dd></div>${
+        year === undefined ? "" : `\n                  <div><dt>سنة الطبع</dt><dd>${arabicDigits(year)}</dd></div>`
+      }${
+        volume === undefined ? "" : `\n                  <div><dt>الجزء</dt><dd>${arabicDigits(volume)}</dd></div>`
+      }
+                  <div><dt>الصفحة</dt><dd>${pageSpan(collation.location)}</dd></div>
+                  <div><dt>المقابلة بالنص أعلاه</dt><dd data-match="${match}">${ring(match)}${MATCH[match].label}</dd></div>
+                </dl>
+              </li>`;
+    });
+    const rows = comparisonRows(occurrence.raw_text, collations);
+    const group = (wording: boolean, title: string) => {
+      const listed = rows.filter((row) => row.wording === wording);
+      return listed.length === 0 ? [] : [`              <tbody>
+                <tr><th colspan="${collations.length + 1}" scope="rowgroup">${title}</th></tr>
+${listed.map((row) =>
+  `                <tr><th scope="row">${row.text}</th>${row.cells.map((cell) => `<td>${cell}</td>`).join("")}</tr>`
+).join("\n")}
+              </tbody>`];
+    };
+    const table = rows.length === 0 ? [] : [`            <table>
+              <caption>مقارنة الفروقات</caption>
+              <thead>
+                <tr><th scope="col">${publisher(occurrence.witness_id)}</th>${collations.map((collation) =>
+      `<th scope="col">${ring(matchOf(collation))}${publisher(collation.witness_id)}</th>`
+    ).join("")}</tr>
+              </thead>
+${[...group(true, "الفروق في الألفاظ"), ...group(false, "الفروق في التشكيل والإملاء والترقيم")].join("\n")}
+            </table>`];
+    return [`      <section aria-labelledby="tafasil">
+        <h2 id="tafasil">${ICON.books}تفاصيل الطبعات</h2>
+        <details>
+          <summary><span>عرض الطبعات</span><span>إخفاء الطبعات</span>${ICON.caret}</summary>
+          <div>
+${[`            <ol role="list">
+${items.join("\n")}
+            </ol>`, ...table].join("\n")}
+          </div>
+        </details>
+      </section>`];
+  };
+
   for (const record of hadith) {
     const display = index.occurrence.get(record.display_occurrence_id) as OccurrenceRecord;
-    const members = record.member_occurrence_ids
+    const others = record.member_occurrence_ids
+      .filter((id) => id !== display.occurrence_id)
       .map((id) => index.occurrence.get(id) as OccurrenceRecord)
-      .sort((left, right) =>
-        Number(right.occurrence_id === display.occurrence_id) -
-          Number(left.occurrence_id === display.occurrence_id) ||
-        byOccurrence(left, right)
-      );
-    // A hadith's way back is its one category: a visible line under the
-    // citation, and the same trail as breadcrumb data.
-    const topic = topicOf.get(record.hadith_id);
-    const trail = topic === undefined ? undefined : structuredData({
-      "@context": "https://schema.org",
-      "@type": "BreadcrumbList",
-      itemListElement: [
-        ["الرئيسية", ROUTE.home],
-        ["الأقسام", ROUTE.categories],
-        [topic.title, ROUTE.topic(topic.topic_id)],
-      ].map(([title, route], position) => ({
-        "@type": "ListItem",
-        position: position + 1,
-        name: title,
-        item: absolute(route as string),
-      })),
-    });
+      .sort(byOccurrence);
     // The saved text supplies the title, heading, and description alike.
+    // The card holds the displayed narration in full: the heading, then the
+    // rest of the entry where the text opens it, else the whole narration.
     const plain = record.text.replaceAll("\n", " ");
+    const raw = display.raw_text;
+    const rest = raw === record.text
+      ? ""
+      : raw.startsWith(`${record.text}\n`) ? raw.slice(record.text.length + 1) : raw;
+    const words = display.prophet_words ?? [];
+    const textFrom = [...raw.slice(0, raw.indexOf(record.text))].length;
+    const restFrom = rest === raw ? 0 : [...record.text].length + 1;
     addRoute(ROUTE.hadith(record.hadith_id), {
       description: plain,
-      head: trail,
       main: [
         "    <article>",
-        `      <h1>${record.text.split("\n").map(escapeHtml).join("<br>")}</h1>`,
-        citation(display, "      "),
-        ...topic === undefined ? [] : [facts([
-          ["القسم", `${ICON.grid}<a href="${at(ROUTE.topic(topic.topic_id))}">${escapeHtml(topic.title)}</a>`],
-        ], "      ")],
-        `      <section aria-labelledby="masadir">
-        <h2 id="masadir">${ICON.books}المصادر</h2>
+        "      <div>",
+        `        <h1>${lines(record.text, textFrom, words, "<span>", "</span>").join("\n")}</h1>`,
+        ...rest === "" ? [] : [paragraphs(rest, "        ", restFrom, words)],
+        "      </div>",
+        ...sourceDetails(display),
+        ...printings(display),
+        ...others.length === 0 ? [] : [`      <section aria-labelledby="masadir">
+        <h2 id="masadir">${ICON.books}مصادر أخرى</h2>
         <ol role="list">
-${members.map((occurrence) => narration(occurrence, "          ")).join("\n")}
+${others.map((occurrence) => narration(occurrence, "          ")).join("\n")}
         </ol>
-      </section>
-    </article>`,
+      </section>`],
+        "    </article>",
       ].join("\n"),
       title: titled(plain),
     });
+  }
+
+  // An indexable site lists every page but the 404 in its sitemap; at a
+  // host's root, where crawlers look for it, robots.txt admits every
+  // crawler and names the sitemap.
+  if (site.indexable) {
+    const routes = pages.map((file) => file.path)
+      .filter((path) => path.endsWith("index.html"))
+      .sort(compareText)
+      .map((path) => path.slice(0, -"index.html".length));
+    pages.push({
+      path: "sitemap.xml",
+      text: `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${routes.map((route) => `  <url><loc>${escapeHtml(absolute(route))}</loc></url>`).join("\n")}
+</urlset>
+`,
+    });
+    if (base === "") {
+      pages.push({ path: "robots.txt", text: `User-agent: *\nAllow: /\n\nSitemap: ${absolute("sitemap.xml")}\n` });
+    }
   }
 
   return pages.sort((left, right) => compareText(left.path, right.path));

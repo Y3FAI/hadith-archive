@@ -1,0 +1,281 @@
+{
+  "differences": [
+    {
+      "end": 36,
+      "kind": "spelling",
+      "reading": "ٱللَّهُ",
+      "start": 29,
+      "text": "اللَّهُ"
+    },
+    {
+      "end": 44,
+      "kind": "spelling",
+      "reading": "، ",
+      "start": 44,
+      "text": ""
+    },
+    {
+      "end": 59,
+      "kind": "spelling",
+      "reading": "ٱلنَّبِيِّ",
+      "start": 49,
+      "text": "النَّبِيِّ"
+    },
+    {
+      "end": 61,
+      "kind": "spelling",
+      "reading": "صَلَّى ٱللَّهُ عَلَيْهِ وَسَلَّمَ",
+      "start": 60,
+      "text": "ﷺ"
+    },
+    {
+      "end": 128,
+      "kind": "spelling",
+      "reading": "ٱلدُّنْيَا",
+      "start": 118,
+      "text": "الدُّنْيَا"
+    },
+    {
+      "end": 129,
+      "kind": "spelling",
+      "reading": "..",
+      "start": 128,
+      "text": "؛"
+    },
+    {
+      "end": 145,
+      "kind": "spelling",
+      "reading": "ٱللَّهُ",
+      "start": 138,
+      "text": "اللَّهُ"
+    },
+    {
+      "end": 192,
+      "kind": "spelling",
+      "reading": "ٱلْقِيَامَةِ",
+      "start": 181,
+      "text": "القِيَامَةِ"
+    },
+    {
+      "end": 194,
+      "kind": "spelling",
+      "reading": " .\n",
+      "start": 192,
+      "text": "، "
+    },
+    {
+      "end": 214,
+      "kind": "spelling",
+      "reading": "عَلَىٰ",
+      "start": 209,
+      "text": "عَلَى"
+    },
+    {
+      "end": 224,
+      "kind": "spelling",
+      "reading": "..",
+      "start": 223,
+      "text": "؛"
+    },
+    {
+      "end": 240,
+      "kind": "spelling",
+      "reading": "ٱللَّهُ",
+      "start": 233,
+      "text": "اللَّهُ"
+    },
+    {
+      "end": 264,
+      "kind": "spelling",
+      "reading": "ٱلدُّنْيَا",
+      "start": 254,
+      "text": "الدُّنْيَا"
+    },
+    {
+      "end": 276,
+      "kind": "spelling",
+      "reading": "وَٱلآخِرَةِ",
+      "start": 265,
+      "text": "وَالآخِرَةِ"
+    },
+    {
+      "end": 278,
+      "kind": "spelling",
+      "reading": " .\n",
+      "start": 276,
+      "text": "، "
+    },
+    {
+      "end": 302,
+      "kind": "spelling",
+      "reading": "..",
+      "start": 301,
+      "text": "؛"
+    },
+    {
+      "end": 319,
+      "kind": "spelling",
+      "reading": "ٱللَّهُ",
+      "start": 312,
+      "text": "اللَّهُ"
+    },
+    {
+      "end": 334,
+      "kind": "spelling",
+      "reading": "ٱلدُّنْيَا",
+      "start": 324,
+      "text": "الدُّنْيَا"
+    },
+    {
+      "end": 346,
+      "kind": "spelling",
+      "reading": "وَٱلآخِرَةِ",
+      "start": 335,
+      "text": "وَالآخِرَةِ"
+    },
+    {
+      "end": 348,
+      "kind": "spelling",
+      "reading": " .\n",
+      "start": 346,
+      "text": "، "
+    },
+    {
+      "end": 357,
+      "kind": "spelling",
+      "reading": "وَٱللَّهُ",
+      "start": 348,
+      "text": "وَاللَّهُ"
+    },
+    {
+      "end": 377,
+      "kind": "spelling",
+      "reading": "ٱلْعَبْدِ",
+      "start": 369,
+      "text": "العَبْدِ"
+    },
+    {
+      "end": 396,
+      "kind": "spelling",
+      "reading": "ٱلْعَبْدُ",
+      "start": 388,
+      "text": "العَبْدُ"
+    },
+    {
+      "end": 465,
+      "kind": "spelling",
+      "reading": "..",
+      "start": 464,
+      "text": "؛"
+    },
+    {
+      "end": 480,
+      "kind": "spelling",
+      "reading": "ٱللَّهُ",
+      "start": 474,
+      "text": "اللَّه"
+    },
+    {
+      "end": 515,
+      "kind": "spelling",
+      "reading": "ٱلْجَنَّةِ",
+      "start": 506,
+      "text": "الجَنَّةِ"
+    },
+    {
+      "end": 532,
+      "kind": "spelling",
+      "reading": "ٱجْتَمَعَ",
+      "start": 523,
+      "text": "اجْتَمَعَ"
+    },
+    {
+      "end": 571,
+      "kind": "spelling",
+      "reading": "ٱللَّهِ",
+      "start": 564,
+      "text": "اللَّهِ"
+    },
+    {
+      "end": 597,
+      "kind": "spelling",
+      "reading": "ٱللَّهِ",
+      "start": 590,
+      "text": "اللَّهِ"
+    },
+    {
+      "end": 598,
+      "kind": "spelling",
+      "reading": "",
+      "start": 597,
+      "text": "،"
+    },
+    {
+      "end": 629,
+      "kind": "spelling",
+      "reading": "",
+      "start": 628,
+      "text": "؛"
+    },
+    {
+      "end": 669,
+      "kind": "spelling",
+      "reading": "ٱلسَّكِينَةُ",
+      "start": 657,
+      "text": "السَّكِينَةُ"
+    },
+    {
+      "end": 697,
+      "kind": "spelling",
+      "reading": "ٱلرَّحْمَةُ",
+      "start": 686,
+      "text": "الرَّحْمَةُ"
+    },
+    {
+      "end": 726,
+      "kind": "spelling",
+      "reading": "ٱلْمَلَائِكَةُ",
+      "start": 713,
+      "text": "المَلَائِكَةُ"
+    },
+    {
+      "end": 748,
+      "kind": "spelling",
+      "reading": "ٱللَّهُ",
+      "start": 741,
+      "text": "اللَّهُ"
+    },
+    {
+      "end": 767,
+      "kind": "spelling",
+      "reading": " .\n",
+      "start": 765,
+      "text": "، "
+    },
+    {
+      "end": 796,
+      "kind": "spelling",
+      "reading": "..",
+      "start": 795,
+      "text": "؛"
+    },
+    {
+      "end": 825,
+      "kind": "spelling",
+      "reading": " » .",
+      "start": 824,
+      "text": "»"
+    }
+  ],
+  "location": {
+    "hadith_number": 36,
+    "page_end": 104,
+    "page_start": 103
+  },
+  "occurrence_id": 36,
+  "record_type": "collation",
+  "schema_version": 1,
+  "span_end": 825,
+  "span_start": 0,
+  "witness_id": "nawawi-40-dar-al-minhaj-2009-1"
+}

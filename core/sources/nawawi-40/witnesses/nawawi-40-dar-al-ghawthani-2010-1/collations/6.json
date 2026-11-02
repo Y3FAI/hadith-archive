@@ -1,0 +1,309 @@
+{
+  "differences": [
+    {
+      "end": 26,
+      "kind": "spelling",
+      "reading": "",
+      "start": 25,
+      "text": "،"
+    },
+    {
+      "end": 39,
+      "kind": "spelling",
+      "reading": "النُّعْمانِ",
+      "start": 27,
+      "text": "النُّعْمَانِ"
+    },
+    {
+      "end": 44,
+      "kind": "spelling",
+      "reading": "بنِ",
+      "start": 40,
+      "text": "بْنِ"
+    },
+    {
+      "end": 77,
+      "kind": "spelling",
+      "reading": "﵄",
+      "start": 53,
+      "text": "رَضِيَ اللَّهُ عَنْهُمَا"
+    },
+    {
+      "end": 83,
+      "kind": "spelling",
+      "reading": "قالَ",
+      "start": 78,
+      "text": "قَالَ"
+    },
+    {
+      "end": 137,
+      "kind": "spelling",
+      "reading": "الحَلالَ",
+      "start": 128,
+      "text": "الحَلَالَ"
+    },
+    {
+      "end": 154,
+      "kind": "spelling",
+      "reading": "وإِنّ",
+      "start": 147,
+      "text": "وَإِنَّ"
+    },
+    {
+      "end": 164,
+      "kind": "spelling",
+      "reading": "الحَرامَ",
+      "start": 155,
+      "text": "الحَرَامَ"
+    },
+    {
+      "end": 187,
+      "kind": "spelling",
+      "reading": "وبَيْنَهُما",
+      "start": 174,
+      "text": "وَبَيْنَهُمَا"
+    },
+    {
+      "end": 201,
+      "kind": "spelling",
+      "reading": "مُشْتَبِهاتٌ",
+      "start": 188,
+      "text": "مُشْتَبِهَاتٌ"
+    },
+    {
+      "end": 205,
+      "kind": "spelling",
+      "reading": "لا",
+      "start": 202,
+      "text": "لَا"
+    },
+    {
+      "end": 241,
+      "kind": "spelling",
+      "reading": "النّاسِ",
+      "start": 233,
+      "text": "النَّاسِ"
+    },
+    {
+      "end": 243,
+      "kind": "spelling",
+      "reading": "؛ ",
+      "start": 241,
+      "text": ".\n"
+    },
+    {
+      "end": 270,
+      "kind": "spelling",
+      "reading": "الشُّبُهاتِ",
+      "start": 258,
+      "text": "الشُّبُهَاتِ"
+    },
+    {
+      "end": 271,
+      "kind": "wording",
+      "reading": "فَقَدِ ",
+      "start": 271,
+      "text": ""
+    },
+    {
+      "end": 303,
+      "kind": "spelling",
+      "reading": "وعِرْضِهِ",
+      "start": 293,
+      "text": "وَعِرْضِهِ"
+    },
+    {
+      "end": 305,
+      "kind": "spelling",
+      "reading": "، ",
+      "start": 303,
+      "text": ".\n"
+    },
+    {
+      "end": 311,
+      "kind": "spelling",
+      "reading": "ومَنْ",
+      "start": 305,
+      "text": "وَمَنْ"
+    },
+    {
+      "end": 322,
+      "kind": "spelling",
+      "reading": "في",
+      "start": 319,
+      "text": "فِي"
+    },
+    {
+      "end": 335,
+      "kind": "spelling",
+      "reading": "الشُّبُهاتِ",
+      "start": 323,
+      "text": "الشُّبُهَاتِ"
+    },
+    {
+      "end": 346,
+      "kind": "spelling",
+      "reading": "في",
+      "start": 343,
+      "text": "فِي"
+    },
+    {
+      "end": 356,
+      "kind": "spelling",
+      "reading": "الحَرامِ",
+      "start": 347,
+      "text": "الحَرَامِ"
+    },
+    {
+      "end": 357,
+      "kind": "spelling",
+      "reading": "،",
+      "start": 356,
+      "text": "؛"
+    },
+    {
+      "end": 369,
+      "kind": "spelling",
+      "reading": "كالرّاعِي",
+      "start": 358,
+      "text": "كَالرَّاعِي"
+    },
+    {
+      "end": 422,
+      "kind": "spelling",
+      "reading": "؛ ",
+      "start": 420,
+      "text": ".\n"
+    },
+    {
+      "end": 427,
+      "kind": "spelling",
+      "reading": "أَلا",
+      "start": 422,
+      "text": "أَلَا"
+    },
+    {
+      "end": 435,
+      "kind": "spelling",
+      "reading": "وإِنَّ",
+      "start": 428,
+      "text": "وَإِنَّ"
+    },
+    {
+      "end": 456,
+      "kind": "spelling",
+      "reading": "حِمًى",
+      "start": 451,
+      "text": "حِمىً"
+    },
+    {
+      "end": 463,
+      "kind": "spelling",
+      "reading": "أَلا",
+      "start": 458,
+      "text": "أَلَا"
+    },
+    {
+      "end": 471,
+      "kind": "spelling",
+      "reading": "وإِنَّ",
+      "start": 464,
+      "text": "وَإِنَّ"
+    },
+    {
+      "end": 497,
+      "kind": "spelling",
+      "reading": "مَحارِمُه",
+      "start": 486,
+      "text": "مَحَارِمُهُ"
+    },
+    {
+      "end": 499,
+      "kind": "spelling",
+      "reading": "؛ ",
+      "start": 497,
+      "text": ".\n"
+    },
+    {
+      "end": 504,
+      "kind": "spelling",
+      "reading": "أَلا",
+      "start": 499,
+      "text": "أَلَا"
+    },
+    {
+      "end": 512,
+      "kind": "spelling",
+      "reading": "وإِنَّ",
+      "start": 505,
+      "text": "وَإِنَّ"
+    },
+    {
+      "end": 516,
+      "kind": "spelling",
+      "reading": "في",
+      "start": 513,
+      "text": "فِي"
+    },
+    {
+      "end": 535,
+      "kind": "spelling",
+      "reading": "",
+      "start": 534,
+      "text": "،"
+    },
+    {
+      "end": 541,
+      "kind": "spelling",
+      "reading": "إِذا",
+      "start": 536,
+      "text": "إِذَا"
+    },
+    {
+      "end": 583,
+      "kind": "spelling",
+      "reading": "وإِذا",
+      "start": 576,
+      "text": "وَإِذَا"
+    },
+    {
+      "end": 617,
+      "kind": "spelling",
+      "reading": "،",
+      "start": 616,
+      "text": "؛"
+    },
+    {
+      "end": 623,
+      "kind": "spelling",
+      "reading": "أَلا",
+      "start": 618,
+      "text": "أَلَا"
+    },
+    {
+      "end": 630,
+      "kind": "spelling",
+      "reading": "وهِيَ",
+      "start": 624,
+      "text": "وَهِيَ"
+    },
+    {
+      "end": 640,
+      "kind": "spelling",
+      "reading": ".",
+      "start": 640,
+      "text": ""
+    }
+  ],
+  "location": {
+    "hadith_number": 6,
+    "page_end": 35,
+    "page_start": 35
+  },
+  "occurrence_id": 6,
+  "record_type": "collation",
+  "schema_version": 1,
+  "span_end": 640,
+  "span_start": 0,
+  "witness_id": "nawawi-40-dar-al-ghawthani-2010-1"
+}

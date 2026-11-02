@@ -1,0 +1,260 @@
+{
+  "differences": [
+    {
+      "end": 36,
+      "kind": "spelling",
+      "reading": "ٱللَّهُ",
+      "start": 29,
+      "text": "اللَّهُ"
+    },
+    {
+      "end": 71,
+      "kind": "spelling",
+      "reading": "ٱللَّهِ",
+      "start": 65,
+      "text": "اللَّه"
+    },
+    {
+      "end": 73,
+      "kind": "spelling",
+      "reading": "صَلَّى ٱللَّهُ عَلَيْهِ وَسَلَّمَ",
+      "start": 72,
+      "text": "ﷺ"
+    },
+    {
+      "end": 88,
+      "kind": "spelling",
+      "reading": "ٱللَّهَ",
+      "start": 82,
+      "text": "اللَّه"
+    },
+    {
+      "end": 89,
+      "kind": "wording",
+      "reading": "تَعَالَىٰ ",
+      "start": 89,
+      "text": ""
+    },
+    {
+      "end": 141,
+      "kind": "spelling",
+      "reading": "ٱللَّهَ",
+      "start": 135,
+      "text": "اللَّه"
+    },
+    {
+      "end": 151,
+      "kind": "wording",
+      "reading": "",
+      "start": 142,
+      "text": "تَعَالَى "
+    },
+    {
+      "end": 171,
+      "kind": "spelling",
+      "reading": "ٱلْمُؤْمِنِينَ",
+      "start": 158,
+      "text": "المُؤْمِنِينَ"
+    },
+    {
+      "end": 203,
+      "kind": "spelling",
+      "reading": "ٱلْمُرْسَلِينَ",
+      "start": 190,
+      "text": "المُرْسَلِينَ"
+    },
+    {
+      "end": 221,
+      "kind": "spelling",
+      "reading": "تَعَالَىٰ",
+      "start": 213,
+      "text": "تَعَالَى"
+    },
+    {
+      "end": 236,
+      "kind": "spelling",
+      "reading": "يَٰٓأَيُّهَا",
+      "start": 224,
+      "text": "يَا أَيُّهَا"
+    },
+    {
+      "end": 246,
+      "kind": "spelling",
+      "reading": "ٱلرُّسُلُ",
+      "start": 237,
+      "text": "الرُّسُلُ"
+    },
+    {
+      "end": 253,
+      "kind": "spelling",
+      "reading": "كُلُواْ",
+      "start": 247,
+      "text": "كُلُوا"
+    },
+    {
+      "end": 272,
+      "kind": "spelling",
+      "reading": "ٱلطَّيِّبَٰتِ",
+      "start": 259,
+      "text": "الطَّيِّبَاتِ"
+    },
+    {
+      "end": 284,
+      "kind": "spelling",
+      "reading": "وَٱعْمَلُواْ",
+      "start": 273,
+      "text": "وَاعْمَلُوا"
+    },
+    {
+      "end": 296,
+      "kind": "spelling",
+      "reading": "صَٰلِحًا﴾ .\n",
+      "start": 285,
+      "text": "صَالِحاً﴾، "
+    },
+    {
+      "end": 312,
+      "kind": "spelling",
+      "reading": "تَعَالَىٰ",
+      "start": 304,
+      "text": "تَعَالَى"
+    },
+    {
+      "end": 327,
+      "kind": "spelling",
+      "reading": "يَٰٓأَيُّهَا",
+      "start": 315,
+      "text": "يَا أَيُّهَا"
+    },
+    {
+      "end": 337,
+      "kind": "spelling",
+      "reading": "ٱلَّذِينَ",
+      "start": 328,
+      "text": "الَّذِينَ"
+    },
+    {
+      "end": 345,
+      "kind": "spelling",
+      "reading": "ءَامَنُواْ",
+      "start": 338,
+      "text": "آمَنُوا"
+    },
+    {
+      "end": 352,
+      "kind": "spelling",
+      "reading": "كُلُواْ",
+      "start": 346,
+      "text": "كُلُوا"
+    },
+    {
+      "end": 357,
+      "kind": "spelling",
+      "reading": "مِن",
+      "start": 353,
+      "text": "مِنْ"
+    },
+    {
+      "end": 368,
+      "kind": "spelling",
+      "reading": "طَيِّبَٰتِ",
+      "start": 358,
+      "text": "طَيِّبَاتِ"
+    },
+    {
+      "end": 387,
+      "kind": "spelling",
+      "reading": "رَزَقْنَٰكُمْ﴾ » ",
+      "start": 373,
+      "text": "رَزَقْنَاكُمْ﴾"
+    },
+    {
+      "end": 411,
+      "kind": "spelling",
+      "reading": "ٱلرَّجُلَ",
+      "start": 402,
+      "text": "الرَّجُلَ"
+    },
+    {
+      "end": 412,
+      "kind": "spelling",
+      "reading": "",
+      "start": 411,
+      "text": "،"
+    },
+    {
+      "end": 430,
+      "kind": "spelling",
+      "reading": "ٱلسَّفَرَ",
+      "start": 421,
+      "text": "السَّفَرَ"
+    },
+    {
+      "end": 431,
+      "kind": "spelling",
+      "reading": "",
+      "start": 430,
+      "text": "،"
+    },
+    {
+      "end": 441,
+      "kind": "spelling",
+      "reading": "",
+      "start": 440,
+      "text": "،"
+    },
+    {
+      "end": 485,
+      "kind": "spelling",
+      "reading": "ٱلسَّمَاءِ",
+      "start": 475,
+      "text": "السَّمَاءِ"
+    },
+    {
+      "end": 497,
+      "kind": "spelling",
+      "reading": " ،",
+      "start": 496,
+      "text": "!"
+    },
+    {
+      "end": 508,
+      "kind": "spelling",
+      "reading": " ،",
+      "start": 507,
+      "text": "!"
+    },
+    {
+      "end": 595,
+      "kind": "spelling",
+      "reading": "بِٱلْحَرَامِ",
+      "start": 584,
+      "text": "بِالحَرَامِ"
+    },
+    {
+      "end": 605,
+      "kind": "spelling",
+      "reading": "فَأَنَّىٰ",
+      "start": 597,
+      "text": "فَأَنَّى"
+    },
+    {
+      "end": 629,
+      "kind": "spelling",
+      "reading": " ؟!",
+      "start": 626,
+      "text": "؟!»"
+    }
+  ],
+  "location": {
+    "hadith_number": 10,
+    "page_end": 62,
+    "page_start": 61
+  },
+  "occurrence_id": 10,
+  "record_type": "collation",
+  "schema_version": 1,
+  "span_end": 629,
+  "span_start": 0,
+  "witness_id": "nawawi-40-dar-al-minhaj-2009-1"
+}

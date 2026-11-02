@@ -1,0 +1,169 @@
+{
+  "differences": [
+    {
+      "end": 36,
+      "kind": "spelling",
+      "reading": "ٱللَّهُ",
+      "start": 29,
+      "text": "اللَّهُ"
+    },
+    {
+      "end": 71,
+      "kind": "spelling",
+      "reading": "ٱللَّهِ",
+      "start": 65,
+      "text": "اللَّه"
+    },
+    {
+      "end": 73,
+      "kind": "spelling",
+      "reading": "صَلَّى ٱللَّهُ عَلَيْهِ وَسَلَّمَ",
+      "start": 72,
+      "text": "ﷺ"
+    },
+    {
+      "end": 90,
+      "kind": "spelling",
+      "reading": "سُلَامَىٰ",
+      "start": 82,
+      "text": "سُلَامَى"
+    },
+    {
+      "end": 104,
+      "kind": "spelling",
+      "reading": "ٱلنَّاسِ",
+      "start": 96,
+      "text": "النَّاسِ"
+    },
+    {
+      "end": 161,
+      "kind": "spelling",
+      "reading": "ٱلشَّمْسُ",
+      "start": 152,
+      "text": "الشَّمْسُ"
+    },
+    {
+      "end": 171,
+      "kind": "wording",
+      "reading": " يَعْدِلَُ",
+      "start": 161,
+      "text": ": تَعْدِلُ"
+    },
+    {
+      "end": 191,
+      "kind": "spelling",
+      "reading": "ٱلِاثْنَيْنِ",
+      "start": 179,
+      "text": "الاِثْنَيْنِ"
+    },
+    {
+      "end": 211,
+      "kind": "wording",
+      "reading": "وَيُعِينَُ",
+      "start": 202,
+      "text": "وَتُعِينُ"
+    },
+    {
+      "end": 221,
+      "kind": "spelling",
+      "reading": "ٱلرَّجُلَ",
+      "start": 212,
+      "text": "الرَّجُلَ"
+    },
+    {
+      "end": 249,
+      "kind": "wording",
+      "reading": "فَيَحْمِلُهُ",
+      "start": 237,
+      "text": "فَتَحْمِلُهُ"
+    },
+    {
+      "end": 274,
+      "kind": "wording",
+      "reading": "يَرْفَعَُ",
+      "start": 266,
+      "text": "تَرْفَعُ"
+    },
+    {
+      "end": 322,
+      "kind": "spelling",
+      "reading": "وَٱلْكَلِمَةُ",
+      "start": 310,
+      "text": "وَالكَلِمَةُ"
+    },
+    {
+      "end": 335,
+      "kind": "spelling",
+      "reading": "ٱلطَّيِّبَةُ",
+      "start": 323,
+      "text": "الطَّيِّبَةُ"
+    },
+    {
+      "end": 353,
+      "kind": "wording",
+      "reading": "وَبِكُلِّ",
+      "start": 346,
+      "text": "وَكُلُّ"
+    },
+    {
+      "end": 362,
+      "kind": "spelling",
+      "reading": "خَُطْوَةٍ",
+      "start": 354,
+      "text": "خُطْوَةٍ"
+    },
+    {
+      "end": 373,
+      "kind": "wording",
+      "reading": "يَمْشِيهَا",
+      "start": 363,
+      "text": "تَمْشِيهَا"
+    },
+    {
+      "end": 390,
+      "kind": "spelling",
+      "reading": "ٱلصَّلَاةِ",
+      "start": 380,
+      "text": "الصَّلَاةِ"
+    },
+    {
+      "end": 410,
+      "kind": "wording",
+      "reading": "وَيُمِيطَُ",
+      "start": 401,
+      "text": "وَتُمِيطُ"
+    },
+    {
+      "end": 418,
+      "kind": "spelling",
+      "reading": "ٱلأَذَىٰ",
+      "start": 411,
+      "text": "الأَذَى"
+    },
+    {
+      "end": 434,
+      "kind": "spelling",
+      "reading": "ٱلطَّرِيقِ",
+      "start": 424,
+      "text": "الطَّرِيقِ"
+    },
+    {
+      "end": 444,
+      "kind": "spelling",
+      "reading": " » .",
+      "start": 443,
+      "text": "»"
+    }
+  ],
+  "location": {
+    "hadith_number": 26,
+    "page_end": 86,
+    "page_start": 85
+  },
+  "occurrence_id": 26,
+  "record_type": "collation",
+  "schema_version": 1,
+  "span_end": 444,
+  "span_start": 0,
+  "witness_id": "nawawi-40-dar-al-minhaj-2009-1"
+}

@@ -1,0 +1,20 @@
+{
+  "fingerprint": "c104d10819c6db2388e46db5c1029d28f106f2f294350747ce2340140e832271",
+  "location": {
+    "hadith_number": 12,
+    "page_end": 90,
+    "page_start": 90
+  },
+  "occurrence_id": 12,
+  "ordinal": 12,
+  "prophet_words": [
+    {
+      "end": 134,
+      "start": 76
+    }
+  ],
+  "raw_text": "عَنْ أَبِي هُرَيْرَةَ رَضِيَ اللَّهُ عَنْهُ قَالَ: قَالَ رَسُولُ اللَّه ﷺ: «مِنْ حُسْنِ إِسْلَامِ المَرْءِ: تَرْكُهُ مَا لَا يَعْنِيهِ»\nحَدِيثٌ حَسَنٌ، رَوَاهُ التِّرْمِذِيُّ، وَغَيْرُهُ.",
+  "record_type": "occurrence",
+  "schema_version": 1,
+  "witness_id": "nawawi-40-al-qasim-sharh"
+}

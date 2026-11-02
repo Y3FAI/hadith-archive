@@ -1,0 +1,176 @@
+{
+  "differences": [
+    {
+      "end": 36,
+      "kind": "spelling",
+      "reading": "ٱللَّهُ",
+      "start": 29,
+      "text": "اللَّهُ"
+    },
+    {
+      "end": 72,
+      "kind": "spelling",
+      "reading": "ٱللَّهِ",
+      "start": 65,
+      "text": "اللَّهِ"
+    },
+    {
+      "end": 74,
+      "kind": "spelling",
+      "reading": "صَلَّى ٱللَّهُ عَلَيْهِ وَسَلَّمَ",
+      "start": 73,
+      "text": "ﷺ"
+    },
+    {
+      "end": 90,
+      "kind": "spelling",
+      "reading": "ٱللَّهَ",
+      "start": 83,
+      "text": "اللَّهَ"
+    },
+    {
+      "end": 99,
+      "kind": "spelling",
+      "reading": "تَعَالَىٰ",
+      "start": 91,
+      "text": "تَعَالَى"
+    },
+    {
+      "end": 118,
+      "kind": "spelling",
+      "reading": "عَادَىٰ",
+      "start": 112,
+      "text": "عَادَى"
+    },
+    {
+      "end": 131,
+      "kind": "spelling",
+      "reading": "..",
+      "start": 131,
+      "text": ""
+    },
+    {
+      "end": 159,
+      "kind": "spelling",
+      "reading": "بِٱلْحَرْبِ",
+      "start": 149,
+      "text": "بِالحَرْبِ"
+    },
+    {
+      "end": 236,
+      "kind": "spelling",
+      "reading": "ٱفْتَرَضْتُ",
+      "start": 225,
+      "text": "افْتَرَضْتُ"
+    },
+    {
+      "end": 247,
+      "kind": "spelling",
+      "reading": " ، ",
+      "start": 245,
+      "text": ".\n"
+    },
+    {
+      "end": 303,
+      "kind": "spelling",
+      "reading": "بِٱلنَّوَافِلِ",
+      "start": 289,
+      "text": "بِالنَّوَافِلِ"
+    },
+    {
+      "end": 310,
+      "kind": "spelling",
+      "reading": "حَتَّىٰ",
+      "start": 304,
+      "text": "حَتَّى"
+    },
+    {
+      "end": 343,
+      "kind": "spelling",
+      "reading": "..",
+      "start": 342,
+      "text": "؛"
+    },
+    {
+      "end": 367,
+      "kind": "spelling",
+      "reading": "ٱلَّذِي",
+      "start": 360,
+      "text": "الَّذِي"
+    },
+    {
+      "end": 401,
+      "kind": "spelling",
+      "reading": "ٱلَّذِي",
+      "start": 394,
+      "text": "الَّذِي"
+    },
+    {
+      "end": 433,
+      "kind": "spelling",
+      "reading": "ٱلَّتِي",
+      "start": 426,
+      "text": "الَّتِي"
+    },
+    {
+      "end": 442,
+      "kind": "spelling",
+      "reading": "يَبْطُِشُ",
+      "start": 434,
+      "text": "يَبْطِشُ"
+    },
+    {
+      "end": 468,
+      "kind": "spelling",
+      "reading": "ٱلَّتِي",
+      "start": 461,
+      "text": "الَّتِي"
+    },
+    {
+      "end": 492,
+      "kind": "wording",
+      "reading": "وَإِنْ",
+      "start": 484,
+      "text": "وَلَئِنْ"
+    },
+    {
+      "end": 518,
+      "kind": "wording",
+      "reading": ".. أَعْطَيْتُهُ",
+      "start": 502,
+      "text": " لَأُعْطِيَنَّهُ"
+    },
+    {
+      "end": 542,
+      "kind": "spelling",
+      "reading": "ٱسْتَعَاذَنِي",
+      "start": 529,
+      "text": "اسْتَعَاذَنِي"
+    },
+    {
+      "end": 542,
+      "kind": "spelling",
+      "reading": "..",
+      "start": 542,
+      "text": ""
+    },
+    {
+      "end": 558,
+      "kind": "spelling",
+      "reading": " » .",
+      "start": 557,
+      "text": "»"
+    }
+  ],
+  "location": {
+    "hadith_number": 38,
+    "page_end": 109,
+    "page_start": 108
+  },
+  "occurrence_id": 38,
+  "record_type": "collation",
+  "schema_version": 1,
+  "span_end": 558,
+  "span_start": 0,
+  "witness_id": "nawawi-40-dar-al-minhaj-2009-1"
+}

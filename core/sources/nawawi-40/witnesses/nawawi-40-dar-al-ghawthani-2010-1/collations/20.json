@@ -1,0 +1,141 @@
+{
+  "differences": [
+    {
+      "end": 21,
+      "kind": "spelling",
+      "reading": "",
+      "start": 20,
+      "text": "،"
+    },
+    {
+      "end": 35,
+      "kind": "spelling",
+      "reading": "بنِ",
+      "start": 31,
+      "text": "بْنِ"
+    },
+    {
+      "end": 58,
+      "kind": "spelling",
+      "reading": "الأَنْصارِيِّ",
+      "start": 44,
+      "text": "الأَنْصَارِيِّ"
+    },
+    {
+      "end": 92,
+      "kind": "spelling",
+      "reading": "﵁",
+      "start": 71,
+      "text": "رَضِيَ اللَّهُ عَنْهُ"
+    },
+    {
+      "end": 98,
+      "kind": "spelling",
+      "reading": "قال",
+      "start": 93,
+      "text": "قَالَ"
+    },
+    {
+      "end": 105,
+      "kind": "spelling",
+      "reading": "قالَ",
+      "start": 100,
+      "text": "قَالَ"
+    },
+    {
+      "end": 113,
+      "kind": "spelling",
+      "reading": "رسُولُ",
+      "start": 106,
+      "text": "رَسُولُ"
+    },
+    {
+      "end": 121,
+      "kind": "spelling",
+      "reading": "اللَّه",
+      "start": 114,
+      "text": "اللَّهِ"
+    },
+    {
+      "end": 131,
+      "kind": "spelling",
+      "reading": "إِنّ",
+      "start": 126,
+      "text": "إِنَّ"
+    },
+    {
+      "end": 138,
+      "kind": "spelling",
+      "reading": "مِمّا",
+      "start": 132,
+      "text": "مِمَّا"
+    },
+    {
+      "end": 156,
+      "kind": "spelling",
+      "reading": "النّاسُ",
+      "start": 148,
+      "text": "النَّاسُ"
+    },
+    {
+      "end": 169,
+      "kind": "spelling",
+      "reading": "كَلامِ",
+      "start": 162,
+      "text": "كَلَامِ"
+    },
+    {
+      "end": 182,
+      "kind": "spelling",
+      "reading": "النُّبُوّةِ",
+      "start": 170,
+      "text": "النُّبُوَّةِ"
+    },
+    {
+      "end": 198,
+      "kind": "spelling",
+      "reading": "إِذا",
+      "start": 193,
+      "text": "إِذَا"
+    },
+    {
+      "end": 214,
+      "kind": "wording",
+      "reading": "تَسْتَحِ",
+      "start": 204,
+      "text": "تَسْتَحْيِ"
+    },
+    {
+      "end": 224,
+      "kind": "spelling",
+      "reading": "فاصْنَعْ",
+      "start": 215,
+      "text": "فَاصْنَعْ"
+    },
+    {
+      "end": 228,
+      "kind": "spelling",
+      "reading": "ما",
+      "start": 225,
+      "text": "مَا"
+    },
+    {
+      "end": 236,
+      "kind": "spelling",
+      "reading": ".",
+      "start": 236,
+      "text": ""
+    }
+  ],
+  "location": {
+    "hadith_number": 20,
+    "page_end": 73,
+    "page_start": 73
+  },
+  "occurrence_id": 20,
+  "record_type": "collation",
+  "schema_version": 1,
+  "span_end": 236,
+  "span_start": 0,
+  "witness_id": "nawawi-40-dar-al-ghawthani-2010-1"
+}

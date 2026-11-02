@@ -72,13 +72,10 @@ jobs:
             echo "::notice::No records in core/ yet; there is no site to build."
           fi
 
-      # Where reviewed topics live is still open; until then the site shows
-      # books only.
+      # Reviewed topics live in topics/, beside core/.
       - name: Build the site
         if: steps.records.outputs.present == 'true'
-        run: |
-          mkdir -p "$RUNNER_TEMP/topics"
-          bun run apps/web/src/main.ts --core core --topics "$RUNNER_TEMP/topics" --site config/site.json --out artifacts/site
+        run: bun run apps/web/src/main.ts --core core --topics topics --site config/site.json --out artifacts/site
 
       - if: steps.records.outputs.present == 'true' && github.event_name == 'push'
         uses: actions/upload-pages-artifact@v5

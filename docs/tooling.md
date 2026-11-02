@@ -94,7 +94,7 @@ Historical checks require the complete Git history. Before resolving the base or
 
 A failed prerequisite invalidates the repository and prevents only checks that cannot be evaluated honestly. It never becomes a false pass for dependent rules. Missing schemas, unavailable required history, internal errors, and incomplete execution cannot produce a valid report.
 
-The verifier reports findings; it does not fix them. Its machine report contains only the current verification-catalog version, validity, and sorted findings. The catalog is at version four, independent of the draft version-one record schemas, and a report claiming any other catalog version is refused rather than serialized. Terminal presentation is derived from that report. Exit status `0` means complete success, `1` means complete verification found rule failures, and `2` means verification could not complete.
+The verifier reports findings; it does not fix them. Its machine report contains only the current verification-catalog version, validity, and sorted findings. The catalog is at version five, independent of the draft version-one record schemas, and a report claiming any other catalog version is refused rather than serialized. Terminal presentation is derived from that report. Exit status `0` means complete success, `1` means complete verification found rule failures, and `2` means verification could not complete.
 
 Verification proves repository consistency under the published machine rules. It cannot prove that preserved text matches the cited physical source witness or that a human-authored grouping is scholarly correct. Those claims remain independently checkable because the core records preserve the exact witness and location needed for human review.
 
@@ -136,7 +136,7 @@ The builder accepts explicit `--core`, `--topics`, `--site`, and `--out` inputs.
 
 The `build:demo` command regenerates ignored `artifacts/site/` from the fixtures. A change to the demo's markup or CSS is carried into the generator and its tests, then checked on a build in all three browser engines. The generator builds no search page or field until search is built.
 
-The public site is built in CI (`.github/workflows/check.yml`): once the full check passes, the `site` job builds `core/` with `config/site.json`, and after a change to `main` the `deploy` job publishes that build on GitHub Pages at the site's `url`. Until the first record is admitted, `core/` does not exist and nothing is built or published.
+The public site is built in CI (`.github/workflows/check.yml`): once the full check passes, the `site` job builds `core/` with `config/site.json`, and after a change to `main` the `deploy` job publishes that build on GitHub Pages at the site's `url`. With `"indexable": true` the build leaves out `noindex` (but on the 404 page) and writes `sitemap.xml`, and `robots.txt` when the site is at a host's root; every page but the 404 carries its canonical address. Until the first record is admitted, `core/` does not exist and nothing is built or published.
 
 ## Change routing
 

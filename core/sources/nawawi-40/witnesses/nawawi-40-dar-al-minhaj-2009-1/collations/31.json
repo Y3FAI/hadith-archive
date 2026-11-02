@@ -1,0 +1,197 @@
+{
+  "differences": [
+    {
+      "end": 21,
+      "kind": "spelling",
+      "reading": "ٱلْعَبَّاسِ",
+      "start": 11,
+      "text": "العَبَّاسِ"
+    },
+    {
+      "end": 22,
+      "kind": "spelling",
+      "reading": "",
+      "start": 21,
+      "text": "،"
+    },
+    {
+      "end": 55,
+      "kind": "spelling",
+      "reading": "ٱلسَّاعِدِيِّ",
+      "start": 42,
+      "text": "السَّاعِدِيِّ"
+    },
+    {
+      "end": 70,
+      "kind": "spelling",
+      "reading": "ٱللَّهُ",
+      "start": 63,
+      "text": "اللَّهُ"
+    },
+    {
+      "end": 86,
+      "kind": "spelling",
+      "reading": " : ",
+      "start": 83,
+      "text": ": «"
+    },
+    {
+      "end": 115,
+      "kind": "spelling",
+      "reading": "ٱلنَّبِيِّ",
+      "start": 105,
+      "text": "النَّبِيِّ"
+    },
+    {
+      "end": 117,
+      "kind": "spelling",
+      "reading": "صَلَّى ٱللَّهُ عَلَيْهِ وَسَلَّمَ",
+      "start": 116,
+      "text": "ﷺ"
+    },
+    {
+      "end": 146,
+      "kind": "spelling",
+      "reading": "ٱللَّهِ",
+      "start": 139,
+      "text": "اللَّهِ"
+    },
+    {
+      "end": 147,
+      "kind": "spelling",
+      "reading": " ؛",
+      "start": 146,
+      "text": "!"
+    },
+    {
+      "end": 162,
+      "kind": "spelling",
+      "reading": "عَلَىٰ",
+      "start": 157,
+      "text": "عَلَى"
+    },
+    {
+      "end": 186,
+      "kind": "spelling",
+      "reading": "..",
+      "start": 186,
+      "text": ""
+    },
+    {
+      "end": 197,
+      "kind": "spelling",
+      "reading": "أَحَبَّنِيَ",
+      "start": 187,
+      "text": "أَحَبَّنِي"
+    },
+    {
+      "end": 205,
+      "kind": "spelling",
+      "reading": "ٱللَّهُ",
+      "start": 198,
+      "text": "اللَّهُ"
+    },
+    {
+      "end": 206,
+      "kind": "spelling",
+      "reading": "",
+      "start": 205,
+      "text": "،"
+    },
+    {
+      "end": 219,
+      "kind": "spelling",
+      "reading": "وَأَحَبَّنِيَ",
+      "start": 207,
+      "text": "وَأَحَبَّنِي"
+    },
+    {
+      "end": 228,
+      "kind": "spelling",
+      "reading": "ٱلنَّاسُ",
+      "start": 220,
+      "text": "النَّاسُ"
+    },
+    {
+      "end": 238,
+      "kind": "spelling",
+      "reading": " : «",
+      "start": 237,
+      "text": ":"
+    },
+    {
+      "end": 246,
+      "kind": "spelling",
+      "reading": "ٱزْهَدْ",
+      "start": 239,
+      "text": "ازْهَدْ"
+    },
+    {
+      "end": 261,
+      "kind": "spelling",
+      "reading": "ٱلدُّنْيَا",
+      "start": 251,
+      "text": "الدُّنْيَا"
+    },
+    {
+      "end": 271,
+      "kind": "spelling",
+      "reading": "يُحِبَُّكَ",
+      "start": 262,
+      "text": "يُحِبَّكَ"
+    },
+    {
+      "end": 279,
+      "kind": "spelling",
+      "reading": "ٱللَّهُ",
+      "start": 272,
+      "text": "اللَّهُ"
+    },
+    {
+      "end": 290,
+      "kind": "spelling",
+      "reading": "وَٱزْهَدْ",
+      "start": 281,
+      "text": "وَازْهَدْ"
+    },
+    {
+      "end": 313,
+      "kind": "spelling",
+      "reading": "ٱلنَّاسِ",
+      "start": 305,
+      "text": "النَّاسِ"
+    },
+    {
+      "end": 323,
+      "kind": "spelling",
+      "reading": "يُحِبَُّكَ",
+      "start": 314,
+      "text": "يُحِبَّكَ"
+    },
+    {
+      "end": 332,
+      "kind": "spelling",
+      "reading": "ٱلنَّاسُ",
+      "start": 324,
+      "text": "النَّاسُ"
+    },
+    {
+      "end": 333,
+      "kind": "spelling",
+      "reading": " » .",
+      "start": 332,
+      "text": "»"
+    }
+  ],
+  "location": {
+    "hadith_number": 31,
+    "page_end": 96,
+    "page_start": 96
+  },
+  "occurrence_id": 31,
+  "record_type": "collation",
+  "schema_version": 1,
+  "span_end": 333,
+  "span_start": 0,
+  "witness_id": "nawawi-40-dar-al-minhaj-2009-1"
+}

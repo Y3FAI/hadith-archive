@@ -1,0 +1,176 @@
+{
+  "differences": [
+    {
+      "end": 42,
+      "kind": "spelling",
+      "reading": "﵄",
+      "start": 18,
+      "text": "رَضِيَ اللَّهُ عَنْهُمَا"
+    },
+    {
+      "end": 42,
+      "kind": "spelling",
+      "reading": ":",
+      "start": 42,
+      "text": ""
+    },
+    {
+      "end": 72,
+      "kind": "spelling",
+      "reading": "قالَ",
+      "start": 67,
+      "text": "قَالَ"
+    },
+    {
+      "end": 98,
+      "kind": "spelling",
+      "reading": "أُقاتِلَ",
+      "start": 89,
+      "text": "أُقَاتِلَ"
+    },
+    {
+      "end": 107,
+      "kind": "spelling",
+      "reading": "النّاسَ",
+      "start": 99,
+      "text": "النَّاسَ"
+    },
+    {
+      "end": 129,
+      "kind": "spelling",
+      "reading": "أَنْ",
+      "start": 126,
+      "text": "أَن"
+    },
+    {
+      "end": 133,
+      "kind": "spelling",
+      "reading": "لا",
+      "start": 130,
+      "text": "لَا"
+    },
+    {
+      "end": 140,
+      "kind": "spelling",
+      "reading": "إِلٰهَ",
+      "start": 134,
+      "text": "إِلَهَ"
+    },
+    {
+      "end": 147,
+      "kind": "spelling",
+      "reading": "إِلّا",
+      "start": 141,
+      "text": "إِلَّا"
+    },
+    {
+      "end": 163,
+      "kind": "spelling",
+      "reading": "وأَنَّ",
+      "start": 156,
+      "text": "وَأَنَّ"
+    },
+    {
+      "end": 203,
+      "kind": "spelling",
+      "reading": "ويُقِيمُوا",
+      "start": 192,
+      "text": "وَيُقِيمُوا"
+    },
+    {
+      "end": 214,
+      "kind": "spelling",
+      "reading": "الصَّلاةَ",
+      "start": 204,
+      "text": "الصَّلَاةَ"
+    },
+    {
+      "end": 226,
+      "kind": "spelling",
+      "reading": "ويُؤْتُوا",
+      "start": 216,
+      "text": "وَيُؤْتُوا"
+    },
+    {
+      "end": 237,
+      "kind": "spelling",
+      "reading": "الزَّكاةَ",
+      "start": 227,
+      "text": "الزَّكَاةَ"
+    },
+    {
+      "end": 239,
+      "kind": "spelling",
+      "reading": "؛ ",
+      "start": 237,
+      "text": ".\n"
+    },
+    {
+      "end": 246,
+      "kind": "spelling",
+      "reading": "فإِذا",
+      "start": 239,
+      "text": "فَإِذَا"
+    },
+    {
+      "end": 290,
+      "kind": "spelling",
+      "reading": "دِماءَهُمْ",
+      "start": 279,
+      "text": "دِمَاءَهُمْ"
+    },
+    {
+      "end": 306,
+      "kind": "spelling",
+      "reading": "وأَمْوالَهُمْ",
+      "start": 291,
+      "text": "وَأَمْوَالَهُمْ"
+    },
+    {
+      "end": 313,
+      "kind": "spelling",
+      "reading": "إِلّا",
+      "start": 307,
+      "text": "إِلَّا"
+    },
+    {
+      "end": 333,
+      "kind": "spelling",
+      "reading": "الإِسْلامِ",
+      "start": 322,
+      "text": "الإِسْلَامِ"
+    },
+    {
+      "end": 348,
+      "kind": "spelling",
+      "reading": "وحِسابُهُمْ",
+      "start": 335,
+      "text": "وَحِسَابُهُمْ"
+    },
+    {
+      "end": 371,
+      "kind": "spelling",
+      "reading": "تَعالَى",
+      "start": 363,
+      "text": "تَعَالَى"
+    },
+    {
+      "end": 372,
+      "kind": "spelling",
+      "reading": ".",
+      "start": 372,
+      "text": ""
+    }
+  ],
+  "location": {
+    "hadith_number": 8,
+    "page_end": 41,
+    "page_start": 41
+  },
+  "occurrence_id": 8,
+  "record_type": "collation",
+  "schema_version": 1,
+  "span_end": 372,
+  "span_start": 0,
+  "witness_id": "nawawi-40-dar-al-ghawthani-2010-1"
+}

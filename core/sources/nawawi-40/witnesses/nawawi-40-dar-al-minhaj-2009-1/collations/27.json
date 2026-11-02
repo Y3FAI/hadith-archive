@@ -1,0 +1,106 @@
+{
+  "differences": [
+    {
+      "end": 16,
+      "kind": "spelling",
+      "reading": "ٱلنَّوَّاسِ",
+      "start": 5,
+      "text": "النَّوَّاسِ"
+    },
+    {
+      "end": 31,
+      "kind": "spelling",
+      "reading": "سِمْعَانَ",
+      "start": 22,
+      "text": "سَمْعَانَ"
+    },
+    {
+      "end": 46,
+      "kind": "spelling",
+      "reading": "ٱللَّهُ",
+      "start": 39,
+      "text": "اللَّهُ"
+    },
+    {
+      "end": 54,
+      "kind": "spelling",
+      "reading": "، ",
+      "start": 54,
+      "text": ""
+    },
+    {
+      "end": 69,
+      "kind": "spelling",
+      "reading": "ٱلنَّبِيِّ",
+      "start": 59,
+      "text": "النَّبِيِّ"
+    },
+    {
+      "end": 71,
+      "kind": "spelling",
+      "reading": "صَلَّى ٱللَّهُ عَلَيْهِ وَسَلَّمَ",
+      "start": 70,
+      "text": "ﷺ"
+    },
+    {
+      "end": 87,
+      "kind": "spelling",
+      "reading": "ٱلْبِرُّ",
+      "start": 80,
+      "text": "البِرُّ"
+    },
+    {
+      "end": 88,
+      "kind": "spelling",
+      "reading": "",
+      "start": 87,
+      "text": ":"
+    },
+    {
+      "end": 104,
+      "kind": "spelling",
+      "reading": "ٱلْخُلُقِ",
+      "start": 96,
+      "text": "الخُلُقِ"
+    },
+    {
+      "end": 116,
+      "kind": "spelling",
+      "reading": "وَٱلإِثْمُ",
+      "start": 106,
+      "text": "وَالإِثْمُ"
+    },
+    {
+      "end": 117,
+      "kind": "spelling",
+      "reading": "",
+      "start": 116,
+      "text": ":"
+    },
+    {
+      "end": 185,
+      "kind": "spelling",
+      "reading": "ٱلنَّاسُ",
+      "start": 177,
+      "text": "النَّاسُ"
+    },
+    {
+      "end": 186,
+      "kind": "spelling",
+      "reading": " » .",
+      "start": 185,
+      "text": "»"
+    }
+  ],
+  "location": {
+    "hadith_number": 27,
+    "page_end": 87,
+    "page_start": 87
+  },
+  "occurrence_id": 27,
+  "record_type": "collation",
+  "schema_version": 1,
+  "span_end": 186,
+  "span_start": 0,
+  "witness_id": "nawawi-40-dar-al-minhaj-2009-1"
+}

@@ -1,0 +1,113 @@
+{
+  "differences": [
+    {
+      "end": 43,
+      "kind": "spelling",
+      "reading": "﵁",
+      "start": 22,
+      "text": "رَضِيَ اللَّهُ عَنْهُ"
+    },
+    {
+      "end": 46,
+      "kind": "spelling",
+      "reading": "، ",
+      "start": 43,
+      "text": ": «"
+    },
+    {
+      "end": 65,
+      "kind": "spelling",
+      "reading": "قالَ",
+      "start": 60,
+      "text": "قَالَ"
+    },
+    {
+      "end": 91,
+      "kind": "spelling",
+      "reading": ".",
+      "start": 90,
+      "text": "،"
+    },
+    {
+      "end": 97,
+      "kind": "spelling",
+      "reading": "قالَ",
+      "start": 92,
+      "text": "قَالَ"
+    },
+    {
+      "end": 99,
+      "kind": "spelling",
+      "reading": "«",
+      "start": 99,
+      "text": ""
+    },
+    {
+      "end": 102,
+      "kind": "spelling",
+      "reading": "لا",
+      "start": 99,
+      "text": "لَا"
+    },
+    {
+      "end": 112,
+      "kind": "spelling",
+      "reading": "».",
+      "start": 111,
+      "text": "،"
+    },
+    {
+      "end": 122,
+      "kind": "spelling",
+      "reading": "فرَدَّدَ",
+      "start": 113,
+      "text": "فَرَدَّدَ"
+    },
+    {
+      "end": 131,
+      "kind": "spelling",
+      "reading": "مِراراً",
+      "start": 123,
+      "text": "مِرَاراً"
+    },
+    {
+      "end": 138,
+      "kind": "spelling",
+      "reading": "قالَ",
+      "start": 133,
+      "text": "قَالَ"
+    },
+    {
+      "end": 140,
+      "kind": "spelling",
+      "reading": "«",
+      "start": 140,
+      "text": ""
+    },
+    {
+      "end": 143,
+      "kind": "spelling",
+      "reading": "لا",
+      "start": 140,
+      "text": "لَا"
+    },
+    {
+      "end": 153,
+      "kind": "spelling",
+      "reading": ".",
+      "start": 153,
+      "text": ""
+    }
+  ],
+  "location": {
+    "hadith_number": 16,
+    "page_end": 59,
+    "page_start": 59
+  },
+  "occurrence_id": 16,
+  "record_type": "collation",
+  "schema_version": 1,
+  "span_end": 153,
+  "span_start": 0,
+  "witness_id": "nawawi-40-dar-al-ghawthani-2010-1"
+}

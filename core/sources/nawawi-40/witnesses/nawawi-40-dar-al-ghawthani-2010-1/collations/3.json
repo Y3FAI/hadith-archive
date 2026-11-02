@@ -1,0 +1,176 @@
+{
+  "differences": [
+    {
+      "end": 29,
+      "kind": "spelling",
+      "reading": "الرَّحْمٰنِ",
+      "start": 18,
+      "text": "الرَّحْمَنِ"
+    },
+    {
+      "end": 30,
+      "kind": "spelling",
+      "reading": "",
+      "start": 29,
+      "text": "،"
+    },
+    {
+      "end": 50,
+      "kind": "spelling",
+      "reading": "بنِ",
+      "start": 46,
+      "text": "بْنِ"
+    },
+    {
+      "end": 62,
+      "kind": "spelling",
+      "reading": "بنِ",
+      "start": 58,
+      "text": "بْنِ"
+    },
+    {
+      "end": 73,
+      "kind": "spelling",
+      "reading": "الخَطّابِ",
+      "start": 63,
+      "text": "الخَطَّابِ"
+    },
+    {
+      "end": 98,
+      "kind": "spelling",
+      "reading": "﵄",
+      "start": 74,
+      "text": "رَضِيَ اللَّهُ عَنْهُمَا"
+    },
+    {
+      "end": 104,
+      "kind": "spelling",
+      "reading": "قال",
+      "start": 99,
+      "text": "قَالَ"
+    },
+    {
+      "end": 161,
+      "kind": "spelling",
+      "reading": "الإِسْلامُ",
+      "start": 150,
+      "text": "الإِسْلَامُ"
+    },
+    {
+      "end": 185,
+      "kind": "spelling",
+      "reading": "شَهادَةِ",
+      "start": 176,
+      "text": "شَهَادَةِ"
+    },
+    {
+      "end": 189,
+      "kind": "spelling",
+      "reading": "أَنْ",
+      "start": 186,
+      "text": "أَن"
+    },
+    {
+      "end": 193,
+      "kind": "spelling",
+      "reading": "لا",
+      "start": 190,
+      "text": "لَا"
+    },
+    {
+      "end": 200,
+      "kind": "spelling",
+      "reading": "إِلٰهَ",
+      "start": 194,
+      "text": "إِلَهَ"
+    },
+    {
+      "end": 207,
+      "kind": "spelling",
+      "reading": "إِلّا",
+      "start": 201,
+      "text": "إِلَّا"
+    },
+    {
+      "end": 223,
+      "kind": "spelling",
+      "reading": "وأَنَّ",
+      "start": 216,
+      "text": "وَأَنَّ"
+    },
+    {
+      "end": 255,
+      "kind": "wording",
+      "reading": "رَسُولُ اللَّهِ",
+      "start": 235,
+      "text": "عَبْدُهُ وَرَسُولُهُ"
+    },
+    {
+      "end": 266,
+      "kind": "spelling",
+      "reading": "وإِقامِ",
+      "start": 257,
+      "text": "وَإِقَامِ"
+    },
+    {
+      "end": 277,
+      "kind": "spelling",
+      "reading": "الصَّلاةِ",
+      "start": 267,
+      "text": "الصَّلَاةِ"
+    },
+    {
+      "end": 289,
+      "kind": "spelling",
+      "reading": "وإِيتاءِ",
+      "start": 279,
+      "text": "وَإِيتَاءِ"
+    },
+    {
+      "end": 300,
+      "kind": "spelling",
+      "reading": "الزَّكاةِ",
+      "start": 290,
+      "text": "الزَّكَاةِ"
+    },
+    {
+      "end": 309,
+      "kind": "spelling",
+      "reading": "وحَجِّ",
+      "start": 302,
+      "text": "وَحَجِّ"
+    },
+    {
+      "end": 328,
+      "kind": "spelling",
+      "reading": "وصَوْمِ",
+      "start": 320,
+      "text": "وَصَوْمِ"
+    },
+    {
+      "end": 338,
+      "kind": "spelling",
+      "reading": "رَمَضانَ",
+      "start": 329,
+      "text": "رَمَضَانَ"
+    },
+    {
+      "end": 339,
+      "kind": "spelling",
+      "reading": ".",
+      "start": 339,
+      "text": ""
+    }
+  ],
+  "location": {
+    "hadith_number": 3,
+    "page_end": 27,
+    "page_start": 27
+  },
+  "occurrence_id": 3,
+  "record_type": "collation",
+  "schema_version": 1,
+  "span_end": 339,
+  "span_start": 0,
+  "witness_id": "nawawi-40-dar-al-ghawthani-2010-1"
+}

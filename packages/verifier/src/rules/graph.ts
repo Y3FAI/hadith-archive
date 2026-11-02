@@ -564,7 +564,7 @@ export const collationWitnessScope: VerificationRule<StructuralVerificationConte
 
 // Collation offsets count code points, so any tool can check them; the
 // boundaries are those of extended grapheme clusters, in code points.
-function codePointGraphemeBoundaries(text: string): ReadonlySet<number> {
+export function codePointGraphemeBoundaries(text: string): ReadonlySet<number> {
   const boundaries = new Set<number>();
   let codePoints = 0;
   for (const { segment } of graphemes.segment(text)) {

@@ -1,0 +1,176 @@
+{
+  "differences": [
+    {
+      "end": 26,
+      "kind": "spelling",
+      "reading": "ٱللَّهُ",
+      "start": 19,
+      "text": "اللَّهُ"
+    },
+    {
+      "end": 65,
+      "kind": "spelling",
+      "reading": "ٱللَّهِ",
+      "start": 58,
+      "text": "اللَّهِ"
+    },
+    {
+      "end": 67,
+      "kind": "spelling",
+      "reading": "صَلَّى ٱللَّهُ عَلَيْهِ وَسَلَّمَ",
+      "start": 66,
+      "text": "ﷺ"
+    },
+    {
+      "end": 91,
+      "kind": "spelling",
+      "reading": "ٱللَّهُ",
+      "start": 84,
+      "text": "اللَّهُ"
+    },
+    {
+      "end": 100,
+      "kind": "spelling",
+      "reading": "تَعَالَىٰ",
+      "start": 92,
+      "text": "تَعَالَى"
+    },
+    {
+      "end": 111,
+      "kind": "spelling",
+      "reading": "بْنَ",
+      "start": 106,
+      "text": "ابْنَ"
+    },
+    {
+      "end": 118,
+      "kind": "spelling",
+      "reading": " ؛",
+      "start": 117,
+      "text": "!"
+    },
+    {
+      "end": 157,
+      "kind": "spelling",
+      "reading": "..",
+      "start": 156,
+      "text": "؛"
+    },
+    {
+      "end": 177,
+      "kind": "spelling",
+      "reading": "عَلَىٰ",
+      "start": 172,
+      "text": "عَلَى"
+    },
+    {
+      "end": 211,
+      "kind": "spelling",
+      "reading": " .\n",
+      "start": 209,
+      "text": "، "
+    },
+    {
+      "end": 220,
+      "kind": "spelling",
+      "reading": "بْنَ",
+      "start": 215,
+      "text": "ابْنَ"
+    },
+    {
+      "end": 227,
+      "kind": "spelling",
+      "reading": " ؛",
+      "start": 226,
+      "text": "!"
+    },
+    {
+      "end": 270,
+      "kind": "spelling",
+      "reading": "ٱلسَّمَاءِ",
+      "start": 260,
+      "text": "السَّمَاءِ"
+    },
+    {
+      "end": 271,
+      "kind": "spelling",
+      "reading": "",
+      "start": 270,
+      "text": "،"
+    },
+    {
+      "end": 294,
+      "kind": "spelling",
+      "reading": "ٱسْتَغْفَرْتَنِي",
+      "start": 278,
+      "text": "اسْتَغْفَرْتَنِي"
+    },
+    {
+      "end": 295,
+      "kind": "spelling",
+      "reading": "..",
+      "start": 294,
+      "text": "؛"
+    },
+    {
+      "end": 311,
+      "kind": "spelling",
+      "reading": " .\n",
+      "start": 309,
+      "text": "، "
+    },
+    {
+      "end": 320,
+      "kind": "spelling",
+      "reading": "بْنَ",
+      "start": 315,
+      "text": "ابْنَ"
+    },
+    {
+      "end": 327,
+      "kind": "spelling",
+      "reading": " ؛",
+      "start": 326,
+      "text": "!"
+    },
+    {
+      "end": 371,
+      "kind": "spelling",
+      "reading": "ٱلأَرْضِ",
+      "start": 363,
+      "text": "الأَرْضِ"
+    },
+    {
+      "end": 381,
+      "kind": "spelling",
+      "reading": "",
+      "start": 380,
+      "text": "،"
+    },
+    {
+      "end": 424,
+      "kind": "spelling",
+      "reading": "..",
+      "start": 423,
+      "text": "؛"
+    },
+    {
+      "end": 462,
+      "kind": "spelling",
+      "reading": " » .",
+      "start": 461,
+      "text": "»"
+    }
+  ],
+  "location": {
+    "hadith_number": 42,
+    "page_end": 115,
+    "page_start": 114
+  },
+  "occurrence_id": 42,
+  "record_type": "collation",
+  "schema_version": 1,
+  "span_end": 462,
+  "span_start": 0,
+  "witness_id": "nawawi-40-dar-al-minhaj-2009-1"
+}

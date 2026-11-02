@@ -1,0 +1,113 @@
+{
+  "differences": [
+    {
+      "end": 17,
+      "kind": "spelling",
+      "reading": "",
+      "start": 16,
+      "text": "،"
+    },
+    {
+      "end": 42,
+      "kind": "spelling",
+      "reading": "",
+      "start": 41,
+      "text": "،"
+    },
+    {
+      "end": 69,
+      "kind": "spelling",
+      "reading": "ٱلرَّحْمَٰنِ",
+      "start": 58,
+      "text": "الرَّحْمَنِ"
+    },
+    {
+      "end": 70,
+      "kind": "spelling",
+      "reading": "",
+      "start": 69,
+      "text": "،"
+    },
+    {
+      "end": 105,
+      "kind": "spelling",
+      "reading": "ٱللَّهُ",
+      "start": 98,
+      "text": "اللَّهُ"
+    },
+    {
+      "end": 116,
+      "kind": "spelling",
+      "reading": "، ",
+      "start": 116,
+      "text": ""
+    },
+    {
+      "end": 136,
+      "kind": "spelling",
+      "reading": "ٱللَّهِ",
+      "start": 129,
+      "text": "اللَّهِ"
+    },
+    {
+      "end": 138,
+      "kind": "spelling",
+      "reading": "صَلَّى ٱللَّهُ عَلَيْهِ وَسَلَّمَ",
+      "start": 137,
+      "text": "ﷺ"
+    },
+    {
+      "end": 153,
+      "kind": "spelling",
+      "reading": "ٱتَّقِ",
+      "start": 147,
+      "text": "اتَّقِ"
+    },
+    {
+      "end": 160,
+      "kind": "spelling",
+      "reading": "ٱللَّهَ",
+      "start": 154,
+      "text": "اللَّه"
+    },
+    {
+      "end": 202,
+      "kind": "spelling",
+      "reading": "ٱلسَّيِّئَةَ",
+      "start": 190,
+      "text": "السَّيِّئَةَ"
+    },
+    {
+      "end": 213,
+      "kind": "spelling",
+      "reading": "ٱلْحَسَنَةَ",
+      "start": 203,
+      "text": "الحَسَنَةَ"
+    },
+    {
+      "end": 243,
+      "kind": "spelling",
+      "reading": "ٱلنَّاسَ",
+      "start": 235,
+      "text": "النَّاسَ"
+    },
+    {
+      "end": 260,
+      "kind": "spelling",
+      "reading": " » .",
+      "start": 259,
+      "text": "»"
+    }
+  ],
+  "location": {
+    "hadith_number": 18,
+    "page_end": 70,
+    "page_start": 70
+  },
+  "occurrence_id": 18,
+  "record_type": "collation",
+  "schema_version": 1,
+  "span_end": 260,
+  "span_start": 0,
+  "witness_id": "nawawi-40-dar-al-minhaj-2009-1"
+}

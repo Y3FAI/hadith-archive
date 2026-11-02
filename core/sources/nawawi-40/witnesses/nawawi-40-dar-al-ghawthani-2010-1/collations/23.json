@@ -1,0 +1,246 @@
+{
+  "differences": [
+    {
+      "end": 18,
+      "kind": "spelling",
+      "reading": "مالِكٍ",
+      "start": 11,
+      "text": "مَالِكٍ"
+    },
+    {
+      "end": 19,
+      "kind": "spelling",
+      "reading": "",
+      "start": 18,
+      "text": "،"
+    },
+    {
+      "end": 29,
+      "kind": "spelling",
+      "reading": "الحارِثِ",
+      "start": 20,
+      "text": "الحَارِثِ"
+    },
+    {
+      "end": 34,
+      "kind": "spelling",
+      "reading": "بنِ",
+      "start": 30,
+      "text": "بْنِ"
+    },
+    {
+      "end": 42,
+      "kind": "spelling",
+      "reading": "عاصِمٍ",
+      "start": 35,
+      "text": "عَاصِمٍ"
+    },
+    {
+      "end": 78,
+      "kind": "spelling",
+      "reading": "﵁",
+      "start": 57,
+      "text": "رَضِيَ اللَّهُ عَنْهُ"
+    },
+    {
+      "end": 84,
+      "kind": "spelling",
+      "reading": "قالَ",
+      "start": 79,
+      "text": "قَالَ"
+    },
+    {
+      "end": 91,
+      "kind": "spelling",
+      "reading": "قالَ",
+      "start": 86,
+      "text": "قَالَ"
+    },
+    {
+      "end": 106,
+      "kind": "spelling",
+      "reading": "اللَّهِ",
+      "start": 100,
+      "text": "اللَّه"
+    },
+    {
+      "end": 139,
+      "kind": "spelling",
+      "reading": "الإِيمانِ",
+      "start": 129,
+      "text": "الإِيمَانِ"
+    },
+    {
+      "end": 151,
+      "kind": "spelling",
+      "reading": "والحَمْدُ",
+      "start": 141,
+      "text": "وَالحَمْدُ"
+    },
+    {
+      "end": 157,
+      "kind": "spelling",
+      "reading": "للَّهِ",
+      "start": 152,
+      "text": "للَّه"
+    },
+    {
+      "end": 177,
+      "kind": "spelling",
+      "reading": "المِيزانَ",
+      "start": 167,
+      "text": "المِيزَانَ"
+    },
+    {
+      "end": 190,
+      "kind": "spelling",
+      "reading": "وسُبْحانَ",
+      "start": 179,
+      "text": "وَسُبْحَانَ"
+    },
+    {
+      "end": 209,
+      "kind": "spelling",
+      "reading": "والحَمْدُ",
+      "start": 199,
+      "text": "وَالحَمْدُ"
+    },
+    {
+      "end": 248,
+      "kind": "spelling",
+      "reading": "ما",
+      "start": 245,
+      "text": "مَا"
+    },
+    {
+      "end": 266,
+      "kind": "wording",
+      "reading": "السَّماواتِ",
+      "start": 256,
+      "text": "السَّمَاءِ"
+    },
+    {
+      "end": 277,
+      "kind": "spelling",
+      "reading": "والأَرْضِ",
+      "start": 267,
+      "text": "وَالأَرْضِ"
+    },
+    {
+      "end": 291,
+      "kind": "spelling",
+      "reading": "والصَّلاةُ",
+      "start": 279,
+      "text": "وَالصَّلَاةُ"
+    },
+    {
+      "end": 312,
+      "kind": "spelling",
+      "reading": "والصَّدَقَةُ",
+      "start": 299,
+      "text": "وَالصَّدَقَةُ"
+    },
+    {
+      "end": 322,
+      "kind": "spelling",
+      "reading": "بُرْهانٌ",
+      "start": 313,
+      "text": "بُرْهَانٌ"
+    },
+    {
+      "end": 335,
+      "kind": "spelling",
+      "reading": "والصَّبْرُ",
+      "start": 324,
+      "text": "وَالصَّبْرُ"
+    },
+    {
+      "end": 343,
+      "kind": "spelling",
+      "reading": "ضِياءٌ",
+      "start": 336,
+      "text": "ضِيَاءٌ"
+    },
+    {
+      "end": 356,
+      "kind": "spelling",
+      "reading": "والقُرْآنُ",
+      "start": 345,
+      "text": "وَالقُرْآنُ"
+    },
+    {
+      "end": 364,
+      "kind": "spelling",
+      "reading": "حُجّةٌ",
+      "start": 357,
+      "text": "حُجَّةٌ"
+    },
+    {
+      "end": 384,
+      "kind": "spelling",
+      "reading": "؛",
+      "start": 383,
+      "text": "،"
+    },
+    {
+      "end": 399,
+      "kind": "spelling",
+      "reading": "النّاسِ",
+      "start": 391,
+      "text": "النَّاسِ"
+    },
+    {
+      "end": 418,
+      "kind": "spelling",
+      "reading": "فبائِعٌ",
+      "start": 409,
+      "text": "فَبَائِعٌ"
+    },
+    {
+      "end": 428,
+      "kind": "spelling",
+      "reading": "،",
+      "start": 427,
+      "text": "؛"
+    },
+    {
+      "end": 442,
+      "kind": "spelling",
+      "reading": "فمُعْتِقُها",
+      "start": 429,
+      "text": "فَمُعْتِقُهَا"
+    },
+    {
+      "end": 443,
+      "kind": "spelling",
+      "reading": "",
+      "start": 442,
+      "text": "،"
+    },
+    {
+      "end": 459,
+      "kind": "spelling",
+      "reading": "مُوبِقُها",
+      "start": 449,
+      "text": "مُوبِقُهَا"
+    },
+    {
+      "end": 460,
+      "kind": "spelling",
+      "reading": ".",
+      "start": 460,
+      "text": ""
+    }
+  ],
+  "location": {
+    "hadith_number": 23,
+    "page_end": 81,
+    "page_start": 81
+  },
+  "occurrence_id": 23,
+  "record_type": "collation",
+  "schema_version": 1,
+  "span_end": 460,
+  "span_start": 0,
+  "witness_id": "nawawi-40-dar-al-ghawthani-2010-1"
+}

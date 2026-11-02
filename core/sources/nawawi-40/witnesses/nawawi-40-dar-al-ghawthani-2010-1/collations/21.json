@@ -1,0 +1,155 @@
+{
+  "differences": [
+    {
+      "end": 20,
+      "kind": "spelling",
+      "reading": "،",
+      "start": 18,
+      "text": " -"
+    },
+    {
+      "end": 28,
+      "kind": "spelling",
+      "reading": "وقِيلَ",
+      "start": 21,
+      "text": "وَقِيلَ"
+    },
+    {
+      "end": 46,
+      "kind": "spelling",
+      "reading": "",
+      "start": 44,
+      "text": " -"
+    },
+    {
+      "end": 62,
+      "kind": "spelling",
+      "reading": "بنِ",
+      "start": 58,
+      "text": "بْنِ"
+    },
+    {
+      "end": 76,
+      "kind": "spelling",
+      "reading": "اللَّهِ",
+      "start": 70,
+      "text": "اللَّه"
+    },
+    {
+      "end": 77,
+      "kind": "wording",
+      "reading": "الثَّقَفِيِّ ",
+      "start": 77,
+      "text": ""
+    },
+    {
+      "end": 98,
+      "kind": "spelling",
+      "reading": "﵁",
+      "start": 77,
+      "text": "رَضِيَ اللَّهُ عَنْهُ"
+    },
+    {
+      "end": 104,
+      "kind": "spelling",
+      "reading": "قالَ",
+      "start": 99,
+      "text": "قَالَ"
+    },
+    {
+      "end": 107,
+      "kind": "spelling",
+      "reading": "",
+      "start": 106,
+      "text": "«"
+    },
+    {
+      "end": 118,
+      "kind": "spelling",
+      "reading": "يا",
+      "start": 115,
+      "text": "يَا"
+    },
+    {
+      "end": 135,
+      "kind": "spelling",
+      "reading": "،",
+      "start": 134,
+      "text": "!"
+    },
+    {
+      "end": 144,
+      "kind": "spelling",
+      "reading": "لي",
+      "start": 141,
+      "text": "لِي"
+    },
+    {
+      "end": 148,
+      "kind": "spelling",
+      "reading": "في",
+      "start": 145,
+      "text": "فِي"
+    },
+    {
+      "end": 160,
+      "kind": "spelling",
+      "reading": "الإِسْلامِ",
+      "start": 149,
+      "text": "الإِسْلَامِ"
+    },
+    {
+      "end": 172,
+      "kind": "spelling",
+      "reading": "لا",
+      "start": 169,
+      "text": "لَا"
+    },
+    {
+      "end": 206,
+      "kind": "spelling",
+      "reading": ".",
+      "start": 205,
+      "text": "،"
+    },
+    {
+      "end": 212,
+      "kind": "spelling",
+      "reading": "قالَ",
+      "start": 207,
+      "text": "قَالَ"
+    },
+    {
+      "end": 214,
+      "kind": "spelling",
+      "reading": "«",
+      "start": 214,
+      "text": ""
+    },
+    {
+      "end": 238,
+      "kind": "spelling",
+      "reading": ".",
+      "start": 237,
+      "text": "،"
+    },
+    {
+      "end": 255,
+      "kind": "spelling",
+      "reading": ".",
+      "start": 255,
+      "text": ""
+    }
+  ],
+  "location": {
+    "hadith_number": 21,
+    "page_end": 76,
+    "page_start": 76
+  },
+  "occurrence_id": 21,
+  "record_type": "collation",
+  "schema_version": 1,
+  "span_end": 255,
+  "span_start": 0,
+  "witness_id": "nawawi-40-dar-al-ghawthani-2010-1"
+}

@@ -1,0 +1,17 @@
+{
+  "edition_statement": "الطبعة الأولى",
+  "file_sha256": "12e468a5fcafecfffdea860629ab115bbcf869fc9b465f0de65d0b816d33eefa",
+  "isbn": "9789933403324",
+  "priority_score": 0,
+  "publication_year": 2010,
+  "publisher": "دار الغوثاني للدراسات القرآنية",
+  "record_type": "source_witness",
+  "reference_scheme": {
+    "hadith_number": true,
+    "volume": false
+  },
+  "schema_version": 1,
+  "source_id": "nawawi-40",
+  "title_as_printed": "متن الأربعين النووية",
+  "witness_id": "nawawi-40-dar-al-ghawthani-2010-1"
+}
