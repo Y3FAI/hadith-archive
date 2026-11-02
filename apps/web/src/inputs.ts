@@ -48,6 +48,8 @@ export interface SiteConfig {
   /** Whether search engines may index the site; absent means they may not. */
   readonly indexable: boolean;
   readonly name: string;
+  /** The search service's address, which the search page asks. */
+  readonly search_url: string;
   readonly source_url: string;
   /** The site's public address, such as https://y3fai.github.io/hadith-archive. */
   readonly url: string;
@@ -309,7 +311,7 @@ async function loadTopics(
   return topics;
 }
 
-const SITE_KEYS = ["indexable", "name", "source_url", "url"];
+const SITE_KEYS = ["indexable", "name", "search_url", "source_url", "url"];
 
 // An https address written as the URL parser writes it, with no query,
 // fragment, credentials, or trailing slash.
@@ -354,12 +356,15 @@ async function loadSite(
       fail(`/${key}`, "Unknown site configuration property");
     }
   }
-  const { indexable = false, name, source_url: sourceUrl, url } = value;
+  const { indexable = false, name, search_url: searchUrl, source_url: sourceUrl, url } = value;
   if (typeof indexable !== "boolean") {
     fail("/indexable", "indexable must be true or false");
   }
   if (typeof name !== "string" || !validSingleLine(name)) {
     fail("/name", "name must be nonempty single-line text");
+  }
+  if (!isHttpsUrl(searchUrl)) {
+    fail("/search_url", "search_url must be an https URL without a trailing slash, query, or fragment");
   }
   if (!isHttpsUrl(sourceUrl)) {
     fail("/source_url", "source_url must be an https URL without a trailing slash, query, or fragment");
@@ -368,7 +373,13 @@ async function loadSite(
     fail("/url", "url must be an https URL without a trailing slash, query, or fragment");
   }
   return findings.length === before
-    ? { indexable: indexable as boolean, name: name as string, source_url: sourceUrl as string, url: url as string }
+    ? {
+      indexable: indexable as boolean,
+      name: name as string,
+      search_url: searchUrl as string,
+      source_url: sourceUrl as string,
+      url: url as string,
+    }
     : undefined;
 }
 

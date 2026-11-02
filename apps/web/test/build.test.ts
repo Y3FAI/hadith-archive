@@ -7,7 +7,8 @@ import { join, resolve } from "node:path";
 import { formatCanonicalJson } from "../../../packages/canonical-json/src/index.ts";
 import { ASSET_PATHS, ASSETS_DIRECTORY, buildSite, type BuildResult } from "../src/build.ts";
 import { loadInputs, REPOSITORY_ROOT, type SiteInputs } from "../src/inputs.ts";
-import { comparisonRows, isbnDigits, pageNumbers, renderSite } from "../src/render.ts";
+import { prepare, results, type SearchText } from "../../search/src/search.ts";
+import { comparisonRows, isbnDigits, pageNumbers, renderSite, searchTexts } from "../src/render.ts";
 
 const FIXTURE = resolve(REPOSITORY_ROOT, "apps/web/fixtures/demo");
 const scratch = await mkdtemp(join(tmpdir(), "hadith-archive-site-"));
@@ -84,6 +85,8 @@ const pages = () => [...demoBuild.files.keys()].filter((path) => path.endsWith("
 
 // The fixture site lives at https://y3fai.github.io/hadith-archive.
 const BASE = "/hadith-archive/";
+// Pages without an address of their own, kept out of search engines.
+const UNLISTED = ["404.html", "search/index.html"];
 const fileOf = (href: string) => `${href.slice(BASE.length)}${href.endsWith("/") ? "index.html" : ""}`;
 
 describe("demo build", () => {
@@ -112,6 +115,10 @@ describe("demo build", () => {
       "privacy/index.html",
       "repository/index.html",
       "script.js",
+      "search-engine.js",
+      "search.js",
+      "search.json",
+      "search/index.html",
       "share.png",
       "style.css",
     ]);
@@ -135,10 +142,11 @@ describe("demo build", () => {
       const rules = `{"prerender":[{"where":{"href_matches":"${BASE}*"},"eagerness":"moderate"}]}`;
       const digest = createHash("sha256").update(rules).digest("base64");
       expect(html).toContain(`<script type="speculationrules">${rules}</script>`);
-      expect(html).toContain(`<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-${digest}'; object-src 'none'; base-uri 'none'; form-action 'self'">`);
-      // Every page but the 404 names its own whole address.
+      // It also admits requests to the search service.
+      expect(html).toContain(`<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-${digest}'; connect-src 'self' https://search.haditharchive.com; object-src 'none'; base-uri 'none'; form-action 'self'">`);
+      // Every page but the 404 and search pages names its own whole address.
       const canonical = `https://y3fai.github.io/hadith-archive/${path.replace(/index\.html$/, "")}`;
-      expect(html.includes(`<link rel="canonical" href="${canonical}">`)).toBe(path !== "404.html");
+      expect(html.includes(`<link rel="canonical" href="${canonical}">`)).toBe(!UNLISTED.includes(path));
       expect(html).toContain(`<link rel="stylesheet" href="${BASE}style.css?v=${hash("style.css")}">`);
       expect(html).toContain(`<script src="${BASE}script.js?v=${hash("script.js")}"></script>`);
       expect(html).toContain(`<link rel="preload" href="${BASE}font/UthmanTN_v2-0.woff2"`);
@@ -146,8 +154,10 @@ describe("demo build", () => {
       expect(html).toContain("<a href=\"#main\">تخطَّ إلى المحتوى</a>");
       const links = [...html.matchAll(/ (?:href|src|action)="([^"]+)"/g)].map((match) => match[1] as string);
       for (const url of links) {
+        // The search page also connects early to the search service.
         expect(url.startsWith(BASE) || url === "#main" || url.startsWith("https://github.com/Y3FAI/hadith-archive") ||
-          url.startsWith("https://y3fai.github.io/hadith-archive/") || url === "mailto:admin@haditharchive.com")
+          url.startsWith("https://y3fai.github.io/hadith-archive/") || url === "mailto:admin@haditharchive.com" ||
+          url === "https://search.haditharchive.com")
           .toBe(true);
       }
     }
@@ -213,10 +223,10 @@ describe("demo build", () => {
       .toBe("عَنِ الرَّاوِي التَّجْرِيبِيِّ قَالَ: هَذَا نَصٌّ تَجْرِيبِيٌّ يُوضَعُ فِي مَكَانِ... - أرشيف الحديث");
   });
 
-  test("describes every page but the 404 from what it shows", () => {
+  test("describes every page but the 404 and search pages from what it shows", () => {
     const description = (path: string) => /<meta name="description" content="([^"]*)">/.exec(page(path))?.[1];
     for (const path of pages()) {
-      expect(description(path) === undefined).toBe(path === "404.html");
+      expect(description(path) === undefined).toBe(UNLISTED.includes(path));
     }
     // The home page says what the site is.
     expect(description("index.html")).toBe(
@@ -231,9 +241,11 @@ describe("demo build", () => {
     expect(description("p/demo-book-1-demo-edition/index.html")).toBe(
       "طبعة ناشر تجريبي: الكتاب الكتاب التجريبي الأول، المؤلف مؤلف تجريبي، طبعة تجريبية، سنة الطبع ٢٠٢٦، ردمك ٩٧٨٠٠٠٠٠٠٠٠٠٢",
     );
-    // A written page is described by its first paragraph.
+    // A written page is described by its first paragraph; the licence by its
+    // second, after the copyright line.
+    expect(description("about/index.html")).toBe(/<p>(.*?)<\/p>/.exec(page("about/index.html"))?.[1]);
     expect(description("license/index.html")).toBe(
-      "يجوز لأي أحد نسخ بيانات الأرشيف وشيفراته ووثائقه، وتعديلها ونشرها وتوزيعها وبيعها، دون إذن مسبق، بشرط إرفاق هذه الرخصة بها، وألا تُستخدم فيما لا يرضي الله تعالى.",
+      "هذا العمل متاح للجميع مجانًا، ويجوز نسخه وتعديله ونشره وتوزيعه وبيعه دون الحاجة إلى إذن مسبق، على ألا يُستخدم فيما لا يرضي الله تعالى؛ فنحن لا نأذن بذلك، ونتبرأ إلى الله من ذلك.",
     );
   });
 
@@ -406,14 +418,46 @@ describe("demo build", () => {
     expect([...reached, "404.html"].sort()).toEqual(pages().sort());
   });
 
-  test("launches without search, the home page titled with the site's name", () => {
-    expect(page("index.html")).toContain(`<main id="main">\n    <h1>أرشيف الحديث</h1>\n    <section aria-labelledby="aqsam">`);
+  test("puts the search field first on the home page and under the 404 page's title", () => {
+    const field = (heading: string) => `    <search>
+      <form action="${BASE}search/">
+        <${heading}><label for="q">ابحث في الأحاديث</label></${heading}>
+        <div>
+          <input id="q" name="q" type="search" placeholder="ابحث في الأحاديث" enterkeyhint="search" autocomplete="off">`;
+    expect(page("index.html")).toContain(`<main id="main">\n${field("h1")}`);
+    expect(page("404.html")).toContain(`الصفحة غير موجودة</h1>\n${field("h2")}`);
+    expect(page("search/index.html")).toContain(`<main id="main">\n${field("h1")}`);
     for (const path of pages()) {
-      expect(page(path)).not.toContain("<search>");
-      // The stylesheet hides a title followed by a section: only the home page's.
-      if (path !== "index.html") {
-        expect(page(path)).not.toMatch(/<\/h1>\n\s*<section/);
-      }
+      expect(page(path).includes("<search>")).toBe(["404.html", "index.html", "search/index.html"].includes(path));
+    }
+  });
+
+  test("serves the search engine and the texts, to search by words when the service cannot answer", async () => {
+    const engine = await import(join(demoBuild.out, "search-engine.js")) as typeof import("../../search/src/search.ts");
+    const texts = JSON.parse(page("search.json")) as SearchText[];
+    expect(texts).toEqual(searchTexts((fixtureInputs as { inputs: SiteInputs }).inputs.core));
+    expect(texts.map((text) => text.id)).toEqual([1, 2, 3, 4]);
+    for (const query of ["نص تجريبي", "الروايات الطويلة", "كلمةغيرموجودة"]) {
+      expect(engine.results(engine.prepare(texts), query)).toEqual(results(prepare(texts), query));
+    }
+    expect(engine.results(engine.prepare(texts), "نص تجريبي").length).toBeGreaterThan(0);
+  });
+
+  test("searches on the search page alone, with a note for browsers without JavaScript", () => {
+    const hash = (path: string) =>
+      createHash("sha256").update(demoBuild.files.get(path) as Buffer).digest("hex").slice(0, 10);
+    const search = page("search/index.html");
+    expect(search).toContain("<title>البحث - أرشيف الحديث</title>");
+    expect(search).toContain("<link rel=\"preconnect\" href=\"https://search.haditharchive.com\" crossorigin>");
+    expect(search).toContain(`      </form>
+      <noscript><p>يحتاج البحث إلى تفعيل جافاسكربت في المتصفح.</p></noscript>
+    </search>
+    <template><li><a href=""><span></span><svg`);
+    expect(search).toContain("</template>\n    <p role=\"status\"></p>\n  </main>");
+    expect(search).toContain(`<script src="${BASE}search.js?v=${hash("search.js")}" data-api="https://search.haditharchive.com" data-hadith="${BASE}h/" data-engine="${BASE}search-engine.js?v=${hash("search-engine.js")}" data-texts="${BASE}search.json?v=${hash("search.json")}"></script>`);
+    for (const path of pages()) {
+      expect(page(path).includes("search.js")).toBe(path === "search/index.html");
+      expect(page(path).includes("preconnect")).toBe(path === "search/index.html");
     }
   });
 });
@@ -427,7 +471,7 @@ const fixtureInputs = await loadInputs({
 describe("pager", () => {
   const inputs = (fixtureInputs as { inputs: SiteInputs }).inputs;
   const render = (pageSize: number) => new Map(renderSite(inputs, {
-    assetVersions: { "script.js": "s", "style.css": "c" },
+    assetVersions: { "script.js": "s", "search.js": "q", "style.css": "c" },
     pageSize,
   }).map((file) => [file.path, file.text]));
 
@@ -465,7 +509,7 @@ describe("a site before any topic is reviewed", () => {
   test("builds books only, with no categories on the home page or under a hadith", () => {
     const inputs = (fixtureInputs as { inputs: SiteInputs }).inputs;
     const pages = new Map(renderSite({ ...inputs, topics: [] }, {
-      assetVersions: { "script.js": "s", "style.css": "c" },
+      assetVersions: { "script.js": "s", "search.js": "q", "style.css": "c" },
       pageSize: 20,
     }).map((file) => [file.path, file.text]));
     expect(pages.get("index.html")).not.toContain("aria-labelledby=\"aqsam\"");
@@ -752,19 +796,19 @@ describe("site configuration", () => {
     for (const [url, robots] of [["https://example.org", true], ["https://example.org/archive", false]] as const) {
       const root = await fixtureCopy();
       await writeFile(join(root, "site.json"), JSON.stringify({
-        indexable: true, name: "اسم تجريبي", source_url: "https://example.org/repository", url,
+        indexable: true, name: "اسم تجريبي", search_url: "https://search.example.org", source_url: "https://example.org/repository", url,
       }));
       const out = join(await freshDirectory(), "site");
       expect((await build(root, out)).kind).toBe("built");
       const files = await readTree(out);
       const html = [...files.keys()].filter((path) => path.endsWith(".html"));
       for (const path of html) {
-        expect((files.get(path) as Buffer).toString("utf8").includes("noindex")).toBe(path === "404.html");
+        expect((files.get(path) as Buffer).toString("utf8").includes("noindex")).toBe(UNLISTED.includes(path));
       }
       const sitemap = (files.get("sitemap.xml") as Buffer).toString("utf8");
       expect(sitemap).toStartWith("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n");
       expect([...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]).sort())
-        .toEqual(html.filter((path) => path !== "404.html").map((path) => `${url}/${path.replace(/index\.html$/, "")}`).sort());
+        .toEqual(html.filter((path) => !UNLISTED.includes(path)).map((path) => `${url}/${path.replace(/index\.html$/, "")}`).sort());
       expect(files.get("robots.txt")?.toString("utf8"))
         .toBe(robots ? "User-agent: *\nAllow: /\n\nSitemap: https://example.org/sitemap.xml\n" : undefined);
     }
@@ -777,6 +821,7 @@ describe("site configuration", () => {
     const root = await fixtureCopy();
     await writeFile(join(root, "site.json"), JSON.stringify({
       name: "اسم تجريبي",
+      search_url: "https://search.example.org",
       source_url: "https://example.org/repository",
       url: "https://example.org",
     }));
@@ -787,6 +832,7 @@ describe("site configuration", () => {
     expect(home).toContain("<a href=\"/c/\">");
     expect(home).toContain("<a href=\"/repository/\">المستودع</a>");
     expect(home).toContain("<a href=\"/license/\">الرخصة</a>");
+    expect(home).toContain("<form action=\"/search/\">");
   });
 
   test("refuses unknown keys, unsafe URLs, malformed names, and a non-boolean indexable", async () => {
@@ -795,6 +841,7 @@ describe("site configuration", () => {
       analytics: "x",
       indexable: "yes",
       name: "",
+      search_url: "https://search.example.org/?q=",
       source_url: "http://example.org/",
       url: "https://example.org/path/",
     }));
@@ -802,6 +849,7 @@ describe("site configuration", () => {
       "site.json /analytics Unknown site configuration property",
       "site.json /indexable indexable must be true or false",
       "site.json /name name must be nonempty single-line text",
+      "site.json /search_url search_url must be an https URL without a trailing slash, query, or fragment",
       "site.json /source_url source_url must be an https URL without a trailing slash, query, or fragment",
       "site.json /url url must be an https URL without a trailing slash, query, or fragment",
     ]);
@@ -820,13 +868,13 @@ describe("escaping", () => {
     await writeJson(path, { ...await readJson(path), fingerprint: fingerprint(rawText), raw_text: rawText });
     await writeJson(join(root, "topics/3.json"), { hadith_ids: [4], title: "<i>الأخلاق</i>", topic_id: 3 });
     await writeFile(join(root, "site.json"), JSON.stringify({
-      name: "أرشيف \"الحديث\"", source_url: "https://example.org/a\"b", url: "https://example.org",
+      name: "أرشيف \"الحديث\"", search_url: "https://search.example.org", source_url: "https://example.org/a\"b", url: "https://example.org",
     }));
     const out = join(await freshDirectory(), "site");
     // A quote is not valid in a URL path, so the URL parser rejects it first.
     expect((await build(root, out)).kind).toBe("refused");
     await writeFile(join(root, "site.json"), JSON.stringify({
-      name: "أرشيف <الحديث>", source_url: "https://example.org/a&b", url: "https://example.org",
+      name: "أرشيف <الحديث>", search_url: "https://example.org/s&t", source_url: "https://example.org/a&b", url: "https://example.org",
     }));
     expect((await build(root, out)).kind).toBe("built");
     const html = (await Promise.all([...(await readTree(out)).entries()]
@@ -840,6 +888,7 @@ describe("escaping", () => {
     expect(html).toContain("&lt;b&gt;&amp;amp;&lt;/b&gt;");
     expect(html).toContain("&lt;i&gt;الأخلاق&lt;/i&gt;");
     expect(html).toContain("href=\"https://example.org/a&amp;b\"");
+    expect(html).toContain("data-api=\"https://example.org/s&amp;t\"");
   });
 });
 
@@ -875,6 +924,6 @@ describe("command line", () => {
     await writeJson(join(root, "topics/1.json"), { hadith_ids: [1, 2], title: "الإيمان", topic_id: 1 });
     const built = await run(...options, "--out", out);
     expect(built.code).toBe(0);
-    expect(built.stdout).toBe(`Built 36 files into ${out}\n`);
+    expect(built.stdout).toBe(`Built 40 files into ${out}\n`);
   });
 });

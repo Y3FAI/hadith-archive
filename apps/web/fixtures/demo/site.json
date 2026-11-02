@@ -1,5 +1,6 @@
 {
   "name": "أرشيف الحديث",
+  "search_url": "https://search.haditharchive.com",
   "source_url": "https://github.com/Y3FAI/hadith-archive",
   "url": "https://y3fai.github.io/hadith-archive"
 }

@@ -9,6 +9,7 @@ import type {
 
 import { createHash } from "node:crypto";
 
+import type { SearchText } from "../../search/src/search.ts";
 import type { SiteInputs, Topic } from "./inputs.ts";
 
 // Phosphor thin icons, exactly as in the handwritten demo; caretRight is its
@@ -30,6 +31,7 @@ const ICON = {
   menu: svg("M220,128a4,4,0,0,1-4,4H40a4,4,0,0,1,0-8H216A4,4,0,0,1,220,128ZM40,68H216a4,4,0,0,0,0-8H40a4,4,0,0,0,0,8ZM216,188H40a4,4,0,0,0,0,8H216a4,4,0,0,0,0-8Z"),
   pin: svg("M232.49,84.2,171.8,23.51a12,12,0,0,0-17,0L99.45,79.07c-8.08-3-32.79-9.45-59,11.67a12,12,0,0,0-1,17.84l51.13,51.13L45.17,205.17a4,4,0,0,0,5.66,5.66l45.46-45.47,51.12,51.12A12,12,0,0,0,155.9,220c.28,0,.57,0,.85,0a12,12,0,0,0,8.73-4.74c19.83-26.36,16.51-47.18,11.71-58.57l55.3-55.49A12,12,0,0,0,232.49,84.2Zm-5.66,11.31h0L169.56,153a4,4,0,0,0-.75,4.61c10.43,20.85-1.62,42-9.73,52.83a4,4,0,0,1-6,.4L45.17,102.93a4,4,0,0,1,.33-6C58.44,86.53,70.86,83.74,80.44,83.74A43.9,43.9,0,0,1,98.6,87.38a4,4,0,0,0,4.62-.75l57.27-57.46a4,4,0,0,1,5.66,0l60.68,60.69A4,4,0,0,1,226.83,95.51Z"),
   question: svg("M136,180a8,8,0,1,1-8-8A8,8,0,0,1,136,180ZM128,76c-19.85,0-36,14.36-36,32v4a4,4,0,0,0,8,0v-4c0-13.23,12.56-24,28-24s28,10.77,28,24-12.56,24-28,24a4,4,0,0,0-4,4v8a4,4,0,0,0,8,0v-4.2c18-1.77,32-15.36,32-31.8C164,90.36,147.85,76,128,76Zm100,52A100,100,0,1,1,128,28,100.11,100.11,0,0,1,228,128Zm-8,0a92,92,0,1,0-92,92A92.1,92.1,0,0,0,220,128Z"),
+  search: svg("M226.83,221.17l-52.7-52.7a84.1,84.1,0,1,0-5.66,5.66l52.7,52.7a4,4,0,0,0,5.66-5.66ZM36,112a76,76,0,1,1,76,76A76.08,76.08,0,0,1,36,112Z"),
 };
 
 // How another printing compares with the text above, as a collation's
@@ -190,6 +192,7 @@ export const ROUTE = {
   printing: (witnessId: string) => `p/${segment(witnessId)}/`,
   privacy: "privacy/",
   repository: "repository/",
+  search: "search/",
   section: (sourceId: string, sectionId: string) => `b/${segment(sourceId)}/${segment(sectionId)}/`,
   source: (sourceId: string) => `b/${segment(sourceId)}/`,
   topic: (id: number) => `c/${segment(id)}/`,
@@ -246,14 +249,19 @@ function excerpt(text: string, limit: number): { readonly text: string; readonly
 
 const preview = (text: string) => excerpt(text, PREVIEW_BASE_CHARACTERS).text;
 
+// Where the Prophet's first marked words begin in a text that starts at
+// code point `from` of its raw text, in code points, if any are in it.
+function prophetStart(text: string, from: number, words: ProphetWords): number | undefined {
+  const first = words.find((range) => range.end > from && range.start < from + [...text].length);
+  return first === undefined ? undefined : Math.max(first.start - from, 0);
+}
+
 // A hadith's title starts at the Prophet's first marked words, else at the
 // text's start, so titles differ where narrator chains repeat. Quotation
 // marks are left out, and a cut ends in «...».
 function hadithTitle(text: string, from: number, words: ProphetWords): string {
-  const characters = [...text];
-  const first = words.find((range) => range.end > from && range.start < from + characters.length);
-  const start = first === undefined ? 0 : Math.max(first.start - from, 0);
-  const cut = excerpt(characters.slice(start).join("").replace(/[«»]/g, ""), TITLE_BASE_CHARACTERS);
+  const start = prophetStart(text, from, words) ?? 0;
+  const cut = excerpt([...text].slice(start).join("").replace(/[«»]/g, ""), TITLE_BASE_CHARACTERS);
   return cut.whole ? cut.text : `${cut.text.replace(/[\p{P}\s]+$/u, "")}...`;
 }
 
@@ -335,6 +343,8 @@ interface PageContent {
   readonly route?: string;
   readonly current?: Current;
   readonly description?: string;
+  /** The search page, which loads the search script. */
+  readonly search?: boolean;
 }
 
 interface Index {
@@ -394,20 +404,13 @@ const ABOUT = `    <h1>${ICON.info}حول أرشيف الحديث</h1>
 // LICENSE, word for word, below its title.
 const LICENSE = `    <h1>${ICON.info}الرخصة</h1>
     <div>
-      <p>يجوز لأي أحد نسخ بيانات الأرشيف وشيفراته ووثائقه، وتعديلها ونشرها وتوزيعها وبيعها، دون إذن مسبق، بشرط إرفاق هذه الرخصة بها، وألا تُستخدم فيما لا يرضي الله تعالى.</p>
-      <p>وتُقدَّم بحالتها الراهنة دون أي ضمان، ولا يتحمل المساهمون في الأرشيف مسؤولية ما ينشأ عن استخدامها.</p>
-      <p>أما نصوص الأحاديث فننقلها كما طُبعت مع ذكر مصدر كل نص، وتبقى حقوق الطبعات لناشريها.</p>
-      <p>والخط من مجمع الملك فهد لطباعة المصحف الشريف، والأيقونات من فوسفور، ولكل منهما رخصته الخاصة.</p>
-      <p>لأي ملاحظة راسلنا على <a href="mailto:admin@haditharchive.com" dir="ltr">admin@haditharchive.com</a></p>
-    </div>
-    <h2>نص الرخصة</h2>
-    <div>
       <p>حقوق النشر © ٢٠٢٦، المساهمون في أرشيف الحديث.</p>
       <p>هذا العمل متاح للجميع مجانًا، ويجوز نسخه وتعديله ونشره وتوزيعه وبيعه دون الحاجة إلى إذن مسبق، على ألا يُستخدم فيما لا يرضي الله تعالى؛ فنحن لا نأذن بذلك، ونتبرأ إلى الله من ذلك.</p>
       <p>تسري هذه الرخصة على ما أنشأه المساهمون في أرشيف الحديث من شيفرات ووثائق وبيانات، بما في ذلك اختيار البيانات وتنظيمها ومعرّفاتها.</p>
       <p>وتبقى حقوق المواد التي استعنا بها من أعمال الآخرين، كالخطوط والأيقونات، لأصحابها، وتخضع كل مادة لرخصتها الخاصة، المبينة في ملف CREDITS.md.</p>
       <p>يجب إرفاق هذه الرخصة عند نسخ العمل أو أي جزء جوهري منه.</p>
       <p>يُقدَّم هذا العمل بحالته الراهنة، دون أي ضمان من أي نوع، ولا يتحمل المساهمون فيه مسؤولية أي أضرار أو مطالبات أو تبعات تنشأ عنه أو عن استخدامه.</p>
+      <p>لأي ملاحظة راسلنا على <a href="mailto:admin@haditharchive.com" dir="ltr">admin@haditharchive.com</a></p>
     </div>`;
 
 const PRIVACY = `    <h1>${ICON.info}الخصوصية</h1>
@@ -416,6 +419,21 @@ const PRIVACY = `    <h1>${ICON.info}الخصوصية</h1>
       <p>الموقع مستضاف على صفحات المستودع، التي قد تحفظ عناوين الزوار للأمان.</p>
       <p>لأي سؤال راسلنا على <a href="mailto:admin@haditharchive.com" dir="ltr">admin@haditharchive.com</a></p>
     </div>`;
+
+/**
+ * Every HADITH's saved text for search, by identifier, with where the
+ * Prophet's words begin in it as its displayed narration marks them: the
+ * search page's copy, and the search service's.
+ */
+export function searchTexts(core: SiteInputs["core"]): SearchText[] {
+  const occurrence = new Map(core.occurrences.map((record) => [record.occurrence_id, record]));
+  return [...core.hadith].sort((left, right) => left.hadith_id - right.hadith_id).map((record) => {
+    const display = occurrence.get(record.display_occurrence_id) as OccurrenceRecord;
+    const from = [...display.raw_text.slice(0, display.raw_text.indexOf(record.text))].length;
+    const words = prophetStart(record.text, from, display.prophet_words ?? []);
+    return { id: record.hadith_id, text: record.text, ...words === undefined ? {} : { words } };
+  });
+}
 
 /** Renders every page; the order of the result is the order of `path`. */
 export function renderSite(inputs: SiteInputs, options: RenderOptions): readonly PageFile[] {
@@ -428,14 +446,20 @@ export function renderSite(inputs: SiteInputs, options: RenderOptions): readonly
   const absolute = (route: string) => `${site.url}/${route}`;
   const asset = (path: string) => `${at(path)}?v=${options.assetVersions[path] as string}`;
   const name = escapeHtml(site.name);
+  const searchUrl = escapeHtml(site.search_url);
   const sourceUrl = escapeHtml(site.source_url);
 
+  // The search page's copy of the texts, linked with a hash of its bytes.
+  const texts = `${JSON.stringify(searchTexts(core))}\n`;
+  const textsVersion = createHash("sha256").update(texts).digest("hex").slice(0, 10);
+
   // Prerender a page when its link is hovered. The security policy allows
-  // the site's own files, and this one inline script by its hash.
+  // the site's own files, this one inline script by its hash, and requests
+  // to the search service.
   const speculation = `{"prerender":[{"where":{"href_matches":"${at(ROUTE.home)}*"},"eagerness":"moderate"}]}`;
   const policy = `default-src 'self'; script-src 'self' 'sha256-${
     createHash("sha256").update(speculation).digest("base64")
-  }'; object-src 'none'; base-uri 'none'; form-action 'self'`;
+  }'; connect-src 'self' ${searchUrl}; object-src 'none'; base-uri 'none'; form-action 'self'`;
 
   const layout = (page: PageContent): string => {
     const here = (current: Current) => page.current === current ? " aria-current=\"page\"" : "";
@@ -480,7 +504,8 @@ export function renderSite(inputs: SiteInputs, options: RenderOptions): readonly
   <link rel="preload" href="${at("font/UthmanTN_v2-0.woff2")}" as="font" type="font/woff2" crossorigin>
   <link rel="icon" href="${at("favicon.ico")}" sizes="32x32">
   <link rel="icon" href="${at("favicon.svg")}" type="image/svg+xml">
-  <link rel="stylesheet" href="${asset("style.css")}">
+  <link rel="stylesheet" href="${asset("style.css")}">${page.search === true ? `
+  <link rel="preconnect" href="${searchUrl}" crossorigin>` : ""}
   <script type="speculationrules">${speculation}</script>
 </head>
 <body>
@@ -512,15 +537,20 @@ ${page.main}
       <li><a href="${at(ROUTE.repository)}"${here("repository")}>المستودع</a></li>
     </ul>
   </footer>
-  <script src="${asset("script.js")}"></script>
+  <script src="${asset("script.js")}"></script>${page.search === true ? `
+  <script src="${asset("search.js")}" data-api="${searchUrl}" data-hadith="${at("h/")}" data-engine="${asset("search-engine.js")}" data-texts="${at("search.json")}?v=${textsVersion}"></script>` : ""}
 </body>
 </html>
 `;
   };
 
   const pages: PageFile[] = [];
+  const routes: string[] = [];
   const add = (path: string, page: PageContent) => pages.push({ path, text: layout(page) });
-  const addRoute = (route: string, page: PageContent) => add(`${route}index.html`, { ...page, route });
+  const addRoute = (route: string, page: PageContent) => {
+    routes.push(route);
+    add(`${route}index.html`, { ...page, route });
+  };
   const titled = (...parts: string[]) => [...parts, site.name].join(" - ");
 
   const index = buildIndex(core);
@@ -529,6 +559,16 @@ ${page.main}
   const hadith = [...core.hadith].sort((left, right) => left.hadith_id - right.hadith_id);
   const hadithById = new Map(hadith.map((record) => [record.hadith_id, record]));
 
+  // The field sends its words to the search page; a note may follow it.
+  const searchForm = (heading: "h1" | "h2", note = "") => `    <search>
+      <form action="${at(ROUTE.search)}">
+        <${heading}><label for="q">ابحث في الأحاديث</label></${heading}>
+        <div>
+          <input id="q" name="q" type="search" placeholder="ابحث في الأحاديث" enterkeyhint="search" autocomplete="off">
+          <button type="submit" aria-label="ابحث">${ICON.search}</button>
+        </div>
+      </form>${note}
+    </search>`;
   const topicTiles = (items: readonly Topic[]) => `      <ul role="list">
 ${items.map((topic) =>
   `        <li><a href="${at(ROUTE.topic(topic.topic_id))}">${escapeHtml(topic.title)}</a></li>`
@@ -594,12 +634,12 @@ ${cards.map((record) =>
     }
   };
 
-  // The site launches without search. Its title is the site's name, hidden
-  // on screen, and before any topic is reviewed it shows books only.
+  // The home page: a large search, then categories and books; before any
+  // topic is reviewed it shows books only.
   addRoute(ROUTE.home, {
     current: "home",
     main: [
-      `    <h1>${escapeHtml(site.name)}</h1>`,
+      searchForm("h1"),
       ...topics.length === 0 ? [] : [`    <section aria-labelledby="aqsam">
       <h2 id="aqsam"><a href="${at(ROUTE.categories)}">${ICON.grid}الأقسام</a></h2>
       <a href="${at(ROUTE.categories)}">المزيد${ICON.caretLeft}</a>
@@ -618,12 +658,29 @@ ${bookCards(sources.slice(0, HOME_BOOKS))}
 
   // GitHub Pages answers every missing address with this page.
   add("404.html", {
-    main: `    <h1>${ICON.question}الصفحة غير موجودة</h1>`,
+    main: `    <h1>${ICON.question}الصفحة غير موجودة</h1>
+${searchForm("h2")}`,
     title: titled("الصفحة غير موجودة"),
   });
 
+  // The search page, out of the index and the sitemap: its script asks the
+  // search service, or searches the words in the site's copy of the texts
+  // when the service cannot answer, and shows the results as cards built
+  // from the template; its status line tells screen readers how many were
+  // found. Without the script, a note under the field says what search needs.
+  add(`${ROUTE.search}index.html`, {
+    main: `${searchForm("h1", `
+      <noscript><p>يحتاج البحث إلى تفعيل جافاسكربت في المتصفح.</p></noscript>`)}
+    <template><li><a href=""><span></span>${ICON.arrow}</a></li></template>
+    <p role="status"></p>`,
+    search: true,
+    title: titled("البحث"),
+  });
+  pages.push({ path: "search.json", text: texts });
+
   addRoute(ROUTE.about, { current: "about", description: paragraph(ABOUT), main: ABOUT, title: `حول ${site.name}` });
-  addRoute(ROUTE.license, { current: "license", description: paragraph(LICENSE), main: LICENSE, title: titled("الرخصة") });
+  // The licence is described by its second paragraph; the first is the copyright line.
+  addRoute(ROUTE.license, { current: "license", description: paragraph(LICENSE, 2), main: LICENSE, title: titled("الرخصة") });
   addRoute(ROUTE.privacy, { current: "privacy", description: paragraph(PRIVACY), main: PRIVACY, title: titled("الخصوصية") });
   // The repository page: what it holds and what anyone can do with it,
   // with its address in the facts under the title.
@@ -633,15 +690,11 @@ ${facts([
     ["التنزيل", `<a href="${sourceUrl}/releases" rel="nofollow">نسخ البيانات</a>`],
   ])}
     <div>
-      <p>المستودع يحفظ أرشيف الحديث كله: بياناته وشيفراته ووثائقه، ومنه يُبنى هذا الموقع.</p>
-      <p>والأرشيف مفتوح المصدر: يجوز لأي أحد نسخ بياناته وشيفراته واستعمالها ونشرها وفق الرخصة.</p>
-      <p>يمكن لأي أحد الاطلاع على بياناته وتنزيلها كاملة دون حساب.</p>
-      <p>ويمكن لكل أحد أن يراجع النصوص بنفسه: مع كل حديث كتابه وطبعته وصفحته، ومع كل طبعة بصمة الملف الذي نُقل منه النص، فيُقابَل كل نص بأصله.</p>
-      <p>ويُسجَّل فيه كل تغيير بتاريخه ووقته، فيُعرف متى أضيف كل نص وما تغيّر فيه.</p>
-      <p>ولكل تغيير بصمة رقمية موقَّعة، فلا يتغير شيء دون أن يظهر.</p>
-      <p>ويُفحص كل تغيير آليًا قبل قبوله، فلا يُقبل سجل يخالف قواعد الأرشيف.</p>
-      <p>وتُنشر نسخ كاملة من البيانات مع بصماتها، يمكن تنزيلها والتحقق من سلامتها.</p>
-      <p>وبذلك يبقى الأرشيف محفوظًا ويمكن التحقق منه.</p>
+      <p>يضم المستودع بيانات الأرشيف وشيفراته ووثائقه كاملة، ومنه يُبنى هذا الموقع.</p>
+      <p>والأرشيف مفتوح المصدر، فبوسع أي أحد تصفح المستودع وتنزيل محتواه واستعماله ونشره وفق الرخصة.</p>
+      <p>ويُذكر مع كل حديث كتابه وطبعته وصفحته، ومع كل طبعة بصمة الملف الذي نُقل منه، فيمكن مقابلة كل نص بأصله.</p>
+      <p>ويحفظ المستودع كل تعديل موقَّعًا بتاريخه، فيُعرف متى أُضيف كل نص وما تغيّر فيه، ولا يُقبل تعديل إلا بعد فحصه آليًا.</p>
+      <p>وتُنشر البيانات في نسخ كاملة مع بصمة كل ملف للتحقق من سلامته.</p>
       <p>لأي تصحيح أو ملاحظة راسلنا على <a href="mailto:admin@haditharchive.com" dir="ltr">admin@haditharchive.com</a></p>
     </div>`;
   addRoute(ROUTE.repository, {
@@ -967,14 +1020,11 @@ ${others.map((occurrence) => narration(occurrence, "          ")).join("\n")}
     });
   }
 
-  // An indexable site lists every page but the 404 in its sitemap; at a
-  // host's root, where crawlers look for it, robots.txt admits every
-  // crawler and names the sitemap.
+  // An indexable site lists every page with its own route in its sitemap,
+  // so neither the 404 page nor the search page; at a host's root, where
+  // crawlers look for it, robots.txt admits every crawler and names the sitemap.
   if (site.indexable) {
-    const routes = pages.map((file) => file.path)
-      .filter((path) => path.endsWith("index.html"))
-      .sort(compareText)
-      .map((path) => path.slice(0, -"index.html".length));
+    routes.sort(compareText);
     pages.push({
       path: "sitemap.xml",
       text: `<?xml version="1.0" encoding="UTF-8"?>
