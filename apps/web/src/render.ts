@@ -284,8 +284,10 @@ function summary(heading: string, items: readonly string[]): string {
 
 const asText = ([label, value]: readonly [string, string]) => `${label} ${value}`;
 
-// A written page's description: its first paragraph, which each one has.
-const lead = (main: string) => (/<p>([^<]*)<\/p>/.exec(main) as RegExpExecArray)[1] as string;
+// A written page's paragraph, the first unless another is named; each
+// written page has the ones asked for.
+const paragraph = (main: string, number = 1) =>
+  ([...main.matchAll(/<p>([^<]*)<\/p>/g)][number - 1] as RegExpExecArray)[1] as string;
 
 // A printing's details: its title as printed, edition, year, ISBN, and the
 // SHA-256 of the file it was taken from, left to right.
@@ -333,8 +335,6 @@ interface PageContent {
   readonly route?: string;
   readonly current?: Current;
   readonly description?: string;
-  /** What a shared link shows under its title, if not the description. */
-  readonly share?: string;
 }
 
 interface Index {
@@ -386,11 +386,7 @@ const ABOUT = `    <h1>${ICON.info}حول أرشيف الحديث</h1>
       <p>واليوم تنتشر الأحاديث عبر المواقع والتطبيقات، لكن الوصول إلى مصادرها والتثبت من ألفاظها قد يكون صعبًا. ومن هنا نشأ أرشيف الحديث لخدمة السنة النبوية بما تتيحه الوسائل الحديثة.</p>
       <p>يجمع الأرشيف الأحاديث من كتب الحديث المشهورة مثل صحيح البخاري ومسلم، ويحفظ نصوصها كما طُبعت، مع ذكر الكتاب ودار النشر والطبعة ورقم الصفحة، حتى يسهل على القارئ الرجوع إلى المصدر والتثبت من النص.</p>
       <p>أرشيف الحديث مشروع مفتوح المصدر، تُتاح شيفراته وبياناته للجميع، ويمكن الاطلاع عليها والتحقق منها وتنزيلها وإعادة استخدامها كاملة من خلال المستودع.</p>
-      <p>نرجو أن يكون الأرشيف حلقة وصل بين ما يقرأه الناس من أحاديث على الإنترنت ومصادرها في كتب السنة. نسأل الله أن يتقبله منا، وأن ينفع به، وأن يجعله خالصًا لوجهه الكريم.</p>
-    </div>
-    <h2>المنهجية</h2>
-    <div>
-      <p>ننقل الأحاديث كاملة دون تعديل، ونربط بينها وننظمها، حتى أقسامها مأخوذة من الكتب نفسها.</p>
+      <p>نرجو أن يكون الأرشيف حلقة وصل بين ما يقرأه الناس من أحاديث على الإنترنت ومصادرها في كتب الحديث. نسأل الله أن يتقبله منا، وأن ينفع به، وأن يجعله خالصًا لوجهه الكريم.</p>
     </div>`;
 
 // The licence page, which is also the copyright page: a summary, the rights
@@ -398,11 +394,10 @@ const ABOUT = `    <h1>${ICON.info}حول أرشيف الحديث</h1>
 // LICENSE, word for word, below its title.
 const LICENSE = `    <h1>${ICON.info}الرخصة</h1>
     <div>
-      <p>يجوز نسخ العمل وتعديله ونشره وتوزيعه وبيعه دون إذن.</p>
-      <p>بشرط إرفاق الرخصة، وألا يُستخدم فيما لا يرضي الله تعالى.</p>
-      <p>دون ضمان أو مسؤولية.</p>
-      <p>ننقل نصوص الأحاديث كما طُبعت، ونذكر مصدر كل نص، وتبقى حقوق الطبعات لناشريها.</p>
-      <p>الخط من مجمع الملك فهد لطباعة المصحف الشريف، والأيقونات من فوسفور، ولكل منهما رخصته.</p>
+      <p>يجوز لأي أحد نسخ بيانات الأرشيف وشيفراته ووثائقه، وتعديلها ونشرها وتوزيعها وبيعها، دون إذن مسبق، بشرط إرفاق هذه الرخصة بها، وألا تُستخدم فيما لا يرضي الله تعالى.</p>
+      <p>وتُقدَّم بحالتها الراهنة دون أي ضمان، ولا يتحمل المساهمون في الأرشيف مسؤولية ما ينشأ عن استخدامها.</p>
+      <p>أما نصوص الأحاديث فننقلها كما طُبعت مع ذكر مصدر كل نص، وتبقى حقوق الطبعات لناشريها.</p>
+      <p>والخط من مجمع الملك فهد لطباعة المصحف الشريف، والأيقونات من فوسفور، ولكل منهما رخصته الخاصة.</p>
       <p>لأي ملاحظة راسلنا على <a href="mailto:admin@haditharchive.com" dir="ltr">admin@haditharchive.com</a></p>
     </div>
     <h2>نص الرخصة</h2>
@@ -455,7 +450,7 @@ export function renderSite(inputs: SiteInputs, options: RenderOptions): readonly
     // A shared link: its title and description in WhatsApp, Telegram and X,
     // and the site's image in X's card alone, which otherwise shows an
     // empty icon (WhatsApp and Telegram read only og:image).
-    const shared = page.share ?? page.description;
+    const shared = page.description;
     const sharing = page.route === undefined ? "" : `
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="${name}">
@@ -465,6 +460,15 @@ export function renderSite(inputs: SiteInputs, options: RenderOptions): readonly
   <meta name="twitter:card" content="summary">
   <meta name="twitter:image" content="${escapeHtml(absolute("share.png"))}">
   <meta name="twitter:image:alt" content="${name}">`;
+    // The site's name for search results, which Google reads from the home
+    // page's WebSite data.
+    const website = page.route !== ROUTE.home ? "" : `
+  <script type="application/ld+json">${JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      name: site.name,
+      url: absolute(ROUTE.home),
+    }).replaceAll("<", "\\u003c")}</script>`;
     return `<!doctype html>
 <html lang="ar" dir="rtl">
 <head>
@@ -472,7 +476,7 @@ export function renderSite(inputs: SiteInputs, options: RenderOptions): readonly
   <meta http-equiv="Content-Security-Policy" content="${policy}">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="text-scale" content="scale">${robots}${description}
-  <title>${escapeHtml(page.title)}</title>${canonical}${sharing}
+  <title>${escapeHtml(page.title)}</title>${canonical}${sharing}${website}
   <link rel="preload" href="${at("font/UthmanTN_v2-0.woff2")}" as="font" type="font/woff2" crossorigin>
   <link rel="icon" href="${at("favicon.ico")}" sizes="32x32">
   <link rel="icon" href="${at("favicon.svg")}" type="image/svg+xml">
@@ -608,10 +612,8 @@ ${bookCards(sources.slice(0, HOME_BOOKS))}
     </section>`,
     ].join("\n"),
     title: site.name,
-    description: [
-      ...topics.length === 0 ? [] : [summary("الأقسام", topics.slice(0, HOME_TOPICS).map((topic) => topic.title))],
-      summary("الكتب", sources.slice(0, HOME_BOOKS).map((source) => source.title)),
-    ].join(". "),
+    // What the site is, first (owner, 2026-11-02).
+    description: "أرشيف مجاني مفتوح المصدر للأحاديث النبوية بنصوصها ومصادرها.",
   });
 
   // GitHub Pages answers every missing address with this page.
@@ -620,23 +622,31 @@ ${bookCards(sources.slice(0, HOME_BOOKS))}
     title: titled("الصفحة غير موجودة"),
   });
 
-  addRoute(ROUTE.about, { current: "about", description: lead(ABOUT), main: ABOUT, title: `حول ${site.name}` });
-  addRoute(ROUTE.license, { current: "license", description: lead(LICENSE), main: LICENSE, title: titled("الرخصة") });
-  addRoute(ROUTE.privacy, { current: "privacy", description: lead(PRIVACY), main: PRIVACY, title: titled("الخصوصية") });
+  addRoute(ROUTE.about, { current: "about", description: paragraph(ABOUT), main: ABOUT, title: `حول ${site.name}` });
+  addRoute(ROUTE.license, { current: "license", description: paragraph(LICENSE), main: LICENSE, title: titled("الرخصة") });
+  addRoute(ROUTE.privacy, { current: "privacy", description: paragraph(PRIVACY), main: PRIVACY, title: titled("الخصوصية") });
   // The repository page: what it holds and what anyone can do with it,
   // with its address in the facts under the title.
   const repository = `    <h1>${ICON.info}المستودع</h1>
-${facts([["الرابط", `<a href="${sourceUrl}" rel="nofollow">فتح المستودع</a>`]])}
+${facts([
+    ["الرابط", `<a href="${sourceUrl}" rel="nofollow">فتح المستودع</a>`],
+    ["التنزيل", `<a href="${sourceUrl}/releases" rel="nofollow">نسخ البيانات</a>`],
+  ])}
     <div>
       <p>المستودع يحفظ أرشيف الحديث كله: بياناته وشيفراته ووثائقه، ومنه يُبنى هذا الموقع.</p>
+      <p>والأرشيف مفتوح المصدر: يجوز لأي أحد نسخ بياناته وشيفراته واستعمالها ونشرها وفق الرخصة.</p>
       <p>يمكن لأي أحد الاطلاع على بياناته وتنزيلها كاملة دون حساب.</p>
+      <p>ويمكن لكل أحد أن يراجع النصوص بنفسه: مع كل حديث كتابه وطبعته وصفحته، ومع كل طبعة بصمة الملف الذي نُقل منه النص، فيُقابَل كل نص بأصله.</p>
       <p>ويُسجَّل فيه كل تغيير بتاريخه ووقته، فيُعرف متى أضيف كل نص وما تغيّر فيه.</p>
       <p>ولكل تغيير بصمة رقمية موقَّعة، فلا يتغير شيء دون أن يظهر.</p>
+      <p>ويُفحص كل تغيير آليًا قبل قبوله، فلا يُقبل سجل يخالف قواعد الأرشيف.</p>
+      <p>وتُنشر نسخ كاملة من البيانات مع بصماتها، يمكن تنزيلها والتحقق من سلامتها.</p>
       <p>وبذلك يبقى الأرشيف محفوظًا ويمكن التحقق منه.</p>
+      <p>لأي تصحيح أو ملاحظة راسلنا على <a href="mailto:admin@haditharchive.com" dir="ltr">admin@haditharchive.com</a></p>
     </div>`;
   addRoute(ROUTE.repository, {
     current: "repository",
-    description: lead(repository),
+    description: paragraph(repository),
     main: repository,
     title: titled("المستودع"),
   });
@@ -913,11 +923,10 @@ ${items.join("\n")}
       .filter((id) => id !== display.occurrence_id)
       .map((id) => index.occurrence.get(id) as OccurrenceRecord)
       .sort(byOccurrence);
-    // The saved text supplies the heading, the description and, from the
-    // Prophet's words, the title.
+    // The saved text supplies the heading and, from the Prophet's words, the
+    // title; the description is where the text is printed.
     // The card holds the displayed narration in full: the heading, then the
     // rest of the entry where the text opens it, else the whole narration.
-    const plain = record.text.replaceAll("\n", " ");
     const raw = display.raw_text;
     const rest = raw === record.text
       ? ""
@@ -925,11 +934,11 @@ ${items.join("\n")}
     const words = display.prophet_words ?? [];
     const textFrom = [...raw.slice(0, raw.indexOf(record.text))].length;
     const restFrom = rest === raw ? 0 : [...record.text].length + 1;
-    // A shared hadith shows where its text is printed: the book, the
-    // hadith's number, the printing, and the volume and page.
+    // In search results and shared links, a hadith shows where its text is
+    // printed: the book, the hadith's number, the printing, the volume and page.
     const witness = index.witness.get(display.witness_id) as SourceWitnessRecord;
     const { hadith_number: number, volume } = display.location;
-    const share = [
+    const printed = [
       (index.source.get(witness.source_id) as SourceRecord).title,
       ...number === undefined ? [] : [`الحديث ${arabicDigits(number)}`],
       `طبعة ${witness.publisher}`,
@@ -937,8 +946,7 @@ ${items.join("\n")}
       `الصفحة ${pageSpan(display.location)}`,
     ].join("، ");
     addRoute(ROUTE.hadith(record.hadith_id), {
-      description: plain,
-      share,
+      description: printed,
       main: [
         "    <article>",
         "      <div>",

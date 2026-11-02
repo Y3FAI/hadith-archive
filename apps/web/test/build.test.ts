@@ -195,6 +195,9 @@ describe("demo build", () => {
     expect(page("license/index.html")).toContain(`<a href="${BASE}license/" aria-current="page">الرخصة</a>`);
     expect(page("repository/index.html"))
       .toContain("<div><dt>الرابط</dt><dd><a href=\"https://github.com/Y3FAI/hadith-archive\" rel=\"nofollow\">فتح المستودع</a></dd></div>");
+    expect(page("repository/index.html")).toContain(
+      "<div><dt>التنزيل</dt><dd><a href=\"https://github.com/Y3FAI/hadith-archive/releases\" rel=\"nofollow\">نسخ البيانات</a></dd></div>",
+    );
   });
 
   test("names the site in every title", () => {
@@ -215,9 +218,12 @@ describe("demo build", () => {
     for (const path of pages()) {
       expect(description(path) === undefined).toBe(path === "404.html");
     }
+    // The home page says what the site is.
     expect(description("index.html")).toBe(
-      "الأقسام: الإيمان، الطهارة، الصلاة. الكتب: الكتاب التجريبي الأول، الكتاب التجريبي الثاني، الكتاب التجريبي الثالث، الكتاب التجريبي الرابع",
+      "أرشيف مجاني مفتوح المصدر للأحاديث النبوية بنصوصها ومصادرها.",
     );
+    // A hadith is described by where its text is printed.
+    expect(description("h/1/index.html")).toBe("الكتاب التجريبي الأول، الحديث ٣، طبعة ناشر تجريبي، الجزء ١، الصفحة ١٢");
     expect(description("c/1/index.html")).toBe("الإيمان: عدد الأحاديث ٢");
     expect(description("b/demo-book-1/index.html"))
       .toBe("الكتاب التجريبي الأول: المؤلف مؤلف تجريبي، عدد الأبواب ٢، عدد الأحاديث ٢، عدد الطبعات ١");
@@ -226,7 +232,18 @@ describe("demo build", () => {
       "طبعة ناشر تجريبي: الكتاب الكتاب التجريبي الأول، المؤلف مؤلف تجريبي، طبعة تجريبية، سنة الطبع ٢٠٢٦، ردمك ٩٧٨٠٠٠٠٠٠٠٠٠٢",
     );
     // A written page is described by its first paragraph.
-    expect(description("license/index.html")).toBe("يجوز نسخ العمل وتعديله ونشره وتوزيعه وبيعه دون إذن.");
+    expect(description("license/index.html")).toBe(
+      "يجوز لأي أحد نسخ بيانات الأرشيف وشيفراته ووثائقه، وتعديلها ونشرها وتوزيعها وبيعها، دون إذن مسبق، بشرط إرفاق هذه الرخصة بها، وألا تُستخدم فيما لا يرضي الله تعالى.",
+    );
+  });
+
+  test("names the site for search results in the home page's WebSite data alone", () => {
+    expect(page("index.html")).toContain(
+      "<script type=\"application/ld+json\">{\"@context\":\"https://schema.org\",\"@type\":\"WebSite\",\"name\":\"أرشيف الحديث\",\"url\":\"https://y3fai.github.io/hadith-archive/\"}</script>",
+    );
+    for (const path of pages().filter((path) => path !== "index.html")) {
+      expect(page(path)).not.toContain("application/ld+json");
+    }
   });
 
   test("shares a hadith with its source, and gives X alone the site's image", () => {
@@ -253,7 +270,6 @@ describe("demo build", () => {
     const hadith = page("h/1/index.html");
     // The text lies inside its narration, so the whole narration follows it.
     expect(hadith).toContain(`<div>\n        <h1><span>${saved["text"]}</span></h1>\n        <p>${display["raw_text"]}</p>\n      </div>`);
-    expect(hadith).toContain(`<meta name="description" content="${saved["text"]}">`);
     // Under the card, «المصدر» opens to the book and the printing in full.
     const source = hadith.slice(hadith.indexOf("<section aria-labelledby=\"masdar\">"), hadith.indexOf("</section>"));
     expect(source).toContain("المصدر</h2>\n        <details>\n          <summary><span>عرض المصدر</span><span>إخفاء المصدر</span>");
