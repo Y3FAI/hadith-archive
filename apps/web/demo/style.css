@@ -56,6 +56,7 @@ body {
   overflow-wrap: anywhere;
   display: flex;
   flex-direction: column;
+  min-height: 100vh; /* for browsers without svh */
   min-height: 100svh;
 }
 
@@ -309,6 +310,14 @@ dd {
   align-items: center;
   gap: .25em;
   margin: 0;
+}
+
+/* A file's SHA-256. Its Latin letters fall back to a font that looks larger
+   than the Naskh, so they are set a little smaller and closer. */
+dd code {
+  font: inherit;
+  font-size: .8em;
+  line-height: 1.5;
 }
 
 /* Cards: the white surfaces that hold reading text. */
@@ -993,13 +1002,15 @@ main > ol a:active {
 }
 
 /* Focus keeps the green. The cartouche's shape would clip the frame, so
-   its item carries the frame instead. */
+   its item carries the frame instead; without :has() the link keeps its own. */
 main > section > ul a:focus-visible {
   background: var(--fill);
 }
 
-[aria-labelledby="aqsam"] ul a:focus-visible {
-  outline: none;
+@supports selector(:has(a)) {
+  [aria-labelledby="aqsam"] ul a:focus-visible {
+    outline: none;
+  }
 }
 
 [aria-labelledby="aqsam"] li:has(> a:focus-visible) {

@@ -199,7 +199,9 @@ describe("demo build", () => {
     expect(title("c/1/index.html")).toBe("الإيمان - أرشيف الحديث");
     expect(title("b/demo-book-1/bab-1/index.html"))
       .toBe("الباب التجريبي الأول - الكتاب التجريبي الأول - أرشيف الحديث");
-    expect(title("h/1/index.html")).toEndWith("الشَّاشَاتِ الصَّغِيرَةِ وَالْكَبِيرَةِ. - أرشيف الحديث");
+    // A hadith's title is cut to whole words, as much as a search result shows.
+    expect(title("h/1/index.html"))
+      .toBe("عَنِ الرَّاوِي التَّجْرِيبِيِّ قَالَ: هَذَا نَصٌّ تَجْرِيبِيٌّ يُوضَعُ فِي مَكَانِ... - أرشيف الحديث");
   });
 
   test("shows the saved quotation on its narration's card, its source, and the other members", async () => {
@@ -218,7 +220,11 @@ describe("demo build", () => {
         "المؤلف مؤلف تجريبي",
         "رقم الحديث ٣",
         `طبعة <a href="${BASE}p/demo-book-1-demo-edition/">ناشر تجريبي</a>`,
+        "العنوان الكتاب التجريبي الأول",
+        "الطبعة طبعة تجريبية",
         "سنة الطبع ٢٠٢٦",
+        "ردمك ٩٧٨٠٠٠٠٠٠٠٠٠٢",
+        "بصمة الملف <code dir=\"ltr\">139705312aa323c7ce33e7d8945d84912f911406e6d22db0f5f541da289f2f3c</code>",
         "الجزء ١",
         "الصفحة ١٢",
       ]);
@@ -259,6 +265,8 @@ describe("demo build", () => {
     const hadith = await readFile(join(out, "h/1/index.html"), "utf8");
     const marked = (text: string) => text.replace(words, `<span class="prophet">${words}</span>`);
     expect(hadith).toContain(`<h1><span>${marked(saved)}</span></h1>\n        <p>${marked(raw)}</p>`);
+    // The title starts at the Prophet's words.
+    expect(/<title>([^<]*)<\/title>/.exec(hadith)?.[1]).toStartWith(`${words} `);
   });
 
   test("keeps a hadith's page to its text and sources, without its category", () => {
@@ -304,13 +312,15 @@ describe("demo build", () => {
     expect([...printing.matchAll(/<div><dt>([^<]+)<\/dt><dd>([^<]+)<\/dd><\/div>/g)].map((match) => `${match[1]} ${match[2]}`))
       .toEqual([
         "المؤلف مؤلف تجريبي",
-        "العنوان كما طُبع الكتاب التجريبي الأول",
+        "العنوان الكتاب التجريبي الأول",
         "الطبعة طبعة تجريبية",
         "سنة الطبع ٢٠٢٦",
         "ردمك ٩٧٨٠٠٠٠٠٠٠٠٠٢",
         "عدد الأحاديث ٢",
         "النص المعروض في الموقع",
       ]);
+    // The file's SHA-256 stays as stored, left to right.
+    expect(printing).toContain("<div><dt>بصمة الملف</dt><dd><code dir=\"ltr\">139705312aa323c7ce33e7d8945d84912f911406e6d22db0f5f541da289f2f3c</code></dd></div>\n        <div><dt>عدد الأحاديث</dt>");
   });
 
   test("shows an ISBN in Arabic-Indic digits, an ISBN-10 ending in X as its ISBN-13", () => {

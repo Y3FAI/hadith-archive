@@ -61,6 +61,11 @@ export const FOLD_BASE_CHARACTERS = 400;
 // lines at the widest layout; the full text is on the hadith's own page.
 export const PREVIEW_BASE_CHARACTERS = 240;
 
+// A hadith's title quotes whole words up to this many base characters, then
+// «... - أرشيف الحديث»: what a search result's title shows on a computer
+// (about 600px of 20px Arial, measured on al-Nawawi's Forty).
+export const TITLE_BASE_CHARACTERS = 50;
+
 // Long lists are split into pages of this many hadith.
 export const PAGE_SIZE = 20;
 
@@ -220,16 +225,31 @@ const paragraphs = (text: string, indent: string, from = 0, words: ProphetWords 
 
 const baseLength = (text: string) => [...text].filter((character) => !/\p{M}/u.test(character)).length;
 
-// Line breaks become spaces; the first word is kept even when it is longer.
-function preview(text: string): string {
+// The first whole words of a text up to `limit` base characters, and whether
+// they are all of it. Line breaks become spaces; the first word is kept even
+// when it is longer.
+function excerpt(text: string, limit: number): { readonly text: string; readonly whole: boolean } {
   const words = text.split(/\s+/).filter((word) => word !== "");
   let kept = 1;
   let length = baseLength(words[0] ?? "");
-  while (kept < words.length && length + 1 + baseLength(words[kept] as string) <= PREVIEW_BASE_CHARACTERS) {
+  while (kept < words.length && length + 1 + baseLength(words[kept] as string) <= limit) {
     length += 1 + baseLength(words[kept] as string);
     kept += 1;
   }
-  return words.slice(0, kept).join(" ");
+  return { text: words.slice(0, kept).join(" "), whole: kept >= words.length };
+}
+
+const preview = (text: string) => excerpt(text, PREVIEW_BASE_CHARACTERS).text;
+
+// A hadith's title starts at the Prophet's first marked words, else at the
+// text's start, so titles differ where narrator chains repeat. Quotation
+// marks are left out, and a cut ends in «...».
+function hadithTitle(text: string, from: number, words: ProphetWords): string {
+  const characters = [...text];
+  const first = words.find((range) => range.end > from && range.start < from + characters.length);
+  const start = first === undefined ? 0 : Math.max(first.start - from, 0);
+  const cut = excerpt(characters.slice(start).join("").replace(/[«»]/g, ""), TITLE_BASE_CHARACTERS);
+  return cut.whole ? cut.text : `${cut.text.replace(/[\p{P}\s]+$/u, "")}...`;
 }
 
 // An ISBN in Arabic-Indic digits. An ISBN-10 whose check digit is X is
@@ -249,6 +269,19 @@ function facts(items: readonly (readonly [string, string])[], indent = "    "): 
   return `${indent}<dl>\n${items.map(([label, value]) =>
     `${indent}  <div><dt>${label}</dt><dd>${value}</dd></div>`
   ).join("\n")}\n${indent}</dl>`;
+}
+
+// A printing's details: its title as printed, edition, year, ISBN, and the
+// SHA-256 of the file it was taken from, left to right.
+function printingFacts(witness: SourceWitnessRecord): (readonly [string, string])[] {
+  const { edition_statement: edition, isbn, publication_year: year } = witness;
+  return [
+    ["العنوان", escapeHtml(witness.title_as_printed)],
+    ...edition === undefined ? [] : [["الطبعة", escapeHtml(edition)] as const],
+    ...year === undefined ? [] : [["سنة الطبع", arabicDigits(year)] as const],
+    ...isbn === undefined ? [] : [["ردمك", isbnDigits(isbn)] as const],
+    ["بصمة الملف", `<code dir="ltr">${escapeHtml(witness.file_sha256)}</code>`],
+  ];
 }
 
 /**
@@ -405,6 +438,7 @@ export function renderSite(inputs: SiteInputs, options: RenderOptions): readonly
   <link rel="icon" href="${at("favicon.ico")}" sizes="32x32">
   <link rel="icon" href="${at("favicon.svg")}" type="image/svg+xml">
   <link rel="stylesheet" href="${asset("style.css")}">
+  <script type="speculationrules">{"prerender":[{"where":{"href_matches":"${at(ROUTE.home)}*"},"eagerness":"moderate"}]}</script>
 </head>
 <body>
   <a href="#main">تخطَّ إلى المحتوى</a>
@@ -417,7 +451,7 @@ export function renderSite(inputs: SiteInputs, options: RenderOptions): readonly
       <button type="button" popovertarget="menu" popovertargetaction="hide" aria-label="إغلاق القائمة" autofocus>
         ${ICON.close}
       </button>
-      <ul>
+      <ul role="list">
         <li><a href="${at(ROUTE.home)}"${here("home")}>${ICON.home}الرئيسية</a></li>
         <li><a href="${at(ROUTE.categories)}"${here("categories")}>${ICON.grid}الأقسام</a></li>
         <li><a href="${at(ROUTE.books)}"${here("books")}>${ICON.books}الكتب</a></li>
@@ -666,18 +700,11 @@ ${witnesses.map((witness) =>
             counted(COMPARED[match], compared.filter((collation) => matchOf(collation) === match).length)
           ),
         ];
-      const { edition_statement: edition, isbn, publication_year: year } = witness;
       addRoute(ROUTE.printing(witness.witness_id), {
         main: `    <h1>${ICON.books}طبعة ${escapeHtml(witness.publisher)}</h1>
 ${facts([["الكتاب", bookLink(source)], ["المؤلف", escapeHtml(source.author)]])}
     <div>
-${facts([
-  ["العنوان كما طُبع", escapeHtml(witness.title_as_printed)],
-  ...edition === undefined ? [] : [["الطبعة", escapeHtml(edition)] as const],
-  ...year === undefined ? [] : [["سنة الطبع", arabicDigits(year)] as const],
-  ...isbn === undefined ? [] : [["ردمك", isbnDigits(isbn)] as const],
-  ...text,
-], "      ")}
+${facts([...printingFacts(witness), ...text], "      ")}
     </div>`,
         title: titled(`طبعة ${witness.publisher}`, source.title),
       });
@@ -733,13 +760,12 @@ ${citation(occurrence, `${indent}  `)}
 ${indent}</li>`;
   };
 
-  // «المصدر»: the displayed narration's book and printing, in a card that
+  // «المصدر»: the displayed narration's book and printing in full, in a card that
   // opens like «تفاصيل الطبعات» below it.
   const sourceDetails = (occurrence: OccurrenceRecord) => {
     const witness = index.witness.get(occurrence.witness_id) as SourceWitnessRecord;
     const book = index.source.get(witness.source_id) as SourceRecord;
     const { hadith_number: number, volume } = occurrence.location;
-    const year = witness.publication_year;
     return [`      <section aria-labelledby="masdar">
         <h2 id="masdar">${ICON.pin}المصدر</h2>
         <details>
@@ -752,7 +778,7 @@ ${facts([
 ], "            ")}
 ${facts([
   ["طبعة", `<a href="${at(ROUTE.printing(witness.witness_id))}">${escapeHtml(witness.publisher)}</a>`],
-  ...year === undefined ? [] : [["سنة الطبع", arabicDigits(year)] as const],
+  ...printingFacts(witness),
   ...volume === undefined ? [] : [["الجزء", arabicDigits(volume)] as const],
   ["الصفحة", pageSpan(occurrence.location)],
 ], "            ")}
@@ -828,7 +854,8 @@ ${items.join("\n")}
       .filter((id) => id !== display.occurrence_id)
       .map((id) => index.occurrence.get(id) as OccurrenceRecord)
       .sort(byOccurrence);
-    // The saved text supplies the title, heading, and description alike.
+    // The saved text supplies the heading, the description and, from the
+    // Prophet's words, the title.
     // The card holds the displayed narration in full: the heading, then the
     // rest of the entry where the text opens it, else the whole narration.
     const plain = record.text.replaceAll("\n", " ");
@@ -857,7 +884,7 @@ ${others.map((occurrence) => narration(occurrence, "          ")).join("\n")}
       </section>`],
         "    </article>",
       ].join("\n"),
-      title: titled(plain),
+      title: titled(hadithTitle(record.text, textFrom, words)),
     });
   }
 

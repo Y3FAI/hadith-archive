@@ -33,6 +33,9 @@ addEventListener("pointerup", (event) => {
   setTimeout(() => { press = null; });
 });
 
+// A press the browser cancels, such as the start of a drag, has no release.
+addEventListener("pointercancel", () => { press = null; });
+
 // To show a match inside a closed narration (Find in page, or a link to
 // a quoted passage), the browser scrolls the clipped text instead of
 // opening the card. Open it at once and move the page by the same
