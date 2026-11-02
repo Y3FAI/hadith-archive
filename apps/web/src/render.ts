@@ -180,7 +180,7 @@ export function comparisonRows(raw: string, collations: readonly CollationRecord
 // slash; its file is the route's index.html. Section identifiers start with
 // a letter, so a page number after a route never meets one.
 const segment = (value: string | number) => encodeURIComponent(String(value));
-const ROUTE = {
+export const ROUTE = {
   about: "about/",
   books: "b/",
   categories: "c/",
