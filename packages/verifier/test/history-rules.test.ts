@@ -166,9 +166,16 @@ describe("Git-history rules", () => {
 
   test("resolves and indexes the explicit real-repository base", async () => {
     const history = await loadGitHistoryState(repositoryRoot, "HEAD^");
+    const { stdout } = await execFileAsync("git", ["ls-tree", "-r", "--name-only", "HEAD^", "core/"], {
+      cwd: repositoryRoot,
+    });
+    const greatest = (pattern: RegExp) => Math.max(0, ...stdout.split("\n").flatMap((path) => {
+      const match = pattern.exec(path);
+      return match === null ? [] : [Number(match[1])];
+    }));
     expect(history.baseCommit).toMatch(/^[0-9a-f]{40}$/);
-    expect(history.greatestHadithId).toBe(0);
-    expect(history.greatestOccurrenceId).toBe(0);
+    expect(history.greatestHadithId).toBe(greatest(/^core\/hadith\/(\d+)\.json$/));
+    expect(history.greatestOccurrenceId).toBe(greatest(/\/occurrences\/(\d+)\.json$/));
   });
 
   test("remembers historical deletion and schema mutation after restoration", async () => {
