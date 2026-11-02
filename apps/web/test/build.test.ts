@@ -218,9 +218,9 @@ describe("demo build", () => {
     for (const path of pages()) {
       expect(description(path) === undefined).toBe(path === "404.html");
     }
-    // The home page takes the about page's sentence on what the archive holds.
+    // The home page says what the site is.
     expect(description("index.html")).toBe(
-      "يجمع الأرشيف الأحاديث من كتب الحديث المشهورة مثل صحيح البخاري ومسلم، ويحفظ نصوصها كما طُبعت، مع ذكر الكتاب ودار النشر والطبعة ورقم الصفحة، حتى يسهل على القارئ الرجوع إلى المصدر والتثبت من النص.",
+      "أرشيف مجاني مفتوح المصدر للأحاديث النبوية بنصوصها ومصادرها.",
     );
     // A hadith is described by where its text is printed.
     expect(description("h/1/index.html")).toBe("الكتاب التجريبي الأول، الحديث ٣، طبعة ناشر تجريبي، الجزء ١، الصفحة ١٢");
@@ -232,7 +232,9 @@ describe("demo build", () => {
       "طبعة ناشر تجريبي: الكتاب الكتاب التجريبي الأول، المؤلف مؤلف تجريبي، طبعة تجريبية، سنة الطبع ٢٠٢٦، ردمك ٩٧٨٠٠٠٠٠٠٠٠٠٢",
     );
     // A written page is described by its first paragraph.
-    expect(description("license/index.html")).toBe("يجوز نسخ العمل وتعديله ونشره وتوزيعه وبيعه دون إذن.");
+    expect(description("license/index.html")).toBe(
+      "يجوز لأي أحد نسخ بيانات الأرشيف وشيفراته ووثائقه، وتعديلها ونشرها وتوزيعها وبيعها، دون إذن مسبق، بشرط إرفاق هذه الرخصة بها، وألا تُستخدم فيما لا يرضي الله تعالى.",
+    );
   });
 
   test("names the site for search results in the home page's WebSite data alone", () => {
