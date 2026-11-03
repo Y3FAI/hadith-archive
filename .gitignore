@@ -9,6 +9,7 @@
 # Reproducible, disposable output.
 /artifacts/
 node_modules/
+.wrangler/
 coverage/
 
 # Working notes and contributor briefing. The repository publishes what the

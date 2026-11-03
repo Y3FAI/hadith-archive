@@ -1,0 +1,14 @@
+{
+  // The search service at search.haditharchive.com: wrangler deploy from
+  // this folder, after bun run search:data when a HADITH is added or changed.
+  "name": "hadith-search",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-10-01",
+  "ai": { "binding": "AI", "remote": true },
+  "version_metadata": { "binding": "CF_VERSION_METADATA" },
+  "routes": [{ "pattern": "search.haditharchive.com", "custom_domain": true }],
+  "workers_dev": false,
+  "preview_urls": false,
+  // No logs: queries are not kept.
+  "observability": { "enabled": false }
+}

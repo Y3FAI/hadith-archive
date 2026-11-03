@@ -293,11 +293,11 @@ dl div::before {
 /* Hidden on screen, still read by screen readers: a label whose value
    starts with an icon in its place (the pin before a book, the squares
    before a hadith's categories), the search's label (the field's
-   placeholder says what to do), the home page's title, the site's
-   name, which the header already shows, and the word behind a comparison's
-   «=». In a browser without :has(), :is() drops only those parts, so the
-   search's label and the word stay hidden there too. */
-:is(dt:has(+ dd > svg), search :is(h1, h2), main > h1:has(+ section), td > [aria-hidden="true"] + span) {
+   placeholder says what to do), the search page's status line, which
+   says what the page shows, and the word behind a comparison's «=». In a
+   browser without :has(), :is() drops only the first part, so the others
+   stay hidden there too. */
+:is(dt:has(+ dd > svg), search :is(h1, h2), main > [role="status"], td > [aria-hidden="true"] + span) {
   position: absolute;
   width: 1px;
   height: 1px;
@@ -647,10 +647,10 @@ mark:empty {
   padding-inline: .2em;
 }
 
-/* Search, kept for later (search.html): the site launches without it.
-   The field sits in the middle of its own space, half a step more than
-   the usual gap between parts of the page on each side: as far below the
-   header as above what follows. */
+/* The home page: a large search, then categories and books. The field
+   sits in the middle of its own space, half a step more than the usual
+   gap between parts of the page on each side: as far below the header as
+   above what follows. */
 search {
   display: block;
   padding-block: calc(var(--space-l) / 2) calc(var(--space-l) / 2 + .5rem);
@@ -691,6 +691,23 @@ search button {
   margin-block: auto;
 }
 
+/* While a search runs, the field and its button rest in label grey. */
+search :disabled {
+  color: #636366;
+  -webkit-text-fill-color: #636366;
+  opacity: 1;
+  cursor: default;
+}
+
+/* The search page's messages, and its note without JavaScript, sit under
+   the field, level with the query's first letter. */
+search p {
+  margin-block: var(--space-s) 0;
+  margin-inline-start: 1.5rem;
+  color: #636366;
+  font-size: 1rem;
+}
+
 /* Search results: the field keeps its query, the count sits under it,
    level with the query's first letter, and the results follow as on a
    category page. */
@@ -701,6 +718,12 @@ search:has(+ dl) {
 search + dl {
   margin-block-end: calc(var(--space-s) * 2 - .3125rem);
   margin-inline-start: 1.5rem;
+}
+
+/* The 404 page: the field sits under the title, like a heading's
+   content. */
+main > h1 + search {
+  padding-block-start: 0;
 }
 
 /* A heading that leads to its own page. Like the menu links, the 44px
@@ -759,12 +782,6 @@ h2 + a {
     margin-block: 0 var(--space-s);
     margin-inline: -.75rem 0;
   }
-}
-
-/* The home page's title is hidden, so its first section starts where
-   another page's title does, without a heading's gap above it. */
-main > h1:has(+ section) + section {
-  margin-block-start: calc(var(--text) * .3 - var(--space-l));
 }
 
 /* Cards sit a little further apart than a heading from its content, so
@@ -955,6 +972,64 @@ main > ol mark {
   background: #F3EBD9;
   border-radius: 4px;
   color: inherit;
+}
+
+/* While a search runs, three empty cards stand where its results will be,
+   each with two grey lines in place of the text, and a short grey bar in
+   place of the count. They pulse softly, then the results fade in, top
+   first (search.js staggers them); under reduced motion both keep still. */
+main > ol[aria-busy="true"] li {
+  display: flex;
+  flex-direction: column;
+  padding: .75rem 1.5rem;
+  background: #FFFFFF;
+  border-radius: var(--radius-panel);
+  box-shadow: var(--shadow);
+  font-size: var(--text);
+}
+
+/* Each grey line stands in the middle of a text line's height; in a
+   column their margins add up rather than collapse. */
+main > ol[aria-busy="true"] span {
+  height: .75em;
+  margin-block: calc((1em * var(--leading) - .75em) / 2);
+  border-radius: 4px;
+  background: #E8E8ED;
+}
+
+main > ol[aria-busy="true"] span + span {
+  width: 60%;
+}
+
+search + dl dd:empty {
+  align-self: center;
+  width: 1.5em;
+  height: .75em;
+  border-radius: 4px;
+  background: #E8E8ED;
+}
+
+@keyframes waiting {
+  50% {
+    opacity: .4;
+  }
+}
+
+@keyframes appear {
+  from {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  main > ol[aria-busy="true"] li,
+  search + dl dd:empty {
+    animation: waiting 1.6s ease-in-out infinite;
+  }
+
+  search ~ ol:not([aria-busy]) > li {
+    animation: appear .2s ease-out backwards;
+  }
 }
 
 /* Under the mouse every green card turns a shade lighter; the author's
@@ -1163,6 +1238,13 @@ nav a[aria-current="page"] {
     background: #FFFFFF;
     box-shadow: var(--shadow);
   }
+}
+
+/* A press on the search button shows at once, in the page's grey, over
+   the hover's white. */
+search button:active:not(:disabled) {
+  background: #F5F5F7;
+  box-shadow: none;
 }
 
 @media (forced-colors: active) {

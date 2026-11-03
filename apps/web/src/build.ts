@@ -20,13 +20,18 @@ export const ASSET_PATHS = [
   "font/UthmanTN_v2-0.ttf",
   "font/UthmanTN_v2-0.woff2",
   "script.js",
+  "search.js",
   "share.png",
   "style.css",
 ];
 
+// The search engine, which the search page runs when the search service
+// cannot answer: the service's own code, with its types removed.
+const ENGINE_SOURCE = resolve(REPOSITORY_ROOT, "apps/search/src/search.ts");
+
 // Linked with a hash of their bytes, so a changed file is never served
 // stale from a cache.
-const VERSIONED_ASSETS = ["script.js", "style.css"];
+const VERSIONED_ASSETS = ["script.js", "search-engine.js", "search.js", "style.css"];
 
 export interface BuildOptions extends InputPaths {
   readonly out: string;
@@ -102,11 +107,14 @@ export async function buildSite(options: BuildOptions): Promise<BuildResult> {
   for (const path of ASSET_PATHS) {
     files.set(path, new Uint8Array(await readFile(resolve(ASSETS_DIRECTORY, path))));
   }
+  const encoder = new TextEncoder();
+  files.set("search-engine.js", encoder.encode(
+    new Bun.Transpiler({ loader: "ts" }).transformSync(await readFile(ENGINE_SOURCE, "utf8")),
+  ));
   const assetVersions = Object.fromEntries(VERSIONED_ASSETS.map((path) => [
     path,
     createHash("sha256").update(files.get(path) as Uint8Array).digest("hex").slice(0, 10),
   ]));
-  const encoder = new TextEncoder();
   for (const page of renderSite(loaded.inputs, { assetVersions, pageSize: PAGE_SIZE })) {
     files.set(page.path, encoder.encode(page.text));
   }

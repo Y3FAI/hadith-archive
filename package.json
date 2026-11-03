@@ -12,6 +12,7 @@
     "check:generated": "bun run packages/core-loader/scripts/check-record-types.ts",
     "generate:types": "bun run packages/core-loader/scripts/generate-record-types.ts",
     "release": "bun run apps/web/src/release.ts",
+    "search:data": "bun run apps/search/scripts/data.ts",
     "test": "bun test packages apps",
     "typecheck": "tsc --noEmit",
     "verify": "bun run packages/verifier/src/main.ts",
