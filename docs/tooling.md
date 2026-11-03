@@ -126,17 +126,25 @@ python3 -m http.server 8000 --bind 127.0.0.1 --directory apps/web/demo
 
 Open [the static demo on port 8000](http://127.0.0.1:8000/). Navigation covers home → category → hadith and home → book → bab → hadith, with category and book index pages. Category and bab pages use compact preview link cards: opening words with an ellipsis, natural wrapping, and a grey arrow beneath the text. They carry no book metadata or full narrations. Browse headings use the site-name text scale; the hadith detail page retains full text, citations, and member narrations.
 
-The static pages are design examples. Every hadith card reuses `hadith.html`, and every bab link reuses `bab.html`; these links represent neither generated records nor real topic assignments. The generator reproduces these pages from records. The site launches without search; `search.html` keeps that design for later and is linked from nowhere. Demo omissions establish no production publishing policy.
+The static pages are design examples. Every hadith card reuses `hadith.html`, and every bab link reuses `bab.html`; these links represent neither generated records nor real topic assignments. The generator reproduces these pages from records; `search.html` shows the search page's design with test results. Demo omissions establish no production publishing policy.
 
 ## Generator
 
 The builder in `apps/web/src/` writes the approved demo pages from saved records, topics, and a site file. Its tests run against synthetic fixtures in `apps/web/fixtures/demo/`.
 
-The builder accepts explicit `--core`, `--topics`, `--site`, and `--out` inputs. Its core-shaped directory is loaded through the supported loader and non-history verifier rules; topic files follow the [saved topic-file contract](schema.md#topic-files-for-the-generated-demo). The site file supplies `name`, `source_url`, and `url`, the public address whose path begins every link. These inputs remain separate from the hand-written mock pages and from root `core/` admission.
+The builder accepts explicit `--core`, `--topics`, `--site`, and `--out` inputs. Its core-shaped directory is loaded through the supported loader and non-history verifier rules; topic files follow the [saved topic-file contract](schema.md#topic-files-for-the-generated-demo). The site file supplies `name`, `source_url`, `search_url`, the search service's address, and `url`, the public address whose path begins every link. These inputs remain separate from the hand-written mock pages and from root `core/` admission.
 
-The `build:demo` command regenerates ignored `artifacts/site/` from the fixtures. A change to the demo's markup or CSS is carried into the generator and its tests, then checked on a build in all three browser engines. The generator builds no search page or field until search is built.
+The `build:demo` command regenerates ignored `artifacts/site/` from the fixtures. A change to the demo's markup or CSS is carried into the generator and its tests, then checked on a build in all three browser engines.
 
-The public site is built in CI (`.github/workflows/check.yml`): once the full check passes, the `site` job builds `core/` with `config/site.json`, and after a change to `main` the `deploy` job publishes that build on GitHub Pages at the site's `url`. With `"indexable": true` the build leaves out `noindex` (but on the 404 page) and writes `sitemap.xml`, and `robots.txt` when the site is at a host's root; every page but the 404 carries its canonical address. Until the first record is admitted, `core/` does not exist and nothing is built or published.
+The public site is built in CI (`.github/workflows/check.yml`): once the full check passes, the `site` job builds `core/` with `config/site.json`, and after a change to `main` the `deploy` job publishes that build on GitHub Pages at the site's `url`. With `"indexable": true` the build leaves out `noindex` (but on the 404 and search pages) and writes `sitemap.xml`, and `robots.txt` when the site is at a host's root; every page but those two carries its canonical address.
+
+## Search
+
+The search page sends a query to the search service in `apps/search/`, a Cloudflare Worker at the site file's `search_url`. It matches words (stems, roots, joined and misspelt words, ranked by BM25) and meaning (vectors from Workers AI). Texts where every word matched come first, then the five closest by meaning; when Workers AI fails or is slow, the words answer alone. The service keeps no logs.
+
+The service holds each HADITH's saved text with its vector in `apps/search/data.json`. After a HADITH is added or changed, `bun run search:data` rewrites the file, embedding only new and changed texts through a local Worker (`wrangler dev src/embed.ts --ip 127.0.0.1` in `apps/search/`), and `wrangler deploy` from `apps/search/` publishes the service. A test fails while the file differs from the saved texts.
+
+When the service cannot answer, the page searches by words alone in the browser, with the same engine (`apps/search/src/search.ts`, built into `search-engine.js`) and the site's copy of the texts (`search.json`). Search needs JavaScript; without it the page says so.
 
 ## Change routing
 

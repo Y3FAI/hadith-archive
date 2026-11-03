@@ -295,7 +295,6 @@ describe("demo build", () => {
         "الطبعة طبعة تجريبية",
         "سنة الطبع ٢٠٢٦",
         "ردمك ٩٧٨٠٠٠٠٠٠٠٠٠٢",
-        "بصمة الملف <code dir=\"ltr\">139705312aa323c7ce33e7d8945d84912f911406e6d22db0f5f541da289f2f3c</code>",
         "الجزء ١",
         "الصفحة ١٢",
       ]);
@@ -357,12 +356,21 @@ describe("demo build", () => {
     expect(category).toContain("<div><dt>عدد الأحاديث</dt><dd>٢</dd></div>");
   });
 
-  test("lists a book's abwab, and each bab's hadith once", () => {
+  test("shows a book in full in one card, then its abwab, and each bab's hadith once", () => {
     const book = page("b/demo-book-1/index.html");
-    expect(book).toContain("<div><dt>المؤلف</dt><dd>مؤلف تجريبي</dd></div>");
-    expect(book).toContain("<div><dt>عدد الأبواب</dt><dd>٢</dd></div>");
-    expect(book).toContain("<div><dt>عدد الطبعات</dt><dd>١</dd></div>");
-    expect(book).toContain(`<li><a href="${BASE}p/demo-book-1-demo-edition/">ناشر تجريبي <span>٢٠٢٦</span></a></li>`);
+    // Under the title, one card of the book, ending with the printing whose
+    // text the site shows; the printings are not listed.
+    expect(book).toMatch(/<\/h1>\n    <div>\n      <dl>\n/);
+    expect([...book.matchAll(/<div><dt>([^<]+)<\/dt><dd>(.*?)<\/dd><\/div>/g)].map((match) => `${match[1]} ${match[2]}`))
+      .toEqual([
+        "الكتاب الكتاب التجريبي الأول",
+        "المؤلف مؤلف تجريبي",
+        "عدد الأبواب ٢",
+        "عدد الأحاديث ٢",
+        "عدد الطبعات ١",
+        `النص المعروض <a href="${BASE}p/demo-book-1-demo-edition/">طبعة ناشر تجريبي</a>`,
+      ]);
+    expect(book).not.toContain("الطبعات</h2>");
     expect(book).toContain(`<li><a href="${BASE}b/demo-book-1/bab-1/">الباب التجريبي الأول</a></li>`);
     const cards = (path: string) =>
       [...page(path).matchAll(/<a href="\/hadith-archive\/h\/(\d+)\/"><span>/g)].map((match) => match[1]);
@@ -370,9 +378,9 @@ describe("demo build", () => {
     expect(cards("b/demo-book-2/bab-1/index.html")).toEqual(["1"]);
     expect(page("b/demo-book-2/bab-1/index.html")).toContain(`<cite><a href="${BASE}b/demo-book-2/">`);
     // A source without sections lists its hadith on its own page, under a
-    // heading of their own after the printings.
+    // heading of their own after the book's card.
     expect(cards("b/demo-book-4/index.html")).toEqual(["2", "4"]);
-    expect(page("b/demo-book-4/index.html")).toMatch(/<\/section>\n    <h2>.*<\/svg>الأحاديث<\/h2>\n    <ol role="list">/);
+    expect(page("b/demo-book-4/index.html")).toMatch(/<\/div>\n    <h2>.*<\/svg>الأحاديث<\/h2>\n    <ol role="list">/);
   });
 
   test("gives each printing a page of what it says of itself and its text", () => {

@@ -792,9 +792,8 @@ main > section > ul {
   gap: calc(var(--space-s) + .25rem);
 }
 
-/* A book's sections («abwab») and printings («tabaat») use the same cards
-   as the books. */
-:is([aria-labelledby="kutub"], [aria-labelledby="abwab"], [aria-labelledby="tabaat"]) ul {
+/* A book's sections («abwab») use the same cards as the books. */
+:is([aria-labelledby="kutub"], [aria-labelledby="abwab"]) ul {
   grid-template-columns: minmax(0, 1fr);
 }
 
@@ -815,7 +814,7 @@ main > section > ul {
   }
 
   @container (width >= 30rem) {
-    :is([aria-labelledby="kutub"], [aria-labelledby="abwab"], [aria-labelledby="tabaat"]) ul {
+    :is([aria-labelledby="kutub"], [aria-labelledby="abwab"]) ul {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
   }
@@ -876,7 +875,7 @@ main > section > ul a {
 
 /* Inside the frame, the text keeps about as much room above and below as
    at its sides; the card's height follows its text. */
-:is([aria-labelledby="kutub"], [aria-labelledby="abwab"], [aria-labelledby="tabaat"]) ul a {
+:is([aria-labelledby="kutub"], [aria-labelledby="abwab"]) ul a {
   flex-direction: column;
   justify-content: center;
   padding: 1.25rem 1.5rem 1.375rem;
@@ -886,7 +885,7 @@ main > section > ul a {
   text-wrap: balance;
 }
 
-:is([aria-labelledby="kutub"], [aria-labelledby="tabaat"]) ul span {
+[aria-labelledby="kutub"] ul span {
   margin-block-start: .25rem;
   color: #C9B488;
   font-size: 1rem;
@@ -1039,7 +1038,7 @@ search + dl dd:empty {
     --fill: #365343;
   }
 
-  :is([aria-labelledby="kutub"], [aria-labelledby="tabaat"]) ul a:hover span {
+  [aria-labelledby="kutub"] ul a:hover span {
     color: #CEBB93;
   }
 
@@ -1072,7 +1071,7 @@ main > ol a:active {
     display: none;
   }
 
-  :is([aria-labelledby="kutub"], [aria-labelledby="tabaat"]) ul span {
+  [aria-labelledby="kutub"] ul span {
     color: #636366;
   }
 }
@@ -1145,8 +1144,9 @@ main > div > p:has(a[href^="mailto:"]) {
   text-align: start;
 }
 
-/* A printing's page: its details in one card, each label grey above its
-   value; with room, labels and values side by side in two columns. */
+/* A printing's page and a book's first page: the details in one card,
+   each label grey above its value; with room, labels and values side by
+   side in two columns. */
 main > div > dl {
   display: grid;
   gap: .75rem;

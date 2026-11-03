@@ -139,6 +139,11 @@ apps/
       demo/                   # saved synthetic core, topics and site configuration
     src/                      # static site generator
     test/                     # generator tests
+  search/                     # search service, a Cloudflare Worker
+    data.json                 # each HADITH's saved text and its vector
+    scripts/                  # writes data.json
+    src/                      # the service and its engine, shared with the site
+    test/
 
 packages/
   canonical-json/             # deterministic JSON parsing and representation
