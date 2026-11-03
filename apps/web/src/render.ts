@@ -297,8 +297,7 @@ const asText = ([label, value]: readonly [string, string]) => `${label} ${value}
 const paragraph = (main: string, number = 1) =>
   ([...main.matchAll(/<p>([^<]*)<\/p>/g)][number - 1] as RegExpExecArray)[1] as string;
 
-// A printing's details: its title as printed, edition, year, ISBN, and the
-// SHA-256 of the file it was taken from, left to right.
+// A printing's details: its title as printed, edition, year and ISBN.
 function printingFacts(witness: SourceWitnessRecord): (readonly [string, string])[] {
   const { edition_statement: edition, isbn, publication_year: year } = witness;
   return [
@@ -306,9 +305,13 @@ function printingFacts(witness: SourceWitnessRecord): (readonly [string, string]
     ...edition === undefined ? [] : [["الطبعة", escapeHtml(edition)] as const],
     ...year === undefined ? [] : [["سنة الطبع", arabicDigits(year)] as const],
     ...isbn === undefined ? [] : [["ردمك", isbnDigits(isbn)] as const],
-    ["بصمة الملف", `<code dir="ltr">${escapeHtml(witness.file_sha256)}</code>`],
   ];
 }
+
+// The SHA-256 of the file a printing was taken from, left to right; shown on
+// the printing's own page.
+const fileHash = (witness: SourceWitnessRecord) =>
+  ["بصمة الملف", `<code dir="ltr">${escapeHtml(witness.file_sha256)}</code>`] as const;
 
 /**
  * The pager's entries: the first page, the last, and three around the
@@ -601,8 +604,8 @@ ${items.join("\n")}
 
   // A browse page: its heading and facts, then each hadith once as a card of
   // its opening words leading to its own page, split into numbered pages.
-  // Anything listed before the hadith (a book's abwab and printings) shows
-  // on the first, and the hadith then take a heading of their own.
+  // Anything listed before the hadith (a book's card and abwab) shows on
+  // the first, and the hadith then take a heading of their own.
   const addList = (
     route: string,
     title: readonly string[],
@@ -749,18 +752,6 @@ ${sections.map((section) =>
     </section>`];
   const counted = (label: string, count: number) =>
     count === 0 ? [] : [[label, arabicDigits(count)] as const];
-  const printingList = (witnesses: readonly SourceWitnessRecord[]) => witnesses.length === 0
-    ? []
-    : [`    <section aria-labelledby="tabaat">
-      <h2 id="tabaat">${ICON.books}الطبعات</h2>
-      <ul role="list">
-${witnesses.map((witness) =>
-  `        <li><a href="${at(ROUTE.printing(witness.witness_id))}">${escapeHtml(witness.publisher)}${
-    witness.publication_year === undefined ? "" : ` <span>${arabicDigits(witness.publication_year)}</span>`
-  }</a></li>`
-).join("\n")}
-      </ul>
-    </section>`];
   const byWitness = compareWitnesses(index);
 
   for (const source of sources) {
@@ -792,10 +783,22 @@ ${witnesses.map((witness) =>
       ...counted("عدد الأحاديث", hadithOf(occurrences).length),
       ...counted("عدد الطبعات", witnesses.length),
     ];
+    // On the first page, one card of the book in full: title, author,
+    // counts, and the printing whose text the site shows.
+    const bookCard = `    <div>
+${facts([
+  ["الكتاب", escapeHtml(source.title)],
+  ["المؤلف", escapeHtml(source.author)],
+  ...bookCounts,
+  ...presenting === undefined ? [] : [[
+    "النص المعروض",
+    `<a href="${at(ROUTE.printing(presenting.witness_id))}">طبعة ${escapeHtml(presenting.publisher)}</a>`,
+  ] as const],
+], "      ")}
+    </div>`;
     addList(ROUTE.source(source.source_id), [source.title], undefined, [
       `    <h1 id="abwab">${ICON.books}${escapeHtml(source.title)}</h1>`,
-      facts([["المؤلف", escapeHtml(source.author)], ...bookCounts]),
-    ], [...sectionList(source.source_id, topSections), ...printingList(witnesses)],
+    ], [bookCard, ...sectionList(source.source_id, topSections)],
     hadithOf(occurrences.filter((occurrence) => occurrence.section_id === undefined)),
     summary(source.title, [`المؤلف ${source.author}`, ...bookCounts.map(asText)]));
 
@@ -818,7 +821,7 @@ ${witnesses.map((witness) =>
         main: `    <h1>${ICON.books}طبعة ${escapeHtml(witness.publisher)}</h1>
 ${facts([["الكتاب", bookLink(source)], ["المؤلف", escapeHtml(source.author)]])}
     <div>
-${facts([...printingFacts(witness), ...text], "      ")}
+${facts([...printingFacts(witness), fileHash(witness), ...text], "      ")}
     </div>`,
         title: titled(`طبعة ${witness.publisher}`, source.title),
         description: summary(`طبعة ${witness.publisher}`, [
